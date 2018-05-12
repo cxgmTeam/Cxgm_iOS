@@ -1,0 +1,108 @@
+//
+//  PrefixHeader.pch
+//  CXGMSupermarket
+//
+//  Created by 天闻 on 2018/4/2.
+//  Copyright © 2018年 zhu yingmin. All rights reserved.
+//
+
+#ifndef PrefixHeader_pch
+#define PrefixHeader_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#import "APIHeader.h"
+#import "MJRefresh.h"
+#import "UIImageView+WebCache.h"
+#import "UIView+DCExtension.h" // UIView分类
+
+#import "DataModel.h"
+#import "Object_Extension.h"
+#import "DeviceHelper.h"
+#import "Utility.h"
+#import "APIParameterHelper.h"
+#import "AFNetAPIClient.h"
+#import "NSObject+WHC_Model.h"
+#import "UserInfoManager.h"
+
+#import "CutomNavigationController.h"
+#import "CustomViewController.h"
+#import "CustomDetailViewController.h"
+
+//define this constant if you want to use Masonry without the 'mas_' prefix
+#define MAS_SHORTHAND
+//define this constant if you want to enable auto-boxing for default syntax
+#define MAS_SHORTHAND_GLOBALS
+
+#import "Masonry.h"
+
+#define CLog(format, ...)  NSLog(format, ## __VA_ARGS__)
+#define NSLog(FORMAT, ...) printf("%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
+
+// 判断是否是iPhone X
+#define iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
+// 状态栏高度
+#define STATUS_BAR_HEIGHT (iPhoneX ? 44.f : 20.f)
+// 导航栏高度
+#define NAVIGATION_BAR_HEIGHT (iPhoneX ? 88.f : 64.f)
+// tabBar高度
+#define TAB_BAR_HEIGHT (iPhoneX ? (49.f+34.f) : 49.f)
+// home indicator
+#define HOME_INDICATOR_HEIGHT (iPhoneX ? 34.f : 0.f)
+
+#define RGBA(r,g,b,a) [UIColor colorWithRed:r/255.0f green:g/255.0f blue:b/255.0f alpha:a]
+#define RGB(r,g,b) RGBA(r,g,b,1.0f)
+
+/** 屏幕高度 */
+#define ScreenH [UIScreen mainScreen].bounds.size.height
+/** 屏幕宽度 */
+#define ScreenW [UIScreen mainScreen].bounds.size.width
+
+/*****************  屏幕适配  ******************/
+#define iphone6p (ScreenH == 763)
+#define iphone6 (ScreenH == 667)
+#define iphone5 (ScreenH == 568)
+#define iphone4 (ScreenH == 480)
+
+/** 使用苹方字体 */
+#define PFR [[[UIDevice currentDevice] systemVersion] floatValue] >= 9.0 ? @"PingFangSC-Regular" : @"PingFang SC"
+
+#define PFR20Font [UIFont fontWithName:@"PingFangSC-Regular" size:20]
+#define PFR18Font [UIFont fontWithName:@"PingFangSC-Regular" size:18]
+#define PFR17Font [UIFont fontWithName:@"PingFangSC-Regular" size:17]
+#define PFR16Font [UIFont fontWithName:@"PingFangSC-Regular" size:16]
+#define PFR15Font [UIFont fontWithName:@"PingFangSC-Regular" size:15]
+#define PFR14Font [UIFont fontWithName:@"PingFangSC-Regular" size:14]
+#define PFR13Font [UIFont fontWithName:@"PingFangSC-Regular" size:13]
+#define PFR12Font [UIFont fontWithName:@"PingFangSC-Regular" size:12]
+#define PFR11Font [UIFont fontWithName:@"PingFangSC-Regular" size:11]
+#define PFR10Font [UIFont fontWithName:@"PingFangSC-Regular" size:10]
+#define PFR9Font [UIFont fontWithName:@"PingFangSC-Regular" size:9]
+#define PFR8Font [UIFont fontWithName:@"PingFangSC-Regular" size:8]
+
+#define PFM14Font [UIFont fontWithName:@"PingFangSC-Medium" size:14]
+
+
+
+#define Color333333 [UIColor colorWithRed:0x33/255.0 green:0x33/255.0 blue:0x33/255.0 alpha:1]
+#define Color666666 [UIColor colorWithRed:0x66/255.0 green:0x66/255.0 blue:0x66/255.0 alpha:1]
+#define Color999999 [UIColor colorWithRed:0x99/255.0 green:0x99/255.0 blue:0x99/255.0 alpha:1]
+#define ColorE8E8E8E [UIColor colorWithRed:0xE8/255.0 green:0xE8/255.0 blue:0xE8/255.0 alpha:1]
+#define Color00A862 [UIColor colorWithRed:0.0 green:0xA8/255.0 blue:0x62/255.0 alpha:1]
+
+
+/** 弱引用 */
+#define WEAKSELF __weak typeof(self) weakSelf = self;
+
+
+#define WindowHomePage_Notify    @"WindowHomePage_Notify"
+#define WindowShopCart_Notify    @"WindowShopCart_Notify"
+
+
+#define PAGECOUNT  @"10"
+
+#define BackupUserInfo @"BackupUserInfo"   //注册或登录成功后保存到NSUserDefaults中
+
+
+#endif /* PrefixHeader_pch */

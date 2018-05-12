@@ -1,0 +1,146 @@
+//
+//  DetailTopToolView.m
+//  CXGMSupermarket
+//
+//  Created by 天闻 on 2018/4/16.
+//  Copyright © 2018年 zhu yingmin. All rights reserved.
+//
+
+#import "DetailTopToolView.h"
+
+@interface DetailTopToolView ()
+@property (strong , nonatomic)UIButton* cartBtn;
+
+@property(nonatomic,strong)UIView* menuView;
+@property(nonatomic,strong)UIView* redLine;
+@property(nonatomic,strong)UIButton* lastBtn;
+@property(nonatomic,assign)CGFloat btnWidth;
+@property(nonatomic,assign)CGFloat redLineWidth;
+@end
+
+@implementation DetailTopToolView
+
+- (instancetype)initWithFrame:(CGRect)frame{
+    if (self = [super initWithFrame:frame]) {
+        
+        [self setupUI];
+    }
+    return self;
+}
+
+- (void)setupUI
+{
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(20, STATUS_BAR_HEIGHT, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"arrow_left"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:backButton];
+    
+    _cartBtn = [UIButton new];
+    [_cartBtn setImage:[UIImage imageNamed:@"top_cart"] forState:UIControlStateNormal];
+    [self addSubview:_cartBtn];
+    [_cartBtn mas_makeConstraints:^(MASConstraintMaker *make){
+        make.size.equalTo(CGSizeMake(44, 44));
+        make.right.equalTo(-20);
+        make.top.equalTo(STATUS_BAR_HEIGHT);
+    }];
+    [_cartBtn addTarget:self action:@selector(onTapCartBtn:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIView* line = [UIView new];
+    line.backgroundColor = ColorE8E8E8E;
+    [self addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make){
+        make.top.equalTo(NAVIGATION_BAR_HEIGHT);
+        make.left.right.equalTo(self);
+        make.height.equalTo(1);
+    }];
+    
+    line = [UIView new];
+    line.backgroundColor = ColorE8E8E8E;
+    [self addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make){
+        make.bottom.left.right.equalTo(self);
+        make.height.equalTo(1);
+    }];
+    
+    
+    
+    
+    _menuView = [[UIView alloc] initWithFrame:CGRectMake(0, NAVIGATION_BAR_HEIGHT, ScreenW, 45)];
+    [self addSubview:_menuView];
+    
+    
+    NSArray* array = @[@"商品",@"详情",@"推荐"];
+    
+    _lastBtn = nil;
+    _btnWidth = ScreenW/array.count;
+    _redLineWidth = 53;
+    
+    for (NSInteger i = 0; i < array.count; i++) {
+        UIButton* btn = [UIButton new];
+        btn.tag = i;
+        [btn setTitle:array[i] forState:UIControlStateNormal];
+        [btn setTitleColor:Color00A862 forState:UIControlStateSelected];
+        [btn setTitleColor:Color999999 forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
+        [btn addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
+        [_menuView addSubview:btn];
+        [btn mas_makeConstraints:^(MASConstraintMaker *make){
+            make.left.equalTo(i*self.btnWidth);
+            make.top.bottom.equalTo(self.menuView);
+            make.width.equalTo(self.btnWidth);
+        }];
+        if (i == 0) {
+            _lastBtn = btn;
+            _lastBtn.selected = YES;
+        }
+    }
+    
+    _redLine = [UIView new];
+    _redLine.backgroundColor = Color00A862;
+    [_menuView addSubview:_redLine];
+    [_redLine mas_makeConstraints:^(MASConstraintMaker *make){
+        make.height.equalTo(3);
+        make.width.equalTo(self.redLineWidth);
+        make.left.equalTo((self.btnWidth-self.redLineWidth)/2.f);
+        make.bottom.equalTo(self.menuView);
+    }];
+}
+
+- (void)clickButton:(UIButton *)button
+{
+    _lastBtn.selected = NO;
+    button.selected = YES;
+    _lastBtn = button;
+    
+    [_redLine mas_updateConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(button.tag*self.btnWidth+(self.btnWidth-self.redLineWidth)/2.f);
+    }];
+    
+    !_scrollCollectionView?:_scrollCollectionView(button.tag);
+}
+
+- (void)selectButton:(NSInteger)index
+{
+    _lastBtn.selected = NO;
+    UIButton *button = _menuView.subviews[index];
+    if ([button isKindOfClass:[UIButton class]]) {
+        button.selected = YES;
+        _lastBtn = button;
+        [_redLine mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.lastBtn.frame.origin.x+(self.btnWidth-self.redLineWidth)/2.f);
+        }];
+    }
+}
+
+
+- (void)backButtonClicked:(id)sender
+{
+    !_backBtnClickBlock ? : _backBtnClickBlock();
+}
+
+- (void)onTapCartBtn:(id)sender
+{
+     [[NSNotificationCenter defaultCenter] postNotificationName:WindowShopCart_Notify object:nil];
+}
+@end
