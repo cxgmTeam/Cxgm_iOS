@@ -1,18 +1,19 @@
 //
-//  ShoppingCartController.m
+//  AnotherCartViewController.m
 //  CXGMSupermarket
 //
-//  Created by 天闻 on 2018/4/10.
+//  Created by zhu yingmin on 2018/5/13.
 //  Copyright © 2018年 zhu yingmin. All rights reserved.
 //
 
-#import "ShoppingCartController.h"
+#import "AnotherCartViewController.h"
+
 #import "LZConfigFile.h"
 #import "LZCartTableViewCell.h"
 #import "LZCartModel.h"
 #import "OrderConfirmViewController.h"
 
-@interface ShoppingCartController ()<UITableViewDelegate,UITableViewDataSource>
+@interface AnotherCartViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (strong,nonatomic)UITableView *myTableView;
 
@@ -27,11 +28,10 @@
 @property (strong,nonatomic)NSMutableArray *dataArray;
 @property (strong,nonatomic)NSMutableArray *selectedArray;
 @property(assign,nonatomic)NSInteger pageNum;
+
 @end
 
-@implementation ShoppingCartController
-
-
+@implementation AnotherCartViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -81,7 +81,7 @@
         }else{
             [weakSelf.myTableView.mj_footer endRefreshing];
         }
-        [self.myTableView.mj_header endRefreshing];
+        [weakSelf.myTableView.mj_header endRefreshing];
     } failure:^(id JSON, NSError *error){
         [weakSelf.myTableView.mj_header endRefreshing];
         [weakSelf.myTableView.mj_footer endRefreshing];
@@ -124,7 +124,7 @@
     }
 }
 
- //  计算已选中商品金额
+//  计算已选中商品金额
 -(void)countPrice {
     double totlePrice = 0.0;
     
@@ -145,8 +145,7 @@
     backgroundView.tag = TAG_CartEmptyView + 1;
     [self.view addSubview:backgroundView];
     [backgroundView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.right.equalTo(self.view);
-        make.bottom.equalTo(-50);
+        make.left.right.bottom.equalTo(self.view);
         make.height.equalTo(50);
     }];
     _bottomView = backgroundView;
@@ -241,7 +240,8 @@
         make.edges.equalTo(self.view);
     }];
     _emptyView = backgroundView;
-
+    
+    
     UIButton* button = [UIButton new];
     button.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
     [button setTitle:@"去逛逛" forState:UIControlStateNormal];
@@ -253,7 +253,7 @@
         make.size.equalTo(CGSizeMake(120, 42));
         make.center.equalTo(backgroundView);
     }];
-
+    
     UILabel *warnLabel = [[UILabel alloc]init];
     warnLabel.textAlignment = NSTextAlignmentCenter;
     warnLabel.text = @"购物车空空如也～";
@@ -448,4 +448,6 @@
     
     return _selectedArray;
 }
+
+
 @end

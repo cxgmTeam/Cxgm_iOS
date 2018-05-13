@@ -8,16 +8,31 @@
 
 #import "DataModel.h"
 
-@implementation DataModel
+@implementation ListModel
 
 @end
+
+@implementation DataModel
+
++(DataModel *)dataModelWith:(NSString *)JSON{
+    DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+    if ([model.data isKindOfClass:[NSDictionary class]]) {
+        model.listModel = [[ListModel alloc] initWithDictionary:(NSDictionary *)model.data error:nil];
+    }
+    return model;
+}
+@end
+
+
 
 @implementation GoodsModel
 
 @end
 
-@implementation ShopCartModel
+@implementation CouponsModel
 
 @end
+
+
 
 

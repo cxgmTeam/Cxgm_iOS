@@ -22,6 +22,9 @@
 #import "DetailTopToolView.h"
 
 #import "ULBCollectionViewFlowLayout.h"
+#import "LoginViewController.h"
+
+#import "AnotherCartViewController.h"
 
 @interface GoodsDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,ULBCollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -29,6 +32,10 @@
 
 @property (assign , nonatomic)BOOL isScrollDown;//滚动方向
 @property (assign , nonatomic)NSInteger sectionIndex;
+@property (assign , nonatomic)CGFloat alpha;
+
+@property (strong , nonatomic)UIButton * addGoodsBtn;
+@property (strong , nonatomic)UIButton * upTopBtn;
 @end
 
 /* cell */
@@ -48,38 +55,79 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 
 @implementation GoodsDetailViewController
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self.view addSubview:self.addGoodsBtn];
+    [self.addGoodsBtn mas_makeConstraints:^(MASConstraintMaker *make){
+        make.bottom.left.right.equalTo(self.view);
+        make.height.equalTo(50);
+    }];
+    
+    
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.edges.equalTo(self.view);
+        make.top.left.right.equalTo(self.view);
+        make.bottom.equalTo(self.addGoodsBtn.top);
     }];
     self.collectionView.contentInset = UIEdgeInsetsMake(-STATUS_BAR_HEIGHT, 0, 0, 0);
-    
-    
     
     [self.topToolView mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.left.right.equalTo(self.view);
         make.height.equalTo(NAVIGATION_BAR_HEIGHT+45);
     }];
-    self.topToolView.backgroundColor = [UIColor whiteColor];
+    [self.topToolView setAlphaOfView:self.alpha];
+
+    self.topToolView.goodNameLabel.text = self.goodsModel.name;
+    
+    [self.view addSubview:self.upTopBtn];
+    [self.upTopBtn mas_makeConstraints:^(MASConstraintMaker *make){
+        make.size.equalTo(CGSizeMake(40, 40));
+        make.right.equalTo(-10);
+        make.bottom.equalTo(-60);
+    }];
+    [self.upTopBtn addTarget:self action:@selector(onTapUpTopBtn:) forControlEvents:UIControlEventTouchUpInside];
 }
 
+- (void)setGoodsModel:(GoodsModel *)goodsModel{
 
-
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
+    _goodsModel = goodsModel;
     
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+- (void)onTapUpTopBtn:(id)sender
+{
+    [UIView animateWithDuration:.5 animations:^{
+        self.collectionView.contentOffset = CGPointZero;
+    }];
     
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
+
+- (void)addGoodsToCart:(id)sender
+{
+    if (![UserInfoManager sharedInstance].isLogin) {
+        LoginViewController* vc = [LoginViewController new];
+        [self.navigationController pushViewController:vc animated:YES];
+        return;
+    }
+    
+    if (!self.goodsModel) return;
+    
+    NSDictionary* dic = @{@"amount":self.goodsModel.price.length>0?self.goodsModel.price:@"",
+                          @"goodCode":self.goodsModel.goodCode.length>0?self.goodsModel.goodCode:@"",
+                          @"goodName":self.goodsModel.name.length>0?self.goodsModel.name:@"",
+                          @"goodNum":@"1",
+                          @"shopId":self.goodsModel.shopId.length>0?self.goodsModel.shopId:@""
+                          };
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+        DataModel* model = [DataModel dataModelWith:JSON];
+        if ([model.code intValue] == 200) {
+            [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -278,18 +326,14 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         _isScrollDown = lastOffsetY < scrollView.contentOffset.y;
         lastOffsetY = scrollView.contentOffset.y;
         
-        
-        
-//        _backTopButton.hidden = (scrollView.contentOffset.y > ScreenH) ? NO : YES;//判断回到顶部按钮是否隐藏
-//        _topToolView.hidden = (scrollView.contentOffset.y < 0) ? YES : NO;//判断顶部工具View的显示和隐形
-//
-//        if (scrollView.contentOffset.y > DCNaviH) {
-//            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
-//            [[NSNotificationCenter defaultCenter]postNotificationName:SHOWTOPTOOLVIEW object:nil];
-//        }else{
-//            [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-//            [[NSNotificationCenter defaultCenter]postNotificationName:HIDETOPTOOLVIEW object:nil];
-//        }
+        self.alpha = lastOffsetY/ScreenW;
+        if (self.alpha < 0) {
+            self.alpha = 0;
+        }
+        if (self.alpha > 1) {
+            self.alpha = 1;
+        }
+        [self.topToolView setAlphaOfView:self.alpha];
     }
 }
 
@@ -326,9 +370,33 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         _topToolView.scrollCollectionView = ^(NSInteger section){
             [weakSelf selectSectionAtIndex:section];
         };
+        _topToolView.gotoCartBlock = ^{
+            AnotherCartViewController* vc = [AnotherCartViewController new];
+            [weakSelf.navigationController pushViewController:vc animated:YES];
+        };
         [self.view addSubview:_topToolView];
     }
     return _topToolView;
+}
+
+- (UIButton *)addGoodsBtn{
+    if (!_addGoodsBtn) {
+        _addGoodsBtn = [UIButton new];
+        _addGoodsBtn.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
+        [_addGoodsBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
+        [_addGoodsBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        _addGoodsBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:18];
+        [_addGoodsBtn addTarget:self action:@selector(addGoodsToCart:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _addGoodsBtn;
+}
+
+- (UIButton *)upTopBtn{
+    if (!_upTopBtn) {
+        _upTopBtn = [UIButton new];
+        [_upTopBtn setImage:[UIImage imageNamed:@"to_top"] forState:UIControlStateNormal];
+    }
+    return _upTopBtn;
 }
 
 - (UICollectionView *)collectionView
@@ -355,6 +423,19 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         [self.view addSubview:_collectionView];
     }
     return _collectionView;
+}
+
+#pragma mark-
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 @end

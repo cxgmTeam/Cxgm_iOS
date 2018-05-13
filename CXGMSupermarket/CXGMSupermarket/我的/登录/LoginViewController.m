@@ -13,6 +13,9 @@
 @property(nonatomic,strong)UITextField* codeField;
 @property(nonatomic,strong)UIButton* codeButton;
 @property(nonatomic,strong)UIButton* loginBtn;
+
+@property(nonatomic,strong)NSTimer * timer;
+@property(nonatomic,assign)int times;
 @end
 
 @implementation LoginViewController
@@ -44,16 +47,52 @@
         [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请输入正确的手机号码"];
         return;
     }
-    
+    if (!_timer) {
+        _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:YES];
+        _times = 60;
+    }
+    WEAKSELF;
     NSDictionary* dic = @{@"phone":_phoneField.text};
     [AFNetAPIClient POST:[LoginBaseURL stringByAppendingString:APISendSMS] token:nil parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.code integerValue] == 200) {
             [MBProgressHUD MBProgressHUDWithView:self.view Str:@"发送成功,请注意查收"];
+        }else{
+            [weakSelf sendCodeFailed];
         }
     } failure:^(id JSON, NSError *error){
-        
+        [weakSelf sendCodeFailed];
     }];
+}
+
+- (void)sendCodeFailed
+{
+    [MBProgressHUD MBProgressHUDWithView:self.view Str:@"验证码发送失败,请重新获取"];
+    self.codeButton.enabled = YES;
+    self.codeButton.titleLabel.text =@"获取验证码";
+    [self stopTimer];
+}
+
+- (void)onTimer
+{
+    _times--;
+    _codeButton.titleLabel.text = [NSString stringWithFormat:@"剩余%ds",_times];
+    _codeButton.enabled = NO;
+    if (_times == 0) {
+        _codeButton.enabled = YES;
+        _codeButton.titleLabel.text =@"获取验证码";
+        [self stopTimer];
+    }
+}
+
+//废弃定时器
+- (void)stopTimer
+{
+    if(_timer != nil){
+        [_timer invalidate];
+        _timer = nil;
+        _times = 60;
+    }
 }
 
 - (void)validateSMSMessage
@@ -206,5 +245,11 @@
     label1.attributedText = attr;
 }
 
-
+#pragma mark-
+- (void)dealloc{
+    if(_timer != nil){
+        [_timer invalidate];
+        _timer = nil;
+    }
+}
 @end

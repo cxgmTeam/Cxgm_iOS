@@ -53,14 +53,14 @@
 #pragma mark - public method
 - (void)reloadDataWithModel:(LZCartModel*)model {
     
-//    self.lzImageView.image = model.image;
-//    self.nameLabel.text = model.nameStr;
-//    self.priceLabel.text = model.price;
-//    self.numberLabel.text = [NSString stringWithFormat:@"%ld",(long)model.number];
-//    self.sizeLabel.text = model.sizeStr;
+    [self.lzImageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    self.nameLabel.text = model.goodName;
+    self.priceLabel.text = [NSString stringWithFormat: @"¥ %@",model.price];
+    self.numberLabel.text = model.goodNum;
+    self.sizeLabel.text = model.specifications;
+    self.activityLabel.text = model.coupon;
     
-    
-    self.selectBtn.selected = model.select;
+    self.selectBtn.selected = [model.select boolValue];
 }
 
 - (void)numberAddWithBlock:(LZNumberChangedBlock)block {

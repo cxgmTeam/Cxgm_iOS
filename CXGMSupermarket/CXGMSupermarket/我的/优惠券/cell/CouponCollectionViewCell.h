@@ -10,6 +10,6 @@
 #import "CouponItem.h"
 
 @interface CouponCollectionViewCell : UICollectionViewCell
-@property (nonatomic, strong) CouponItem *couponItem;
+@property (nonatomic, strong) CouponsModel *coupons;
 @property (nonatomic, copy) dispatch_block_t expandClick;
 @end

@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface ScrollGoodsCell : UICollectionViewCell
-@property(nonatomic,copy)dispatch_block_t showGoodsDetail;
+@property(nonatomic,copy)void(^showGoodsDetail)(GoodsModel *model) ;
 @property(nonatomic,strong)NSArray* goodsList;
 @end

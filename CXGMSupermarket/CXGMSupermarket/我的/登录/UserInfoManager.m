@@ -58,7 +58,12 @@
     return YES;
 }
 
-
+//退出登录
+- (void)deleteUserInfo{
+    self.userInfo = nil;
+    NSUserDefaults* userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults removeObjectForKey:BackupUserInfo];
+}
 
 @end
 

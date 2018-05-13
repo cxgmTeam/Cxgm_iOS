@@ -19,6 +19,7 @@
 #import "OrderViewController.h"
 #import "AddressViewController.h"
 #import "LoginViewController.h"
+#import "SettingViewController.h"
 
 @interface MyCenterViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -195,12 +196,16 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         case 2:{
             if ([self needJumpToLogin]) return;
             
-            if (indexPath.item == 0) {
+            if (indexPath.item == 0) {//优惠券
                 CouponViewController * vc = [CouponViewController new];
                 [self.navigationController pushViewController:vc animated:YES];
             }
-            if (indexPath.item == 1) {
+            if (indexPath.item == 1) {//收货地址
                 AddressViewController * vc = [AddressViewController new];
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+            if (indexPath.item == 4) {//设置
+                SettingViewController * vc = [SettingViewController new];
                 [self.navigationController pushViewController:vc animated:YES];
             }
         }

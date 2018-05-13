@@ -14,6 +14,9 @@
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)UIView *emptyView;
 @property (strong , nonatomic)NSMutableArray *listArray;
+
+@property (assign , nonatomic)NSInteger pageNum;
+
 @end
 
 static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
@@ -21,50 +24,66 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
 
 @implementation CouponListViewController
 
-- (UICollectionView *)collectionView
-{
-    if (!_collectionView) {
-        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        layout.minimumLineSpacing = 10;
-        layout.minimumInteritemSpacing = 0;
-        
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.showsVerticalScrollIndicator = NO;
-        [_collectionView registerClass:[CouponCollectionViewCell class] forCellWithReuseIdentifier:CouponCollectionViewCellID];
-        [self.view addSubview:_collectionView];
-        _collectionView.contentInset = UIEdgeInsetsMake(14, 10, 10, 10);
-        
-    }
-    return _collectionView;
-}
 
-- (void)loadData
-{
-    [self setupCouponEmptyView];
+
+- (void)findCoupons{
+    NSDictionary* dic = @{@"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
+                          @"pageSize":@"10"};
     
-    for (NSInteger i = 0; i < 3; i++) {
-        CouponItem* item = [CouponItem new];
-        item.isOpen = NO;
-        [self.listArray addObject:item];
-    }
-    [self.collectionView reloadData];
-    
-    _emptyView.hidden = self.listArray.count>0? YES:NO;
+    WEAKSELF;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindCoupons] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+        DataModel* model = [DataModel dataModelWith:JSON];
+        if ([model.listModel.list isKindOfClass:[NSArray class]]) {
+            NSArray* array = [CouponsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            [weakSelf.listArray addObjectsFromArray:array];
+            [weakSelf.collectionView reloadData];
+            
+            weakSelf.emptyView.hidden = weakSelf.listArray.count>0? YES:NO;
+            
+            if (array.count == 0) {
+                [weakSelf.collectionView.mj_footer endRefreshingWithNoMoreData];
+            }else{
+                [weakSelf.collectionView.mj_footer endRefreshing];
+            }
+        }else{
+             [weakSelf.collectionView.mj_footer endRefreshing];
+        }
+        
+        [weakSelf.collectionView.mj_header endRefreshing];
+       
+    } failure:^(id JSON, NSError *error){
+        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+        [weakSelf.collectionView.mj_header endRefreshing];
+        [weakSelf.collectionView.mj_footer endRefreshing];
+    }];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.listArray = [NSMutableArray arrayWithCapacity:0];
+    [self setupCouponEmptyView];
     
-    [self performSelector:@selector(loadData) withObject:nil afterDelay:1];
+    self.listArray = [NSMutableArray arrayWithCapacity:0];
     
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
     }];
+    WEAKSELF
+    self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        weakSelf.pageNum = 1;
+        [weakSelf.listArray removeAllObjects];
+        [weakSelf findCoupons];
+    }];
+    self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        weakSelf.pageNum ++;
+        [weakSelf findCoupons];
+    }];
+    
+    self.pageNum = 1;
+    [self findCoupons];
 }
 
 - (void)setupCouponEmptyView{
@@ -101,11 +120,11 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     CouponCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CouponCollectionViewCellID forIndexPath:indexPath];
-    CouponItem* item = self.listArray[indexPath.item];
-    item.isExpire = self.isExpire;
-    cell.couponItem = item;
+    CouponsModel* item = self.listArray[indexPath.item];
+    item.isExpire = item.status;
+    cell.coupons = item;
     cell.expandClick = ^{
-        item.isOpen = !item.isOpen;
+        item.isOpen = [NSString stringWithFormat:@"%d",![item.isOpen boolValue]];
         [self.collectionView reloadItemsAtIndexPaths:@[indexPath]];
     };
     return cell;
@@ -118,6 +137,25 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
     }else{
         return CGSizeMake(ScreenW-20, 100);
     }
+}
+
+#pragma mark- init
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+        layout.minimumLineSpacing = 10;
+        layout.minimumInteritemSpacing = 0;
+        
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.showsVerticalScrollIndicator = NO;
+        [_collectionView registerClass:[CouponCollectionViewCell class] forCellWithReuseIdentifier:CouponCollectionViewCellID];
+        [self.view addSubview:_collectionView];
+        _collectionView.contentInset = UIEdgeInsetsMake(14, 10, 10, 10);
+    }
+    return _collectionView;
 }
 
 @end

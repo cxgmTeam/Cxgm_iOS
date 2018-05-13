@@ -28,4 +28,6 @@
 - (void)saveUserInfo:(NSDictionary *)json;
 //用户是否已经登录 如果登录直接显示登录状态
 - (BOOL)isLogin;
+//退出登录
+- (void)deleteUserInfo;
 @end

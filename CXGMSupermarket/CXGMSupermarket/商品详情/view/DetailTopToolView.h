@@ -9,7 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface DetailTopToolView : UIView
+
+@property(nonatomic,strong) UILabel* goodNameLabel;
+
 @property (nonatomic, copy) dispatch_block_t backBtnClickBlock;
+@property (nonatomic, copy) dispatch_block_t gotoCartBlock;
+
 @property (nonatomic, copy) void(^scrollCollectionView)(NSInteger section);//联动collectionView
 - (void)selectButton:(NSInteger)index;
+- (void)setAlphaOfView:(CGFloat)alpha;
 @end

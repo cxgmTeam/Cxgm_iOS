@@ -8,15 +8,22 @@
 
 #import "JSONModel.h"
 
+@interface ListModel : JSONModel
+@property (nonatomic,strong)NSObject<Optional> * list;
+@end
+
 @interface DataModel : JSONModel
 @property (nonatomic,strong)NSObject<Optional> * result;
 @property (nonatomic,strong)NSString<Optional> * code;
 @property (nonatomic,strong)NSString<Optional> * msg;
 @property (nonatomic,strong)NSObject<Optional> * data;
+@property (nonatomic,strong)ListModel<Optional> * listModel;
+
++(DataModel *)dataModelWith:(NSString *)JSON;
 @end
 
 
-
+//商品信息
 @interface GoodsModel : JSONModel
 @property (nonatomic,strong)NSString<Optional> * id;
 @property (nonatomic,strong)NSString<Optional> * sn;
@@ -67,21 +74,25 @@
 @property (nonatomic,strong)NSString<Optional> * grade;
 @property (nonatomic,strong)NSString<Optional> * parentId;
 @property (nonatomic,strong)NSObject<Optional> * productImageList;
-@end
-
-
-
-@interface ShopCartModel : JSONModel
-@property (nonatomic,strong)NSString<Optional> * amount;
 @property (nonatomic,strong)NSString<Optional> * goodCode;
-@property (nonatomic,strong)NSString<Optional> * goodName;
-@property (nonatomic,strong)NSString<Optional> * goodNum;
-@property (nonatomic,strong)NSString<Optional> * id;
-@property (nonatomic,strong)NSString<Optional> * imageUrl;
-@property (nonatomic,strong)NSString<Optional> * price;
-@property (nonatomic,strong)NSString<Optional> * shopId;
-@property (nonatomic,strong)NSString<Optional> * userId;
 @end
+
+//优惠券
+@interface CouponsModel : JSONModel
+@property (nonatomic,strong)NSString<Optional> * beginDate;
+@property (nonatomic,strong)NSString<Optional> * categoryId;
+@property (nonatomic,strong)NSString<Optional> * codeId;
+@property (nonatomic,strong)NSString<Optional> * endDate;
+@property (nonatomic,strong)NSString<Optional> * introduction;
+@property (nonatomic,strong)NSString<Optional> * name;
+@property (nonatomic,strong)NSString<Optional> * productId;
+@property (nonatomic,strong)NSString<Optional> * status;
+
+@property(nonatomic,assign)NSString<Optional> * isOpen;//用做UI的展开折叠 
+@property(nonatomic,assign)NSString<Optional> * isExpire;
+@end
+
+
 
 
 

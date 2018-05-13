@@ -16,6 +16,7 @@
 @property(nonatomic,strong)UIButton* lastBtn;
 @property(nonatomic,assign)CGFloat btnWidth;
 @property(nonatomic,assign)CGFloat redLineWidth;
+
 @end
 
 @implementation DetailTopToolView
@@ -28,10 +29,35 @@
     return self;
 }
 
+- (void)setAlphaOfView:(CGFloat)alpha{
+    
+    self.backgroundColor = [UIColor colorWithWhite:1 alpha:alpha];
+    _menuView.alpha = alpha;
+    _goodNameLabel.alpha = alpha;
+    
+//    _cartBtn.hidden = alpha==1?YES:NO;
+}
+
+- (void)selectButton:(NSInteger)index
+{
+    if (index+2 > _menuView.subviews.count) return;
+    
+    _lastBtn.selected = NO;
+    
+    UIButton *button = _menuView.subviews[index+2];
+    if ([button isKindOfClass:[UIButton class]]) {
+        button.selected = YES;
+        _lastBtn = button;
+        [_redLine mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.lastBtn.frame.origin.x+(self.btnWidth-self.redLineWidth)/2.f);
+        }];
+    }
+}
+
 - (void)setupUI
 {
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    backButton.frame = CGRectMake(20, STATUS_BAR_HEIGHT, 44, 44);
+    backButton.frame = CGRectMake(0, STATUS_BAR_HEIGHT, 44, 44);
     [backButton setImage:[UIImage imageNamed:@"arrow_left"] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:backButton];
@@ -46,30 +72,27 @@
     }];
     [_cartBtn addTarget:self action:@selector(onTapCartBtn:) forControlEvents:UIControlEventTouchUpInside];
     
+
+    
+    _menuView = [[UIView alloc] initWithFrame:CGRectMake(0, NAVIGATION_BAR_HEIGHT, ScreenW, 45)];
+    [self addSubview:_menuView];
+    
     UIView* line = [UIView new];
     line.backgroundColor = ColorE8E8E8E;
-    [self addSubview:line];
+    [_menuView addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make){
-        make.top.equalTo(NAVIGATION_BAR_HEIGHT);
-        make.left.right.equalTo(self);
+        make.top.left.right.equalTo(self.menuView);
         make.height.equalTo(1);
     }];
     
     line = [UIView new];
     line.backgroundColor = ColorE8E8E8E;
-    [self addSubview:line];
+    [_menuView addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make){
-        make.bottom.left.right.equalTo(self);
+        make.bottom.left.right.equalTo(self.menuView);
         make.height.equalTo(1);
     }];
-    
-    
-    
-    
-    _menuView = [[UIView alloc] initWithFrame:CGRectMake(0, NAVIGATION_BAR_HEIGHT, ScreenW, 45)];
-    [self addSubview:_menuView];
-    
-    
+
     NSArray* array = @[@"商品",@"详情",@"推荐"];
     
     _lastBtn = nil;
@@ -105,6 +128,19 @@
         make.left.equalTo((self.btnWidth-self.redLineWidth)/2.f);
         make.bottom.equalTo(self.menuView);
     }];
+    
+    UILabel *label = [[UILabel alloc] init];
+    label.textAlignment = NSTextAlignmentCenter;
+    label.text = @"圣湖 青海特产老酸奶优质特惠 245...";
+    label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:17];
+    label.textColor = [UIColor colorWithRed:1/255.0 green:1/255.0 blue:1/255.0 alpha:1/1.0];
+    [self addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make){
+        make.bottom.equalTo(self.menuView.top).offset(-7);
+        make.left.equalTo(backButton.right);
+        make.width.equalTo(ScreenW-44);
+    }];
+    _goodNameLabel = label;
 }
 
 - (void)clickButton:(UIButton *)button
@@ -120,18 +156,7 @@
     !_scrollCollectionView?:_scrollCollectionView(button.tag);
 }
 
-- (void)selectButton:(NSInteger)index
-{
-    _lastBtn.selected = NO;
-    UIButton *button = _menuView.subviews[index];
-    if ([button isKindOfClass:[UIButton class]]) {
-        button.selected = YES;
-        _lastBtn = button;
-        [_redLine mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.lastBtn.frame.origin.x+(self.btnWidth-self.redLineWidth)/2.f);
-        }];
-    }
-}
+
 
 
 - (void)backButtonClicked:(id)sender
@@ -141,6 +166,6 @@
 
 - (void)onTapCartBtn:(id)sender
 {
-     [[NSNotificationCenter defaultCenter] postNotificationName:WindowShopCart_Notify object:nil];
+     !_gotoCartBlock ? : _gotoCartBlock();
 }
 @end

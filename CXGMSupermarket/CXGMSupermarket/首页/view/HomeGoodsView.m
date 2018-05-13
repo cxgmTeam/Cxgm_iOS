@@ -27,8 +27,9 @@
 @property(nonatomic,strong)NSArray* categoryNames;//banner下面的分类
 
 @property(nonatomic,strong)NSArray* topGoodsList;//精品推荐
-@property(nonatomic,strong)NSArray* hotGoodsList;//热门推荐
 @property(nonatomic,strong)NSArray* xinGoodsList;//新品上市
+@property(nonatomic,strong)NSMutableArray* hotGoodsList;//热销推荐
+@property(assign,nonatomic)NSInteger pageNum;
 
 @end
 
@@ -49,31 +50,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
 @implementation HomeGoodsView
 
-- (UICollectionView *)collectionView
-{
-    if (!_collectionView) {
-        ULBCollectionViewFlowLayout *layout = [ULBCollectionViewFlowLayout new];
-        
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.showsVerticalScrollIndicator = NO;   
-        
-        [_collectionView registerClass:[CategoryGridCell class] forCellWithReuseIdentifier:CategoryGridCellID];
-        [_collectionView registerClass:[ScrollGoodsCell class] forCellWithReuseIdentifier:ScrollGoodsCellID];
-        [_collectionView registerClass:[GoodsListGridCell class] forCellWithReuseIdentifier:GoodsListGridCellID];
-        [_collectionView registerClass:[HomeFeatureViewCell class] forCellWithReuseIdentifier:HomeFeatureViewCellID];
-        
-        [_collectionView registerClass:[SlideshowHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SlideshowHeadViewID];
-        [_collectionView registerClass:[TextTitleHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:TextTitleHeadViewID];
-        [_collectionView registerClass:[MidAdHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:MidAdHeadViewID];
-        
-        [_collectionView registerClass:[TopLineFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:TopLineFootViewID];
-        
-        [self addSubview:_collectionView];
-    }
-    return _collectionView;
-}
+
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         
@@ -83,14 +60,29 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
             make.edges.equalTo(self);
         }];
+        WEAKSELF
+        self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+            weakSelf.pageNum = 1;
+            [weakSelf.hotGoodsList removeAllObjects];
+            
+            [weakSelf findTopProduct];
+            [weakSelf findNewProduct];
+            [weakSelf findHotProduct];
+        }];
+        self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+            weakSelf.pageNum ++;
+            [weakSelf findHotProduct];
+        }];
     }
     
+    self.pageNum = 1;
+    self.hotGoodsList = [NSMutableArray array];
     
     [self findTopProduct];
     [self findNewProduct];
     [self findHotProduct];
-    
-    
+
+
     return self;
 }
 
@@ -98,16 +90,13 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 //精品推荐
 - (void)findTopProduct
 {
-    NSDictionary* dic = @{@"shopId":@"",@"pageNum":@"1",@"pageSize":@"10"};
+    NSDictionary* dic = @{@"shopId":@""};
     
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindTopProduct]  token:nil parameters:dic success:^(id JSON, NSError *error){
-        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
-        if ([model.data isKindOfClass:[NSDictionary class]]) {
-            NSArray* list = [(NSDictionary *)model.data objectForKey:@"list"];
-            if ([list isKindOfClass:[NSArray class]]) {
-                self.topGoodsList = [GoodsModel arrayOfModelsFromDictionaries:list error:nil];
-                [self.collectionView reloadData];
-            }
+        DataModel* model = [DataModel dataModelWith:JSON];
+        if ([model.listModel.list isKindOfClass:[NSArray class]]) {
+            self.topGoodsList = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            [self.collectionView reloadData];
         }
     } failure:^(id JSON, NSError *error){
         
@@ -117,16 +106,14 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 //新品上市
 - (void)findNewProduct
 {
-    NSDictionary* dic = @{@"shopId":@"",@"pageNum":@"1",@"pageSize":@"10"};
+    NSDictionary* dic = @{@"shopId":@""};
     
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindNewProduct]  token:nil parameters:dic success:^(id JSON, NSError *error){
-        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
-        if ([model.data isKindOfClass:[NSDictionary class]]) {
-            NSArray* list = [(NSDictionary *)model.data objectForKey:@"list"];
-            if ([list isKindOfClass:[NSArray class]]) {
-                self.xinGoodsList = [GoodsModel arrayOfModelsFromDictionaries:list error:nil];
-                [self.collectionView reloadData];
-            }
+        
+        DataModel* model = [DataModel dataModelWith:JSON];
+        if ([model.listModel.list isKindOfClass:[NSArray class]]) {
+            self.xinGoodsList = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            [self.collectionView reloadData];
         }
     } failure:^(id JSON, NSError *error){
         
@@ -136,19 +123,30 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 //热销推荐
 - (void)findHotProduct
 {
-    NSDictionary* dic = @{@"shopId":@"",@"pageNum":@"1",@"pageSize":@"10"};
-    
+    NSDictionary* dic = @{@"shopId":@"",
+                          @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
+                          @"pageSize":@"10"};
+    WEAKSELF;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindHotProduct]  token:nil parameters:dic success:^(id JSON, NSError *error){
-        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
-        if ([model.data isKindOfClass:[NSDictionary class]]) {
-            NSArray* list = [(NSDictionary *)model.data objectForKey:@"list"];
-            if ([list isKindOfClass:[NSArray class]]) {
-                self.hotGoodsList = [GoodsModel arrayOfModelsFromDictionaries:list error:nil];
-                [self.collectionView reloadData];
+
+        DataModel* model = [DataModel dataModelWith:JSON];
+        if ([model.listModel.list isKindOfClass:[NSArray class]]) {
+           NSArray* array  = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            [weakSelf.hotGoodsList addObjectsFromArray:array];
+            [weakSelf.collectionView reloadData];
+            if (array.count == 0) {
+                [weakSelf.collectionView.mj_footer endRefreshingWithNoMoreData];
+            }else{
+                [weakSelf.collectionView.mj_footer endRefreshing];
             }
+        }else{
+            [weakSelf.collectionView.mj_footer endRefreshing];
         }
-    } failure:^(id JSON, NSError *error){
+        [weakSelf.collectionView.mj_header endRefreshing];
         
+    } failure:^(id JSON, NSError *error){
+        [weakSelf.collectionView.mj_header endRefreshing];
+        [weakSelf.collectionView.mj_footer endRefreshing];
     }];
 }
 
@@ -204,8 +202,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
                 break;
         }
         WEAKSELF;
-        cell.showGoodsDetail = ^{
-            !weakSelf.showGoodsDetailVC?:weakSelf.showGoodsDetailVC();
+        cell.showGoodsDetail = ^(GoodsModel* model){
+            !weakSelf.showGoodsDetailVC?:weakSelf.showGoodsDetailVC(model);
         };
         gridcell = cell;
     }
@@ -318,7 +316,35 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         !_showSubCategoryVC?:_showSubCategoryVC();
     }
     if (indexPath.section == 7) {
-        !_showGoodsDetailVC?:_showGoodsDetailVC();
+        GoodsModel* goods = self.hotGoodsList[indexPath.item];
+        !_showGoodsDetailVC?:_showGoodsDetailVC(goods);
     }
+}
+
+#pragma mark- init
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        ULBCollectionViewFlowLayout *layout = [ULBCollectionViewFlowLayout new];
+        
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.showsVerticalScrollIndicator = NO;
+        
+        [_collectionView registerClass:[CategoryGridCell class] forCellWithReuseIdentifier:CategoryGridCellID];
+        [_collectionView registerClass:[ScrollGoodsCell class] forCellWithReuseIdentifier:ScrollGoodsCellID];
+        [_collectionView registerClass:[GoodsListGridCell class] forCellWithReuseIdentifier:GoodsListGridCellID];
+        [_collectionView registerClass:[HomeFeatureViewCell class] forCellWithReuseIdentifier:HomeFeatureViewCellID];
+        
+        [_collectionView registerClass:[SlideshowHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SlideshowHeadViewID];
+        [_collectionView registerClass:[TextTitleHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:TextTitleHeadViewID];
+        [_collectionView registerClass:[MidAdHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:MidAdHeadViewID];
+        
+        [_collectionView registerClass:[TopLineFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:TopLineFootViewID];
+        
+        [self addSubview:_collectionView];
+    }
+    return _collectionView;
 }
 @end

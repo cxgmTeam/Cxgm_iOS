@@ -9,5 +9,5 @@
 #import "CustomDetailViewController.h"
 
 @interface GoodsDetailViewController : CustomDetailViewController
-
+@property(nonatomic,strong)GoodsModel* goodsModel;
 @end

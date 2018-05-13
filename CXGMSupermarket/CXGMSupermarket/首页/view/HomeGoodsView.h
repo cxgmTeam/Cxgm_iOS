@@ -10,5 +10,5 @@
 
 @interface HomeGoodsView : UIView
 @property(nonatomic,copy)dispatch_block_t showSubCategoryVC;
-@property(nonatomic,copy)dispatch_block_t showGoodsDetailVC;
+@property(nonatomic,copy)void(^showGoodsDetailVC)(GoodsModel* model);
 @end

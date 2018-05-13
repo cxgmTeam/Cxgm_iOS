@@ -40,8 +40,9 @@
         [wself.navigationController pushViewController:vc animated:YES];
     };
     
-    _goodsView.showGoodsDetailVC = ^{
+    _goodsView.showGoodsDetailVC = ^(GoodsModel *model){
         GoodsDetailViewController* vc = [GoodsDetailViewController new];
+        vc.goodsModel = model;
         [wself.navigationController pushViewController:vc animated:YES];
     };
     

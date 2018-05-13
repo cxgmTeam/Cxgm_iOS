@@ -23,20 +23,20 @@
 
 @implementation CouponCollectionViewCell
 
-- (void)setCouponItem:(CouponItem *)couponItem{
-    if (couponItem.isOpen) {
+- (void)setCoupons:(CouponsModel *)coupons{
+    if ([coupons.isOpen boolValue]) {
         [_openBtn setImage:[UIImage imageNamed:@"order_open"] forState:UIControlStateNormal];
     }else{
         [_openBtn setImage:[UIImage imageNamed:@"order_fold"] forState:UIControlStateNormal];
     }
-    _bottomView.hidden = !couponItem.isOpen;
+    _bottomView.hidden = ![coupons.isOpen boolValue];
     
-    if (couponItem.isExpire) {
+    if (coupons.isExpire) {
         _stateImageView.image = [UIImage imageNamed:@"coupon_useless"];
     }else{
         _stateImageView.image = [UIImage imageNamed:@"coupon_bg"];
     }
-    _useBtton.hidden = couponItem.isExpire;
+    _useBtton.hidden = [coupons.isExpire boolValue];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame{

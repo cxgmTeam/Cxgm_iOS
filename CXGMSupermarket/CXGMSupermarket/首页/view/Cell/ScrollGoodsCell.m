@@ -87,7 +87,7 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
 #pragma mark - <UICollectionViewDelegate>
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    
-    !self.showGoodsDetail?:self.showGoodsDetail();
+    GoodsModel* goods = self.goodsList[indexPath.item];
+    !self.showGoodsDetail?:self.showGoodsDetail(goods);
 }
 @end

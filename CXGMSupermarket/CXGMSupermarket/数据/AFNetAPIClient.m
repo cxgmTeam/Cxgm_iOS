@@ -62,17 +62,17 @@
             DataModel * model = [[DataModel alloc] initWithString:aString error:nil];
             if ([model.code intValue] == 200) {
                 success(aString,nil);
-                NSString * url = [NSString stringWithFormat:@"%@",task.response.URL];
-                [self writeDiskWithData:[aString dataUsingEncoding:NSUTF8StringEncoding] Path:url];
+//                NSString * url = [NSString stringWithFormat:@"%@",task.response.URL];
+//                [self writeDiskWithData:[aString dataUsingEncoding:NSUTF8StringEncoding] Path:url];
             }
             else
             {
-                NSString * url = [NSString stringWithFormat:@"%@",task.response.URL];
-                NSString * diskaString = [self readFromDiskWithPath:url];
-                if (diskaString) {
-                    success(diskaString,nil);
-                }
-                else
+//                NSString * url = [NSString stringWithFormat:@"%@",task.response.URL];
+//                NSString * diskaString = [self readFromDiskWithPath:url];
+//                if (diskaString) {
+//                    success(diskaString,nil);
+//                }
+//                else
                 {
                     failure(model.msg,nil);
                 }
@@ -82,15 +82,15 @@
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         NSLog(@"get failure error %@",error);
         if (failure) {
-            NSString * url = [NSString stringWithFormat:@"%@",[error.userInfo objectForKey:@"NSErrorFailingURLKey"]];
-            NSString * aString = [self readFromDiskWithPath:url];
-            if (aString) {
-                success(aString,nil);
-            }
-            else
+//            NSString * url = [NSString stringWithFormat:@"%@",[error.userInfo objectForKey:@"NSErrorFailingURLKey"]];
+//            NSString * aString = [self readFromDiskWithPath:url];
+//            if (aString) {
+//                success(aString,nil);
+//            }
+//            else
             {
                 UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
-                [MBProgressHUD MBProgressHUDWithView:window Str:@"服务器连接失败"];
+                [MBProgressHUD MBProgressHUDWithView:window Str:@"请检查网络连接"];
                 failure(@"请求失败",nil);
             }
         }
@@ -140,7 +140,7 @@
         NSLog(@"AFNetAPIClient post error %@",error.debugDescription);
         if (failure) {
             UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
-            [MBProgressHUD MBProgressHUDWithView:window Str:@"请检查网络"];
+            [MBProgressHUD MBProgressHUDWithView:window Str:@"请检查网络连接"];
             failure(@"请求失败",nil);
         }
     }];
