@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "LocationModel.h"
 
 @interface LocationTableViewCell : UITableViewCell
+
 @property(nonatomic,strong)LocationModel* location;
 @end

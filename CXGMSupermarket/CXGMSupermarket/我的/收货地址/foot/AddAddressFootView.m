@@ -20,6 +20,7 @@
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
         [self addSubview:button];
+        [button addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
         [button mas_makeConstraints:^(MASConstraintMaker *make){
             make.size.equalTo(CGSizeMake(ScreenW-30, 42));
             make.left.equalTo(15);
@@ -27,5 +28,10 @@
         }];
     }
     return self;
+}
+
+- (void)onTapButton:(id)sender
+{
+    !_saveUserAddress?:_saveUserAddress();
 }
 @end

@@ -60,6 +60,9 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
 - (void)findFirstCategory
 {
     NSDictionary* dic = @{@"shopId":@""};
+    if ([DeviceHelper sharedInstance].shop) {
+         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
+    }
     
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindFirstCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
 //        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];

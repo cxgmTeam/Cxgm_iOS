@@ -23,7 +23,9 @@
 }
 @end
 
+@implementation ShopModel
 
+@end
 
 @implementation GoodsModel
 
@@ -33,6 +35,13 @@
 
 @end
 
+@implementation AddressModel
+
+@end
 
 
+
+@implementation LocationModel
+
+@end
 

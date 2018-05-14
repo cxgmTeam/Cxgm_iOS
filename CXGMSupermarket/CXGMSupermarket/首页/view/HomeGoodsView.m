@@ -91,6 +91,9 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (void)findTopProduct
 {
     NSDictionary* dic = @{@"shopId":@""};
+    if ([DeviceHelper sharedInstance].shop) {
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
+    }
     
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindTopProduct]  token:nil parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [DataModel dataModelWith:JSON];
@@ -107,6 +110,9 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (void)findNewProduct
 {
     NSDictionary* dic = @{@"shopId":@""};
+    if ([DeviceHelper sharedInstance].shop) {
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
+    }
     
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindNewProduct]  token:nil parameters:dic success:^(id JSON, NSError *error){
         
@@ -126,6 +132,11 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     NSDictionary* dic = @{@"shopId":@"",
                           @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
                           @"pageSize":@"10"};
+    if ([DeviceHelper sharedInstance].shop) {
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
+                @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
+                @"pageSize":@"10"};
+    }
     WEAKSELF;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindHotProduct]  token:nil parameters:dic success:^(id JSON, NSError *error){
 

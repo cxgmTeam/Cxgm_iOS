@@ -131,6 +131,10 @@ static CGFloat TopBtnWidth = 60;
 - (void)findSecondCategory:(NSString *)productCategoryId
 {
     NSDictionary* dic = @{@"shopId":@"",@"productCategoryId":productCategoryId.length > 0? productCategoryId:@""};
+    if ([DeviceHelper sharedInstance].shop) {
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
+                @"productCategoryId":productCategoryId.length > 0? productCategoryId:@""};
+    }
     
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindSecondCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
 //        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
@@ -144,6 +148,10 @@ static CGFloat TopBtnWidth = 60;
 - (void)findThirdCategory:(NSString *)productCategoryTwoId
 {
     NSDictionary* dic = @{@"shopId":@"",@"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
+    if ([DeviceHelper sharedInstance].shop) {
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
+                @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
+    }
     
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindThirdCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
 //        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];

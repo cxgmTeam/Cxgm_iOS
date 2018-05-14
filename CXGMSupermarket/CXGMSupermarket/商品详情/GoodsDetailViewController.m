@@ -120,7 +120,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                           @"shopId":self.goodsModel.shopId.length>0?self.goodsModel.shopId:@""
                           };
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
-        DataModel* model = [DataModel dataModelWith:JSON];
+        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
             [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
         }

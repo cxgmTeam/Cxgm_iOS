@@ -8,13 +8,17 @@
 
 #import "MainViewController.h"
 #import <CoreLocation/CoreLocation.h>
+#import "WGS84TOGCJ02.h"
 
+#import "HomeViewController.h"
 
 @interface MainViewController ()<CLLocationManagerDelegate,UIAlertViewDelegate>
 
 @property(nonatomic,strong)CLLocationManager* locationManager;//定位
 
 @property(nonatomic,strong)UILabel* titleLabel;
+
+@property(nonatomic,strong)HomeViewController* homeVC;
 @end
 
 @implementation MainViewController
@@ -64,7 +68,9 @@
     {
         NSString* string = vc[i];
         CustomViewController* controller = [NSClassFromString(string) new];
-        
+        if (i == 0) {
+            self.homeVC = (HomeViewController *)controller;
+        }
         CutomNavigationController *nav = [[CutomNavigationController alloc] initWithRootViewController:controller];
         if (i == vc.count-1) {
             nav.navigationBarHidden = YES;
@@ -72,9 +78,6 @@
         
         UITabBarItem* barItem = [[UITabBarItem alloc]initWithTitle:title[i] image:[UIImage imageNamed:image[i]] selectedImage:[[UIImage imageNamed:selectedImage[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
         barItem.tag = i;
-        
-//        controller.tabBarItem = barItem;
-//        [array addObject:controller];
         
         nav.tabBarItem = barItem;
         [array addObject:nav];
@@ -144,10 +147,19 @@
 //维度：loc.coordinate.latitude
 //经度：loc.coordinate.longitude
     
+    [DeviceHelper sharedInstance].location = loc;
+    
     NSLog(@"纬度=%f，经度=%f",loc.coordinate.latitude,loc.coordinate.longitude);
     NSLog(@"locations.count  %ld",locations.count);
     
-    [self checkAddress:[NSString stringWithFormat:@"%f",loc.coordinate.longitude] dimension:[NSString stringWithFormat:@"%f",loc.coordinate.latitude]];
+    //判断是不是属于国内范围
+    if (![WGS84TOGCJ02 isLocationOutOfChina:[loc coordinate]]) {
+        //转换后的coord
+        CLLocationCoordinate2D coord = [WGS84TOGCJ02 transformFromWGSToGCJ:[loc coordinate]];
+        
+        [self checkAddress:[NSString stringWithFormat:@"%lf",coord.longitude] dimension:[NSString stringWithFormat:@"%lf",coord.latitude]];
+    }
+    
     
     // 保存 Device 的现语言
     NSMutableArray *userDefaultLanguages = [[NSUserDefaults standardUserDefaults]
@@ -162,6 +174,7 @@
                        if(!error){
                            for (CLPlacemark *place in placemarks) {
                                NSLog(@"placemark.addressDictionary  %@",place.addressDictionary);
+                               [DeviceHelper sharedInstance].place = place;
                                
                                NSString *city = place.locality;
                                NSString *administrativeArea = place.administrativeArea;
@@ -218,12 +231,23 @@
                           @"longitude":longitude,
                           @"dimension":dimension
                           };
-    
+    WEAKSELF;
     //data为空代表不在配送范围内
     [AFNetAPIClient POST:[LoginBaseURL stringByAppendingString:APICheckAddress] token:nil parameters:dic success:^(id JSON, NSError *error){
-        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            NSArray* array = (NSArray *)model.data;
+            if (array.count > 0) {
+                [DeviceHelper sharedInstance].shop = [[ShopModel alloc] initWithDictionary:[array firstObject] error:nil];
+                [weakSelf.homeVC setupMainUI:YES];
+            }else{
+                [weakSelf.homeVC setupMainUI:NO];
+            }
+        }else{
+            [weakSelf.homeVC setupMainUI:NO];
+        }
     } failure:^(id JSON, NSError *error){
-        
+        [weakSelf.homeVC setupMainUI:NO];
     }];
 }
 

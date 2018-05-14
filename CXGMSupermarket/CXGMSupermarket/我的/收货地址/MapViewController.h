@@ -7,7 +7,10 @@
 //
 
 #import "MyCenterSubViewController.h"
+#import "LocationTableViewCell.h"
 
 @interface MapViewController : MyCenterSubViewController
+
+@property(nonatomic,copy)void(^selectedAddress)(LocationModel *model);
 
 @end

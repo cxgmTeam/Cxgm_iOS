@@ -16,6 +16,12 @@
 + (NSString *)convertToJsonData:(NSDictionary *)dict;
 // JSON字符串转化为字典
 + (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
+//把手机号第4-7位变成星号
++(NSString*)phoneNumToAsterisk:(NSString*)phoneNum;
+
 
 + (void)CXGMPostRequest:(NSString *)requestUrl token:(NSString *)token parameter:(NSDictionary *)dict success:(void (^)(id JSON, NSError *error))success failure:(void (^)(id JSON, NSError *error))failure;
+
+//是否在配送范围
++ (BOOL)checkAddress:(NSString *)longitude dimension:(NSString *)dimension;
 @end

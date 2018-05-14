@@ -23,6 +23,16 @@
 @end
 
 
+//店铺
+@interface ShopModel : JSONModel
+
+@property (nonatomic,strong)NSString<Optional> * id;
+@property (nonatomic,strong)NSString<Optional> * shopName;
+@property (nonatomic,strong)NSString<Optional> * shopAddress;
+@property (nonatomic,strong)NSString<Optional> * imageUrl;
+@property (nonatomic,strong)NSString<Optional> * description;
+@end
+
 //商品信息
 @interface GoodsModel : JSONModel
 @property (nonatomic,strong)NSString<Optional> * id;
@@ -88,13 +98,35 @@
 @property (nonatomic,strong)NSString<Optional> * productId;
 @property (nonatomic,strong)NSString<Optional> * status;
 
-@property(nonatomic,assign)NSString<Optional> * isOpen;//用做UI的展开折叠 
-@property(nonatomic,assign)NSString<Optional> * isExpire;
+@property(nonatomic,strong)NSString<Optional> * isOpen;//用做UI的展开折叠
+@property(nonatomic,strong)NSString<Optional> * isExpire;
+@end
+
+//用户地址
+@interface AddressModel : JSONModel
+@property(nonatomic,strong)NSString<Optional> * id;
+@property(nonatomic,strong)NSString<Optional> * address;
+@property(nonatomic,strong)NSString<Optional> * area;
+@property(nonatomic,strong)NSString<Optional> * dimension;
+@property(nonatomic,strong)NSString<Optional> * longitude;
+@property(nonatomic,strong)NSString<Optional> * phone;
+@property(nonatomic,strong)NSString<Optional> * realName;
 @end
 
 
 
+@interface LocationModel : NSObject
 
+@property(nonatomic,copy)NSString *name;
+
+@property(nonatomic,copy)NSString *address;
+@property(nonatomic,copy)NSString *street;
+@property(nonatomic,assign)double latitude;
+@property(nonatomic,assign)double longitude;
+
+@property(nonatomic,assign)BOOL inScope;//是否在配送范围
+
+@end
 
 
 

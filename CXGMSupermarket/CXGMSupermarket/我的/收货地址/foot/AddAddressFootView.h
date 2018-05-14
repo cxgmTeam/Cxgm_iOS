@@ -10,4 +10,5 @@
 
 @interface AddAddressFootView : UICollectionReusableView
 
+@property(nonatomic,copy)dispatch_block_t saveUserAddress;
 @end

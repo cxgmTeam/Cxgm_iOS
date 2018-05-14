@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface AddressCollectionViewCell : UICollectionViewCell
+@property(nonatomic,strong)AddressModel* address;
 
+@property(nonatomic,copy)void(^updateAddress)(AddressModel* address);
 @end

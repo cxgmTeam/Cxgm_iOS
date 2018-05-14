@@ -14,6 +14,7 @@
 #import "HomeShopsView.h"
 
 #import "SearchViewController.h"
+#import "AddressViewController.h"
 
 @interface HomeViewController ()
 @property(nonatomic,strong)HomeGoodsView* goodsView;
@@ -27,39 +28,65 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    _goodsView = [HomeGoodsView new];
-    [self.view addSubview:_goodsView];
-    [_goodsView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.edges.equalTo(self.view);
-    }];
-    typeof(self) __weak wself = self;
-    _goodsView.showSubCategoryVC = ^{
-        SubCategoryController* vc = [SubCategoryController new];
-//        vc.title = wself.categoryNames[indexPath.item];
-        [wself.navigationController pushViewController:vc animated:YES];
-    };
-    
-    _goodsView.showGoodsDetailVC = ^(GoodsModel *model){
-        GoodsDetailViewController* vc = [GoodsDetailViewController new];
-        vc.goodsModel = model;
-        [wself.navigationController pushViewController:vc animated:YES];
-    };
-    
-
-//    _shopsView = [HomeShopsView new];
-//    [self.view addSubview:_shopsView];
-//    [_shopsView mas_makeConstraints:^(MASConstraintMaker *make){
-//        make.edges.equalTo(self.view);
-//    }];
     
     [self setupTopBar];
 }
 
+- (void)setupMainUI:(BOOL)inScope
+{
+    if (inScope)
+    {
+        if (_shopsView.superview) {
+            [_shopsView removeFromSuperview];
+            _shopsView = nil;
+        }
+        
+        if (!_goodsView)
+        {
+            _goodsView = [HomeGoodsView new];
+            [self.view addSubview:_goodsView];
+            [_goodsView mas_makeConstraints:^(MASConstraintMaker *make){
+                make.edges.equalTo(self.view);
+            }];
+            typeof(self) __weak wself = self;
+            _goodsView.showSubCategoryVC = ^{
+                SubCategoryController* vc = [SubCategoryController new];
+                //        vc.title = wself.categoryNames[indexPath.item];
+                [wself.navigationController pushViewController:vc animated:YES];
+            };
+            
+            _goodsView.showGoodsDetailVC = ^(GoodsModel *model){
+                GoodsDetailViewController* vc = [GoodsDetailViewController new];
+                vc.goodsModel = model;
+                [wself.navigationController pushViewController:vc animated:YES];
+            };
+        }
+    }
+    else
+    {
+        if (_goodsView.superview) {
+            [_goodsView removeFromSuperview];
+            _goodsView = nil;
+        }
+        
+        if (!_shopsView)
+        {
+            _shopsView = [HomeShopsView new];
+            [self.view addSubview:_shopsView];
+            [_shopsView mas_makeConstraints:^(MASConstraintMaker *make){
+                make.edges.equalTo(self.view);
+            }];
+        }
+    }
+}
+
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
     _topView.hidden = NO;
 }
+
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
@@ -70,7 +97,9 @@
 {
     UIButton* locationBtn = [UIButton new];
     [locationBtn setImage:[UIImage imageNamed:@"order_address"] forState:UIControlStateNormal];
+    [locationBtn addTarget:self action:@selector(showAddressVC:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:locationBtn];
+
     
     UIButton* messageBtn = [UIButton new];
     [messageBtn setImage:[UIImage imageNamed:@"top_message"] forState:UIControlStateNormal];
@@ -100,6 +129,12 @@
         make.edges.equalTo(self.topView);
     }];
     [btn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)showAddressVC:(id)sender
+{
+    AddressViewController* vc = [AddressViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)onTapButton:(id)sender

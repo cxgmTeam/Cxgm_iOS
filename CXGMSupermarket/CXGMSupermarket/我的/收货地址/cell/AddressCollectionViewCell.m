@@ -17,6 +17,13 @@
 
 @implementation AddressCollectionViewCell
 
+- (void)setAddress:(AddressModel *)address{
+    _nameLabel.text = address.realName;
+    _phoneLabel.text = [Utility phoneNumToAsterisk:address.phone];
+    _addressLabel.text = [address.area stringByAppendingString:address.address];
+    
+}
+
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor whiteColor];
@@ -92,8 +99,14 @@
             make.right.equalTo(-5);
             make.size.equalTo(CGSizeMake(40, 40));
         }];
+        [editBtn addTarget:self action:@selector(onTapEditBtn:) forControlEvents:UIControlEventTouchUpInside];
 
     }
     return self;
+}
+
+- (void)onTapEditBtn:(id)sender
+{
+    !_updateAddress?:_updateAddress(self.address);
 }
 @end

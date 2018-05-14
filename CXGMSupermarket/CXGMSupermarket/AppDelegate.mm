@@ -14,8 +14,11 @@
 
 #import <BaiduMapAPI_Map/BMKMapView.h>
 
+
 @interface AppDelegate ()<BMKGeneralDelegate>
 @property(nonatomic,strong)  BMKMapManager* mapManager;
+
+@property(nonatomic,strong)CLLocationManager* locationManager;//定位
 @end
 
 @implementation AppDelegate
@@ -133,6 +136,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+
 }
 
 
@@ -150,6 +154,7 @@
     }
     return result;
 }
+
 
 
 @end

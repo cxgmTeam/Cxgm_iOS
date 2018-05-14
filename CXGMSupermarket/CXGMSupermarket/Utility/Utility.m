@@ -119,8 +119,13 @@
     return dic;
 }
 
+//把手机号第4-7位变成星号
++(NSString*)phoneNumToAsterisk:(NSString*)phoneNum
+{
+    return[phoneNum stringByReplacingCharactersInRange:NSMakeRange(3,4)withString:@"****"];
+}
 
-
+#pragma mark-
 + (void)CXGMPostRequest:(NSString *)requestUrl token:(NSString *)token parameter:(NSDictionary *)dict success:(void (^)(id JSON, NSError *error))success failure:(void (^)(id JSON, NSError *error))failure
 {
     NSURLSession *session = [NSURLSession sharedSession];
@@ -141,7 +146,7 @@
     
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:postRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-        NSLog(@"post dic = %@",dic);
+        NSLog(@"CXGMPostRequest dic = %@",dic);
         if ([[dic objectForKey:@"code"] integerValue] == 200) {
             if (success) {
                 success(dic,nil);
@@ -153,5 +158,26 @@
         }
     }];
     [dataTask resume];
+}
+
+//是否在配送范围
++ (BOOL)checkAddress:(NSString *)longitude dimension:(NSString *)dimension
+{
+    NSDictionary* dic = @{
+                          @"longitude":longitude,
+                          @"dimension":dimension
+                          };
+    __block BOOL flag = NO;
+    //data为空代表不在配送范围内
+    [AFNetAPIClient POST:[LoginBaseURL stringByAppendingString:APICheckAddress] token:nil parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model  = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            NSArray* array = (NSArray *)model.data;
+            flag = array.count>0?YES:NO;
+        }
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+    return flag;
 }
 @end

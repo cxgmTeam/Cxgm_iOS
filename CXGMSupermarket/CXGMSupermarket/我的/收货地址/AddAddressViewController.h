@@ -9,5 +9,5 @@
 #import "MyCenterSubViewController.h"
 
 @interface AddAddressViewController : MyCenterSubViewController
-
+@property(nonatomic,strong)AddressModel* address;
 @end

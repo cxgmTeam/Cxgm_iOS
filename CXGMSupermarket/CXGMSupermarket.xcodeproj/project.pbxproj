@@ -22,8 +22,10 @@
 		770355B12099E077002B3A8D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770355B02099E077002B3A8D /* LoginViewController.m */; };
 		7737987220A86D750050187D /* AnotherCartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7737987120A86D750050187D /* AnotherCartViewController.m */; };
 		774813902071CF17002DDF93 /* CutomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7748138F2071CF17002DDF93 /* CutomNavigationController.m */; };
+		774C47E120A99806009B129F /* AddressHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C47E020A99806009B129F /* AddressHeadView.m */; };
+		774C47E420A99D2A009B129F /* WGS84TOGCJ02.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C47E320A99D2A009B129F /* WGS84TOGCJ02.m */; };
+		774C47E720A9A990009B129F /* AddressTopViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C47E620A9A990009B129F /* AddressTopViewCell.m */; };
 		776B534E20A69C9000594B32 /* LocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B534D20A69C9000594B32 /* LocationTableViewCell.m */; };
-		776B535120A69D2E00594B32 /* LocationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535020A69D2E00594B32 /* LocationModel.m */; };
 		776B535720A732B100594B32 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535620A732B100594B32 /* SettingViewController.m */; };
 		776B535B20A7347A00594B32 /* SettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535A20A7347A00594B32 /* SettingTableViewCell.m */; };
 		7783F2002095CEFA00338459 /* RemainTimeHintHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F1FF2095CEFA00338459 /* RemainTimeHintHead.m */; };
@@ -332,10 +334,14 @@
 		7737987120A86D750050187D /* AnotherCartViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnotherCartViewController.m; sourceTree = "<group>"; };
 		7748138E2071CF17002DDF93 /* CutomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CutomNavigationController.h; sourceTree = "<group>"; };
 		7748138F2071CF17002DDF93 /* CutomNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CutomNavigationController.m; sourceTree = "<group>"; };
+		774C47DF20A99806009B129F /* AddressHeadView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddressHeadView.h; sourceTree = "<group>"; };
+		774C47E020A99806009B129F /* AddressHeadView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressHeadView.m; sourceTree = "<group>"; };
+		774C47E220A99D2A009B129F /* WGS84TOGCJ02.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WGS84TOGCJ02.h; sourceTree = "<group>"; };
+		774C47E320A99D2A009B129F /* WGS84TOGCJ02.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WGS84TOGCJ02.m; sourceTree = "<group>"; };
+		774C47E520A9A990009B129F /* AddressTopViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddressTopViewCell.h; sourceTree = "<group>"; };
+		774C47E620A9A990009B129F /* AddressTopViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressTopViewCell.m; sourceTree = "<group>"; };
 		776B534C20A69C9000594B32 /* LocationTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationTableViewCell.h; sourceTree = "<group>"; };
 		776B534D20A69C9000594B32 /* LocationTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationTableViewCell.m; sourceTree = "<group>"; };
-		776B534F20A69D2E00594B32 /* LocationModel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationModel.h; sourceTree = "<group>"; };
-		776B535020A69D2E00594B32 /* LocationModel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationModel.m; sourceTree = "<group>"; };
 		776B535520A732B100594B32 /* SettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
 		776B535620A732B100594B32 /* SettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		776B535920A7347A00594B32 /* SettingTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingTableViewCell.h; sourceTree = "<group>"; };
@@ -991,6 +997,8 @@
 				770355A52099C664002B3A8D /* AddAddressViewCell.m */,
 				776B534C20A69C9000594B32 /* LocationTableViewCell.h */,
 				776B534D20A69C9000594B32 /* LocationTableViewCell.m */,
+				774C47E520A9A990009B129F /* AddressTopViewCell.h */,
+				774C47E620A9A990009B129F /* AddressTopViewCell.m */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -1015,13 +1023,13 @@
 			path = "登录";
 			sourceTree = "<group>";
 		};
-		776B535220A69D6E00594B32 /* Data */ = {
+		774C47DE20A983EF009B129F /* head */ = {
 			isa = PBXGroup;
 			children = (
-				776B534F20A69D2E00594B32 /* LocationModel.h */,
-				776B535020A69D2E00594B32 /* LocationModel.m */,
+				774C47DF20A99806009B129F /* AddressHeadView.h */,
+				774C47E020A99806009B129F /* AddressHeadView.m */,
 			);
-			path = Data;
+			path = head;
 			sourceTree = "<group>";
 		};
 		776B535320A7327D00594B32 /* 设置 */ = {
@@ -1669,6 +1677,8 @@
 				BE6CFAF8207A3D8A00DFD3CA /* Utility.m */,
 				77FDD577209C644300805709 /* APIParameterHelper.h */,
 				77FDD578209C644300805709 /* APIParameterHelper.m */,
+				774C47E220A99D2A009B129F /* WGS84TOGCJ02.h */,
+				774C47E320A99D2A009B129F /* WGS84TOGCJ02.m */,
 			);
 			path = Utility;
 			sourceTree = "<group>";
@@ -1884,7 +1894,7 @@
 		BE40AFAE208F5F7D00D4B690 /* 收货地址 */ = {
 			isa = PBXGroup;
 			children = (
-				776B535220A69D6E00594B32 /* Data */,
+				774C47DE20A983EF009B129F /* head */,
 				770355A72099DB63002B3A8D /* foot */,
 				770355A32099C507002B3A8D /* cell */,
 				BE40AFAF208F5F9700D4B690 /* AddressViewController.h */,
@@ -2519,6 +2529,7 @@
 				BE520E8D207CD99500BA0FA3 /* HomeViewController.m in Sources */,
 				77F83A7F2070E8CE004E9717 /* IQUIViewController+Additions.m in Sources */,
 				BE8E8783209354CE005EB719 /* OrderInvoiceViewCell.m in Sources */,
+				774C47E120A99806009B129F /* AddressHeadView.m in Sources */,
 				BE24E00C20A3096A0024A64D /* HomeFeatureViewCell.m in Sources */,
 				77A5DE33208C9539005F97F9 /* MyCenterGridCell.m in Sources */,
 				BE9769E92072505C00783217 /* UIScrollView+MJRefresh.m in Sources */,
@@ -2532,6 +2543,7 @@
 				BE44A0892091F106001FE5A6 /* OrderDetailViewController.m in Sources */,
 				779F9FDC208AC08600C38D61 /* SubCategoryController.m in Sources */,
 				BE8E878920935C91005EB719 /* OrderCustomerViewCell.m in Sources */,
+				774C47E720A9A990009B129F /* AddressTopViewCell.m in Sources */,
 				779F9FDF208AC14B00C38D61 /* CatoryGridViewCell.m in Sources */,
 				779C9561209B0F7E0029A591 /* HomeShopViewCell.m in Sources */,
 				BE44A09A2091FA3B001FE5A6 /* OrderStateHeadView.m in Sources */,
@@ -2570,7 +2582,6 @@
 				BE40AFAD208F5EC600D4B690 /* OrderViewController.m in Sources */,
 				BECB90182084B03C00170BC6 /* Foundation+Log.m in Sources */,
 				77F83AAA2070E8CE004E9717 /* SDWebImageFrame.m in Sources */,
-				776B535120A69D2E00594B32 /* LocationModel.m in Sources */,
 				BE9769E12072505C00783217 /* MJRefreshBackStateFooter.m in Sources */,
 				77F83A972070E8CE004E9717 /* NSArray+MASAdditions.m in Sources */,
 				77F83A992070E8CE004E9717 /* View+MASAdditions.m in Sources */,
@@ -2648,6 +2659,7 @@
 				77DD80A5208355A000A1D080 /* DCLIRLButton.m in Sources */,
 				77F83AAF2070E8CE004E9717 /* SDWebImageTransition.m in Sources */,
 				BEC90F7F207F0DC400B5E609 /* ShoppingCartCollectionCell.m in Sources */,
+				774C47E420A99D2A009B129F /* WGS84TOGCJ02.m in Sources */,
 				77F83A8A2070E8CE004E9717 /* JSONModelClassProperty.m in Sources */,
 				779C9558209AE0EE0029A591 /* PayResultViewController.m in Sources */,
 				77B484EF209EC70300D74DD5 /* SearchGridCell.m in Sources */,

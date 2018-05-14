@@ -10,4 +10,5 @@
 
 @interface HomeViewController : CustomViewController
 
+- (void)setupMainUI:(BOOL)inScope;
 @end

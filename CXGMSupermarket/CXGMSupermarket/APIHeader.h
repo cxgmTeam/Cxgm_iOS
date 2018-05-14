@@ -29,6 +29,8 @@
 #define APIDeleteAddress  @"/user/deleteAddress"
 //版本控制接口
 #define APIVisionControl  @"/user/visionControl"
+//查看所有配送范围接口
+#define APIFindAllPsfw  @"/user/findAllPsfw"
 
 
 /*首页相关接口*/
