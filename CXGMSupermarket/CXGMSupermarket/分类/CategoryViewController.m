@@ -14,7 +14,7 @@
 @interface CategoryViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
 
-@property(nonatomic,strong)NSArray* categoryNames;
+@property(nonatomic,strong)NSArray* categoryList;
 @end
 
 static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
@@ -26,25 +26,31 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
     self.title = @"分类";
     self.view.backgroundColor = [UIColor whiteColor];
     
-    self.categoryNames = @[@"新鲜水果",
-                           @"蔬菜净菜",
-                           @"海鲜水产",
-                           @"肉禽蛋品",
-                           @"面点主食",
-                           @"乳品烘焙",
-                           @"餐饮熟食",
-                           @"方便净菜",
-                           @"粮油副食",
-                           @"休闲零食",
-                           @"中外名酒",
-                           @"饮料冲调",
-                           @"美妆个护",
-                           @"母婴保健",
-                           @"厨卫百货"];
+//    self.categoryNames = @[@"新鲜水果",
+//                           @"蔬菜净菜",
+//                           @"海鲜水产",
+//                           @"肉禽蛋品",
+//                           @"面点主食",
+//                           @"乳品烘焙",
+//                           @"餐饮熟食",
+//                           @"方便净菜",
+//                           @"粮油副食",
+//                           @"休闲零食",
+//                           @"中外名酒",
+//                           @"饮料冲调",
+//                           @"美妆个护",
+//                           @"母婴保健",
+//                           @"厨卫百货"];
     self.collectionView.backgroundColor = [UIColor clearColor];
     [_collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
     }];
+    
+    typeof(self) __weak wself = self;
+    self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [wself findFirstCategory];
+    }];
+    
     
     UIButton* searchBtn = [UIButton new];
     [searchBtn setImage:[UIImage imageNamed:@"top_search"] forState:UIControlStateNormal];
@@ -64,11 +70,23 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
          dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
     }
     
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindFirstCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
-//        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            self.categoryList = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            [self.collectionView reloadData];
+        }
+        [self.collectionView.mj_header endRefreshing];
         
     } failure:^(id JSON, NSError *error){
         
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self.collectionView.mj_header endRefreshing];
     }];
 }
 
@@ -80,12 +98,12 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
 
 #pragma mark- UICollectionView
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return self.categoryNames.count;
+    return self.categoryList.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     CatoryGridViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CatoryGridViewCellID forIndexPath:indexPath];
-    [cell setImage:[NSString stringWithFormat:@"category%ld",indexPath.item] title:self.categoryNames[indexPath.item]];
+    cell.category = self.categoryList[indexPath.item];
     return cell;
 }
 
@@ -93,7 +111,7 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
     SubCategoryController* vc = [SubCategoryController new];
-    vc.title = self.categoryNames[indexPath.item];
+    vc.category = self.categoryList[indexPath.item];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

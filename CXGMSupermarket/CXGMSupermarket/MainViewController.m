@@ -159,6 +159,10 @@
         
         [self checkAddress:[NSString stringWithFormat:@"%lf",coord.longitude] dimension:[NSString stringWithFormat:@"%lf",coord.latitude]];
     }
+    else
+    {
+        [self checkAddress:[NSString stringWithFormat:@"%lf",loc.coordinate.longitude] dimension:[NSString stringWithFormat:@"%lf",loc.coordinate.latitude]];
+    }
     
     
     // 保存 Device 的现语言
@@ -217,6 +221,7 @@
     if (errorString) {
         NSLog(@"定位失败信息  %@",errorString);
         
+        [self locationFailed];
     }
 }
 
@@ -251,6 +256,10 @@
     }];
 }
 
+- (void)locationFailed
+{
+    [self.homeVC setupMainUI:NO];
+}
 
 #pragma mark-
 - (void)dealloc{

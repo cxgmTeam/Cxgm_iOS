@@ -21,10 +21,12 @@
 		770355AD2099DF73002B3A8D /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770355AC2099DF73002B3A8D /* MapViewController.m */; };
 		770355B12099E077002B3A8D /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 770355B02099E077002B3A8D /* LoginViewController.m */; };
 		7737987220A86D750050187D /* AnotherCartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7737987120A86D750050187D /* AnotherCartViewController.m */; };
+		773A4B0620AD68EC00F0A5FA /* HYNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 773A4B0420AD68EC00F0A5FA /* HYNoticeView.m */; };
+		773A4B0920AD9B5C00F0A5FA /* AddressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 773A4B0820AD9B5C00F0A5FA /* AddressTableViewCell.m */; };
+		773A4B0C20AD9D4200F0A5FA /* AddressTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 773A4B0B20AD9D4200F0A5FA /* AddressTopTableViewCell.m */; };
 		774813902071CF17002DDF93 /* CutomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7748138F2071CF17002DDF93 /* CutomNavigationController.m */; };
-		774C47E120A99806009B129F /* AddressHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C47E020A99806009B129F /* AddressHeadView.m */; };
 		774C47E420A99D2A009B129F /* WGS84TOGCJ02.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C47E320A99D2A009B129F /* WGS84TOGCJ02.m */; };
-		774C47E720A9A990009B129F /* AddressTopViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C47E620A9A990009B129F /* AddressTopViewCell.m */; };
+		77529E0320AC5BDC0015F7A6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77529E0220AC5BDB0015F7A6 /* MessageUI.framework */; };
 		776B534E20A69C9000594B32 /* LocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B534D20A69C9000594B32 /* LocationTableViewCell.m */; };
 		776B535720A732B100594B32 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535620A732B100594B32 /* SettingViewController.m */; };
 		776B535B20A7347A00594B32 /* SettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535A20A7347A00594B32 /* SettingTableViewCell.m */; };
@@ -243,7 +245,6 @@
 		BE6CFAF9207A3D8A00DFD3CA /* Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = BE6CFAF8207A3D8A00DFD3CA /* Utility.m */; };
 		BE88307320A13F9E0037C32C /* NSObject+WHC_Model.m in Sources */ = {isa = PBXBuildFile; fileRef = BE88307220A13F9D0037C32C /* NSObject+WHC_Model.m */; };
 		BE88307620A1A57F0037C32C /* UserInfoManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BE88307520A1A57F0037C32C /* UserInfoManager.m */; };
-		BE8E877A209339B8005EB719 /* AddressCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8E8779209339B8005EB719 /* AddressCollectionViewCell.m */; };
 		BE8E877D20934D10005EB719 /* OrderGoodsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8E877C20934D10005EB719 /* OrderGoodsViewCell.m */; };
 		BE8E878020935207005EB719 /* GoodsArrivedTimeFoot.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8E877F20935207005EB719 /* GoodsArrivedTimeFoot.m */; };
 		BE8E8783209354CE005EB719 /* OrderInvoiceViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8E8782209354CE005EB719 /* OrderInvoiceViewCell.m */; };
@@ -332,14 +333,17 @@
 		770355B02099E077002B3A8D /* LoginViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 		7737987020A86D750050187D /* AnotherCartViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnotherCartViewController.h; sourceTree = "<group>"; };
 		7737987120A86D750050187D /* AnotherCartViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnotherCartViewController.m; sourceTree = "<group>"; };
+		773A4B0420AD68EC00F0A5FA /* HYNoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYNoticeView.m; sourceTree = "<group>"; };
+		773A4B0520AD68EC00F0A5FA /* HYNoticeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYNoticeView.h; sourceTree = "<group>"; };
+		773A4B0720AD9B5C00F0A5FA /* AddressTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddressTableViewCell.h; sourceTree = "<group>"; };
+		773A4B0820AD9B5C00F0A5FA /* AddressTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressTableViewCell.m; sourceTree = "<group>"; };
+		773A4B0A20AD9D4200F0A5FA /* AddressTopTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddressTopTableViewCell.h; sourceTree = "<group>"; };
+		773A4B0B20AD9D4200F0A5FA /* AddressTopTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressTopTableViewCell.m; sourceTree = "<group>"; };
 		7748138E2071CF17002DDF93 /* CutomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CutomNavigationController.h; sourceTree = "<group>"; };
 		7748138F2071CF17002DDF93 /* CutomNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CutomNavigationController.m; sourceTree = "<group>"; };
-		774C47DF20A99806009B129F /* AddressHeadView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddressHeadView.h; sourceTree = "<group>"; };
-		774C47E020A99806009B129F /* AddressHeadView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressHeadView.m; sourceTree = "<group>"; };
 		774C47E220A99D2A009B129F /* WGS84TOGCJ02.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WGS84TOGCJ02.h; sourceTree = "<group>"; };
 		774C47E320A99D2A009B129F /* WGS84TOGCJ02.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WGS84TOGCJ02.m; sourceTree = "<group>"; };
-		774C47E520A9A990009B129F /* AddressTopViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddressTopViewCell.h; sourceTree = "<group>"; };
-		774C47E620A9A990009B129F /* AddressTopViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressTopViewCell.m; sourceTree = "<group>"; };
+		77529E0220AC5BDB0015F7A6 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
 		776B534C20A69C9000594B32 /* LocationTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationTableViewCell.h; sourceTree = "<group>"; };
 		776B534D20A69C9000594B32 /* LocationTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationTableViewCell.m; sourceTree = "<group>"; };
 		776B535520A732B100594B32 /* SettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
@@ -749,8 +753,6 @@
 		BE88307220A13F9D0037C32C /* NSObject+WHC_Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+WHC_Model.m"; sourceTree = "<group>"; };
 		BE88307420A1A57F0037C32C /* UserInfoManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UserInfoManager.h; sourceTree = "<group>"; };
 		BE88307520A1A57F0037C32C /* UserInfoManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UserInfoManager.m; sourceTree = "<group>"; };
-		BE8E8778209339B8005EB719 /* AddressCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddressCollectionViewCell.h; sourceTree = "<group>"; };
-		BE8E8779209339B8005EB719 /* AddressCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressCollectionViewCell.m; sourceTree = "<group>"; };
 		BE8E877B20934D10005EB719 /* OrderGoodsViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrderGoodsViewCell.h; sourceTree = "<group>"; };
 		BE8E877C20934D10005EB719 /* OrderGoodsViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrderGoodsViewCell.m; sourceTree = "<group>"; };
 		BE8E877E20935207005EB719 /* GoodsArrivedTimeFoot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsArrivedTimeFoot.h; sourceTree = "<group>"; };
@@ -870,10 +872,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77FDD572209BF54200805709 /* OpenGLES.framework in Frameworks */,
+				BE639A022073A33500C223E8 /* CoreGraphics.framework in Frameworks */,
+				77529E0320AC5BDC0015F7A6 /* MessageUI.framework in Frameworks */,
 				77FDD562209BF1F600805709 /* libcrypto.a in Frameworks */,
 				77FDD563209BF1F600805709 /* libssl.a in Frameworks */,
 				77FDD574209BF56C00805709 /* libstdc++.6.0.9.tbd in Frameworks */,
-				77FDD572209BF54200805709 /* OpenGLES.framework in Frameworks */,
 				77FDD570209BF53000805709 /* QuartzCore.framework in Frameworks */,
 				77FDD56E209BF51500805709 /* CoreLocation.framework in Frameworks */,
 				BE1275E6207464D2003A8AF8 /* libSocialQQ.a in Frameworks */,
@@ -906,7 +910,6 @@
 				BE639A082073A36300C223E8 /* libc++.tbd in Frameworks */,
 				BE639A062073A35800C223E8 /* CoreTelephony.framework in Frameworks */,
 				BE639A042073A34B00C223E8 /* SystemConfiguration.framework in Frameworks */,
-				BE639A022073A33500C223E8 /* CoreGraphics.framework in Frameworks */,
 				BE639A002073A32C00C223E8 /* libsqlite3.tbd in Frameworks */,
 				BE1275EE207464D2003A8AF8 /* libSocialOfficialWeChat.a in Frameworks */,
 				BE1275F4207464D2003A8AF8 /* UShareUI.framework in Frameworks */,
@@ -991,14 +994,14 @@
 		770355A32099C507002B3A8D /* cell */ = {
 			isa = PBXGroup;
 			children = (
-				BE8E8778209339B8005EB719 /* AddressCollectionViewCell.h */,
-				BE8E8779209339B8005EB719 /* AddressCollectionViewCell.m */,
 				770355A42099C664002B3A8D /* AddAddressViewCell.h */,
 				770355A52099C664002B3A8D /* AddAddressViewCell.m */,
 				776B534C20A69C9000594B32 /* LocationTableViewCell.h */,
 				776B534D20A69C9000594B32 /* LocationTableViewCell.m */,
-				774C47E520A9A990009B129F /* AddressTopViewCell.h */,
-				774C47E620A9A990009B129F /* AddressTopViewCell.m */,
+				773A4B0720AD9B5C00F0A5FA /* AddressTableViewCell.h */,
+				773A4B0820AD9B5C00F0A5FA /* AddressTableViewCell.m */,
+				773A4B0A20AD9D4200F0A5FA /* AddressTopTableViewCell.h */,
+				773A4B0B20AD9D4200F0A5FA /* AddressTopTableViewCell.m */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -1023,13 +1026,13 @@
 			path = "登录";
 			sourceTree = "<group>";
 		};
-		774C47DE20A983EF009B129F /* head */ = {
+		773A4B0320AD68EC00F0A5FA /* HYNoticeView */ = {
 			isa = PBXGroup;
 			children = (
-				774C47DF20A99806009B129F /* AddressHeadView.h */,
-				774C47E020A99806009B129F /* AddressHeadView.m */,
+				773A4B0520AD68EC00F0A5FA /* HYNoticeView.h */,
+				773A4B0420AD68EC00F0A5FA /* HYNoticeView.m */,
 			);
-			path = head;
+			path = HYNoticeView;
 			sourceTree = "<group>";
 		};
 		776B535320A7327D00594B32 /* 设置 */ = {
@@ -1343,6 +1346,7 @@
 		77F839B22070E8CE004E9717 /* 第三方 */ = {
 			isa = PBXGroup;
 			children = (
+				773A4B0320AD68EC00F0A5FA /* HYNoticeView */,
 				BE24E00D20A30E460024A64D /* GradientLabel */,
 				BE88307020A13F9D0037C32C /* WHC_ModelKit */,
 				77FDD555209BF1F600805709 /* BaiduMap */,
@@ -1894,7 +1898,6 @@
 		BE40AFAE208F5F7D00D4B690 /* 收货地址 */ = {
 			isa = PBXGroup;
 			children = (
-				774C47DE20A983EF009B129F /* head */,
 				770355A72099DB63002B3A8D /* foot */,
 				770355A32099C507002B3A8D /* cell */,
 				BE40AFAF208F5F9700D4B690 /* AddressViewController.h */,
@@ -2021,6 +2024,7 @@
 		BE6399FE2073A32B00C223E8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				77529E0220AC5BDB0015F7A6 /* MessageUI.framework */,
 				77FDD573209BF56B00805709 /* libstdc++.6.0.9.tbd */,
 				77FDD571209BF54100805709 /* OpenGLES.framework */,
 				77FDD56F209BF53000805709 /* QuartzCore.framework */,
@@ -2497,6 +2501,7 @@
 				776B535B20A7347A00594B32 /* SettingTableViewCell.m in Sources */,
 				BE9769E22072505C00783217 /* MJRefreshGifHeader.m in Sources */,
 				77F83A9F2070E8CE004E9717 /* NSData+ImageContentType.m in Sources */,
+				773A4B0620AD68EC00F0A5FA /* HYNoticeView.m in Sources */,
 				77F83A7C2070E8CE004E9717 /* IQUIScrollView+Additions.m in Sources */,
 				77F83AA52070E8CE004E9717 /* SDWebImageCoderHelper.m in Sources */,
 				77F83A782070E8CE004E9717 /* UIProgressView+AFNetworking.m in Sources */,
@@ -2529,7 +2534,6 @@
 				BE520E8D207CD99500BA0FA3 /* HomeViewController.m in Sources */,
 				77F83A7F2070E8CE004E9717 /* IQUIViewController+Additions.m in Sources */,
 				BE8E8783209354CE005EB719 /* OrderInvoiceViewCell.m in Sources */,
-				774C47E120A99806009B129F /* AddressHeadView.m in Sources */,
 				BE24E00C20A3096A0024A64D /* HomeFeatureViewCell.m in Sources */,
 				77A5DE33208C9539005F97F9 /* MyCenterGridCell.m in Sources */,
 				BE9769E92072505C00783217 /* UIScrollView+MJRefresh.m in Sources */,
@@ -2543,7 +2547,6 @@
 				BE44A0892091F106001FE5A6 /* OrderDetailViewController.m in Sources */,
 				779F9FDC208AC08600C38D61 /* SubCategoryController.m in Sources */,
 				BE8E878920935C91005EB719 /* OrderCustomerViewCell.m in Sources */,
-				774C47E720A9A990009B129F /* AddressTopViewCell.m in Sources */,
 				779F9FDF208AC14B00C38D61 /* CatoryGridViewCell.m in Sources */,
 				779C9561209B0F7E0029A591 /* HomeShopViewCell.m in Sources */,
 				BE44A09A2091FA3B001FE5A6 /* OrderStateHeadView.m in Sources */,
@@ -2616,13 +2619,13 @@
 				BE9769E62072505C00783217 /* MJRefreshConst.m in Sources */,
 				77F83AAD2070E8CE004E9717 /* SDWebImageManager.m in Sources */,
 				77F83A822070E8CE004E9717 /* IQTextView.m in Sources */,
-				BE8E877A209339B8005EB719 /* AddressCollectionViewCell.m in Sources */,
 				77DD808D2083217700A1D080 /* TextTitleHeadView.m in Sources */,
 				77F83A892070E8CE004E9717 /* JSONModel.m in Sources */,
 				BE44A0852091E84E001FE5A6 /* GoodsScreenshotsGridCell.m in Sources */,
 				BE40AFB1208F5F9700D4B690 /* AddressViewController.m in Sources */,
 				BECB902A2084BA5700170BC6 /* DetailTopToolView.m in Sources */,
 				BE44A08D2091F301001FE5A6 /* OrderConfirmViewController.m in Sources */,
+				773A4B0920AD9B5C00F0A5FA /* AddressTableViewCell.m in Sources */,
 				BE6CFAF0207A3CBB00DFD3CA /* DataModel.m in Sources */,
 				77F83A802070E8CE004E9717 /* IQKeyboardManager.m in Sources */,
 				BE6CFAF9207A3D8A00DFD3CA /* Utility.m in Sources */,
@@ -2691,6 +2694,7 @@
 				77F83A732070E8CE004E9717 /* AFImageDownloader.m in Sources */,
 				BE9769EA2072505C00783217 /* UIView+MJExtension.m in Sources */,
 				77F83AA22070E8CE004E9717 /* SDImageCache.m in Sources */,
+				773A4B0C20AD9D4200F0A5FA /* AddressTopTableViewCell.m in Sources */,
 				7783F20F2097089E00338459 /* OrderPaywayViewCell.m in Sources */,
 				77F83AAB2070E8CE004E9717 /* SDWebImageGIFCoder.m in Sources */,
 				77F83A9D2070E8CE004E9717 /* MKAnnotationView+WebCache.m in Sources */,
@@ -2859,6 +2863,7 @@
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/UMSocial",
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/UMSocial/UMSocialUI",
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/BaiduMap",
+					"$(PROJECT_DIR)/CXGMSupermarket/第三方/Alipay",
 				);
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2876,6 +2881,7 @@
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/UMSocial/SocialLibraries/WeChat/WechatSDK",
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/UMSocial/UMSocialSDKPlugin",
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/BaiduMap/thirdlibs",
+					"$(PROJECT_DIR)/CXGMSupermarket/第三方/Alipay",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.twsm.LifeHouse;
@@ -2901,6 +2907,7 @@
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/UMSocial",
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/UMSocial/UMSocialUI",
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/BaiduMap",
+					"$(PROJECT_DIR)/CXGMSupermarket/第三方/Alipay",
 				);
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -2918,6 +2925,7 @@
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/UMSocial/SocialLibraries/WeChat/WechatSDK",
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/UMSocial/UMSocialSDKPlugin",
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/BaiduMap/thirdlibs",
+					"$(PROJECT_DIR)/CXGMSupermarket/第三方/Alipay",
 				);
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.twsm.LifeHouse;

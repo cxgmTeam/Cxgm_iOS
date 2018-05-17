@@ -16,6 +16,14 @@
 
 @implementation HomeShopViewCell
 
+
+- (void)setShopModel:(ShopModel *)shopModel
+{
+    _shopNameLabel.text = shopModel.shopName;
+    _shopAddressLabel.text = shopModel.shopAddress;
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:shopModel.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+}
+
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         

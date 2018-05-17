@@ -7,22 +7,21 @@
 //
 
 #import "AddressViewController.h"
-#import "AddressCollectionViewCell.h"
+
 #import "AddAddressViewController.h"
 #import "LoginViewController.h"
-#import "AddressHeadView.h"
-#import "AddressTopViewCell.h"
 #import "MapViewController.h"
 
-@interface AddressViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
-@property (strong , nonatomic)UICollectionView *collectionView;
-@property (strong , nonatomic)NSArray *addressList;
+#import "AddressTopTableViewCell.h"
+#import "AddressTableViewCell.h"
+
+@interface AddressViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property (strong , nonatomic)UITableView *tableView;
+
+@property (strong , nonatomic)NSMutableArray *addressList;
 @end
 
-static NSString *const AddressCollectionViewCellID = @"AddressCollectionViewCell";
-static NSString *const AddressTopViewCellID = @"AddressTopViewCell";
-
-static NSString *const AddressHeadViewID = @"AddressHeadView";
 
 @implementation AddressViewController
 
@@ -43,8 +42,9 @@ static NSString *const AddressHeadViewID = @"AddressHeadView";
         make.height.equalTo(50);
     }];
 
-    self.collectionView.backgroundColor = [UIColor clearColor];
-    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
+    self.addressList = [NSMutableArray array];
+    
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.top.right.equalTo(self.view);
         make.bottom.equalTo(addBtn.top);
     }];
@@ -62,17 +62,21 @@ static NSString *const AddressHeadViewID = @"AddressHeadView";
 {
     if (![UserInfoManager sharedInstance].isLogin) return;
     
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    //点击设为默认 刷新列表会崩溃
+//    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
-    NSDictionary* dic = @{@"userId":userInfo.id};
-    [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIAddressList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){
+    
+    [self.addressList removeAllObjects];
+
+    [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIAddressList] token:userInfo.token parameters:nil success:^(id JSON, NSError *error){
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
-            self.addressList = [AddressModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
-            [self.collectionView reloadData];
+            NSArray* array = [AddressModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            [self.addressList addObjectsFromArray:array];
+            [self.tableView reloadData];
         }
     } failure:^(id JSON, NSError *error){
          [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -91,28 +95,35 @@ static NSString *const AddressHeadViewID = @"AddressHeadView";
     [self.navigationController pushViewController:vc animated:YES];
 }
 
-#pragma mark-
+#pragma mark- UITableView
 
-- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 2;
 }
 
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (section == 0) {
         return 2;
     }
     return self.addressList.count;
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    UICollectionViewCell* viewCell = nil;
-    
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    UITableViewCell* tableCell;
     if (indexPath.section == 0) {
-        AddressTopViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:AddressTopViewCellID forIndexPath:indexPath];
+        AddressTopTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"AddressTopTableViewCell"];
+        if (!cell) {
+            cell = [[AddressTopTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressTopTableViewCell"];
+        }
         cell.indexPath = indexPath;
-        viewCell = cell;
-    }else{
-        AddressCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:AddressCollectionViewCellID forIndexPath:indexPath];
+        tableCell = cell;
+    }
+    else
+    {
+        AddressTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"AddressTableViewCell"];
+        if (!cell) {
+            cell = [[AddressTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressTableViewCell"];
+        }
         if (indexPath.item < self.addressList.count) {
             cell.address = self.addressList[indexPath.item];
         }
@@ -122,82 +133,132 @@ static NSString *const AddressHeadViewID = @"AddressHeadView";
             vc.address = self.addressList[indexPath.row];
             [weakSelf.navigationController pushViewController:vc animated:YES];
         };
-       viewCell = cell;
+        cell.setDefaultAddress = ^(BOOL isDefault){
+            [weakSelf updateAddress:self.addressList[indexPath.row] isDefault:isDefault];
+        };
+        tableCell = cell;
     }
-    return viewCell;
+    return tableCell;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    UICollectionReusableView *reusableview = nil;
-    if (kind == UICollectionElementKindSectionHeader){
-        AddressHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:AddressHeadViewID forIndexPath:indexPath];
-        if (indexPath.section == 0) {
-            headerView.titleLabel.text = @"当前定位";
-        }else{
-            headerView.titleLabel.text = @"我的收获地址";
-        }
-        reusableview = headerView;
-    }
-    return reusableview;
-}
-
-#pragma mark - item宽高
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        return CGSizeMake(ScreenW , 45);
-    }
-    if (indexPath.section == 1) {
-        return CGSizeMake(ScreenW , 128);
-    }
-    return CGSizeZero;
-}
-
-#pragma mark - head宽高
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    
-    return CGSizeMake(ScreenW, 42);
-}
-
-#pragma mark - <UICollectionViewDelegateFlowLayout>
-#pragma mark - X间距
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return  0;
-}
-#pragma mark - Y间距
-- (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return (section == 2) ? 10 : 0;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-    if (indexPath.section == 0 && indexPath.item == 1) {
+    if (indexPath.section == 0 && indexPath.row == 1) {
         MapViewController* vc = [MapViewController new];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
-#pragma mark- init
-- (UICollectionView *)collectionView
-{
-    if (!_collectionView) {
-        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        
-        
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.showsVerticalScrollIndicator = NO;
-        _collectionView.alwaysBounceVertical = YES;
-        
-        [_collectionView registerClass:[AddressCollectionViewCell class] forCellWithReuseIdentifier:AddressCollectionViewCellID];
-        [_collectionView registerClass:[AddressTopViewCell class] forCellWithReuseIdentifier:AddressTopViewCellID];
-        
-        [_collectionView registerClass:[AddressHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:AddressHeadViewID];
-        
-        [self.view addSubview:_collectionView];
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    CGFloat height = 0;
+    if (indexPath.section == 0) {
+        height = 45;
+    }else{
+        height = 128+10;
     }
-    return _collectionView;
+    return height;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    return 42;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    UIView* head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenW, 42)];
+    head.backgroundColor = [UIColor colorWithHexString:@"f2f3f4"];
+    UILabel *label = [[UILabel alloc] init];
+    if (section == 0) {
+        label.text = @"当前定位";
+    }else{
+        label.text = @"我的收获地址";
+    }
+    label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];
+    label.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
+    [head addSubview:label];
+    [label mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(15);
+        make.centerY.equalTo(head);
+    }];
+    return head;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return @"删除";
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        AddressModel* address = self.addressList[indexPath.row];
+        
+        [self deleteAddress:address indexPath:indexPath];
+    }
+}
+
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1) {
+        return   UITableViewCellEditingStyleDelete;
+    }
+    return UITableViewCellEditingStyleNone;
+}
+
+- (void)deleteAddress:(AddressModel *)address indexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary* dic = @{@"addressId":address.id};
+    [AFNetAPIClient POST:[LoginBaseURL stringByAppendingString:APIDeleteAddress] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        
+        if ([model.code intValue] == 200) {
+            [self.addressList removeObjectAtIndex:indexPath.row];
+            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+- (void)updateAddress:(AddressModel *)address isDefault:(BOOL)flag
+{
+    UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
+    
+    NSDictionary* dic = @{
+                        @"id": address.id,
+                        @"address": address.address,
+                        @"area": address.area,
+                        @"dimension": address.dimension,
+                        @"longitude": address.longitude,
+                        @"phone": address.phone,
+                        @"realName": address.realName,
+                        @"isDef": flag == YES?@"1":@"0",
+                        };
+    
+    WEAKSELF;
+    [Utility CXGMPostRequest:[LoginBaseURL stringByAppendingString:APIUpdateAddress] token:userInfo.token parameter:dic success:^(id JSON, NSError *error){
+        
+        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+        if ([model.code intValue] == 200) {
+            [weakSelf getAddressList];
+        }
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+#pragma mark- init
+
+- (UITableView *)tableView
+{
+    if (!_tableView) {
+        _tableView = [UITableView new];
+        _tableView.backgroundColor = [UIColor clearColor];
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.delegate = self;
+        _tableView.dataSource = self;
+        [self.view addSubview:_tableView];
+    }
+    return _tableView;
 }
 
 

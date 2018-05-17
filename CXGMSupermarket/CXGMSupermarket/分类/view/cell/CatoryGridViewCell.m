@@ -16,6 +16,11 @@
 
 @implementation CatoryGridViewCell
 
+- (void)setCategory:(CategoryModel *)category
+{
+    _titleLabel.text = category.name;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     
     self = [super initWithFrame:frame];
@@ -28,7 +33,8 @@
 - (void)setUpUI
 {
     _imgView = [[UIImageView alloc] init];
-    _imgView.contentMode = UIViewContentModeScaleAspectFill;
+    _imgView.image = [UIImage imageNamed:@"placeholderImage"];
+//    _imgView.contentMode = UIViewContentModeScaleAspectFill;
     [self addSubview:_imgView];
     
     _titleLabel = [[UILabel alloc] init];
@@ -49,8 +55,8 @@
     }];
 }
 
-- (void)setImage:(NSString *)imgName title:(NSString *)title{
-    _imgView.image = [UIImage imageNamed:imgName];
-    _titleLabel.text = title;
-}
+//- (void)setImage:(NSString *)imgName title:(NSString *)title{
+//    _imgView.image = [UIImage imageNamed:imgName];
+//    _titleLabel.text = title;
+//}
 @end

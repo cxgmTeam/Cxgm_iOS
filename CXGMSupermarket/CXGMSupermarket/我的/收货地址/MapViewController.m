@@ -46,6 +46,9 @@
 
 @property(strong,nonatomic) NSMutableArray *pointArray;
 @property(assign,nonatomic) NSInteger pointNodeNum;
+
+@property(strong,nonatomic) BMKPolygon *ploygon;
+
 @end
 
 @implementation MapViewController
@@ -107,9 +110,9 @@
     _searchTable.hidden = YES;
     
     
-    
     [self findAllPsfw];
 }
+
 
 - (void)findAllPsfw
 {
@@ -128,40 +131,53 @@
                 NSArray* array = [psfw componentsSeparatedByString:@","];
                 
                 self.pointNodeNum = array.count;
+
+                NSMutableArray * pointsArr = [NSMutableArray array];
                 
-                 CLLocationCoordinate2D coords[self.pointNodeNum];
-                
-                for (NSInteger i = 0;i < array.count ;i++) {
-                    NSString* string = array[i];
-                    NSArray* arr = [string componentsSeparatedByString:@"_"];
-                    if (arr.count>1) {
-                        // 添加多边形覆盖物
-                       
-                        coords[i].latitude = [arr[0] doubleValue];;
-                        coords[i].longitude = [arr[1] doubleValue];
+                if (!self.ploygon)
+                {
+                    for (NSInteger i = 0;i < self.pointNodeNum  ;i++)
+                    {
+                        NSString* string = array[i];
+                        NSArray* arr = [string componentsSeparatedByString:@"_"];
+                        if (arr.count>1) {
+                            
+//                            NSLog(@"%f  %f",[arr[0] floatValue],[arr[1] floatValue]);
+                            
+                            CLLocation *location = [[CLLocation alloc] initWithLatitude:[arr[1] floatValue] longitude:[arr[0] floatValue]];
+                            [pointsArr addObject:location];
+
+                        }
                     }
-                    if (i == self.pointNodeNum-1) {
-                        BMKPolygon* polygon = [BMKPolygon polygonWithCoordinates:coords count:self.pointNodeNum];
-                        [self.mapView addOverlay:polygon];
+
+                    CLLocationCoordinate2D commuterLotCoords[self.pointNodeNum];
+                    
+                    for(int i = 0; i < [pointsArr count]; i++) {
+                        commuterLotCoords[i] = [[pointsArr objectAtIndex:i] coordinate];
                     }
+
+                    self.ploygon = [BMKPolygon polygonWithCoordinates:commuterLotCoords count:self.pointNodeNum];
+                    [self.mapView addOverlay:self.ploygon];
                 }
+                
             }
         }
     } failure:^(id JSON, NSError *error){
         
     }];
+    
 }
 
 // Override
 - (BMKOverlayView *)mapView:(BMKMapView *)mapView viewForOverlay:(id <BMKOverlay>)overlay
 {
-    NSLog(@"%s",__func__);
     if ([overlay isKindOfClass:[BMKPolygon class]])
     {
         BMKPolygonView* polygonView = [[BMKPolygonView alloc] initWithOverlay:overlay];
         polygonView.strokeColor = [[UIColor purpleColor] colorWithAlphaComponent:1];
         polygonView.fillColor = [[UIColor cyanColor] colorWithAlphaComponent:0.2];
-        polygonView.lineWidth = 5.0;
+        polygonView.lineWidth = 2.0;
+        polygonView.lineDash = YES;
         return polygonView;
     }
     return nil;
@@ -234,7 +250,7 @@
 {
     [_mapView setMapType:BMKMapTypeStandard];// 地图类型 ->卫星／标准、
     
-    _mapView.zoomLevel=17;
+    _mapView.zoomLevel=11;
     _mapView.delegate=self;
     _mapView.showsUserLocation = YES;
 
@@ -329,17 +345,20 @@
     [_mapView updateLocationData:userLocation];
 
 
-//    _mapView.centerCoordinate = userLocation.location.coordinate;
+    _mapView.centerCoordinate = userLocation.location.coordinate;
     
-    BMKCoordinateRegion region ;//表示范围的结构体
-    region.center = _mapView.centerCoordinate;//中心点
-    region.span.latitudeDelta = 0.004;//经度范围（设置为0.1表示显示范围为0.2的纬度范围）
-    region.span.longitudeDelta = 0.004;//纬度范围
-    [_mapView setRegion:region animated:YES];
+    //和覆盖范围冲突
+    
+//    BMKCoordinateRegion region ;//表示范围的结构体
+//    region.center = _mapView.centerCoordinate;//中心点
+//    region.span.latitudeDelta = 0.004;//经度范围（设置为0.1表示显示范围为0.2的纬度范围）
+//    region.span.longitudeDelta = 0.004;//纬度范围
+//    [_mapView setRegion:region animated:YES];
     
 }
 
 #pragma mark BMKMapViewDelegate
+
 - (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
     //屏幕坐标转地图经纬度
@@ -381,7 +400,7 @@
             model.address=poiInfo.address;
             model.latitude = poiInfo.pt.latitude;
             model.longitude = poiInfo.pt.longitude;
-            model.inScope = [Utility checkAddress:[NSString stringWithFormat:@"%lf",poiInfo.pt.longitude] dimension:[NSString stringWithFormat:@"%lf",poiInfo.pt.latitude]];
+//            model.inScope = [Utility checkAddress:[NSString stringWithFormat:@"%lf",poiInfo.pt.longitude] dimension:[NSString stringWithFormat:@"%lf",poiInfo.pt.latitude]];
             
             [self.locationDataArr addObject:model];
             
@@ -425,7 +444,7 @@
             model.address=poi.address;
             model.latitude = poi.pt.latitude;
             model.longitude = poi.pt.longitude;
-            model.inScope = [Utility checkAddress:[NSString stringWithFormat:@"%lf",poi.pt.longitude] dimension:[NSString stringWithFormat:@"%lf",poi.pt.latitude]];
+//            model.inScope = [Utility checkAddress:[NSString stringWithFormat:@"%lf",poi.pt.longitude] dimension:[NSString stringWithFormat:@"%lf",poi.pt.latitude]];
             
 //            BMKPointAnnotation* item = [[BMKPointAnnotation alloc]init];
 //            item.coordinate = poi.pt;

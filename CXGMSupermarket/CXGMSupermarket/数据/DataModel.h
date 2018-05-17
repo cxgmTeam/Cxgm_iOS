@@ -10,6 +10,7 @@
 
 @interface ListModel : JSONModel
 @property (nonatomic,strong)NSObject<Optional> * list;
+@property (nonatomic,strong)NSString<Optional> * isLastPage;
 @end
 
 @interface DataModel : JSONModel
@@ -87,6 +88,13 @@
 @property (nonatomic,strong)NSString<Optional> * goodCode;
 @end
 
+//分类
+@interface CategoryModel : JSONModel
+@property (nonatomic,strong)NSString<Optional> * id;
+@property (nonatomic,strong)NSString<Optional> * name;
+@property (nonatomic,strong)NSObject<Optional> * shopCategoryList;
+@end
+
 //优惠券
 @interface CouponsModel : JSONModel
 @property (nonatomic,strong)NSString<Optional> * beginDate;
@@ -111,6 +119,7 @@
 @property(nonatomic,strong)NSString<Optional> * longitude;
 @property(nonatomic,strong)NSString<Optional> * phone;
 @property(nonatomic,strong)NSString<Optional> * realName;
+@property(nonatomic,strong)NSString<Optional> * isDef;//是否为默认地址
 @end
 
 

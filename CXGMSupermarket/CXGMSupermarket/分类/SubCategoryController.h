@@ -9,5 +9,5 @@
 #import "CustomDetailViewController.h"
 
 @interface SubCategoryController : CustomDetailViewController
-
+@property(nonatomic,strong)CategoryModel* category;
 @end

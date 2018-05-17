@@ -42,6 +42,7 @@ static CGFloat TopBtnWidth = 60;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.title = self.category.name;
     
     self.categoryArray = [NSMutableArray array];
     
@@ -125,7 +126,12 @@ static CGFloat TopBtnWidth = 60;
         make.top.equalTo(39);
     }];
     
+    
+    if (self.category) {
+        [self findSecondCategory:self.category.id];
+    }
 }
+
 
 //二级分类
 - (void)findSecondCategory:(NSString *)productCategoryId
@@ -136,15 +142,24 @@ static CGFloat TopBtnWidth = 60;
                 @"productCategoryId":productCategoryId.length > 0? productCategoryId:@""};
     }
     
+    typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindSecondCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
-//        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            NSArray* array = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            for (CategoryModel* category in array) {
+                [wself findProductByCategory:category.id];
+                
+                [wself findThirdCategory:category.id];
+            }
+        }
         
     } failure:^(id JSON, NSError *error){
         
     }];
 }
 
-//二级分类
+//三级分类
 - (void)findThirdCategory:(NSString *)productCategoryTwoId
 {
     NSDictionary* dic = @{@"shopId":@"",@"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
@@ -155,6 +170,23 @@ static CGFloat TopBtnWidth = 60;
     
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindThirdCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
 //        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+
+- (void)findProductByCategory:(NSString *)productCategoryTwoId
+{
+    NSDictionary* dic = @{@"shopId":@"",@"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
+    if ([DeviceHelper sharedInstance].shop) {
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
+                @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
+    }
+    
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindProductByCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
+        //        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         
     } failure:^(id JSON, NSError *error){
         
@@ -178,7 +210,7 @@ static CGFloat TopBtnWidth = 60;
 #pragma mark-
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
-    NSLog(@"%s",__func__);
+//    NSLog(@"%s",__func__);
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
@@ -187,7 +219,7 @@ static CGFloat TopBtnWidth = 60;
     
     if (scrollView == self.rightTableView) return;
     
-    NSLog(@"%s",__func__);
+//    NSLog(@"%s",__func__);
     
     float xx = scrollView.contentOffset.x * (TopBtnWidth / self.topScrollWidth) - TopBtnWidth;
     [self.topScrollView scrollRectToVisible:CGRectMake(xx, 0, self.topScrollWidth, 40) animated:YES];
@@ -196,10 +228,10 @@ static CGFloat TopBtnWidth = 60;
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView {
     if (scrollView == self.leftTableView || scrollView == self.topScrollView) return;
     
-    NSLog(@"%s",__func__);
+//    NSLog(@"%s",__func__);
     
     NSIndexPath *topHeaderViewIndexpath = [[self.rightTableView indexPathsForVisibleRows] firstObject];
-    NSLog(@"topHeaderViewIndexpath  %ld",topHeaderViewIndexpath.section);
+//    NSLog(@"topHeaderViewIndexpath  %ld",topHeaderViewIndexpath.section);
     if (self.arrivedSecton == topHeaderViewIndexpath.section) {
         return;
     }

@@ -128,6 +128,8 @@
 #pragma mark-
 + (void)CXGMPostRequest:(NSString *)requestUrl token:(NSString *)token parameter:(NSDictionary *)dict success:(void (^)(id JSON, NSError *error))success failure:(void (^)(id JSON, NSError *error))failure
 {
+    NSLog(@"\n\nCXGMPostRequest requestUrl = %@",requestUrl);
+    
     NSURLSession *session = [NSURLSession sharedSession];
     
     NSURL* url = [NSURL URLWithString:requestUrl];
@@ -146,7 +148,7 @@
     
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:postRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-        NSLog(@"CXGMPostRequest dic = %@",dic);
+        NSLog(@"\n\nCXGMPostRequest dic = %@",dic);
         if ([[dic objectForKey:@"code"] integerValue] == 200) {
             if (success) {
                 success(dic,nil);

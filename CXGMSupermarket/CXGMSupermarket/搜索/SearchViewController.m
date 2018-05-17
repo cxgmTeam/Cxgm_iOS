@@ -158,6 +158,8 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     _topView.hidden = NO;
+    
+    [self.view endEditing:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{

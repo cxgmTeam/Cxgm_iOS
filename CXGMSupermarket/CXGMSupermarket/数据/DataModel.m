@@ -27,6 +27,10 @@
 
 @end
 
+@implementation CategoryModel
+
+@end
+
 @implementation GoodsModel
 
 @end

@@ -10,5 +10,5 @@
 
 @interface CatoryGridViewCell : UICollectionViewCell
 
-- (void)setImage:(NSString *)imgName title:(NSString *)title;
+@property(nonatomic,strong)CategoryModel* category;
 @end

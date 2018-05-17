@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface HomeShopViewCell : UICollectionViewCell
-
+@property(nonatomic,strong)ShopModel* shopModel;
 @end

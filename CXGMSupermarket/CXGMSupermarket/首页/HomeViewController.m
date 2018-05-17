@@ -16,11 +16,15 @@
 #import "SearchViewController.h"
 #import "AddressViewController.h"
 
+#import "HYNoticeView.h"
+
 @interface HomeViewController ()
 @property(nonatomic,strong)HomeGoodsView* goodsView;
 @property(nonatomic,strong)HomeShopsView* shopsView;
 
 @property(nonatomic,strong)UIView* topView;
+
+@property(nonatomic,strong)HYNoticeView *noticeHot;
 @end
 
 
@@ -30,6 +34,10 @@
     [super viewDidLoad];
     
     [self setupTopBar];
+    
+    
+    _noticeHot = [[HYNoticeView alloc] initWithFrame:CGRectMake(10, NAVIGATION_BAR_HEIGHT-25, SCREENW*0.6, 40) text:@"送货至西城区德胜门国际大厦五层" position:HYNoticeViewPositionTopLeft];
+    [_noticeHot showType:HYNoticeTypeTestHot inView:self.navigationController.navigationBar];
 }
 
 - (void)setupMainUI:(BOOL)inScope
@@ -76,8 +84,14 @@
             [_shopsView mas_makeConstraints:^(MASConstraintMaker *make){
                 make.edges.equalTo(self.view);
             }];
+            typeof(self) __weak wself = self;
+            _shopsView.selectShopHandler = ^{
+                [wself setupMainUI:YES];
+            };
         }
     }
+    
+    [self.view bringSubviewToFront:_noticeHot];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -85,12 +99,14 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     _topView.hidden = NO;
+    _noticeHot.hidden = NO;
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     _topView.hidden = YES;
+    _noticeHot.hidden = YES;
 }
 
 - (void)setupTopBar

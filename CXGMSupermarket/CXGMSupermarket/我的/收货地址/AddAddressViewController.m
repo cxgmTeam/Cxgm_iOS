@@ -41,6 +41,17 @@ static NSString *const AddAddressFootViewID = @"AddAddressFootView";
         self.title = @"新增地址";
     }
     
+    if (self.address)
+    {
+        UIButton* deleteBtn = [UIButton new];
+        [deleteBtn setTitle:@"删除" forState:UIControlStateNormal];
+        [deleteBtn setTitleColor:Color00A862 forState:UIControlStateNormal];
+        deleteBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
+        [deleteBtn addTarget:self action:@selector(deleteAddress:) forControlEvents:UIControlEventTouchUpInside];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:deleteBtn];
+    }
+
+    
     self.titleArray = @[@"收货人：",@"手机号码：",@"小区／大厦：",@"楼号-门牌号：",@"备注信息："];
     
     self.dictionary = [NSMutableDictionary dictionaryWithObjectsAndKeys:
@@ -52,6 +63,20 @@ static NSString *const AddAddressFootViewID = @"AddAddressFootView";
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
+    }];
+}
+
+- (void)deleteAddress:(id)sender
+{
+    NSDictionary* dic = @{@"addressId":self.address.id};
+    [AFNetAPIClient POST:[LoginBaseURL stringByAppendingString:APIDeleteAddress] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.code isEqualToString:@"200"]) {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
     }];
 }
 
@@ -85,7 +110,9 @@ static NSString *const AddAddressFootViewID = @"AddAddressFootView";
             @"dimension": [NSString stringWithFormat:@"%lf",self.location.latitude],
             @"longitude": [NSString stringWithFormat:@"%lf",self.location.longitude],
             @"phone": self.phoneField.text,
-            @"realName": self.nameField.text
+            @"realName": self.nameField.text,
+            @"isDef":@"0"
+            
             };
     
     
@@ -100,7 +127,8 @@ static NSString *const AddAddressFootViewID = @"AddAddressFootView";
                 @"dimension": [NSString stringWithFormat:@"%lf",self.location.latitude],
                 @"longitude": [NSString stringWithFormat:@"%lf",self.location.longitude],
                 @"phone": self.phoneField.text,
-                @"realName": self.nameField.text
+                @"realName": self.nameField.text,
+                @"isDef": self.address.isDef,
                 };
     }
     

@@ -10,4 +10,5 @@
 
 @interface HomeShopsView : UIView
 
+@property(nonatomic,copy)dispatch_block_t selectShopHandler;
 @end

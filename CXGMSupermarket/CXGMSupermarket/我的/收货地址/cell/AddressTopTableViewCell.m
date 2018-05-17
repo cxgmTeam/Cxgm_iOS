@@ -1,25 +1,26 @@
 //
-//  AddressTopViewCell.m
+//  AddressTopTableViewCell.m
 //  CXGMSupermarket
 //
-//  Created by zhu yingmin on 2018/5/14.
+//  Created by zhu yingmin on 2018/5/17.
 //  Copyright © 2018年 zhu yingmin. All rights reserved.
 //
 
-#import "AddressTopViewCell.h"
+#import "AddressTopTableViewCell.h"
 
-@interface AddressTopViewCell ()
+@interface AddressTopTableViewCell ()
 
 @property(nonatomic,strong)UILabel* leftLabel;
 @property(nonatomic,strong)UIButton* anchorBtn;
 @property(nonatomic,strong)UIImageView* arrowView;
-
+@property(nonatomic,strong)UIView* lineView;
 @end
 
-@implementation AddressTopViewCell
+@implementation AddressTopTableViewCell
 
-- (instancetype)initWithFrame:(CGRect)frame{
-    if (self = [super initWithFrame:frame]) {
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
+    if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+        
         self.backgroundColor = [UIColor whiteColor];
         
         UILabel *label = [[UILabel alloc] init];
@@ -56,6 +57,16 @@
             make.width.equalTo(100);
         }];
         _anchorBtn = button;
+        
+        UIView* line = [UIView new];
+        line.backgroundColor = [UIColor colorWithHexString:@"E8E8E8"];
+        [self addSubview:line];
+        [line mas_makeConstraints:^(MASConstraintMaker *make){
+            make.height.equalTo(1);
+            make.left.right.bottom.equalTo(self);
+        }];
+        _lineView = line;
+        
     }
     return self;
 }
@@ -68,13 +79,15 @@
         
         _anchorBtn.hidden = NO;
         _arrowView.hidden = YES;
-        
+        _lineView.hidden = NO;
         
     }else{
         
         _leftLabel.text = @"附近地址";
         _anchorBtn.hidden = YES;
         _arrowView.hidden = NO;
+        _lineView.hidden = YES;
     }
 }
+
 @end

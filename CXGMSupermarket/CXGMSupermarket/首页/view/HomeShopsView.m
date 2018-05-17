@@ -15,7 +15,8 @@
 
 @interface HomeShopsView ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
-
+@property (assign , nonatomic)NSInteger pageNum;
+@property (strong , nonatomic)NSMutableArray *shopList;
 @end
 
 #define GoodsHomeSilderImagesArray @[@"http://gfs5.gomein.net.cn/T1obZ_BmLT1RCvBVdK.jpg",@"http://gfs9.gomein.net.cn/T1C3J_B5LT1RCvBVdK.jpg",@"http://gfs5.gomein.net.cn/T1CwYjBCCT1RCvBVdK.jpg",@"http://gfs7.gomein.net.cn/T1u8V_B4ET1RCvBVdK.jpg",@"http://gfs7.gomein.net.cn/T1zODgB5CT1RCvBVdK.jpg"]
@@ -37,6 +38,19 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
         [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
             make.edges.equalTo(self);
         }];
+        typeof(self) __weak wself = self;
+        self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+            wself.pageNum = 1;
+            [wself.shopList removeAllObjects];
+            [wself getShopList];
+        }];
+        self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+            wself.pageNum ++;
+            [wself getShopList];
+        }];
+        
+        self.pageNum = 1;
+        self.shopList = [NSMutableArray array];
         
         [self getShopList];
     }
@@ -45,11 +59,27 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
 
 - (void)getShopList
 {
-    NSDictionary* dic = @{@"pageNum":@"1",@"pageSize":@"10"};
+    NSDictionary* dic = @{@"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
+                          @"pageSize":@"10"};
+    
     [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIShopList] token:nil parameters:dic success:^(id JSON, NSError *error){
         
-    } failure:^(id JSON, NSError *error){
+        DataModel* model = [DataModel dataModelWith:JSON];
+        if ([model.listModel.list isKindOfClass:[NSArray class]]) {
+            NSArray* array = [ShopModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            [self.shopList addObjectsFromArray:array];
+            [self.collectionView reloadData];
+        }
+        if ([model.listModel.isLastPage boolValue]) {
+            [self.collectionView.mj_footer endRefreshingWithNoMoreData];
+        }else{
+            [self.collectionView.mj_footer endRefreshing];
+        }
+        [self.collectionView.mj_header endRefreshing];
         
+    } failure:^(id JSON, NSError *error){
+        [self.collectionView.mj_header endRefreshing];
+        [self.collectionView.mj_footer endRefreshing];
     }];
 }
 
@@ -63,7 +93,7 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
         return 1;
     }
     if (section == 1) {
-        return 3;
+        return self.shopList.count;
     }
     return 0;
 }
@@ -76,6 +106,7 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
         
     }else if (indexPath.section == 1) {
         HomeShopViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:HomeShopViewCellID forIndexPath:indexPath];
+        cell.shopModel = self.shopList[indexPath.item];
         gridcell = cell;
     }
     return gridcell;
@@ -126,6 +157,14 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
         return UIEdgeInsetsMake(10, 0, 10, 0);
     }
     return UIEdgeInsetsZero;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    [DeviceHelper sharedInstance].shop = self.shopList[indexPath.item];
+    
+    !_selectShopHandler?:_selectShopHandler();
 }
 #pragma mark- init
 - (UICollectionView *)collectionView

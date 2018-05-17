@@ -1,13 +1,13 @@
 //
-//  AddressTopViewCell.h
+//  AddressTopTableViewCell.h
 //  CXGMSupermarket
 //
-//  Created by zhu yingmin on 2018/5/14.
+//  Created by zhu yingmin on 2018/5/17.
 //  Copyright © 2018年 zhu yingmin. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface AddressTopViewCell : UICollectionViewCell
+@interface AddressTopTableViewCell : UITableViewCell
 @property(nonatomic,strong)NSIndexPath* indexPath;
 @end

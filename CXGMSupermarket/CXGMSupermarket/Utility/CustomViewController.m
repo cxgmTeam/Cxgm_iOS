@@ -16,7 +16,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@" ===>>>>>>> %@ \n\n",self.class);
+    NSLog(@"\n\n ===>>>>>>> %@ \n\n",self.class);
     self.view.backgroundColor = [UIColor colorWithHexString:@"f2f3f4"];
 
 }
