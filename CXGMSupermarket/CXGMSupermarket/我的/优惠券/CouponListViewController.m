@@ -153,7 +153,7 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
         _collectionView.showsVerticalScrollIndicator = NO;
         [_collectionView registerClass:[CouponCollectionViewCell class] forCellWithReuseIdentifier:CouponCollectionViewCellID];
         [self.view addSubview:_collectionView];
-        _collectionView.contentInset = UIEdgeInsetsMake(14, 10, 10, 10);
+        _collectionView.contentInset = UIEdgeInsetsMake(0, 10, 10, 10);
     }
     return _collectionView;
 }

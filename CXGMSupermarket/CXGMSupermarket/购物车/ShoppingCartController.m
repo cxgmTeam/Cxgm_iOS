@@ -38,9 +38,10 @@
     self.title = @"购物车";
     
     UIButton* editBtn = [UIButton new];
-    [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    [editBtn setTitle:@"删除" forState:UIControlStateNormal];
     [editBtn setTitleColor:Color333333 forState:UIControlStateNormal];
     editBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+    [editBtn addTarget:self action:@selector(onTapDeleteBtn:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
     
     [self setupCartView];
@@ -52,9 +53,10 @@
     
     
     self.pageNum = 1;
+    
     [self getShopCartList];
+    
 }
-
 
 - (void)getShopCartList
 {
@@ -91,6 +93,10 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    
     
     //当进入购物车的时候判断是否有已选择的商品,有就清空
     //主要是提交订单后再返回到购物车,如果不清空,还会显示
@@ -350,10 +356,15 @@
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除该商品?删除后无法恢复!" preferredStyle:1];
+        typeof(self) __weak wself = self;
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除该商品?删除后无法恢复!" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
             LZCartModel *model = [self.dataArray objectAtIndex:indexPath.row];
+            
+            NSArray* array = [NSArray arrayWithObject:model];
+            [wself deleteShopCart:array];
+            
             
             [self.dataArray removeObjectAtIndex:indexPath.row];
             //    删除
@@ -431,6 +442,67 @@
         NSLog(@"你还没有选择任何商品");
     }
 }
+
+
+- (void)onTapDeleteBtn:(id)sender
+{
+    if (self.selectedArray.count == 0) return;
+        
+    
+    typeof(self) __weak wself = self;
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除该商品?删除后无法恢复!" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+
+        [wself deleteShopCart:self.selectedArray];
+
+        //删除成功后的操作
+        for (LZCartModel* model in self.selectedArray) {
+            [self.dataArray removeObject:model];
+        }
+        
+        [self countPrice];
+        
+        self.allSellectedButton.selected = NO;
+        if (self.dataArray.count == 0) {
+            [self changeView];
+        }
+        [self.myTableView reloadData];
+    }];
+    
+    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+    
+    [alert addAction:okAction];
+    [alert addAction:cancel];
+    [self presentViewController:alert animated:YES completion:nil];
+    
+}
+
+- (void)deleteShopCart:(NSArray *)array
+{
+    if (array.count == 0) return;
+        
+    NSString* idString = @"";
+    for (NSInteger i = 0 ; i < array.count ; i++) {
+        LZCartModel * model = array[i];
+        if (i == 0) {
+            idString = [idString stringByAppendingString:model.id];
+        }else{
+            idString = [idString stringByAppendingString:[NSString stringWithFormat:@",%@",model.id]];
+        }
+    }
+    NSDictionary* dic = @{@"shopCartIds":idString};
+
+    [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APIDeleteShopCart] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.code intValue] == 200) {
+            
+        }
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+
 
 #pragma mark - 初始化数组
 - (NSMutableArray *)dataArray {

@@ -23,7 +23,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"我的订单";
-    NSArray* array = @[@"全部",@"待配送",@"配送中",@"已完成",@"退货"];
+    NSArray* array = @[@"全部",@"待付款",@"配送中",@"已完成",@"退货"];
     
     _menuView = [UIView new];
     _menuView.backgroundColor = [UIColor whiteColor];
@@ -84,6 +84,7 @@
     
     for (NSInteger i = 0; i < array.count; i++) {
         OrderListViewController* vc = [OrderListViewController new];
+        vc.status = i-1;
         [_scrollView addSubview:vc.view];
         vc.view.frame = CGRectMake(i*ScreenW, 0, ScreenW, ScreenH-NAVIGATION_BAR_HEIGHT-TAB_BAR_HEIGHT-45);
         [self addChildViewController:vc];

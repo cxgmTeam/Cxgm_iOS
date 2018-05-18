@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface OrderListViewController : UIViewController
-
+@property(nonatomic,assign)NSInteger status;//空 全部  0待支付，1待配送（已支付），2配送中，3已完成，4退货
 @end

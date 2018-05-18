@@ -83,7 +83,23 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
         make.edges.equalTo(self.view);
     }];
 
+    [self getOrderList];
 }
+
+- (void)getOrderList
+{
+    NSDictionary* dic = @{@"status":self.status==-1?@"":[NSString stringWithFormat:@"%ld",self.status],
+                          @"pageNum":@"1",
+                          @"pageSize":@"10"
+                          };
+    [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIOrderList] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+//取消待付款订单
 
 
 #pragma mark-
