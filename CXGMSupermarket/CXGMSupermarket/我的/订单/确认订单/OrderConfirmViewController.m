@@ -44,83 +44,18 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
 @implementation OrderConfirmViewController
 
-- (UICollectionView *)collectionView
-{
-    if (!_collectionView) {
-        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        layout.minimumInteritemSpacing = 0;
-        layout.minimumLineSpacing = 0;
-        
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.showsVerticalScrollIndicator = NO;
-        
-        [_collectionView registerClass:[GoodsCashViewCell class] forCellWithReuseIdentifier:GoodsCashViewCellID];
-        [_collectionView registerClass:[OrderCouponViewCell class] forCellWithReuseIdentifier:OrderCouponViewCellID];
-        [_collectionView registerClass:[OrderBillViewCell class] forCellWithReuseIdentifier:OrderBillViewCellID];
-        [_collectionView registerClass:[OrderPaywayViewCell class] forCellWithReuseIdentifier:OrderPaywayViewCellID];
-        [_collectionView registerClass:[OrderCustomerViewCell class] forCellWithReuseIdentifier:OrderCustomerViewCellID];
-        
-        [_collectionView registerClass:[RemainTimeHintHead class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:RemainTimeHintHeadID];
-        [_collectionView registerClass:[OrderGoodsInfoHead class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderGoodsInfoHeadID];
-        
-        [_collectionView registerClass:[BlankCollectionFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BlankCollectionFootViewID];
-        [_collectionView registerClass:[GoodsArrivedTimeFoot class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:GoodsArrivedTimeFootID];
-        
-        [self.view addSubview:_collectionView];
-    }
-    return _collectionView;
-}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"确认订单";
     
-    UIView* bottomView = [UIView new];
-    bottomView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:bottomView];
-    [bottomView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.right.bottom.equalTo(self.view);
-        make.height.equalTo(50);
-    }];
-    {
-        UILabel *label = [[UILabel alloc] init];
-        label.text = @"实付款：";
-        label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-        label.textColor = [UIColor colorWithRed:33/255.0 green:33/255.0 blue:33/255.0 alpha:1/1.0];
-        [bottomView addSubview:label];
-        [label mas_makeConstraints:^(MASConstraintMaker *make){
-            make.left.equalTo(17);
-            make.top.equalTo(16);
-        }];
-        
-        _moneyLabel = [[UILabel alloc] init];
-        _moneyLabel.text = @"¥800.80";
-        _moneyLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:20];
-        _moneyLabel.textColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
-        [bottomView addSubview:_moneyLabel];
-        [_moneyLabel mas_makeConstraints:^(MASConstraintMaker *make){
-            make.left.equalTo(label.right).offset(5);
-            make.centerY.equalTo(label);
-        }];
-        
-        UIButton* btn = [UIButton new];
-        btn.backgroundColor = Color00A862;
-        [btn setTitle:@"提交订单" forState:UIControlStateNormal];
-        btn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
-        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [bottomView addSubview:btn];
-        [btn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
-        [btn mas_makeConstraints:^(MASConstraintMaker *make){
-            make.top.bottom.right.equalTo(bottomView);
-            make.width.equalTo(118);
-        }];
-    }
+    [self setupBottom];
+    
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker* make){
         make.left.top.right.equalTo(self.view);
-        make.bottom.equalTo(bottomView.top);
+        make.bottom.equalTo(-50);
     }];
     
 }
@@ -246,5 +181,79 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 
+}
+
+#pragma mark-
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+        layout.minimumInteritemSpacing = 0;
+        layout.minimumLineSpacing = 0;
+        
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.showsVerticalScrollIndicator = NO;
+        
+        [_collectionView registerClass:[GoodsCashViewCell class] forCellWithReuseIdentifier:GoodsCashViewCellID];
+        [_collectionView registerClass:[OrderCouponViewCell class] forCellWithReuseIdentifier:OrderCouponViewCellID];
+        [_collectionView registerClass:[OrderBillViewCell class] forCellWithReuseIdentifier:OrderBillViewCellID];
+        [_collectionView registerClass:[OrderPaywayViewCell class] forCellWithReuseIdentifier:OrderPaywayViewCellID];
+        [_collectionView registerClass:[OrderCustomerViewCell class] forCellWithReuseIdentifier:OrderCustomerViewCellID];
+        
+        [_collectionView registerClass:[RemainTimeHintHead class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:RemainTimeHintHeadID];
+        [_collectionView registerClass:[OrderGoodsInfoHead class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderGoodsInfoHeadID];
+        
+        [_collectionView registerClass:[BlankCollectionFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BlankCollectionFootViewID];
+        [_collectionView registerClass:[GoodsArrivedTimeFoot class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:GoodsArrivedTimeFootID];
+        
+        [self.view addSubview:_collectionView];
+    }
+    return _collectionView;
+}
+
+- (void)setupBottom
+{
+    UIView* bottomView = [UIView new];
+    bottomView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:bottomView];
+    [bottomView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.right.bottom.equalTo(self.view);
+        make.height.equalTo(50);
+    }];
+    {
+        UILabel *label = [[UILabel alloc] init];
+        label.text = @"实付款：";
+        label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+        label.textColor = [UIColor colorWithRed:33/255.0 green:33/255.0 blue:33/255.0 alpha:1/1.0];
+        [bottomView addSubview:label];
+        [label mas_makeConstraints:^(MASConstraintMaker *make){
+            make.left.equalTo(17);
+            make.top.equalTo(16);
+        }];
+        
+        _moneyLabel = [[UILabel alloc] init];
+        _moneyLabel.text = @"¥800.80";
+        _moneyLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:20];
+        _moneyLabel.textColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
+        [bottomView addSubview:_moneyLabel];
+        [_moneyLabel mas_makeConstraints:^(MASConstraintMaker *make){
+            make.left.equalTo(label.right).offset(5);
+            make.centerY.equalTo(label);
+        }];
+        
+        UIButton* btn = [UIButton new];
+        btn.backgroundColor = Color00A862;
+        [btn setTitle:@"提交订单" forState:UIControlStateNormal];
+        btn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
+        [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [bottomView addSubview:btn];
+        [btn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
+        [btn mas_makeConstraints:^(MASConstraintMaker *make){
+            make.top.bottom.right.equalTo(bottomView);
+            make.width.equalTo(118);
+        }];
+    }
 }
 @end

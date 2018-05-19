@@ -9,6 +9,7 @@
 #import "LoginViewController.h"
 
 @interface LoginViewController ()<UITextFieldDelegate>
+
 @property(nonatomic,strong)UITextField* phoneField;
 @property(nonatomic,strong)UITextField* codeField;
 @property(nonatomic,strong)UIButton* codeButton;
@@ -23,10 +24,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
-    self.title = @"登录";
-    
+
     [self setupUI];
     
+}
+
+- (void)backButtonClicked:(UIButton *)button
+{
+    if (self.showCart) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:DontShowCart_Notify object:nil];
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 -(void)textFieldTextChange:(UITextField *)textField{
@@ -125,7 +133,7 @@
             [[UserInfoManager sharedInstance] saveUserInfo:(NSDictionary *)model.data];
             
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.navigationController popViewControllerAnimated:YES];
+                [weakSelf dismissViewControllerAnimated:YES completion:nil];
             });
         }
     } failure:^(id JSON, NSError *error){
@@ -144,14 +152,39 @@
     [self validateSMSMessage];
 }
 
-
+#pragma mark- init
 - (void)setupUI
 {
+    UIView* topView = [UIView new];
+    [self.view addSubview:topView];
+    [topView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.top.left.right.equalTo(self.view);
+        make.height.equalTo(NAVIGATION_BAR_HEIGHT);
+    }];
+    
+    UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    backButton.frame = CGRectMake(20, STATUS_BAR_HEIGHT, 44, 44);
+    [backButton setImage:[UIImage imageNamed:@"arrow_left"] forState:UIControlStateNormal];
+    [backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [topView addSubview:backButton];
+    
+    UILabel *titleLabel = [[UILabel alloc] init];
+    titleLabel.text = @"登录";
+    titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:17];
+    titleLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+    [topView addSubview:titleLabel];
+    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make){
+        make.centerX.equalTo(topView);
+        make.bottom.equalTo(-14);
+    }];
+    
+    
+    
     UIView* line1 = [UIView new];
     line1.backgroundColor = [UIColor colorWithHexString:@"DFDFDF"];
     [self.view addSubview:line1];
     [line1 mas_makeConstraints:^(MASConstraintMaker *make){
-        make.top.equalTo(75);
+        make.top.equalTo(75+NAVIGATION_BAR_HEIGHT);
         make.left.equalTo(27);
         make.right.equalTo(-27);
         make.height.equalTo(1);
@@ -188,7 +221,7 @@
     line2.backgroundColor = [UIColor colorWithHexString:@"DFDFDF"];
     [self.view addSubview:line2];
     [line2 mas_makeConstraints:^(MASConstraintMaker *make){
-        make.top.equalTo(124);
+        make.top.equalTo(124+NAVIGATION_BAR_HEIGHT);
         make.left.equalTo(27);
         make.right.equalTo(-27);
         make.height.equalTo(1);

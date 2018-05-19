@@ -11,6 +11,7 @@
 #import "WGS84TOGCJ02.h"
 
 #import "HomeViewController.h"
+#import "LoginViewController.h"
 
 @interface MainViewController ()<CLLocationManagerDelegate,UIAlertViewDelegate>
 
@@ -19,6 +20,8 @@
 @property(nonatomic,strong)UILabel* titleLabel;
 
 @property(nonatomic,strong)HomeViewController* homeVC;
+
+@property(nonatomic,assign)NSInteger  currentIndex;
 @end
 
 @implementation MainViewController
@@ -30,8 +33,8 @@
     
     UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     label.textAlignment = NSTextAlignmentCenter;
-    label.textColor = Color333333;
-    label.font = PFR17Font;
+    label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:17];
+    label.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     label.text = @"";
     self.navigationItem.titleView = label;
     self.titleLabel = label;
@@ -83,14 +86,28 @@
         [array addObject:nav];
     }
     self.viewControllers = array;
+    
+    self.currentIndex = 0;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startLocationCity:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWindowHomeNotify:) name:WindowHomePage_Notify object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWindowShopCartNotify:) name:WindowShopCart_Notify object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentLoginVC:) name:ShowLoginVC_Notify object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDontShowCart:) name:DontShowCart_Notify object:nil];
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
+    
+    if (item.tag == 2 && ![UserInfoManager sharedInstance].isLogin) {
+        LoginViewController * vc = [LoginViewController new];
+        vc.showCart = YES;
+        [self presentViewController:vc animated:YES completion:nil];
+        return;
+    }
+    
+    self.currentIndex = item.tag;
     
     switch (item.tag) {
         case 0:
@@ -114,12 +131,18 @@
 - (void)onWindowHomeNotify:(NSNotification *)notify{
     self.selectedIndex = 0;
     self.titleLabel.text = @"";
+    
+    self.currentIndex = self.selectedIndex;
 }
 
 
-- (void)onWindowShopCartNotify:(NSNotification *)notify{
-    self.selectedIndex = 2;
-    self.titleLabel.text = @"购物车";
+- (void)presentLoginVC:(NSNotification *)notify{
+    LoginViewController * vc = [LoginViewController new];
+    [self presentViewController:vc animated:YES completion:nil];
+}
+
+- (void)onDontShowCart:(NSNotification *)notify{
+    self.selectedIndex = self.currentIndex;
 }
 
 #pragma mark- 定位

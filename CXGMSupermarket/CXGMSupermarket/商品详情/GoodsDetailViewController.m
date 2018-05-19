@@ -22,7 +22,6 @@
 #import "DetailTopToolView.h"
 
 #import "ULBCollectionViewFlowLayout.h"
-#import "LoginViewController.h"
 
 #import "AnotherCartViewController.h"
 
@@ -106,8 +105,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 - (void)addGoodsToCart:(id)sender
 {
     if (![UserInfoManager sharedInstance].isLogin) {
-        LoginViewController* vc = [LoginViewController new];
-        [self.navigationController pushViewController:vc animated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
         return;
     }
     
@@ -124,6 +122,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         if ([model.code intValue] == 200) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
             });
         }
         
@@ -373,6 +372,10 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
             [weakSelf selectSectionAtIndex:section];
         };
         _topToolView.gotoCartBlock = ^{
+            if (![UserInfoManager sharedInstance].isLogin) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
+                return ;
+            }
             AnotherCartViewController* vc = [AnotherCartViewController new];
             [weakSelf.navigationController pushViewController:vc animated:YES];
         };

@@ -97,7 +97,9 @@
 
 
 #define WindowHomePage_Notify    @"WindowHomePage_Notify"
-#define WindowShopCart_Notify    @"WindowShopCart_Notify"
+#define ShowLoginVC_Notify       @"ShowLoginVC_Notify"
+#define AddGoodsSuccess_Notify    @"AddGoodsSuccess_Notify"
+#define DontShowCart_Notify      @"DontShowCart_Notify"
 
 
 #define PAGECOUNT  @"10"

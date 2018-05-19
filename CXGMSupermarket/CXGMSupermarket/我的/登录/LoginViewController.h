@@ -8,6 +8,6 @@
 
 #import "MyCenterSubViewController.h"
 
-@interface LoginViewController : MyCenterSubViewController
-
+@interface LoginViewController : UIViewController
+@property(nonatomic,assign)BOOL showCart;//点击购物车
 @end

@@ -9,7 +9,7 @@
 #import "AddressViewController.h"
 
 #import "AddAddressViewController.h"
-#import "LoginViewController.h"
+
 #import "MapViewController.h"
 
 #import "AddressTopTableViewCell.h"
@@ -86,8 +86,7 @@
 
 - (void)onTapButton:(id)sender{
     if (![UserInfoManager sharedInstance].isLogin){
-        LoginViewController* vc = [LoginViewController new];
-        [self.navigationController pushViewController:vc animated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
         return;
     }
     

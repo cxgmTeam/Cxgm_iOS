@@ -18,7 +18,6 @@
 #import "CouponViewController.h"
 #import "OrderViewController.h"
 #import "AddressViewController.h"
-#import "LoginViewController.h"
 #import "SettingViewController.h"
 
 @interface MyCenterViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
@@ -57,8 +56,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 - (BOOL)needJumpToLogin
 {
     if (![UserInfoManager sharedInstance].isLogin) {
-        LoginViewController * vc = [LoginViewController new];
-        [self.navigationController pushViewController:vc animated:YES];
+        [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
         return YES;
     }
     return NO;
