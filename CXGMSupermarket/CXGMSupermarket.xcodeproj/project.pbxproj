@@ -51,6 +51,8 @@
 		77A5DE36208C95B2005F97F9 /* MyCenterCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77A5DE35208C95B2005F97F9 /* MyCenterCollectionCell.m */; };
 		77B484EF209EC70300D74DD5 /* SearchGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B484EE209EC70300D74DD5 /* SearchGridCell.m */; };
 		77B484F2209EC72300D74DD5 /* SearchHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B484F1209EC72300D74DD5 /* SearchHeadView.m */; };
+		77D258D520B2A04100BA83FE /* ThirdCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D258D420B2A04100BA83FE /* ThirdCategoryView.m */; };
+		77D258E220B2F31D00BA83FE /* GoodsCouponController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D258E120B2F31D00BA83FE /* GoodsCouponController.m */; };
 		77DD80332082409F00A1D080 /* DCScanningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD80272082409F00A1D080 /* DCScanningViewController.m */; };
 		77DD80342082409F00A1D080 /* flsah_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 77DD80292082409F00A1D080 /* flsah_normal@2x.png */; };
 		77DD80352082409F00A1D080 /* navigationbarScanBg.png in Resources */ = {isa = PBXBuildFile; fileRef = 77DD802C2082409F00A1D080 /* navigationbarScanBg.png */; };
@@ -218,7 +220,6 @@
 		BE44A0902091F348001FE5A6 /* GoodsListingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE44A08F2091F348001FE5A6 /* GoodsListingViewController.m */; };
 		BE44A09A2091FA3B001FE5A6 /* OrderStateHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE44A0992091FA3B001FE5A6 /* OrderStateHeadView.m */; };
 		BE44A09D2091FAA9001FE5A6 /* ShopAddressHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE44A09C2091FAA9001FE5A6 /* ShopAddressHeadView.m */; };
-		BE4E031B2088B5290094767B /* CategoryItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BE4E031A2088B5290094767B /* CategoryItem.m */; };
 		BE520E8D207CD99500BA0FA3 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE520E8C207CD99500BA0FA3 /* HomeViewController.m */; };
 		BE520E90207CD9D000BA0FA3 /* CategoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE520E8F207CD9D000BA0FA3 /* CategoryViewController.m */; };
 		BE520E99207CDAE500BA0FA3 /* SearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE520E98207CDAE500BA0FA3 /* SearchViewController.m */; };
@@ -395,6 +396,10 @@
 		77B484EE209EC70300D74DD5 /* SearchGridCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchGridCell.m; sourceTree = "<group>"; };
 		77B484F0209EC72300D74DD5 /* SearchHeadView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchHeadView.h; sourceTree = "<group>"; };
 		77B484F1209EC72300D74DD5 /* SearchHeadView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchHeadView.m; sourceTree = "<group>"; };
+		77D258D320B2A04100BA83FE /* ThirdCategoryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThirdCategoryView.h; sourceTree = "<group>"; };
+		77D258D420B2A04100BA83FE /* ThirdCategoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThirdCategoryView.m; sourceTree = "<group>"; };
+		77D258E020B2F31D00BA83FE /* GoodsCouponController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsCouponController.h; sourceTree = "<group>"; };
+		77D258E120B2F31D00BA83FE /* GoodsCouponController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsCouponController.m; sourceTree = "<group>"; };
 		77DD80272082409F00A1D080 /* DCScanningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCScanningViewController.m; sourceTree = "<group>"; };
 		77DD80282082409F00A1D080 /* DCScanTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCScanTool.h; sourceTree = "<group>"; };
 		77DD80292082409F00A1D080 /* flsah_normal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "flsah_normal@2x.png"; sourceTree = "<group>"; };
@@ -717,8 +722,6 @@
 		BE44A0992091FA3B001FE5A6 /* OrderStateHeadView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrderStateHeadView.m; sourceTree = "<group>"; };
 		BE44A09B2091FAA9001FE5A6 /* ShopAddressHeadView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShopAddressHeadView.h; sourceTree = "<group>"; };
 		BE44A09C2091FAA9001FE5A6 /* ShopAddressHeadView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShopAddressHeadView.m; sourceTree = "<group>"; };
-		BE4E03192088B5290094767B /* CategoryItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoryItem.h; sourceTree = "<group>"; };
-		BE4E031A2088B5290094767B /* CategoryItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoryItem.m; sourceTree = "<group>"; };
 		BE520E8B207CD99500BA0FA3 /* HomeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		BE520E8C207CD99500BA0FA3 /* HomeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		BE520E8E207CD9D000BA0FA3 /* CategoryViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CategoryViewController.h; sourceTree = "<group>"; };
@@ -1143,6 +1146,15 @@
 				77B484F1209EC72300D74DD5 /* SearchHeadView.m */,
 			);
 			path = head;
+			sourceTree = "<group>";
+		};
+		77D258DF20B2F2C800BA83FE /* 商品优惠券 */ = {
+			isa = PBXGroup;
+			children = (
+				77D258E020B2F31D00BA83FE /* GoodsCouponController.h */,
+				77D258E120B2F31D00BA83FE /* GoodsCouponController.m */,
+			);
+			path = "商品优惠券";
 			sourceTree = "<group>";
 		};
 		77DD802220823A2100A1D080 /* 商品详情 */ = {
@@ -1894,6 +1906,7 @@
 		BE40AFAA208F5EAC00D4B690 /* 订单 */ = {
 			isa = PBXGroup;
 			children = (
+				77D258DF20B2F2C800BA83FE /* 商品优惠券 */,
 				779C9555209AE0D10029A591 /* 支付成功 */,
 				7703557A209953D3002B3A8D /* 发票 */,
 				BE44A0922091F3C0001FE5A6 /* 首页 */,
@@ -2083,6 +2096,8 @@
 			children = (
 				BE8FE0D920862DD400A089C4 /* head */,
 				BE8FE0D2208629EB00A089C4 /* cell */,
+				77D258D320B2A04100BA83FE /* ThirdCategoryView.h */,
+				77D258D420B2A04100BA83FE /* ThirdCategoryView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2094,8 +2109,6 @@
 				BE8FE0D420862A0200A089C4 /* GoodsTableViewCell.m */,
 				BE8FE0D620862ACC00A089C4 /* CategoryTableViewCell.h */,
 				BE8FE0D720862ACC00A089C4 /* CategoryTableViewCell.m */,
-				BE4E03192088B5290094767B /* CategoryItem.h */,
-				BE4E031A2088B5290094767B /* CategoryItem.m */,
 				779F9FDD208AC14B00C38D61 /* CatoryGridViewCell.h */,
 				779F9FDE208AC14B00C38D61 /* CatoryGridViewCell.m */,
 			);
@@ -2499,7 +2512,6 @@
 				BEEB49F420A4704B00508969 /* DetailTopFootView.m in Sources */,
 				BE8E877D20934D10005EB719 /* OrderGoodsViewCell.m in Sources */,
 				7703559F2099C2F0002B3A8D /* InvitationViewController.m in Sources */,
-				BE4E031B2088B5290094767B /* CategoryItem.m in Sources */,
 				77F83A962070E8CE004E9717 /* MASViewConstraint.m in Sources */,
 				77DD808A208320A900A1D080 /* ScrollGoodsCell.m in Sources */,
 				77F83A8D2070E8CE004E9717 /* JSONHTTPClient.m in Sources */,
@@ -2539,6 +2551,7 @@
 				77F83A712070E8CE004E9717 /* AFURLSessionManager.m in Sources */,
 				77DD807120824F7C00A1D080 /* SDCollectionViewCell.m in Sources */,
 				BE44A0902091F348001FE5A6 /* GoodsListingViewController.m in Sources */,
+				77D258D520B2A04100BA83FE /* ThirdCategoryView.m in Sources */,
 				77F83AA62070E8CE004E9717 /* SDWebImageCodersManager.m in Sources */,
 				BECB90132084B03C00170BC6 /* DCKeepNewUserData.m in Sources */,
 				77DD80392082409F00A1D080 /* DCScanIdentifyAreaView.m in Sources */,
@@ -2615,6 +2628,7 @@
 				770355A62099C664002B3A8D /* AddAddressViewCell.m in Sources */,
 				BE520E9F207CDB5400BA0FA3 /* DCTitleRolling.m in Sources */,
 				77F83A842070E8CE004E9717 /* IQPreviousNextView.m in Sources */,
+				77D258E220B2F31D00BA83FE /* GoodsCouponController.m in Sources */,
 				BE44A09D2091FAA9001FE5A6 /* ShopAddressHeadView.m in Sources */,
 				BE6CFAF6207A3D7000DFD3CA /* Object_Extension.m in Sources */,
 				77058A7C20AFE3FB00EF576A /* CartBottomBar.m in Sources */,

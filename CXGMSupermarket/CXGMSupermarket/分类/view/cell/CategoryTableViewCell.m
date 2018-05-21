@@ -16,13 +16,14 @@
 
 @implementation CategoryTableViewCell
 
-- (void)setCategoryItem:(CategoryItem *)categoryItem{
+
+- (void)setCategory:(CategoryModel *)category{
     
-    _contentLabel.text = categoryItem.name;
-    self.backgroundColor = categoryItem.selected == YES?[UIColor whiteColor]:[UIColor clearColor];
-    _greenView.hidden = !categoryItem.selected;
+    _contentLabel.text = category.name;
+    self.backgroundColor = [category.selected boolValue] == YES?[UIColor whiteColor]:[UIColor clearColor];
+    _greenView.hidden = ![category.selected boolValue];
     
-    if (categoryItem.selected) {
+    if ([category.selected boolValue]) {
         _contentLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
         _contentLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     }else{

@@ -13,6 +13,7 @@
 @class LZCartModel;
 typedef void(^LZNumberChangedBlock)(NSInteger number);
 typedef void(^LZCellSelectedBlock)(BOOL select);
+
 @interface LZCartTableViewCell : UITableViewCell
 //商品数量
 @property (assign,nonatomic)NSInteger lzNumber;

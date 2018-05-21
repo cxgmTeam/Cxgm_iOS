@@ -24,6 +24,12 @@
     return self;
 }
 
+- (void)setAddress:(AddressModel *)address
+{
+    _customerLbel.text =[NSString stringWithFormat:@"%@            %@",address.realName,address.phone];
+    _addressLbel.text = [NSString stringWithFormat:@"收货地址：%@%@",address.area,address.address];
+}
+
 - (void)setupUI
 {
     UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"order_address"]];

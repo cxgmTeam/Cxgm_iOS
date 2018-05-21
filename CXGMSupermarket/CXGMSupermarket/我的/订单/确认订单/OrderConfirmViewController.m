@@ -23,10 +23,16 @@
 #import "GoodsListingViewController.h"
 #import "OrderBillViewController.h"
 #import "PayResultViewController.h"
+#import "AddressViewController.h"
+#import "GoodsCouponController.h"
+
+#import "LZCartModel.h"
 
 @interface OrderConfirmViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)UILabel *moneyLabel;
+
+@property (strong , nonatomic)AddressModel* address;
 @end
 
 /* cell */
@@ -58,6 +64,55 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         make.bottom.equalTo(-50);
     }];
     
+    if (self.goodsArray.count > 0) {
+        [self checkCoupon];
+    }
+    
+}
+
+//下单接口
+- (void)addOrder:(NSArray *)array
+{
+    NSDictionary* dic = @{};
+    
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIAddOrder] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+
+- (void)checkCoupon
+{
+    NSMutableArray* array = [NSMutableArray array];
+    for (LZCartModel *model in self.goodsArray) {
+        NSDictionary* dic = @{
+//                              @"createTime": @"",
+                              @"goodCode": model.goodCode.length>0?model.goodCode:@"",
+                              @"id": model.id.length>0?model.id:@"",
+//                              @"orderId": @"0",
+//                              @"productId": @"0",
+                              @"productName": model.goodName.length>0?model.goodName:@"",
+                              @"productNum": model.goodNum.length>0?model.goodNum:@"1"
+                              };
+        [array addObject:dic];
+    }
+    
+    NSDictionary* param = @{@"productList":array};
+    NSDictionary* dic =  @{@"order":param};
+    
+//    [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameters:param success:^(id JSON, NSError *error){
+//
+//    } failure:^(id JSON, NSError *error){
+//
+//    }];
+    
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+
+    } failure:^(id JSON, NSError *error){
+
+    }];
 }
 
 - (void)onTapButton:(id)sender
@@ -78,6 +133,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     UICollectionViewCell *gridcell = nil;
     if (indexPath.section == 0) {
         OrderCustomerViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderCustomerViewCellID forIndexPath:indexPath];
+        if (self.address) {
+            cell.address = self.address;
+        }
         gridcell = cell;
         
     }else if (indexPath.section == 1) {
@@ -105,15 +163,27 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     return gridcell;
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.section == 0 && indexPath.item == 0) {
+        AddressViewController* vc = [AddressViewController new];
+        vc.selectedAddress = ^(AddressModel* address){
+            self.address = address;
+            [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
+        };
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+}
+
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
     
     UICollectionReusableView *reusableview = nil;
     
     if (kind == UICollectionElementKindSectionHeader){
-        if (indexPath.section == 0) {
-            RemainTimeHintHead *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:RemainTimeHintHeadID forIndexPath:indexPath];
-            reusableview = headerView;
-        }else if (indexPath.section == 1){
+
+        if (indexPath.section == 1){
             OrderGoodsInfoHead *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderGoodsInfoHeadID forIndexPath:indexPath];
             typeof(self) __weak wself = self;
             headerView.gotoGoodsList = ^{
@@ -156,10 +226,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
 #pragma mark - head宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    
-    if (section == 0) {
-        return CGSizeMake(ScreenW, 30);
-    }
+
     if (section == 1 ) {
         return CGSizeMake(ScreenW, 111);
     }
@@ -181,6 +248,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 - (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 
+    if (indexPath.section == 2) {
+        GoodsCouponController* vc = [GoodsCouponController new];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 #pragma mark-

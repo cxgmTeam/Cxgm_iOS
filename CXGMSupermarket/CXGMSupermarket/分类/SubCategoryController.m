@@ -12,7 +12,6 @@
 #import "GoodsTableHead.h"
 #import "GoodsDetailViewController.h"
 
-#import "CategoryItem.h"
 
 @interface SubCategoryController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
 
@@ -20,8 +19,6 @@
 @property(nonatomic,strong)UITableView* rightTableView;
 @property(nonatomic,strong)UIScrollView* topScrollView;
 
-@property(nonatomic,strong)NSMutableArray* categoryArray;//左边的类别
-@property(nonatomic,strong)NSArray* subCategoryArray;//顶部的类别
 
 @property(nonatomic,strong)UIButton* updownBtn;
 
@@ -30,6 +27,10 @@
 
 @property(nonatomic,assign)NSInteger topScrollWidth;
 @property(nonatomic,assign)NSInteger arrivedSecton;
+
+@property(nonatomic,strong)NSArray* secondCategorys;
+@property(nonatomic,strong)NSArray* thirdCategorys;
+@property(nonatomic,strong)NSMutableDictionary* dictionary;//三级分类作key  对应的Goods数组作value
 @end
 
 
@@ -44,35 +45,11 @@ static CGFloat TopBtnWidth = 60;
     [super viewDidLoad];
     self.title = self.category.name;
     
-    self.categoryArray = [NSMutableArray array];
+    self.dictionary = [NSMutableDictionary dictionary];
     
-    NSArray* array = @[@"精选推荐",
-                       @"蔬菜豆菇",
-                       @"新鲜水果",
-                       @"鲜肉蛋禽",
-                       @"水产蛋禽",
-                       @"水产海鲜",
-                       @"速冻食品",
-                       @"牛奶面点",
-                       @"休闲零食",
-                       @"粮油副食",
-                       @"厨房用品",
-                       @"酒水饮料",
-                       @"生活用品"];
-    for (NSString* string in array) {
-        CategoryItem* item = [CategoryItem new];
-        item.name = string;
-        [self.categoryArray addObject:item];
-    }
     
-    self.subCategoryArray = @[@"吃青豆",
-                              @"吃青菜",
-                              @"鲜豆腐",
-                              @"鲜菌菇",
-                              @"鲜苹果",
-                              @"鲜鸡蛋",
-                              @"鲜鱼",
-                              @"鲜水果"];
+    
+   
     
     self.leftTableView.backgroundColor = RGB(0xf7, 0xf8, 0xf7);
     [self.leftTableView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -88,27 +65,6 @@ static CGFloat TopBtnWidth = 60;
     self.topScrollWidth = ScreenW-93-40;
     self.topScrollView.frame = CGRectMake(93, 0, self.topScrollWidth, 40);
 
-    
-    for (UIImageView* subView in self.topScrollView.subviews) {
-        [subView removeFromSuperview];
-    }
-    for (NSInteger i = 0; i <  self.subCategoryArray.count; i++)
-    {
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(i * TopBtnWidth, 0, TopBtnWidth, 40);
-        [button setTitle:self.subCategoryArray[i] forState:UIControlStateNormal];
-        [button setTitleColor:Color666666 forState:UIControlStateNormal];
-        [button setTitleColor:Color00A862 forState:UIControlStateSelected];
-        button.titleLabel.font = PFR14Font;
-        button.tag = i;
-        [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
-        if (i==0) {
-            button.selected = YES;
-            self.lastBtn = button;
-        }
-        [self.topScrollView addSubview:button];
-    }
-    self.topScrollView.contentSize = CGSizeMake(TopBtnWidth * self.subCategoryArray.count, 40);
     
     [self.rightTableView mas_makeConstraints:^(MASConstraintMaker *make){
         make.bottom.right.equalTo(self.view);
@@ -132,6 +88,58 @@ static CGFloat TopBtnWidth = 60;
     }
 }
 
+- (void)setupThirdCategory
+{
+    for (UIImageView* subView in self.topScrollView.subviews) {
+        [subView removeFromSuperview];
+    }
+    for (NSInteger i = 0; i <  self.thirdCategorys.count; i++)
+    {
+        CategoryModel* category = self.thirdCategorys[i];
+        
+        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+        button.frame = CGRectMake(i * TopBtnWidth, 0, TopBtnWidth, 40);
+        [button setTitle:category.name forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0] forState:UIControlStateNormal];
+        [button setTitleColor: [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0] forState:UIControlStateSelected];
+        button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];;
+        button.tag = i;
+        [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
+        if (i==0) {
+            button.selected = YES;
+            self.lastBtn = button;
+        }
+        [self.topScrollView addSubview:button];
+    }
+    self.topScrollView.contentSize = CGSizeMake(TopBtnWidth * self.thirdCategorys.count, 40);
+}
+
+- (void)sortThirdGoods:(NSArray *)list
+{
+    [self.dictionary removeAllObjects];
+    
+    for (NSInteger i = 0; i < self.thirdCategorys.count;i++) {
+        CategoryModel* category = self.thirdCategorys[i];
+        
+        NSMutableArray* array = [NSMutableArray array];
+        
+        for (NSInteger j = 0; j < list.count; j++) {
+            GoodsModel* goods = list[j];
+            if ([goods.productCategoryThirdName isEqualToString:category.name]) {
+                [array addObject:goods];
+            }
+            if (j == list.count-1) {
+                [self.dictionary setObject:array forKey:category.name];
+            }
+        }
+        
+        if (i == self.thirdCategorys.count-1) {
+            [self.rightTableView reloadData];
+        }
+    }
+   
+}
+
 
 //二级分类
 - (void)findSecondCategory:(NSString *)productCategoryId
@@ -147,10 +155,17 @@ static CGFloat TopBtnWidth = 60;
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
             NSArray* array = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
-            for (CategoryModel* category in array) {
-                [wself findProductByCategory:category.id];
+            self.secondCategorys = array;
+            
+            [wself.leftTableView reloadData];
+            
+            if (array.count > 0) {
+                CategoryModel* category = [array firstObject];
+                category.selected = @"1";
                 
                 [wself findThirdCategory:category.id];
+                
+                [wself findProductByCategory:category.id];
             }
         }
         
@@ -167,9 +182,14 @@ static CGFloat TopBtnWidth = 60;
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
                 @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
     }
-    
+    typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindThirdCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
-//        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            self.thirdCategorys = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            
+            [wself setupThirdCategory];
+        }
         
     } failure:^(id JSON, NSError *error){
         
@@ -184,9 +204,14 @@ static CGFloat TopBtnWidth = 60;
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
                 @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
     }
-    
+    typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindProductByCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
-        //        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            NSArray* array = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            
+            [wself sortThirdGoods:array];
+        }
         
     } failure:^(id JSON, NSError *error){
         
@@ -254,14 +279,16 @@ static CGFloat TopBtnWidth = 60;
     if (tableView == _leftTableView) {
         return 1;
     }
-    return self.subCategoryArray.count;
+    return self.thirdCategorys.count;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
     if (tableView == _leftTableView) {
-        return self.categoryArray.count;
+        return self.secondCategorys.count;
     }
-    return 5;
+    CategoryModel* category = self.thirdCategorys[section];
+    NSArray* array = [self.dictionary objectForKey:category.name];
+    return array.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -271,13 +298,17 @@ static CGFloat TopBtnWidth = 60;
         if (!cell) {
             cell = [[CategoryTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CategoryTableViewCellID];
         }
-        cell.categoryItem = self.categoryArray[indexPath.row];
+        cell.category = self.secondCategorys[indexPath.row];
         tableCell = cell;
     }else{
         GoodsTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:GoodsTableViewCellID];
         if (!cell) {
             cell = [[GoodsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:GoodsTableViewCellID];
         }
+        CategoryModel* category = self.thirdCategorys[indexPath.section];
+        NSArray* array = [self.dictionary objectForKey:category.name];
+        cell.goodsModel = array[indexPath.row];
+        
         tableCell = cell;
     }
     return tableCell;
@@ -287,7 +318,8 @@ static CGFloat TopBtnWidth = 60;
     UIView* headView = nil;
     if (tableView == _rightTableView) {
         GoodsTableHead* head = [[GoodsTableHead alloc] initWithFrame:CGRectMake(0, 0, ScreenH-93, 34)];
-        head.contentLabel.text = self.subCategoryArray[section];
+        CategoryModel* category = self.thirdCategorys[section];
+        head.contentLabel.text = category.name;
         headView = head;
     }
     return headView;
@@ -303,12 +335,17 @@ static CGFloat TopBtnWidth = 60;
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (tableView == _leftTableView) {
-        for (CategoryItem* item in self.categoryArray) {
-            item.selected = NO;
+        for (CategoryModel* item in self.secondCategorys) {
+            item.selected = @"0";
         }
-        CategoryItem* item = self.categoryArray[indexPath.row];
-        item.selected = YES;
+        CategoryModel* item = self.secondCategorys[indexPath.row];
+        item.selected = @"1";
         [_leftTableView reloadData];
+        
+        [self findThirdCategory:item.id];
+        
+        [self findProductByCategory:item.id];
+        
     }else{
         GoodsDetailViewController* vc = [GoodsDetailViewController new];
         [self.navigationController pushViewController:vc animated:YES];

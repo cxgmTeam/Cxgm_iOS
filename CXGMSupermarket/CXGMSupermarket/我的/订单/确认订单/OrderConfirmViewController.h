@@ -10,4 +10,5 @@
 //应该是从购物车过来的
 @interface OrderConfirmViewController : MyCenterSubViewController
 
+@property(nonatomic,strong)NSArray* goodsArray;
 @end

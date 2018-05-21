@@ -15,5 +15,5 @@
 
 - (void)retsetSelectedStatus;
 
-@property(nonatomic,copy)dispatch_block_t gotoConfirmOrder;
+@property(nonatomic,copy)void(^gotoConfirmOrder)(NSArray* array) ;
 @end

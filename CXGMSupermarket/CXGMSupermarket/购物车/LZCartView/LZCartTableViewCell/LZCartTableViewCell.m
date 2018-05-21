@@ -55,12 +55,21 @@
     
     [self.lzImageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     self.nameLabel.text = model.goodName;
-    self.priceLabel.text = [NSString stringWithFormat: @"¥ %@",model.price];
+    self.priceLabel.text = [NSString stringWithFormat: @"¥ %.2f",[model.price floatValue]];
     self.numberLabel.text = model.goodNum;
     self.sizeLabel.text = model.specifications;
     self.activityLabel.text = model.coupon;
     
     self.selectBtn.selected = [model.select boolValue];
+    
+    
+    CGFloat amount =  [model.goodNum integerValue]*[model.price floatValue];
+    self.subtotalLabel.text = [NSString stringWithFormat:@"小计：¥ %.2f",amount];
+    
+    NSMutableAttributedString* attrStr = [[NSMutableAttributedString alloc] initWithString:self.subtotalLabel.text];
+    [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0] range:NSMakeRange(0, 3)];
+    [attrStr addAttribute:NSForegroundColorAttributeName value: [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0] range:NSMakeRange(3,attrStr.length-3)];
+    self.subtotalLabel.attributedText = attrStr;
 }
 
 - (void)numberAddWithBlock:(LZNumberChangedBlock)block {
@@ -242,16 +251,16 @@
     
     
     //活动
-    UILabel* activityLabel = [[UILabel alloc]init];
-    activityLabel.text = @"满100返20";
-    activityLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-    activityLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
-    [bgView addSubview:activityLabel];
-    [activityLabel mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.equalTo(selectBtn);
-        make.bottom.equalTo(-10);
-    }];
-    self.activityLabel = activityLabel;
+//    UILabel* activityLabel = [[UILabel alloc]init];
+//    activityLabel.text = @"满100返20";
+//    activityLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+//    activityLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+//    [bgView addSubview:activityLabel];
+//    [activityLabel mas_makeConstraints:^(MASConstraintMaker *make){
+//        make.left.equalTo(selectBtn);
+//        make.bottom.equalTo(-10);
+//    }];
+//    self.activityLabel = activityLabel;
     
     
     //活动
@@ -262,7 +271,7 @@
     [bgView addSubview:subtotalLabel];
     [subtotalLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.right.equalTo(addBtn);
-        make.bottom.equalTo(activityLabel);
+        make.bottom.equalTo(-10);
     }];
     self.subtotalLabel = subtotalLabel;
     

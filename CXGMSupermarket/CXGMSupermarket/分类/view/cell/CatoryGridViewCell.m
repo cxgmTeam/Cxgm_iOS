@@ -46,7 +46,8 @@
     
     [_imgView mas_makeConstraints:^(MASConstraintMaker *make){
         make.size.equalTo(CGSizeMake(90, 70));
-        make.top.centerX.equalTo(self);
+        make.centerX.equalTo(self);
+        make.top.equalTo(10);
     }];
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make){

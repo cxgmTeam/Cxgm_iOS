@@ -59,7 +59,8 @@
 #define APIFindCoupons  @"/coupon/findCoupons"
 //优惠券兑换
 #define APIExchangeCoupons  @"/coupon/exchangeCoupons"
-
+//根据用户ID和所选商品类别查询可用优惠券
+#define APICheckCoupon  @"/order/checkCoupon"
 
 
 //我的订单列表
@@ -79,7 +80,7 @@
 //购物车移除商品接口
 #define APIDeleteShopCart  @"/shopCart/deleteShopCart"
 //修改购物车接口
-#define APIUpdateCart  @"/shopCart/upadteCart"
+#define APIUpdateCart  @"/shopCart/updateCart"
 
 
 

@@ -153,6 +153,13 @@
             if (success) {
                 success(dic,nil);
             }
+        }else if ([[dic objectForKey:@"code"] integerValue] == 403){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[UserInfoManager sharedInstance] deleteUserInfo];
+                UIWindow* window = [UIApplication sharedApplication].keyWindow;
+                [MBProgressHUD MBProgressHUDWithView:window Str:@"登录失效，请重新登录"];
+            });
+
         }else{
             if (failure) {
                 failure(nil,error);

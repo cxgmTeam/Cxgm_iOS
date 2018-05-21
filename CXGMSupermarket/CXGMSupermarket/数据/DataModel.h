@@ -41,7 +41,7 @@
 @property (nonatomic,strong)NSString<Optional> * name;
 @property (nonatomic,strong)NSString<Optional> * fullName;
 @property (nonatomic,strong)NSString<Optional> * goodNum;
-@property (nonatomic,strong)NSString<Optional> * price;
+@property (nonatomic,strong)NSString<Optional> * price;//现价
 @property (nonatomic,strong)NSString<Optional> * cost;
 @property (nonatomic,strong)NSString<Optional> * marketPrice;
 @property (nonatomic,strong)NSString<Optional> * image;
@@ -86,6 +86,7 @@
 @property (nonatomic,strong)NSString<Optional> * parentId;
 @property (nonatomic,strong)NSObject<Optional> * productImageList;
 @property (nonatomic,strong)NSString<Optional> * goodCode;
+@property (nonatomic,strong)NSString<Optional> * originalPrice;//原价
 @end
 
 //分类
@@ -93,6 +94,8 @@
 @property (nonatomic,strong)NSString<Optional> * id;
 @property (nonatomic,strong)NSString<Optional> * name;
 @property (nonatomic,strong)NSObject<Optional> * shopCategoryList;
+
+@property (nonatomic,strong)NSString<Optional> * selected;
 @end
 
 //优惠券

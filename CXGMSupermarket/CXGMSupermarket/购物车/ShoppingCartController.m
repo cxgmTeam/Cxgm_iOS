@@ -42,8 +42,9 @@
     }];
     
     typeof(self) __weak wself = self;
-    _cartView.gotoConfirmOrder = ^{
+    _cartView.gotoConfirmOrder = ^(NSArray *array){
         OrderConfirmViewController* vc = [OrderConfirmViewController new];
+        vc.goodsArray = array;
         [wself.navigationController pushViewController:vc animated:YES];
     };
 }

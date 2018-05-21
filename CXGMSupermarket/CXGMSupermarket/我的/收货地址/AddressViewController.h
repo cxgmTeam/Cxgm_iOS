@@ -10,4 +10,8 @@
 
 @interface AddressViewController : MyCenterSubViewController
 
+@property(nonatomic,assign)BOOL selectAddress;
+
+@property(nonatomic,copy)void(^selectedAddress)(AddressModel* address);
+
 @end

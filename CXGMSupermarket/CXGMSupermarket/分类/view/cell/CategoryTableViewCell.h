@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CategoryItem.h"
+
 
 @interface CategoryTableViewCell : UITableViewCell
-@property(nonatomic,strong)CategoryItem* categoryItem;
+@property(nonatomic,strong)CategoryModel* category;
 @end

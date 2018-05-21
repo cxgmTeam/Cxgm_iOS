@@ -10,4 +10,5 @@
 
 @interface OrderCustomerViewCell : UICollectionViewCell
 
+@property(nonatomic,strong)AddressModel* address;
 @end

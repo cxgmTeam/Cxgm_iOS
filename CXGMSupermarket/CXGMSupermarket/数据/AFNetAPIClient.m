@@ -65,6 +65,11 @@
 //                NSString * url = [NSString stringWithFormat:@"%@",task.response.URL];
 //                [self writeDiskWithData:[aString dataUsingEncoding:NSUTF8StringEncoding] Path:url];
             }
+            else if ([model.code  integerValue] == 403){
+                [[UserInfoManager sharedInstance] deleteUserInfo];
+                UIWindow* window = [UIApplication sharedApplication].keyWindow;
+                [MBProgressHUD MBProgressHUDWithView:window Str:@"登录失效，请重新登录"];
+            }
             else
             {
 //                NSString * url = [NSString stringWithFormat:@"%@",task.response.URL];
@@ -126,6 +131,11 @@
             DataModel * model = [[DataModel alloc] initWithString:aString error:nil];
             if ([model.code intValue] == 200) {
                 success(aString,nil);
+            }
+            else if ([model.code  integerValue] == 403){
+                [[UserInfoManager sharedInstance] deleteUserInfo];
+                UIWindow* window = [UIApplication sharedApplication].keyWindow;
+                [MBProgressHUD MBProgressHUDWithView:window Str:@"登录失效，请重新登录"];
             }
             else
             {
@@ -193,6 +203,11 @@
         DataModel * model = [[DataModel alloc] initWithString:aString error:nil];
         if ([model.code intValue] == 200) {
             success(aString,nil);
+        }
+        else if ([model.code  integerValue] == 403){
+            [[UserInfoManager sharedInstance] deleteUserInfo];
+            UIWindow* window = [UIApplication sharedApplication].keyWindow;
+            [MBProgressHUD MBProgressHUDWithView:window Str:@"登录失效，请重新登录"];
         }
         else
         {

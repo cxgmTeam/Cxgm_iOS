@@ -127,8 +127,10 @@
             model.select = @"0";//这个其实有点多余,提交订单后的数据源不会包含这些,保险起见,加上了
         }
         [self.selectedArray removeAllObjects];
+        
     }
     
+    [self.bottomView.checkOutButton setTitle:[NSString stringWithFormat:@"结算(%ld)",(long)self.selectedArray.count] forState:UIControlStateNormal];
     //初始化显示状态
     self.bottomView.allSellectedButton.selected = NO;
     self.bottomView.totlePriceLabel.text = @"总计：￥0.00";
@@ -158,7 +160,10 @@
 }
 
 //  计算已选中商品金额
--(void)countPrice {
+-(void)countPrice
+{
+    [self.bottomView.checkOutButton setTitle:[NSString stringWithFormat:@"结算(%ld)",(long)self.selectedArray.count] forState:UIControlStateNormal];
+    
     double totlePrice = 0.0;
     
     for (LZCartModel *model in self.selectedArray) {
@@ -167,6 +172,8 @@
         
         totlePrice += price*[model.goodNum intValue];
     }
+    
+    //总额为原价总和  优惠为优惠金额总额   合计为两者的差
     self.bottomView.totlePriceLabel.text = [NSString stringWithFormat:@"总计：￥%.2f",totlePrice];
 }
 
@@ -190,6 +197,30 @@
         if ([model.code intValue] == 200) {
             
         }
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+- (void)updateCart:(LZCartModel *)goodsModel
+{
+    CGFloat amount = [goodsModel.goodNum floatValue]*[goodsModel.price floatValue];
+    
+    NSDictionary* dic = @{@"id":goodsModel.id.length>0?goodsModel.id:@"",
+                          @"amount":[NSString stringWithFormat:@"%.2f",amount],
+                          @"goodCode":goodsModel.goodCode.length>0?goodsModel.goodCode:@"",
+                          @"goodName":goodsModel.goodName.length>0?goodsModel.goodName:@"",
+                          @"goodNum":goodsModel.goodNum.length>0?goodsModel.goodNum:@"",
+                          @"shopId":goodsModel.shopId.length>0?goodsModel.shopId:@""
+                          };
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+        if ([model.code intValue] == 200) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+
+            });
+        }
+        
     } failure:^(id JSON, NSError *error){
         
     }];
@@ -222,7 +253,9 @@
         }
         
         LZCartModel *model = self.dataArray[indexPath.row];
+        
         __block typeof(cell)wsCell = cell;
+        typeof(self) __weak wself = self;
         
         [cell numberAddWithBlock:^(NSInteger number) {
             wsCell.lzNumber = number;
@@ -234,6 +267,8 @@
                 [self.selectedArray addObject:model];
                 [self countPrice];
             }
+            
+            [wself updateCart:model];
         }];
         
         [cell numberCutWithBlock:^(NSInteger number) {
@@ -242,13 +277,16 @@
             model.goodNum = [NSString stringWithFormat:@"%ld",(long)number];
             
             [self.dataArray replaceObjectAtIndex:indexPath.row withObject:model];
-            
             //判断已选择数组里有无该对象,有就删除  重新添加
             if ([self.selectedArray containsObject:model]) {
                 [self.selectedArray removeObject:model];
                 [self.selectedArray addObject:model];
                 [self countPrice];
             }
+            
+            //调用修改购物车
+            [wself updateCart:model];
+            
         }];
         
         [cell cellSelectedWithBlock:^(BOOL select) {
@@ -412,17 +450,13 @@
 #pragma mark --- 确认选择,提交订单按钮点击事件
 - (void)goToPayButtonClick:(UIButton*)button {
     
-//    OrderConfirmViewController* vc = [OrderConfirmViewController new];
-//    [self.navigationController pushViewController:vc animated:YES];
-    
     if (self.selectedArray.count > 0) {
         for (NSInteger i = 0; i < self.selectedArray.count; i++) {
 
             LZCartModel *model = self.selectedArray[i];
             
-            
-            if (i == self.selectedArray.count) {
-                !_gotoConfirmOrder?:_gotoConfirmOrder();
+            if (i == self.selectedArray.count-1) {
+                !_gotoConfirmOrder?:_gotoConfirmOrder(self.selectedArray);
             }
         }
     } else {

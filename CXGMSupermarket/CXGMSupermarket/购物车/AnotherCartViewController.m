@@ -35,7 +35,7 @@
         make.edges.equalTo(self.view);
     }];
     typeof(self) __weak wself = self;
-    _cartView.gotoConfirmOrder = ^{
+    _cartView.gotoConfirmOrder = ^(NSArray *array){
         OrderConfirmViewController* vc = [OrderConfirmViewController new];
         [wself.navigationController pushViewController:vc animated:YES];
     };

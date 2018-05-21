@@ -31,14 +31,21 @@
     [_gridImageView sd_setImageWithURL:[NSURL URLWithString:goodsModel.image] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     _nameLabel.text = goodsModel.name;
     _priceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goodsModel.price floatValue]];
-    _oldPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goodsModel.marketPrice floatValue]];
     
-    NSUInteger length = [_oldPriceLabel.text length];
-    NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:_oldPriceLabel.text];
-    [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, length)];
-    [attri addAttribute:NSStrikethroughColorAttributeName value:[UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1/1.0] range:NSMakeRange(0, length)];
-    [_oldPriceLabel setAttributedText:attri];
-    
+    if ([goodsModel.price floatValue] != [goodsModel.originalPrice floatValue] && [goodsModel.originalPrice floatValue] > 0)
+    {
+        _oldPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goodsModel.originalPrice floatValue]];
+        
+        NSUInteger length = [_oldPriceLabel.text length];
+        NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:_oldPriceLabel.text];
+        [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, length)];
+        [attri addAttribute:NSStrikethroughColorAttributeName value:[UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1/1.0] range:NSMakeRange(0, length)];
+        [_oldPriceLabel setAttributedText:attri];
+    }
+    else
+    {
+        _oldPriceLabel.text = @"";
+    }
 }
 
 - (instancetype)initWithFrame:(CGRect)frame{

@@ -28,6 +28,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.title = @"收货地址";
     
     UIButton* addBtn = [UIButton new];
@@ -44,11 +45,20 @@
 
     self.addressList = [NSMutableArray array];
     
-    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.top.right.equalTo(self.view);
-        make.bottom.equalTo(addBtn.top);
-    }];
-    
+    if (self.selectedAddress)
+    {
+        addBtn.hidden = YES;
+        [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
+            make.edges.equalTo(self.view);
+        }];
+    }
+    else
+    {
+        [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
+            make.left.top.right.equalTo(self.view);
+            make.bottom.equalTo(addBtn.top);
+        }];
+    }
     
 }
 
@@ -97,27 +107,28 @@
 #pragma mark- UITableView
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if (self.selectedAddress) {
+        return 1;
+    }
     return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (section == 0) {
-        return 2;
+    if (self.selectedAddress) {
+        return self.addressList.count;
+    }else{
+        if (section == 0) {
+            return 2;
+        }
+        return self.addressList.count;
     }
-    return self.addressList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    UITableViewCell* tableCell;
-    if (indexPath.section == 0) {
-        AddressTopTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"AddressTopTableViewCell"];
-        if (!cell) {
-            cell = [[AddressTopTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressTopTableViewCell"];
-        }
-        cell.indexPath = indexPath;
-        tableCell = cell;
-    }
-    else
+    
+    UITableViewCell* tableCell = nil;
+    
+    if (self.selectedAddress)
     {
         AddressTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"AddressTableViewCell"];
         if (!cell) {
@@ -137,33 +148,89 @@
         };
         tableCell = cell;
     }
+    else
+    {
+        if (indexPath.section == 0) {
+            AddressTopTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"AddressTopTableViewCell"];
+            if (!cell) {
+                cell = [[AddressTopTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressTopTableViewCell"];
+            }
+            cell.indexPath = indexPath;
+            tableCell = cell;
+        }
+        else
+        {
+            AddressTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"AddressTableViewCell"];
+            if (!cell) {
+                cell = [[AddressTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressTableViewCell"];
+            }
+            if (indexPath.item < self.addressList.count) {
+                cell.address = self.addressList[indexPath.item];
+            }
+            WEAKSELF;
+            cell.updateAddress = ^(AddressModel *address){
+                AddAddressViewController* vc = [AddAddressViewController new];
+                vc.address = self.addressList[indexPath.row];
+                [weakSelf.navigationController pushViewController:vc animated:YES];
+            };
+            cell.setDefaultAddress = ^(BOOL isDefault){
+                [weakSelf updateAddress:self.addressList[indexPath.row] isDefault:isDefault];
+            };
+            tableCell = cell;
+        }
+    }
     return tableCell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 0 && indexPath.row == 1) {
-        MapViewController* vc = [MapViewController new];
-        [self.navigationController pushViewController:vc animated:YES];
+    if (self.selectedAddress)
+    {
+        AddressModel* address = self.addressList[indexPath.row];
+        if (self.selectedAddress) {
+            self.selectedAddress(address);
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
+    else
+    {
+        if (indexPath.section == 0 && indexPath.row == 1) {
+            MapViewController* vc = [MapViewController new];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    }
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CGFloat height = 0;
-    if (indexPath.section == 0) {
-        height = 45;
-    }else{
+    if (self.selectedAddress) {
         height = 128+10;
     }
+    else
+    {
+        if (indexPath.section == 0) {
+            height = 45;
+        }else{
+            height = 128+10;
+        }
+    }
+
     return height;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (self.selectedAddress) {
+        return 0;
+    }
     return 42;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if (self.selectedAddress) {
+        return nil;
+    }
     UIView* head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenW, 42)];
     head.backgroundColor = [UIColor colorWithHexString:@"f2f3f4"];
     UILabel *label = [[UILabel alloc] init];
@@ -197,10 +264,17 @@
 
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1) {
+    if (self.selectedAddress) {
         return   UITableViewCellEditingStyleDelete;
     }
-    return UITableViewCellEditingStyleNone;
+    else
+    {
+        if (indexPath.section == 1) {
+            return   UITableViewCellEditingStyleDelete;
+        }
+        return UITableViewCellEditingStyleNone;
+    }
+
 }
 
 - (void)deleteAddress:(AddressModel *)address indexPath:(NSIndexPath *)indexPath
