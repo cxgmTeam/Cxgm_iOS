@@ -2,11 +2,7 @@
 //  LZCartModel.h
 //  LZCartViewController
 //
-//  Created by LQQ on 16/5/18.
-//  Copyright © 2016年 LQQ. All rights reserved.
-//  https://github.com/LQQZYY/CartDemo
-//  http://blog.csdn.net/lqq200912408
-//  QQ交流: 302934443
+
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
@@ -29,5 +25,8 @@
 @property (nonatomic,strong)NSString<Optional> * imageUrl;
 @property (nonatomic,strong)NSString<Optional> * coupon;
 @property (nonatomic,strong)NSString<Optional> * couponId;
+
+@property (nonatomic,strong)NSString<Optional> * originalPrice;
+@property (nonatomic,strong)NSString<Optional> * categoryId;//同一个categoryId的金额计算出来
 
 @end

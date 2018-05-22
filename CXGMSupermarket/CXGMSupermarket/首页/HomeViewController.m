@@ -17,6 +17,7 @@
 #import "AddressViewController.h"
 
 #import "HYNoticeView.h"
+#import "MessageViewController.h"
 
 @interface HomeViewController ()
 @property(nonatomic,strong)HomeGoodsView* goodsView;
@@ -119,6 +120,7 @@
     
     UIButton* messageBtn = [UIButton new];
     [messageBtn setImage:[UIImage imageNamed:@"top_message"] forState:UIControlStateNormal];
+    [messageBtn addTarget:self action:@selector(showMessageVC:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:messageBtn];
     
     
@@ -150,6 +152,12 @@
 - (void)showAddressVC:(id)sender
 {
     AddressViewController* vc = [AddressViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)showMessageVC:(id)sender
+{
+    MessageViewController* vc = [MessageViewController new];
     [self.navigationController pushViewController:vc animated:YES];
 }
 

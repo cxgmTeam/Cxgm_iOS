@@ -11,7 +11,6 @@
 #import "GoodsCashViewCell.h"
 #import "OrderCouponViewCell.h"
 #import "OrderBillViewCell.h"
-#import "OrderPaywayViewCell.h"
 #import "OrderCustomerViewCell.h"
 //head
 #import "RemainTimeHintHead.h"
@@ -22,11 +21,13 @@
 
 #import "GoodsListingViewController.h"
 #import "OrderBillViewController.h"
-#import "PayResultViewController.h"
 #import "AddressViewController.h"
 #import "GoodsCouponController.h"
 
 #import "LZCartModel.h"
+#import "OrderBillViewController.h"
+
+#import "PaymentViewController.h"
 
 @interface OrderConfirmViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -39,10 +40,9 @@
 static NSString *const GoodsCashViewCellID = @"GoodsCashViewCell";
 static NSString *const OrderCouponViewCellID = @"OrderCouponViewCell";
 static NSString *const OrderBillViewCellID = @"OrderBillViewCell";
-static NSString *const OrderPaywayViewCellID = @"OrderPaywayViewCell";
+
 static NSString *const OrderCustomerViewCellID = @"OrderCustomerViewCell";
 /* head */
-static NSString *const RemainTimeHintHeadID = @"RemainTimeHintHead";
 static NSString *const OrderGoodsInfoHeadID = @"OrderGoodsInfoHead";
 /* foot */
 static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
@@ -68,6 +68,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         [self checkCoupon];
     }
     
+    
+    [self getAddressList];
+    
 }
 
 //下单接口
@@ -82,10 +85,69 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     }];
 }
 
+//请求地址 取第一天作为默认地址
+- (void)getAddressList
+{
+    if (![UserInfoManager sharedInstance].isLogin) return;
+    
+    UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
+    
+    [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIAddressList] token:userInfo.token parameters:nil success:^(id JSON, NSError *error){
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            NSArray* array = [AddressModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            if (array.count > 0) {
+                self.address = [array firstObject];
+                [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
+            }
+        }
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
 
+//请求优惠券
 - (void)checkCoupon
 {
-    NSMutableArray* array = [NSMutableArray array];
+    
+    NSMutableArray* categoryArray = [NSMutableArray array];
+    for (LZCartModel *model in self.goodsArray)
+    {
+        BOOL flag = NO;
+        for (NSString * category in categoryArray) {
+            if ([model.categoryId isEqualToString:category]) {
+                flag = YES;
+                break;
+            }
+        }
+        if (!flag) {
+            [categoryArray addObject:model.categoryId];
+        }
+    }
+    
+    NSMutableArray* array1 = [NSMutableArray array];
+    for (NSString * category in categoryArray)
+    {
+        CGFloat amount = 0;
+        
+        for (LZCartModel *model in self.goodsArray)
+        {
+            if ([model.categoryId isEqualToString:category])
+            {
+                amount = amount + [model.price floatValue];
+            }
+        }
+        NSDictionary* dic = @{
+                              @"categoryId":category,
+                              @"amount":[NSString stringWithFormat:@"%.2f",amount]
+                              };
+        [array1 addObject:dic];
+    }
+    
+    
+    NSMutableArray* array2 = [NSMutableArray array];
     for (LZCartModel *model in self.goodsArray) {
         NSDictionary* dic = @{
 //                              @"createTime": @"",
@@ -96,10 +158,13 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
                               @"productName": model.goodName.length>0?model.goodName:@"",
                               @"productNum": model.goodNum.length>0?model.goodNum:@"1"
                               };
-        [array addObject:dic];
+        [array2 addObject:dic];
     }
     
-    NSDictionary* param = @{@"productList":array};
+    NSDictionary* param = @{@"categoryAndAmountList":array1,
+                            @"productList":array2};
+    
+    
     NSDictionary* dic =  @{@"order":param};
     
 //    [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameters:param success:^(id JSON, NSError *error){
@@ -109,7 +174,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 //    }];
     
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+        dispatch_async(dispatch_get_main_queue(), ^{
 
+        });
     } failure:^(id JSON, NSError *error){
 
     }];
@@ -117,12 +184,13 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
 - (void)onTapButton:(id)sender
 {
-    PayResultViewController* vc = [PayResultViewController new];
+    PaymentViewController* vc = [PaymentViewController new];
     [self.navigationController pushViewController:vc animated:YES];
 }
+
 #pragma mark-
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 5;
+    return 4;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -155,11 +223,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         };
         gridcell = cell;
     }
-    else if (indexPath.section == 4) {
-        OrderPaywayViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderPaywayViewCellID forIndexPath:indexPath];
-        gridcell = cell;
-        
-    }
     return gridcell;
 }
 
@@ -175,6 +238,14 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         [self.navigationController pushViewController:vc animated:YES];
     }
     
+    if (indexPath.section == 2 && indexPath.item == 0) {
+        GoodsCouponController* vc = [GoodsCouponController new];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    if (indexPath.section == 3 && indexPath.item == 0) {
+        OrderBillViewController* vc = [OrderBillViewController new];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
@@ -218,9 +289,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (indexPath.section == 2 || indexPath.section == 3 ) {
         return CGSizeMake(ScreenW, 45);
     }
-    if (indexPath.section == 4) {
-        return CGSizeMake(ScreenW, 90);
-    }
+//    if (indexPath.section == 4) {
+//        return CGSizeMake(ScreenW, 90);
+//    }
     return CGSizeZero;
 }
 
@@ -238,21 +309,13 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (section == 0) {
         return CGSizeMake(ScreenW, 55);
     }
-    else if (section == 1 || section == 2 || section == 3 || section == 4)
+    else if (section == 1 || section == 2 || section == 3)
     {
         return CGSizeMake(ScreenW, 10);
     }
     return CGSizeZero;
 }
 
-- (void)collectionView:(UICollectionView *)collectionView didDeselectItemAtIndexPath:(NSIndexPath *)indexPath{
-    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-
-    if (indexPath.section == 2) {
-        GoodsCouponController* vc = [GoodsCouponController new];
-        [self.navigationController pushViewController:vc animated:YES];
-    }
-}
 
 #pragma mark-
 - (UICollectionView *)collectionView
@@ -266,14 +329,13 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.showsVerticalScrollIndicator = NO;
+        _collectionView.alwaysBounceVertical = YES;
         
         [_collectionView registerClass:[GoodsCashViewCell class] forCellWithReuseIdentifier:GoodsCashViewCellID];
         [_collectionView registerClass:[OrderCouponViewCell class] forCellWithReuseIdentifier:OrderCouponViewCellID];
         [_collectionView registerClass:[OrderBillViewCell class] forCellWithReuseIdentifier:OrderBillViewCellID];
-        [_collectionView registerClass:[OrderPaywayViewCell class] forCellWithReuseIdentifier:OrderPaywayViewCellID];
         [_collectionView registerClass:[OrderCustomerViewCell class] forCellWithReuseIdentifier:OrderCustomerViewCellID];
-        
-        [_collectionView registerClass:[RemainTimeHintHead class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:RemainTimeHintHeadID];
+
         [_collectionView registerClass:[OrderGoodsInfoHead class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderGoodsInfoHeadID];
         
         [_collectionView registerClass:[BlankCollectionFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BlankCollectionFootViewID];

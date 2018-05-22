@@ -9,8 +9,12 @@
 #import <UIKit/UIKit.h>
 
 @interface AddressTableViewCell : UITableViewCell
+
 @property(nonatomic,strong)AddressModel* address;
 
-@property(nonatomic,copy)void(^updateAddress)(AddressModel* address);
+@property(nonatomic,copy)dispatch_block_t updateAddress;
+@property(nonatomic,copy)dispatch_block_t deleteAddress;
+
 @property(nonatomic,copy)void(^setDefaultAddress)(BOOL isDefault);
+
 @end

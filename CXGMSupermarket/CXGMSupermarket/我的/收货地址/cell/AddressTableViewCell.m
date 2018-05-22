@@ -21,7 +21,13 @@
 
 - (void)setAddress:(AddressModel *)address{
     _nameLabel.text = address.realName;
-    _phoneLabel.text = [Utility phoneNumToAsterisk:address.phone];
+    
+    if ([address.phone length] == 11) {
+        _phoneLabel.text = [Utility phoneNumToAsterisk:address.phone];
+    }else{
+        _phoneLabel.text = address.phone;
+    }
+    
     _addressLabel.text = [address.area stringByAppendingString:address.address];
     _selectedBtn.selected = [address.isDef boolValue];
 }
@@ -100,15 +106,30 @@
             make.left.equalTo(self.selectedBtn.right);
         }];
         
+        UIButton* deleteBtn = [UIButton new];
+        [deleteBtn setTitle:@" 删除" forState:UIControlStateNormal];
+        [deleteBtn setImage:[UIImage imageNamed:@"address_delete"] forState:UIControlStateNormal];
+        deleteBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];
+        [deleteBtn setTitleColor:[UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0] forState:UIControlStateNormal];
+        [whiteView addSubview:deleteBtn];
+        [deleteBtn mas_makeConstraints:^(MASConstraintMaker *make){
+            make.bottom.equalTo(whiteView);
+            make.right.equalTo(-10);
+            make.size.equalTo(CGSizeMake(50, 40));
+        }];
+        [deleteBtn addTarget:self action:@selector(onTapDeleteBtn:) forControlEvents:UIControlEventTouchUpInside];
+
+        
         UIButton* editBtn = [UIButton new];
-        [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+        [editBtn setTitle:@" 编辑" forState:UIControlStateNormal];
+        [editBtn setImage:[UIImage imageNamed:@"address_edit"] forState:UIControlStateNormal];
         editBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];
         [editBtn setTitleColor:[UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0] forState:UIControlStateNormal];
         [whiteView addSubview:editBtn];
         [editBtn mas_makeConstraints:^(MASConstraintMaker *make){
             make.bottom.equalTo(whiteView);
-            make.right.equalTo(-5);
-            make.size.equalTo(CGSizeMake(40, 40));
+            make.right.equalTo(deleteBtn.left).offset(-10);
+            make.size.equalTo(CGSizeMake(50, 40));
         }];
         [editBtn addTarget:self action:@selector(onTapEditBtn:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -123,9 +144,14 @@
     !_setDefaultAddress?:_setDefaultAddress(_selectedBtn.selected);
 }
 
+- (void)onTapDeleteBtn:(id)sender
+{
+    !_deleteAddress?:_deleteAddress();
+}
+
 - (void)onTapEditBtn:(id)sender
 {
-    !_updateAddress?:_updateAddress(self.address);
+    !_updateAddress?:_updateAddress();
 }
 
 @end
