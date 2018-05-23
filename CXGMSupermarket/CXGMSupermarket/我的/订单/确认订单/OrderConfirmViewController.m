@@ -34,6 +34,9 @@
 @property (strong , nonatomic)UILabel *moneyLabel;
 
 @property (strong , nonatomic)AddressModel* address;
+@property (strong , nonatomic)CouponsModel* coupons;
+
+@property (strong , nonatomic)NSArray* couponArray;
 @end
 
 /* cell */
@@ -67,8 +70,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (self.goodsArray.count > 0) {
         [self checkCoupon];
     }
-    
-    
+
     [self getAddressList];
     
 }
@@ -100,6 +102,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             NSArray* array = [AddressModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
             if (array.count > 0) {
                 self.address = [array firstObject];
+                [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
+            }else{
+                self.address = nil;
                 [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
             }
         }
@@ -150,11 +155,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     NSMutableArray* array2 = [NSMutableArray array];
     for (LZCartModel *model in self.goodsArray) {
         NSDictionary* dic = @{
-//                              @"createTime": @"",
                               @"goodCode": model.goodCode.length>0?model.goodCode:@"",
                               @"id": model.id.length>0?model.id:@"",
-//                              @"orderId": @"0",
-//                              @"productId": @"0",
+                              @"productId": model.productId.length>0?model.productId:@"",
                               @"productName": model.goodName.length>0?model.goodName:@"",
                               @"productNum": model.goodNum.length>0?model.goodNum:@"1"
                               };
@@ -163,20 +166,22 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     NSDictionary* param = @{@"categoryAndAmountList":array1,
                             @"productList":array2};
-    
-    
-    NSDictionary* dic =  @{@"order":param};
-    
-//    [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameters:param success:^(id JSON, NSError *error){
-//
-//    } failure:^(id JSON, NSError *error){
-//
-//    }];
-    
-    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
-        dispatch_async(dispatch_get_main_queue(), ^{
 
-        });
+    
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameter:param success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            self.couponArray = [CouponsModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            if (self.couponArray.count > 0) {
+                self.coupons = [self.couponArray firstObject];
+            }else{
+                self.coupons = nil;
+            }
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]]];
+            });
+        }
+
     } failure:^(id JSON, NSError *error){
 
     }];
@@ -201,9 +206,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     UICollectionViewCell *gridcell = nil;
     if (indexPath.section == 0) {
         OrderCustomerViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderCustomerViewCellID forIndexPath:indexPath];
-        if (self.address) {
-            cell.address = self.address;
-        }
+        cell.address = self.address;
         gridcell = cell;
         
     }else if (indexPath.section == 1) {
@@ -212,6 +215,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     }
     else if (indexPath.section == 2) {
         OrderCouponViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderCouponViewCellID forIndexPath:indexPath];
+        cell.coupons = self.coupons;
         gridcell = cell;
     }
     else if (indexPath.section == 3) {
@@ -238,7 +242,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         [self.navigationController pushViewController:vc animated:YES];
     }
     
-    if (indexPath.section == 2 && indexPath.item == 0) {
+    if (indexPath.section == 2 && indexPath.item == 0 && self.couponArray.count > 0) {
         GoodsCouponController* vc = [GoodsCouponController new];
         [self.navigationController pushViewController:vc animated:YES];
     }

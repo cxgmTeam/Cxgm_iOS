@@ -34,9 +34,11 @@
     [_cartView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
     }];
+    
     typeof(self) __weak wself = self;
     _cartView.gotoConfirmOrder = ^(NSArray *array){
         OrderConfirmViewController* vc = [OrderConfirmViewController new];
+        vc.goodsArray = array;
         [wself.navigationController pushViewController:vc animated:YES];
     };
 }

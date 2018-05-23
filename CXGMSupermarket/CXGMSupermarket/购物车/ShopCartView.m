@@ -124,10 +124,10 @@
     //主要是提交订单后再返回到购物车,如果不清空,还会显示
     if (self.selectedArray.count > 0) {
         for (LZCartModel *model in self.selectedArray) {
-            model.select = @"0";//这个其实有点多余,提交订单后的数据源不会包含这些,保险起见,加上了
+            model.select = @"0";
         }
         [self.selectedArray removeAllObjects];
-        
+        [self.myTableView reloadData];
     }
     
     [self.bottomView.checkOutButton setTitle:[NSString stringWithFormat:@"结算(%ld)",(long)self.selectedArray.count] forState:UIControlStateNormal];

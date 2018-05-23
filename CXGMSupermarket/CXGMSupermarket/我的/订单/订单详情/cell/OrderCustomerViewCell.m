@@ -11,6 +11,8 @@
 @interface OrderCustomerViewCell ()
 @property(nonatomic,strong)UILabel* customerLbel;
 @property(nonatomic,strong)UILabel* addressLbel;
+
+@property(nonatomic,strong)UILabel* noAddressLbel;
 @end
 
 @implementation OrderCustomerViewCell
@@ -26,8 +28,17 @@
 
 - (void)setAddress:(AddressModel *)address
 {
-    _customerLbel.text =[NSString stringWithFormat:@"%@            %@",address.realName,address.phone];
-    _addressLbel.text = [NSString stringWithFormat:@"收货地址：%@%@",address.area,address.address];
+    if (address){
+        _noAddressLbel.hidden = YES;
+        
+        _customerLbel.text =[NSString stringWithFormat:@"%@            %@",address.realName,address.phone];
+        _addressLbel.text = [NSString stringWithFormat:@"收货地址：%@%@",address.area,address.address];
+    }else{
+        _noAddressLbel.hidden = NO;
+        
+        _customerLbel.text = @"";
+        _addressLbel.text = @"";
+    }
 }
 
 - (void)setupUI
@@ -75,6 +86,18 @@
         make.bottom.left.right.equalTo(self);
         make.height.equalTo(1);
     }];
+    
+    
+    _noAddressLbel = [[UILabel alloc] init];
+    _noAddressLbel.text =  @"请新增收获地址";
+    _noAddressLbel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:17];
+    _noAddressLbel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+    [self addSubview:_noAddressLbel];
+    [_noAddressLbel mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(47);
+        make.centerY.equalTo(self);
+    }];
+    _noAddressLbel.hidden = YES;
     
 }
 @end

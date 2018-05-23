@@ -31,6 +31,10 @@
 @property(nonatomic,strong)NSMutableArray* hotGoodsList;//热销推荐
 @property(assign,nonatomic)NSInteger pageNum;
 
+@property(nonatomic,strong)NSArray* slideImagesList;//轮播图
+@property(nonatomic,strong)NSArray* advertiseList;//三个广告位
+@property(nonatomic,strong)NSMutableArray* adBannarList;//下面的广告位
+
 @end
 
 #define GoodsHomeSilderImagesArray @[@"http://gfs5.gomein.net.cn/T1obZ_BmLT1RCvBVdK.jpg",@"http://gfs9.gomein.net.cn/T1C3J_B5LT1RCvBVdK.jpg",@"http://gfs5.gomein.net.cn/T1CwYjBCCT1RCvBVdK.jpg",@"http://gfs7.gomein.net.cn/T1u8V_B4ET1RCvBVdK.jpg",@"http://gfs7.gomein.net.cn/T1zODgB5CT1RCvBVdK.jpg"]
@@ -68,6 +72,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             [weakSelf findTopProduct];
             [weakSelf findNewProduct];
             [weakSelf findHotProduct];
+            [weakSelf findAdvertisement];
+            [weakSelf findMotion];
         }];
         self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
             weakSelf.pageNum ++;
@@ -75,14 +81,18 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         }];
     }
     
+    self.adBannarList = [NSMutableArray array];
+    
     self.pageNum = 1;
     self.hotGoodsList = [NSMutableArray array];
     
     [self findTopProduct];
     [self findNewProduct];
     [self findHotProduct];
-
-
+    
+    [self findAdvertisement];
+    [self findMotion];
+    
     return self;
 }
 
@@ -158,6 +168,79 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     } failure:^(id JSON, NSError *error){
         [weakSelf.collectionView.mj_header endRefreshing];
         [weakSelf.collectionView.mj_footer endRefreshing];
+    }];
+}
+
+
+//广告位
+- (void)findAdvertisement
+{
+    
+    NSDictionary* dic = @{@"shopId":@""};
+    if ([DeviceHelper sharedInstance].shop) {
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
+    }
+    WEAKSELF;
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindAdvertisement]  token:nil parameters:dic success:^(id JSON, NSError *error){
+        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            NSArray* array  = [AdvertisementModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            
+            NSMutableArray* array1 = [NSMutableArray array];
+            NSMutableArray* array2 = [NSMutableArray array];
+            for (AdvertisementModel* model in array) {
+                if ([model.position isEqualToString:@"1"]) {
+                    [array1 addObject:model];
+                }
+                if ([model.position isEqualToString:@"2"]) {
+                    [array2 addObject:model];
+                }
+            }
+
+            
+            self.slideImagesList = [array1 sortedArrayUsingComparator:^NSComparisonResult(AdvertisementModel * obj1, AdvertisementModel * obj2){
+                return [obj1.number  compare: obj2.number];
+            }];
+
+
+            self.advertiseList = [array2 sortedArrayUsingComparator:^NSComparisonResult(AdvertisementModel * obj1, AdvertisementModel * obj2){
+                return [obj1.number  compare: obj2.number];
+            }];
+            
+            
+            [weakSelf.collectionView reloadData];
+        }
+        
+    } failure:^(id JSON, NSError *error){
+
+    }];
+}
+
+//根据门店ID查询首页运营位置
+- (void)findMotion
+{
+    [self.adBannarList removeAllObjects];
+    
+    NSDictionary* dic = @{@"shopId":@""};
+    if ([DeviceHelper sharedInstance].shop) {
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
+    }
+    WEAKSELF;
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindMotion]  token:nil parameters:dic success:^(id JSON, NSError *error){
+        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+
+            for (NSDictionary* dic in (NSArray *)model.data) {
+                AdBannarModel* model = [AdBannarModel AdBannarModelWithJson:dic];
+                [self.adBannarList addObject:model];
+            }
+            [weakSelf.collectionView reloadData];
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
     }];
 }
 

@@ -42,6 +42,11 @@
 #define APIFindHotProduct  @"/homePage/findHotProduct"
 //查询所有门店列表
 #define APIShopList  @"/user/shopList"
+//根据门店ID查询首页广告
+#define APIFindAdvertisement  @"/homePage/findAdvertisement"
+//根据门店ID查询首页运营位置
+#define APIFindMotion  @"/homePage/findMotion"
+
 
 /* 分类页面  */
 //根据门店ID查询商品一级分类

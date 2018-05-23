@@ -25,6 +25,7 @@
 @property (nonatomic,strong)NSString<Optional> * imageUrl;
 @property (nonatomic,strong)NSString<Optional> * coupon;
 @property (nonatomic,strong)NSString<Optional> * couponId;
+@property (nonatomic,strong)NSString<Optional> * productId;
 
 @property (nonatomic,strong)NSString<Optional> * originalPrice;
 @property (nonatomic,strong)NSString<Optional> * categoryId;//同一个categoryId的金额计算出来

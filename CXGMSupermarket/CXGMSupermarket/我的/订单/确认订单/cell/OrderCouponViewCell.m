@@ -14,6 +14,15 @@
 
 @implementation OrderCouponViewCell
 
+- (void)setCoupons:(CouponsModel *)coupons{
+    
+    if (coupons) {
+        _valueLabel.text = @"-￥50.00";
+    }else{
+        _valueLabel.text = @"无优惠券可用";
+    }
+}
+
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         

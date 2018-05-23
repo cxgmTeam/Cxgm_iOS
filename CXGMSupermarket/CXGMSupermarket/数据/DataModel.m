@@ -27,8 +27,24 @@
 
 @end
 
+@implementation AdvertisementModel
+
+@end
+
 @implementation CategoryModel
 
+@end
+
+@implementation AdBannarModel
+
++(AdBannarModel *)AdBannarModelWithJson:(NSDictionary *)json
+{
+    AdBannarModel* model = [[AdBannarModel alloc] initWithDictionary:json error:nil];
+    if ([model.productList isKindOfClass:[NSArray class]]) {
+        model.productList = [GoodsModel arrayOfModelsFromDictionaries:model.productList error:nil];
+    }
+    return model;
+}
 @end
 
 @implementation GoodsModel

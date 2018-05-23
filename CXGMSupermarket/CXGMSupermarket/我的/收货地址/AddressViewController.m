@@ -45,20 +45,10 @@
 
     self.addressList = [NSMutableArray array];
     
-    if (self.selectedAddress)
-    {
-        addBtn.hidden = YES;
-        [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
-            make.edges.equalTo(self.view);
-        }];
-    }
-    else
-    {
-        [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
-            make.left.top.right.equalTo(self.view);
-            make.bottom.equalTo(addBtn.top);
-        }];
-    }
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.top.right.equalTo(self.view);
+        make.bottom.equalTo(addBtn.top);
+    }];
     
     typeof(self) __weak wself = self;
     

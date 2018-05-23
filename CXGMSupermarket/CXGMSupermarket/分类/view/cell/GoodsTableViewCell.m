@@ -60,7 +60,8 @@
                           @"goodCode":self.goodsModel.goodCode.length>0?self.goodsModel.goodCode:@"",
                           @"goodName":self.goodsModel.name.length>0?self.goodsModel.name:@"",
                           @"goodNum":@"1",
-                          @"shopId":self.goodsModel.shopId.length>0?self.goodsModel.shopId:@""
+                          @"shopId":self.goodsModel.shopId.length>0?self.goodsModel.shopId:@"",
+                          @"productId":self.goodsModel.id.length>0?self.goodsModel.id:@""
                           };
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];

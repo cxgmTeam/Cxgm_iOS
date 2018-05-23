@@ -37,6 +37,7 @@
 		776B534E20A69C9000594B32 /* LocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B534D20A69C9000594B32 /* LocationTableViewCell.m */; };
 		776B535720A732B100594B32 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535620A732B100594B32 /* SettingViewController.m */; };
 		776B535B20A7347A00594B32 /* SettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535A20A7347A00594B32 /* SettingTableViewCell.m */; };
+		777B48CA20B59C0E0048CE78 /* PaymentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 777B48C920B59C0E0048CE78 /* PaymentButton.m */; };
 		7783F2002095CEFA00338459 /* RemainTimeHintHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F1FF2095CEFA00338459 /* RemainTimeHintHead.m */; };
 		7783F2032095D2C100338459 /* OrderGoodsInfoHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F2022095D2C100338459 /* OrderGoodsInfoHead.m */; };
 		7783F2062097064700338459 /* GoodsCashViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F2052097064700338459 /* GoodsCashViewCell.m */; };
@@ -369,6 +370,8 @@
 		776B535620A732B100594B32 /* SettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		776B535920A7347A00594B32 /* SettingTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingTableViewCell.h; sourceTree = "<group>"; };
 		776B535A20A7347A00594B32 /* SettingTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingTableViewCell.m; sourceTree = "<group>"; };
+		777B48C820B59C0E0048CE78 /* PaymentButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaymentButton.h; sourceTree = "<group>"; };
+		777B48C920B59C0E0048CE78 /* PaymentButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaymentButton.m; sourceTree = "<group>"; };
 		7783F1FE2095CEFA00338459 /* RemainTimeHintHead.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemainTimeHintHead.h; sourceTree = "<group>"; };
 		7783F1FF2095CEFA00338459 /* RemainTimeHintHead.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemainTimeHintHead.m; sourceTree = "<group>"; };
 		7783F2012095D2C100338459 /* OrderGoodsInfoHead.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrderGoodsInfoHead.h; sourceTree = "<group>"; };
@@ -1076,6 +1079,8 @@
 				775D358C20B446FB0047F9EE /* OrderPaywayViewCell.m */,
 				775D358620B444080047F9EE /* PaymentViewController.h */,
 				775D358720B444080047F9EE /* PaymentViewController.m */,
+				777B48C820B59C0E0048CE78 /* PaymentButton.h */,
+				777B48C920B59C0E0048CE78 /* PaymentButton.m */,
 			);
 			path = "支付";
 			sourceTree = "<group>";
@@ -2627,6 +2632,7 @@
 				77F839AC2070E375004E9717 /* main.m in Sources */,
 				77F83A852070E8CE004E9717 /* IQTitleBarButtonItem.m in Sources */,
 				BEC90F94207F809700B5E609 /* LZCartTableViewCell.m in Sources */,
+				777B48CA20B59C0E0048CE78 /* PaymentButton.m in Sources */,
 				BE24E01020A30E460024A64D /* GradientLabel.m in Sources */,
 				BE9769D92072505C00783217 /* MJRefreshComponent.m in Sources */,
 				7783F2002095CEFA00338459 /* RemainTimeHintHead.m in Sources */,

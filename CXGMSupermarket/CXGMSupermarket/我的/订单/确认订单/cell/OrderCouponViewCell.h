@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface OrderCouponViewCell : UICollectionViewCell
-
+@property(nonatomic,strong)CouponsModel* coupons;
 @end
