@@ -86,6 +86,10 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         make.bottom.equalTo(-60);
     }];
     [self.upTopBtn addTarget:self action:@selector(onTapUpTopBtn:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (self.goodsModel) {
+        [self findProductDetail];
+    }
 }
 
 - (void)setGoodsModel:(GoodsModel *)goodsModel{
@@ -93,6 +97,22 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     _goodsModel = goodsModel;
     
 }
+
+
+- (void)findProductDetail
+{
+    NSDictionary* dic = @{@"productId":self.goodsModel.id,
+                          @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
+                          };
+    
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindProductDetail] token:nil parameters:dic success:^(id JSON, NSError *error){
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+
 
 - (void)onTapUpTopBtn:(id)sender
 {

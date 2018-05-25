@@ -133,6 +133,7 @@
             [[UserInfoManager sharedInstance] saveUserInfo:(NSDictionary *)model.data];
             
             dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:LoginAccount_Success object:nil];
                 [weakSelf dismissViewControllerAnimated:YES completion:nil];
             });
         }

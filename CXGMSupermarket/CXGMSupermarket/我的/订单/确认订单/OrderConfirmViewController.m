@@ -24,7 +24,7 @@
 #import "AddressViewController.h"
 #import "GoodsCouponController.h"
 
-#import "LZCartModel.h"
+
 #import "OrderBillViewController.h"
 
 #import "PaymentViewController.h"
@@ -37,6 +37,8 @@
 @property (strong , nonatomic)CouponsModel* coupons;
 
 @property (strong , nonatomic)NSArray* couponArray;
+
+@property (strong , nonatomic)NSMutableDictionary* orderParam;
 @end
 
 /* cell */
@@ -59,6 +61,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     [super viewDidLoad];
     self.title = @"确认订单";
     
+    self.orderParam = [NSMutableDictionary dictionary];
+    
     [self setupBottom];
     
     self.collectionView.backgroundColor = [UIColor clearColor];
@@ -78,9 +82,11 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 //下单接口
 - (void)addOrder:(NSArray *)array
 {
-    NSDictionary* dic = @{};
     
-    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIAddOrder] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+    
+    
+    
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIAddOrder] token:[UserInfoManager sharedInstance].userInfo.token parameter:self.orderParam success:^(id JSON, NSError *error){
         
     } failure:^(id JSON, NSError *error){
         
@@ -116,6 +122,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 //请求优惠券
 - (void)checkCoupon
 {
+    
+    [self.orderParam removeAllObjects];
     
     NSMutableArray* categoryArray = [NSMutableArray array];
     for (LZCartModel *model in self.goodsArray)
@@ -166,7 +174,11 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     NSDictionary* param = @{@"categoryAndAmountList":array1,
                             @"productList":array2};
-
+    
+    //为提交订单做准备
+    [self.orderParam setObject:array1 forKey:@"categoryAndAmountList"];
+    [self.orderParam setObject:array2 forKey:@"productList"];
+    
     
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameter:param success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
@@ -190,6 +202,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 - (void)onTapButton:(id)sender
 {
     PaymentViewController* vc = [PaymentViewController new];
+    
     [self.navigationController pushViewController:vc animated:YES];
 }
 

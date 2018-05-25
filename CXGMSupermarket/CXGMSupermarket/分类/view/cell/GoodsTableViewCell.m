@@ -56,12 +56,23 @@
     
     if (!self.goodsModel) return;
     
-    NSDictionary* dic = @{@"amount":self.goodsModel.price.length>0?self.goodsModel.price:@"",
-                          @"goodCode":self.goodsModel.goodCode.length>0?self.goodsModel.goodCode:@"",
-                          @"goodName":self.goodsModel.name.length>0?self.goodsModel.name:@"",
+    if ([self.goodsModel.shopCartNum intValue] > 0) {
+        [self updateCart:self.goodsModel];
+    }else{
+        [self addCart:self.goodsModel];
+    }
+}
+
+
+
+- (void)addCart:(GoodsModel *)goods
+{
+    NSDictionary* dic = @{@"amount":goods.price.length>0?goods.price:@"",
+                          @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
+                          @"goodName":goods.name.length>0?goods.name:@"",
                           @"goodNum":@"1",
-                          @"shopId":self.goodsModel.shopId.length>0?self.goodsModel.shopId:@"",
-                          @"productId":self.goodsModel.id.length>0?self.goodsModel.id:@""
+                          @"shopId":goods.shopId.length>0?goods.shopId:@"",
+                          @"productId":goods.id.length>0?goods.id:@""
                           };
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
@@ -70,6 +81,9 @@
                 
                 UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
                 [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
+                
+                self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
             });
         }
@@ -78,6 +92,36 @@
         
     }];
 }
+
+- (void)updateCart:(GoodsModel *)goods
+{
+    CGFloat amount = (1+[goods.shopCartNum integerValue])*[goods.price floatValue];
+    
+    NSDictionary* dic = @{@"id":goods.id.length>0?goods.id:@"",
+                          @"amount":[NSString stringWithFormat:@"%.2f",amount],
+                          @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
+                          @"goodName":goods.name.length>0?goods.name:@"",
+                          @"goodNum":[NSString stringWithFormat:@"%d",1+[goods.shopCartNum intValue]],
+                          @"shopId":goods.shopId.length>0?goods.shopId:@""
+                          };
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+        if ([model.code intValue] == 200) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+                [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
+                
+                self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
+            });
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {

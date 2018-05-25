@@ -7,7 +7,14 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "ReceiptItem.h"
 
 @interface BillHeadViewCell : UICollectionViewCell
 
+@property(nonatomic,strong)ReceiptItem* receipt;
+
+@property(nonatomic,strong)UITextField* companyNameTextField;
+@property(nonatomic,strong)UITextField* dutyParagraphTextField;
+
+@property(nonatomic,copy)void(^selectReceiptHead)(BOOL isOpen);
 @end

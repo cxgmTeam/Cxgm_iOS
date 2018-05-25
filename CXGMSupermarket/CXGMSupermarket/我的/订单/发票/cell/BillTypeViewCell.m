@@ -9,6 +9,11 @@
 #import "BillTypeViewCell.h"
 #import "BillCustomButton.h"
 
+@interface BillTypeViewCell ()
+@property(nonatomic,strong)BillCustomButton* commonBtn;
+@property(nonatomic,strong)BillCustomButton* electronicBtn;
+@end
+
 @implementation BillTypeViewCell
 
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -32,21 +37,42 @@
         make.left.equalTo(15);
     }];
     
-    BillCustomButton* commonBtn = [[BillCustomButton alloc] initWithFrame:CGRectZero withTitle:@"普通发票"];
-    [self addSubview:commonBtn];
-    [commonBtn mas_makeConstraints:^(MASConstraintMaker *make){
+    _commonBtn = [[BillCustomButton alloc] initWithFrame:CGRectZero withTitle:@"普通发票"];
+    _commonBtn.tag = 1;
+    [self addSubview:_commonBtn];
+    [_commonBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.equalTo(15);
         make.bottom.equalTo(-15);
         make.size.equalTo(CGSizeMake(72, 26));
     }];
+    [_commonBtn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
     
-    BillCustomButton* electronicBtn = [[BillCustomButton alloc] initWithFrame:CGRectZero withTitle:@"电子发票"];
-    [self addSubview:electronicBtn];
-    [electronicBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.equalTo(commonBtn.right).offset(10);
+    _electronicBtn = [[BillCustomButton alloc] initWithFrame:CGRectZero withTitle:@"电子发票"];
+    _electronicBtn.tag = 2;
+    [self addSubview:_electronicBtn];
+    [_electronicBtn mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(self.commonBtn.right).offset(10);
         make.bottom.equalTo(-15);
         make.size.equalTo(CGSizeMake(72, 26));
     }];
-    electronicBtn.selected = YES;
+    _electronicBtn.selected = YES;
+    [_electronicBtn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
+}
+
+- (void)onTapButton:(BillCustomButton *)button
+{
+    NSString* type = @"1";
+    
+    if (button.tag == 1) {
+        _commonBtn.selected = YES;
+        _electronicBtn.selected = NO;
+        type = @"0";
+    }else{
+        _commonBtn.selected = NO;
+        _electronicBtn.selected = YES;
+        type = @"1";
+    }
+    
+    !_selectReceiptType?:_selectReceiptType(type);
 }
 @end

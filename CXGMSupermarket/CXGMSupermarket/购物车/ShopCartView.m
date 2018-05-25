@@ -9,7 +9,7 @@
 #import "ShopCartView.h"
 #import "LZConfigFile.h"
 #import "LZCartTableViewCell.h"
-#import "LZCartModel.h"
+
 
 #import "CartEmptyTableCell.h"
 #import "CartBottomBar.h"

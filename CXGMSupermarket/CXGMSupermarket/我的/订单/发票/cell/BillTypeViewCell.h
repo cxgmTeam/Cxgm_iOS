@@ -10,4 +10,5 @@
 
 @interface BillTypeViewCell : UICollectionViewCell
 
+@property(nonatomic,copy)void(^selectReceiptType)(NSString *type);
 @end

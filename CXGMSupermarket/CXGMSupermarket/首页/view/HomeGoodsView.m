@@ -72,6 +72,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             [weakSelf findTopProduct];
             [weakSelf findNewProduct];
             [weakSelf findHotProduct];
+            
             [weakSelf findAdvertisement];
             [weakSelf findMotion];
         }];
@@ -80,6 +81,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             [weakSelf findHotProduct];
         }];
     }
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
     
     self.adBannarList = [NSMutableArray array];
     
@@ -96,6 +99,16 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     return self;
 }
 
+- (void)refreshGoodsInfo:(NSNotification *)notify
+{
+    [self findTopProduct];
+    [self findNewProduct];
+    
+    self.pageNum = 1;
+    [self.hotGoodsList removeAllObjects];
+    [self findHotProduct];
+}
+
 
 //精品推荐
 - (void)findTopProduct
@@ -105,7 +118,12 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
     }
     
-    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindTopProduct]  token:nil parameters:dic success:^(id JSON, NSError *error){
+    NSString* token = @"";
+    if ([UserInfoManager sharedInstance].isLogin) {
+        token = [UserInfoManager sharedInstance].userInfo.token;
+    }
+    
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindTopProduct]  token:token parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
             self.topGoodsList = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
@@ -124,7 +142,12 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
     }
     
-    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindNewProduct]  token:nil parameters:dic success:^(id JSON, NSError *error){
+    NSString* token = @"";
+    if ([UserInfoManager sharedInstance].isLogin) {
+        token = [UserInfoManager sharedInstance].userInfo.token;
+    }
+    
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindNewProduct]  token:token parameters:dic success:^(id JSON, NSError *error){
         
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
@@ -147,8 +170,14 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
                 @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
                 @"pageSize":@"10"};
     }
+    
+    NSString* token = @"";
+    if ([UserInfoManager sharedInstance].isLogin) {
+        token = [UserInfoManager sharedInstance].userInfo.token;
+    }
+    
     WEAKSELF;
-    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindHotProduct]  token:nil parameters:dic success:^(id JSON, NSError *error){
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindHotProduct]  token:token parameters:dic success:^(id JSON, NSError *error){
 
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
@@ -440,5 +469,10 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         [self addSubview:_collectionView];
     }
     return _collectionView;
+}
+
+#pragma mark-
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 @end

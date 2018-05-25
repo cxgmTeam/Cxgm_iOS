@@ -101,6 +101,7 @@
 #define AddGoodsSuccess_Notify    @"AddGoodsSuccess_Notify"
 #define DontShowCart_Notify      @"DontShowCart_Notify"
 
+#define LoginAccount_Success   @"LoginAccount_Success"
 
 #define PAGECOUNT  @"10"
 

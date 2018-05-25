@@ -13,6 +13,7 @@
 #import "GoodsDetailViewController.h"
 
 
+
 @interface SubCategoryController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
 
 @property(nonatomic,strong)UITableView* leftTableView;
@@ -31,6 +32,8 @@
 @property(nonatomic,strong)NSArray* secondCategorys;
 @property(nonatomic,strong)NSArray* thirdCategorys;
 @property(nonatomic,strong)NSMutableDictionary* dictionary;//三级分类作key  对应的Goods数组作value
+
+@property(nonatomic,strong)CategoryModel* secondCategory;
 @end
 
 
@@ -48,6 +51,7 @@ static CGFloat TopBtnWidth = 60;
     self.dictionary = [NSMutableDictionary dictionary];
     
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
     
    
     
@@ -86,6 +90,11 @@ static CGFloat TopBtnWidth = 60;
     if (self.category) {
         [self findSecondCategory:self.category.id];
     }
+}
+
+- (void)refreshGoodsInfo:(NSNotification *)notify
+{
+    [self findProductByCategory:self.secondCategory.id];
 }
 
 - (void)setupThirdCategory
@@ -163,6 +172,8 @@ static CGFloat TopBtnWidth = 60;
                 CategoryModel* category = [array firstObject];
                 category.selected = @"1";
                 
+                self.secondCategory = category;
+                
                 [wself findThirdCategory:category.id];
                 
                 [wself findProductByCategory:category.id];
@@ -204,8 +215,14 @@ static CGFloat TopBtnWidth = 60;
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
                 @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
     }
+    
+    NSString* token = @"";
+    if ([UserInfoManager sharedInstance].isLogin) {
+        token = [UserInfoManager sharedInstance].userInfo.token;
+    }
+
     typeof(self) __weak wself = self;
-    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindProductByCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindProductByCategory]  token:token parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
             NSArray* array = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
@@ -428,5 +445,8 @@ static CGFloat TopBtnWidth = 60;
     return _updownBtn;
 }
 
-
+#pragma mark-
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 @end

@@ -10,9 +10,9 @@
 
 @interface PaymentButton : UIControl
 
-@property(nonatomic,strong)UIImageView* iconView;
-@property(nonatomic,strong)UILabel* titleLabel;
-
 @property(nonatomic,strong)UIImageView* markView;
+
+- (instancetype)initWithFrame:(CGRect)frame image:(NSString *)image title:(NSString *)title;
+
 @end
 

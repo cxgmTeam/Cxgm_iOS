@@ -43,7 +43,8 @@
 {
     AFNetAPIClient * manager = [self sharedClient];
 
-    if (token.length > 0){
+    if (token != nil)
+    {
         [manager.requestSerializer setValue:token forHTTPHeaderField:@"token"];
     }
     NSURLSessionDataTask * task = [manager GET:Function parameters:parameters progress:^(NSProgress * _Nonnull downloadProgress){

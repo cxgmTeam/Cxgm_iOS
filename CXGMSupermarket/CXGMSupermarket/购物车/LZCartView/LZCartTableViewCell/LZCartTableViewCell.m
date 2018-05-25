@@ -10,7 +10,7 @@
 
 #import "LZCartTableViewCell.h"
 #import "LZConfigFile.h"
-#import "LZCartModel.h"
+
 
 @interface LZCartTableViewCell ()
 {

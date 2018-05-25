@@ -7,7 +7,6 @@
 //
 
 #import "PaymentViewController.h"
-#import "OrderPaywayViewCell.h"
 #import "PaymentButton.h"
 
 @interface PaymentViewController ()
@@ -17,7 +16,6 @@
 @property(nonatomic,strong)UILabel* timeLabel;
 @property(nonatomic,strong)UILabel* moneyLabel;
 
-@property(nonatomic,strong)OrderPaywayViewCell* payView;
 
 @property(nonatomic,strong)PaymentButton* weixinBtn;
 @property(nonatomic,strong)PaymentButton* alipayBtn;
@@ -113,19 +111,40 @@
         make.left.equalTo(15);
     }];
     
-//    _payView = [OrderPaywayViewCell new];
-//    [self.view addSubview:_payView];
-//    [_payView mas_makeConstraints:^(MASConstraintMaker *make){
-//        make.top.equalTo(label.bottom).offset(10);
-//        make.left.right.equalTo(self.view);
-//        make.height.equalTo(90);
-//    }];
-    
-    _weixinBtn = [PaymentButton new];
+
+    _weixinBtn = [[PaymentButton alloc] initWithFrame:CGRectZero image:@"wechat_pay" title:@"微信支付"];
+    _weixinBtn.tag = 1;
     [self.view addSubview:_weixinBtn];
     [_weixinBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        
+        make.top.equalTo(label.bottom).offset(10);
+        make.left.right.equalTo(self.view);
+        make.height.equalTo(45);
     }];
+    [_weixinBtn addTarget:self action:@selector(selectPayMent:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _alipayBtn = [[PaymentButton alloc] initWithFrame:CGRectZero image:@"alipay_pay" title:@"支付宝支付"];
+    _alipayBtn.tag = 2;
+    [self.view addSubview:_alipayBtn];
+    [_alipayBtn mas_makeConstraints:^(MASConstraintMaker *make){
+        make.top.equalTo(self.weixinBtn.bottom).offset(1);
+        make.left.right.equalTo(self.view);
+        make.height.equalTo(45);
+    }];
+    [_alipayBtn addTarget:self action:@selector(selectPayMent:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _weixinBtn.markView.hidden = NO;
+    _alipayBtn.markView.hidden = YES;
+}
+
+- (void)selectPayMent:(PaymentButton *)button
+{
+    if (button.tag == 1) {
+        _weixinBtn.markView.hidden = NO;
+        _alipayBtn.markView.hidden = YES;
+    }else{
+        _weixinBtn.markView.hidden = YES;
+        _alipayBtn.markView.hidden = NO;
+    }
 }
 
 

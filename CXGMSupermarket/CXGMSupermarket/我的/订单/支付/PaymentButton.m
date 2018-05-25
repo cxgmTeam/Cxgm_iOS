@@ -8,31 +8,33 @@
 
 #import "PaymentButton.h"
 
+
+
 @implementation PaymentButton
 
-- (instancetype)initWithFrame:(CGRect)frame{
+- (instancetype)initWithFrame:(CGRect)frame image:(NSString *)image title:(NSString *)title{
     if (self = [super initWithFrame:frame]) {
         
         self.backgroundColor = [UIColor whiteColor];
         
-        UIImageView* imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"wechat_pay"]];
+        UIImageView* imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:image]];
         [self addSubview:imgView];
         [imgView mas_makeConstraints:^(MASConstraintMaker *make){
             make.centerY.equalTo(self);
             make.left.equalTo(15);
         }];
-        _iconView = imgView;
+   
         
         UILabel *label = [[UILabel alloc] init];
-        label.text = @"微信支付";
+        label.text = title;
         label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
         label.textColor = [UIColor colorWithRed:33/255.0 green:33/255.0 blue:33/255.0 alpha:1/1.0];
         [self addSubview:label];
         [label mas_makeConstraints:^(MASConstraintMaker *make){
             make.centerY.equalTo(self);
-            make.left.equalTo(self.iconView.right).offset(7);
+            make.left.equalTo(imgView.right).offset(7);
         }];
-        _titleLabel = label;
+
         
         
         _markView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"goods_selected"]];

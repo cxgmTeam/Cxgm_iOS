@@ -68,7 +68,7 @@
     }];
 
     _valueLabel2 = [[UILabel alloc] init];
-    _valueLabel2.text = @"¥41.00";
+    _valueLabel2.text = @"¥0.00";
     _valueLabel2.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
     _valueLabel2.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [self addSubview:_valueLabel2];
@@ -78,7 +78,7 @@
     }];
     
     _valueLabel3 = [[UILabel alloc] init];
-    _valueLabel3.text = @"¥41.00";
+    _valueLabel3.text = @"¥10.00";
     _valueLabel3.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
     _valueLabel3.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [self addSubview:_valueLabel3];

@@ -15,9 +15,12 @@
 //foot
 #import "BillPageFootView.h"
 
+#import "ReceiptItem.h"
 
-@interface OrderBillViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface OrderBillViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,UITextFieldDelegate>
 @property (strong , nonatomic)UICollectionView *collectionView;
+
+@property (strong , nonatomic)ReceiptItem *receiptItem;
 @end
 
 @implementation OrderBillViewController
@@ -30,39 +33,24 @@ static NSString *const BillHeadViewCellID = @"BillHeadViewCell";
 /* foot */
 static NSString *const BillPageFootViewID = @"BillPageFootView";
 
-- (UICollectionView *)collectionView
-{
-    if (!_collectionView) {
-        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        layout.minimumInteritemSpacing= 0;
-        layout.minimumLineSpacing = 10;
-        
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.showsVerticalScrollIndicator = NO;
-        _collectionView.alwaysBounceVertical = YES;
-        
-        [_collectionView registerClass:[BillTypeViewCell class] forCellWithReuseIdentifier:BillTypeViewCellID];
-        [_collectionView registerClass:[BillReceiverViewCell class] forCellWithReuseIdentifier:BillReceiverViewCellID];
-        [_collectionView registerClass:[BillContentViewCell class] forCellWithReuseIdentifier:BillContentViewCellID];
-        [_collectionView registerClass:[BillHeadViewCell class] forCellWithReuseIdentifier:BillHeadViewCellID];
-    
-        [_collectionView registerClass:[BillPageFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BillPageFootViewID];
-        
-        [self.view addSubview:_collectionView];
-    }
-    return _collectionView;
-}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.title = @"发票";
     
+    self.receiptItem = [ReceiptItem new];
+    self.receiptItem.type = @"1";
+    self.receiptItem.phone = [UserInfoManager sharedInstance].userInfo.mobile;
+    self.receiptItem.isOpen = NO;
+    
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
     }];
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField{
+    
 }
 
 #pragma mark-
@@ -75,6 +63,9 @@ static NSString *const BillPageFootViewID = @"BillPageFootView";
     switch (indexPath.item) {
         case 0:{
             BillTypeViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:BillTypeViewCellID forIndexPath:indexPath];
+            cell.selectReceiptType = ^(NSString *type){
+                self.receiptItem.type = type;
+            };
             gridcell = cell;
         }
             
@@ -93,6 +84,14 @@ static NSString *const BillPageFootViewID = @"BillPageFootView";
             break;
         case 3:{
             BillHeadViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:BillHeadViewCellID forIndexPath:indexPath];
+            cell.receipt = self.receiptItem;
+            cell.companyNameTextField.delegate = self;
+            cell.dutyParagraphTextField.delegate = self;
+            
+            cell.selectReceiptHead = ^(BOOL isOpen){
+                self.receiptItem.isOpen = isOpen;
+                [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+            };
             gridcell = cell;
         }
             break;
@@ -114,8 +113,13 @@ static NSString *const BillPageFootViewID = @"BillPageFootView";
         case 2:
             return CGSizeMake(ScreenW, 45);
             break;
-        case 3:
-            return CGSizeMake(ScreenW, 190);
+        case 3:{
+            if(self.receiptItem.isOpen){
+                return CGSizeMake(ScreenW, 190);
+            }else{
+                return CGSizeMake(ScreenW, 84);
+            }
+        }
             break;
         default:
             break;
@@ -138,5 +142,30 @@ static NSString *const BillPageFootViewID = @"BillPageFootView";
     return CGSizeMake(ScreenW, 133+42);  
 }
 
+#pragma mark-
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+        layout.minimumInteritemSpacing= 0;
+        layout.minimumLineSpacing = 10;
+        
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.showsVerticalScrollIndicator = NO;
+        _collectionView.alwaysBounceVertical = YES;
+        
+        [_collectionView registerClass:[BillTypeViewCell class] forCellWithReuseIdentifier:BillTypeViewCellID];
+        [_collectionView registerClass:[BillReceiverViewCell class] forCellWithReuseIdentifier:BillReceiverViewCellID];
+        [_collectionView registerClass:[BillContentViewCell class] forCellWithReuseIdentifier:BillContentViewCellID];
+        [_collectionView registerClass:[BillHeadViewCell class] forCellWithReuseIdentifier:BillHeadViewCellID];
+        
+        [_collectionView registerClass:[BillPageFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BillPageFootViewID];
+        
+        [self.view addSubview:_collectionView];
+    }
+    return _collectionView;
+}
 
 @end

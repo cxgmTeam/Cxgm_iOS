@@ -46,6 +46,8 @@
 #define APIFindAdvertisement  @"/homePage/findAdvertisement"
 //根据门店ID查询首页运营位置
 #define APIFindMotion  @"/homePage/findMotion"
+//根据商品ID查询商品详情
+#define APIFindProductDetail  @"/homePage/findProductDetail"
 
 
 /* 分类页面  */
