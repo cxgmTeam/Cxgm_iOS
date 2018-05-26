@@ -28,6 +28,7 @@
 #import "OrderBillViewController.h"
 
 #import "PaymentViewController.h"
+#import "SelectTimeController.h"
 
 @interface OrderConfirmViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -285,6 +286,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (kind == UICollectionElementKindSectionFooter) {
         if (indexPath.section == 0) {
             GoodsArrivedTimeFoot *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:GoodsArrivedTimeFootID forIndexPath:indexPath];
+            [footview addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectTime:)]];
             reusableview = footview;
         }else{
             BlankCollectionFootView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BlankCollectionFootViewID forIndexPath:indexPath];
@@ -306,9 +308,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (indexPath.section == 2 || indexPath.section == 3 ) {
         return CGSizeMake(ScreenW, 45);
     }
-//    if (indexPath.section == 4) {
-//        return CGSizeMake(ScreenW, 90);
-//    }
+
     return CGSizeZero;
 }
 
@@ -331,6 +331,16 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         return CGSizeMake(ScreenW, 10);
     }
     return CGSizeZero;
+}
+
+#pragma mark-
+- (void)selectTime:(UITapGestureRecognizer *)gesture
+{
+    SelectTimeController* vc = [SelectTimeController new];
+    vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    
+    UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+    [controller presentViewController:vc animated:YES completion:nil];
 }
 
 

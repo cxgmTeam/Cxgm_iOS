@@ -137,8 +137,8 @@
     [self addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make){
         make.bottom.equalTo(self.menuView.top).offset(-7);
-        make.left.equalTo(backButton.right);
-        make.width.equalTo(ScreenW-44);
+        make.centerX.equalTo(self.menuView);
+        make.width.equalTo(ScreenW-105);
     }];
     _goodNameLabel = label;
 }

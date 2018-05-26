@@ -24,6 +24,7 @@
 #import "ULBCollectionViewFlowLayout.h"
 
 #import "AnotherCartViewController.h"
+#import "SelectSpecificationController.h"
 
 @interface GoodsDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,ULBCollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -35,6 +36,10 @@
 
 @property (strong , nonatomic)UIButton * addGoodsBtn;
 @property (strong , nonatomic)UIButton * upTopBtn;
+
+@property (strong , nonatomic)GoodsModel * goodsDetail;
+
+@property (strong , nonatomic)NSArray * pushArray;
 @end
 
 /* cell */
@@ -77,7 +82,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     }];
     [self.topToolView setAlphaOfView:self.alpha];
 
-    self.topToolView.goodNameLabel.text = self.goodsModel.name;
+    
     
     [self.view addSubview:self.upTopBtn];
     [self.upTopBtn mas_makeConstraints:^(MASConstraintMaker *make){
@@ -87,26 +92,49 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     }];
     [self.upTopBtn addTarget:self action:@selector(onTapUpTopBtn:) forControlEvents:UIControlEventTouchUpInside];
     
-    if (self.goodsModel) {
+    if (self.goodsId) {
         [self findProductDetail];
     }
-}
-
-- (void)setGoodsModel:(GoodsModel *)goodsModel{
-
-    _goodsModel = goodsModel;
-    
 }
 
 
 - (void)findProductDetail
 {
-    NSDictionary* dic = @{@"productId":self.goodsModel.id,
+    NSDictionary* dic = @{@"productId":self.goodsId,
+                          @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
+                          };
+    typeof(self) __weak wself = self;
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindProductDetail] token:nil parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSDictionary class]]) {
+            self.goodsDetail = [[GoodsModel alloc] initWithDictionary:(NSDictionary *)model.data error:nil];
+            
+            self.topToolView.goodNameLabel.text = self.goodsDetail.name;
+            [self.collectionView reloadData];
+            
+            [wself pushProducts];
+            
+        }
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+
+- (void)pushProducts
+{
+    NSDictionary* dic = @{@"productCategoryTwoId":self.goodsDetail.productCategoryTwoId.length>0?self.goodsDetail.productCategoryTwoId:@"",
+                          @"productCategoryThirdId":self.goodsDetail.productCategoryThirdId.length>0?self.goodsDetail.productCategoryThirdId:@"",
                           @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
                           };
     
-    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindProductDetail] token:nil parameters:dic success:^(id JSON, NSError *error){
-        
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIPushProducts] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            self.pushArray = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            
+            [self.collectionView reloadData];
+        }
     } failure:^(id JSON, NSError *error){
         
     }];
@@ -129,14 +157,14 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         return;
     }
     
-    if (!self.goodsModel) return;
+    if (!self.goodsDetail) return;
     
-    NSDictionary* dic = @{@"amount":self.goodsModel.price.length>0?self.goodsModel.price:@"",
-                          @"goodCode":self.goodsModel.goodCode.length>0?self.goodsModel.goodCode:@"",
-                          @"goodName":self.goodsModel.name.length>0?self.goodsModel.name:@"",
+    NSDictionary* dic = @{@"amount":self.goodsDetail.price.length>0?self.goodsDetail.price:@"",
+                          @"goodCode":self.goodsDetail.goodCode.length>0?self.goodsDetail.goodCode:@"",
+                          @"goodName":self.goodsDetail.name.length>0?self.goodsDetail.name:@"",
                           @"goodNum":@"1",
-                          @"shopId":self.goodsModel.shopId.length>0?self.goodsModel.shopId:@"",
-                          @"productId":self.goodsModel.id.length>0?self.goodsModel.id:@""
+                          @"shopId":self.goodsDetail.shopId.length>0?self.goodsDetail.shopId:@"",
+                          @"productId":self.goodsDetail.id.length>0?self.goodsDetail.id:@""
                           };
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
@@ -172,7 +200,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         return 6;
     }
     if (section == 2) { //猜你喜欢
-        return 10;
+        return self.pushArray.count;
     }
     return 0;
 }
@@ -181,6 +209,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     UICollectionViewCell *gridcell = nil;
     if (indexPath.section == 0) {//基本信息
         DetailGoodReferralCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:DetailGoodReferralCellID forIndexPath:indexPath];
+        cell.goods = self.goodsDetail;
         gridcell = cell;
     }
     else if (indexPath.section == 1) {//详情
@@ -193,23 +222,23 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                 break;
             case 1:
                 cell.leftTitleLable.text = @"品牌";
-                cell.contentLabel.text = @"丽梅水果";
+                cell.contentLabel.text = self.goodsDetail.brandName;
                 break;
             case 2:
                 cell.leftTitleLable.text = @"产地";
-                cell.contentLabel.text = @"新西兰";
+                cell.contentLabel.text = self.goodsDetail.originPlace;
                 break;
             case 3:
                 cell.leftTitleLable.text = @"生产日期";
-                cell.contentLabel.text = @"2018-04-28";
+                cell.contentLabel.text = self.goodsDetail.creationDate;
                 break;
             case 4:
                 cell.leftTitleLable.text = @"保质期";
-                cell.contentLabel.text = @"30天";
+                cell.contentLabel.text = self.goodsDetail.warrantyPeriod;
                 break;
             case 5:
                 cell.leftTitleLable.text = @"存储条件";
-                cell.contentLabel.text = @"冷藏0℃左右";
+                cell.contentLabel.text = self.goodsDetail.storageCondition;
                 break;
                 
             default:
@@ -219,6 +248,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     }
     else if (indexPath.section == 2) {//猜你喜欢
         GoodsListGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsListGridCellID forIndexPath:indexPath];
+        cell.goodsModel = self.pushArray[indexPath.item];
         gridcell = cell;
     }
     return gridcell;
@@ -242,6 +272,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     if (kind == UICollectionElementKindSectionFooter) {
         if (indexPath.section == 0 ) {
             DetailTopFootView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:DetailTopFootViewID forIndexPath:indexPath];
+            [footview addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectSpecification:)]];
             reusableview = footview;
         }
         if (indexPath.section == 1) {
@@ -378,6 +409,17 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     NSIndexPath *indexPath = [NSIndexPath indexPathForItem:0 inSection:section];
     UICollectionViewLayoutAttributes *attributes = [self.collectionView.collectionViewLayout layoutAttributesForSupplementaryViewOfKind:UICollectionElementKindSectionHeader atIndexPath:indexPath];
     return attributes.frame;
+}
+
+
+#pragma mark-
+- (void)selectSpecification:(UITapGestureRecognizer *)gesture
+{
+    SelectSpecificationController* vc = [SelectSpecificationController new];
+    vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
+    
+    UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+    [controller presentViewController:vc animated:YES completion:nil];
 }
 
 #pragma mark- init

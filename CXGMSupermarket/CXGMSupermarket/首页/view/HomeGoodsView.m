@@ -12,9 +12,9 @@
 #import "ScrollGoodsCell.h"
 #import "GoodsListGridCell.h"
 #import "HomeFeatureViewCell.h"
+#import "MidAdGoodsViewCell.h"
 //head
 #import "SlideshowHeadView.h"
-#import "MidAdHeadView.h"
 #import "TextTitleHeadView.h"
 //foot
 #import "TopLineFootView.h"
@@ -31,22 +31,23 @@
 @property(nonatomic,strong)NSMutableArray* hotGoodsList;//热销推荐
 @property(assign,nonatomic)NSInteger pageNum;
 
-@property(nonatomic,strong)NSArray* slideImagesList;//轮播图
+@property(nonatomic,strong)NSArray* slideDataList;//轮播图数据
+@property(nonatomic,strong)NSMutableArray* slideImageList;//轮播图数据
+
 @property(nonatomic,strong)NSArray* advertiseList;//三个广告位
 @property(nonatomic,strong)NSMutableArray* adBannarList;//下面的广告位
 
 @end
 
-#define GoodsHomeSilderImagesArray @[@"http://gfs5.gomein.net.cn/T1obZ_BmLT1RCvBVdK.jpg",@"http://gfs9.gomein.net.cn/T1C3J_B5LT1RCvBVdK.jpg",@"http://gfs5.gomein.net.cn/T1CwYjBCCT1RCvBVdK.jpg",@"http://gfs7.gomein.net.cn/T1u8V_B4ET1RCvBVdK.jpg",@"http://gfs7.gomein.net.cn/T1zODgB5CT1RCvBVdK.jpg"]
 
 /* cell */
 static NSString *const CategoryGridCellID = @"CategoryGridCell";
 static NSString *const ScrollGoodsCellID = @"ScrollGoodsCell";
 static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
 static NSString *const HomeFeatureViewCellID = @"HomeFeatureViewCell";
+static NSString *const MidAdGoodsViewCellID = @"MidAdGoodsViewCell";
 /* head */
 static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
-static NSString *const MidAdHeadViewID = @"MidAdHeadView";
 static NSString *const TextTitleHeadViewID = @"TextTitleHeadView";
 /* foot */
 static NSString *const TopLineFootViewID = @"TopLineFootView";
@@ -80,22 +81,27 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             weakSelf.pageNum ++;
             [weakSelf findHotProduct];
         }];
+        
+        
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
+        
+        
+        self.slideImageList = [NSMutableArray array];
+        
+        self.adBannarList = [NSMutableArray array];
+        
+        self.pageNum = 1;
+        self.hotGoodsList = [NSMutableArray array];
+        
+        [self findTopProduct];
+        [self findNewProduct];
+        [self findHotProduct];
+        
+        [self findAdvertisement];
+        [self findMotion];
+
     }
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
-    
-    self.adBannarList = [NSMutableArray array];
-    
-    self.pageNum = 1;
-    self.hotGoodsList = [NSMutableArray array];
-    
-    [self findTopProduct];
-    [self findNewProduct];
-    [self findHotProduct];
-    
-    [self findAdvertisement];
-    [self findMotion];
-    
     return self;
 }
 
@@ -205,6 +211,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (void)findAdvertisement
 {
     
+    [self.slideImageList removeAllObjects];
+    
     NSDictionary* dic = @{@"shopId":@""};
     if ([DeviceHelper sharedInstance].shop) {
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
@@ -228,9 +236,13 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             }
 
             
-            self.slideImagesList = [array1 sortedArrayUsingComparator:^NSComparisonResult(AdvertisementModel * obj1, AdvertisementModel * obj2){
+            self.slideDataList = [array1 sortedArrayUsingComparator:^NSComparisonResult(AdvertisementModel * obj1, AdvertisementModel * obj2){
                 return [obj1.number  compare: obj2.number];
             }];
+            
+            for (AdvertisementModel* ad in self.slideDataList) {
+                [self.slideImageList addObject:ad.imageUrl.length>0?ad.imageUrl:@""];
+            }
 
 
             self.advertiseList = [array2 sortedArrayUsingComparator:^NSComparisonResult(AdvertisementModel * obj1, AdvertisementModel * obj2){
@@ -276,20 +288,23 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
 #pragma mark - <UICollectionViewDataSource>
 - (UIColor *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout colorForSectionAtIndex:(NSInteger)section{
-    if (section == 7) {
+    if (section == 5) {
         return [UIColor whiteColor];
     }
     return [UIColor clearColor];
 }
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 8;
+    return 6;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (section == 0) {//4个分类
         return 4;
     }
-    if (section == 7) { //热销
+    if (section == 4) {
+        return self.adBannarList.count;
+    }
+    if (section == 5) { //热销
         return self.hotGoodsList.count;
     }
     return 1;
@@ -307,12 +322,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         
         gridcell = cell;
     }
-    else if (indexPath.section == 7) {//热销
-        GoodsListGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsListGridCellID forIndexPath:indexPath];
-        cell.goodsModel = self.hotGoodsList[indexPath.item];
-        gridcell = cell;
-        
-    }else{
+    else if (indexPath.section == 2 || indexPath.section == 3){
         ScrollGoodsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ScrollGoodsCellID forIndexPath:indexPath];
         switch (indexPath.section) {
             case 2:
@@ -330,6 +340,21 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         };
         gridcell = cell;
     }
+    else if (indexPath.section == 4){
+        MidAdGoodsViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:MidAdGoodsViewCellID forIndexPath:indexPath];
+        cell.adBannar = self.adBannarList[indexPath.item];
+        WEAKSELF;
+        cell.showGoodsDetail = ^(GoodsModel *model){
+            !weakSelf.showGoodsDetailVC?:weakSelf.showGoodsDetailVC(model);
+        };
+        gridcell = cell;
+    }
+    else if (indexPath.section == 5) {//热销
+        GoodsListGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsListGridCellID forIndexPath:indexPath];
+        cell.goodsModel = self.hotGoodsList[indexPath.item];
+        gridcell = cell;
+        
+    }
 
     return gridcell;
 }
@@ -341,7 +366,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if (kind == UICollectionElementKindSectionHeader){
         if (indexPath.section == 0) {
             SlideshowHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SlideshowHeadViewID forIndexPath:indexPath];
-            headerView.imageGroupArray = GoodsHomeSilderImagesArray;
+            headerView.imageGroupArray = self.slideImageList;
             reusableview = headerView;
         }else if (indexPath.section == 2){
             TextTitleHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:TextTitleHeadViewID forIndexPath:indexPath];
@@ -354,16 +379,13 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             headerView.subTitleLabel.text = @"搜索好味道，抢先品尝";
             reusableview = headerView;
         }
-        else if (indexPath.section == 7){
+        else if (indexPath.section == 5){
             TextTitleHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:TextTitleHeadViewID forIndexPath:indexPath];
             headerView.titleLabel.text = @"热销推荐";
             headerView.subTitleLabel.text = @"看大家都在买什么";
             reusableview = headerView;
         }
-        else if (indexPath.section == 4 || indexPath.section == 5 || indexPath.section == 6){
-            MidAdHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:MidAdHeadViewID forIndexPath:indexPath];
-            reusableview = headerView;
-        }
+
         
     }
     if (kind == UICollectionElementKindSectionFooter) {
@@ -381,13 +403,16 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if (indexPath.section == 0) {//分类
         return CGSizeMake(ScreenW/4 , 112);
     }
-    if (indexPath.section == 1) {//分类
+    if (indexPath.section == 1) {
         return CGSizeMake(ScreenW , 196+12);
     }
-    if (indexPath.section == 2 || indexPath.section == 3 || indexPath.section == 4 || indexPath.section == 5 || indexPath.section == 6) {
+    if (indexPath.section == 2 || indexPath.section == 3) {
         return CGSizeMake(ScreenW, 212);
     }
-    if (indexPath.section == 7) {//热销
+    if (indexPath.section ==4) {
+        return CGSizeMake(ScreenW, ScreenW*159/375.f+212);
+    }
+    if (indexPath.section == 5) {//热销
         return CGSizeMake((ScreenW - 12*3)/2, (ScreenW - 12*3)/2+72);
     }
     return CGSizeZero;
@@ -399,12 +424,10 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if (section == 0) {
         return CGSizeMake(ScreenW, ScreenW*190/375.f); //图片滚动的宽高
     }
-    if (section == 2 || section == 3 || section == 7) {//精品推荐  新品上市
+    if (section == 2 || section == 3 || section == 5) {//精品推荐  新品上市
         return CGSizeMake(ScreenW, 74);
     }
-    if (section == 4 || section == 5 || section == 6) {
-        return CGSizeMake(ScreenW, ScreenW*159/375.f);
-    }
+
     return CGSizeZero;
 }
 
@@ -418,15 +441,15 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 #pragma mark - <UICollectionViewDelegateFlowLayout>
 #pragma mark - X间距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return (section == 7) ? 11 : 0;
+    return (section == 5) ? 11 : 0;
 }
 #pragma mark - Y间距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return (section == 7) ? 15 : 0;
+    return (section == 5) ? 15 : 0;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    if (section == 7) {
+    if (section == 5) {
         return UIEdgeInsetsMake(0, 12, 12, 12);
     }
     return UIEdgeInsetsZero;
@@ -438,7 +461,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if (indexPath.section == 0) {        
         !_showSubCategoryVC?:_showSubCategoryVC();
     }
-    if (indexPath.section == 7) {
+    if (indexPath.section == 5) {
         GoodsModel* goods = self.hotGoodsList[indexPath.item];
         !_showGoodsDetailVC?:_showGoodsDetailVC(goods);
     }
@@ -459,10 +482,10 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         [_collectionView registerClass:[ScrollGoodsCell class] forCellWithReuseIdentifier:ScrollGoodsCellID];
         [_collectionView registerClass:[GoodsListGridCell class] forCellWithReuseIdentifier:GoodsListGridCellID];
         [_collectionView registerClass:[HomeFeatureViewCell class] forCellWithReuseIdentifier:HomeFeatureViewCellID];
+        [_collectionView registerClass:[MidAdGoodsViewCell class] forCellWithReuseIdentifier:MidAdGoodsViewCellID];
         
         [_collectionView registerClass:[SlideshowHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SlideshowHeadViewID];
         [_collectionView registerClass:[TextTitleHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:TextTitleHeadViewID];
-        [_collectionView registerClass:[MidAdHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:MidAdHeadViewID];
         
         [_collectionView registerClass:[TopLineFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:TopLineFootViewID];
         

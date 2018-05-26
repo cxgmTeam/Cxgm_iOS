@@ -19,6 +19,9 @@
 @property (strong , nonatomic)UILabel *goodPriceLabel;
 @property (strong , nonatomic)UILabel *oldPriceLabel;
 
+@property (strong , nonatomic)UILabel* unitLabel;
+@property (strong , nonatomic)UIImageView* imgView;
+
 @end
 
 @implementation DetailGoodReferralCell
@@ -31,6 +34,31 @@
         [self setUpUI];
     }
     return self;
+}
+
+- (void)setGoods:(GoodsModel *)goods{
+    _goods = goods;
+    
+    _goodTitleLabel.text = goods.name;
+    _goodSubtitleLabel.text = goods.fullName;
+    _goodPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goods.price floatValue]];
+    _unitLabel.text = [NSString stringWithFormat:@"/%@%@",goods.weight,goods.unit];
+    
+    if ([goods.price floatValue] != [goods.originPlace floatValue] && [goods.originPlace floatValue]>0) {
+        _oldPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goods.originPlace floatValue]];
+        
+        NSUInteger length = [_oldPriceLabel.text length];
+        NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:_oldPriceLabel.text];
+        [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, length)];
+        [attri addAttribute:NSStrikethroughColorAttributeName value:[UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1/1.0] range:NSMakeRange(0, length)];
+        [_oldPriceLabel setAttributedText:attri];
+        
+        _imgView.hidden = NO;
+        
+    }else{
+        _oldPriceLabel.text = @"";
+        _imgView.hidden = YES;
+    }
 }
 
 #pragma mark - UI
@@ -63,12 +91,12 @@
         make.bottom.mas_equalTo(-15);
     }];
     
-    UILabel* unitLabel = [UILabel new];
-    unitLabel.text = @"/个";
-    unitLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-    unitLabel.textColor = [UIColor colorWithRed:63/255.0 green:63/255.0 blue:63/255.0 alpha:1/1.0];
-    [self addSubview:unitLabel];
-    [unitLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+    _unitLabel = [UILabel new];
+    _unitLabel.text = @"/个";
+    _unitLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+    _unitLabel.textColor = [UIColor colorWithRed:63/255.0 green:63/255.0 blue:63/255.0 alpha:1/1.0];
+    [self addSubview:_unitLabel];
+    [_unitLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.mas_equalTo(self.goodPriceLabel.right);
         make.bottom.mas_equalTo(self.goodPriceLabel);
     }];
@@ -79,7 +107,7 @@
     _oldPriceLabel.textColor = [UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1/1.0];
     [self addSubview:_oldPriceLabel];
     [_oldPriceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.mas_equalTo(unitLabel.right).offset(11);
+        make.left.mas_equalTo(self.unitLabel.right).offset(11);
         make.bottom.mas_equalTo(self.goodPriceLabel);
     }];
     
@@ -91,9 +119,9 @@
     [_oldPriceLabel setAttributedText:attri];
     
 
-    UIImageView* imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tehui_limited"]];
-    [self addSubview:imgView];
-    [imgView mas_makeConstraints:^(MASConstraintMaker *make) {
+    _imgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tehui_limited"]];
+    [self addSubview:_imgView];
+    [_imgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.bottom.mas_equalTo(-16);
         make.right.mas_equalTo(-14);
     }];

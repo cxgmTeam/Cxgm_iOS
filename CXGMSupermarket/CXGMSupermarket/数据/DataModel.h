@@ -90,6 +90,7 @@
 @property (nonatomic,strong)NSString<Optional> * shopCartNum;//再购物车的数量
 
 @property (nonatomic,strong)NSString<Optional> * warrantyPeriod;//保质期
+@property (nonatomic,strong)NSString<Optional> * creationDate;
 
 @end
 

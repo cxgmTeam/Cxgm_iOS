@@ -10,4 +10,5 @@
 
 @interface DetailGoodReferralCell : UICollectionViewCell
 
+@property(nonatomic,strong)GoodsModel* goods;
 @end

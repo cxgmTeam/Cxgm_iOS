@@ -70,6 +70,12 @@
     return self;
 }
 
+- (void)setMotionArray:(NSArray *)motionArray{
+    _motionArray = motionArray;
+    
+    
+}
+
 - (void)setupUI
 {
     FeatureItemView* leftItem = [FeatureItemView new];

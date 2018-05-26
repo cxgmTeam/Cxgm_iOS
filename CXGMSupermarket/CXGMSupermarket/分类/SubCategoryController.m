@@ -365,6 +365,10 @@ static CGFloat TopBtnWidth = 60;
         
     }else{
         GoodsDetailViewController* vc = [GoodsDetailViewController new];
+        CategoryModel* category = self.thirdCategorys[indexPath.section];
+        NSArray* array = [self.dictionary objectForKey:category.name];
+        GoodsModel* goodsModel = array[indexPath.row];
+        vc.goodsId = goodsModel.id;
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

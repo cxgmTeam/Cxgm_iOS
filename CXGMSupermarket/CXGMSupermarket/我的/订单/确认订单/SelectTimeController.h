@@ -1,13 +1,13 @@
 //
-//  MidAdHeadView.h
+//  SelectTimeController.h
 //  CXGMSupermarket
 //
-//  Created by zhu yingmin on 2018/4/15.
+//  Created by zhu yingmin on 2018/5/26.
 //  Copyright © 2018年 zhu yingmin. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface MidAdHeadView : UICollectionReusableView
+@interface SelectTimeController : UIViewController
 
 @end

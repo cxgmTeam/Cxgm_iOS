@@ -34,6 +34,9 @@
 		775D358020B3B3D40047F9EE /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D357F20B3B3D40047F9EE /* MessageViewController.m */; };
 		775D358320B3B5740047F9EE /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D358220B3B5740047F9EE /* MessageTableViewCell.m */; };
 		775D358820B444080047F9EE /* PaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D358720B444080047F9EE /* PaymentViewController.m */; };
+		7765066720B9180700B8B0EB /* MidAdGoodsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765066620B9180700B8B0EB /* MidAdGoodsViewCell.m */; };
+		7765066A20B944B100B8B0EB /* SelectTimeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765066920B944B100B8B0EB /* SelectTimeController.m */; };
+		7765067120B948C500B8B0EB /* SelectSpecificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765067020B948C500B8B0EB /* SelectSpecificationController.m */; };
 		776B534E20A69C9000594B32 /* LocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B534D20A69C9000594B32 /* LocationTableViewCell.m */; };
 		776B535720A732B100594B32 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535620A732B100594B32 /* SettingViewController.m */; };
 		776B535B20A7347A00594B32 /* SettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535A20A7347A00594B32 /* SettingTableViewCell.m */; };
@@ -75,7 +78,6 @@
 		77DD807820824FCA00A1D080 /* SlideshowHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD807720824FCA00A1D080 /* SlideshowHeadView.m */; };
 		77DD807E2082F76C00A1D080 /* CategoryGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD807D2082F76C00A1D080 /* CategoryGridCell.m */; };
 		77DD8084208316B100A1D080 /* TopLineFootView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD8083208316B100A1D080 /* TopLineFootView.m */; };
-		77DD808720831DCD00A1D080 /* MidAdHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD808620831DCD00A1D080 /* MidAdHeadView.m */; };
 		77DD808A208320A900A1D080 /* ScrollGoodsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD8089208320A900A1D080 /* ScrollGoodsCell.m */; };
 		77DD808D2083217700A1D080 /* TextTitleHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD808C2083217700A1D080 /* TextTitleHeadView.m */; };
 		77DD80932083287000A1D080 /* GoodsListGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD80922083287000A1D080 /* GoodsListGridCell.m */; };
@@ -363,6 +365,12 @@
 		775D358220B3B5740047F9EE /* MessageTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
 		775D358620B444080047F9EE /* PaymentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaymentViewController.h; sourceTree = "<group>"; };
 		775D358720B444080047F9EE /* PaymentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaymentViewController.m; sourceTree = "<group>"; };
+		7765066520B9180700B8B0EB /* MidAdGoodsViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MidAdGoodsViewCell.h; sourceTree = "<group>"; };
+		7765066620B9180700B8B0EB /* MidAdGoodsViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MidAdGoodsViewCell.m; sourceTree = "<group>"; };
+		7765066820B944B100B8B0EB /* SelectTimeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelectTimeController.h; sourceTree = "<group>"; };
+		7765066920B944B100B8B0EB /* SelectTimeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectTimeController.m; sourceTree = "<group>"; };
+		7765066F20B948C500B8B0EB /* SelectSpecificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectSpecificationController.h; sourceTree = "<group>"; };
+		7765067020B948C500B8B0EB /* SelectSpecificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectSpecificationController.m; sourceTree = "<group>"; };
 		776B534C20A69C9000594B32 /* LocationTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationTableViewCell.h; sourceTree = "<group>"; };
 		776B534D20A69C9000594B32 /* LocationTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationTableViewCell.m; sourceTree = "<group>"; };
 		776B535520A732B100594B32 /* SettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
@@ -441,8 +449,6 @@
 		77DD807D2082F76C00A1D080 /* CategoryGridCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CategoryGridCell.m; sourceTree = "<group>"; };
 		77DD8082208316B100A1D080 /* TopLineFootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TopLineFootView.h; sourceTree = "<group>"; };
 		77DD8083208316B100A1D080 /* TopLineFootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = TopLineFootView.m; sourceTree = "<group>"; };
-		77DD808520831DCD00A1D080 /* MidAdHeadView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MidAdHeadView.h; sourceTree = "<group>"; };
-		77DD808620831DCD00A1D080 /* MidAdHeadView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MidAdHeadView.m; sourceTree = "<group>"; };
 		77DD8088208320A900A1D080 /* ScrollGoodsCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ScrollGoodsCell.h; sourceTree = "<group>"; };
 		77DD8089208320A900A1D080 /* ScrollGoodsCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScrollGoodsCell.m; sourceTree = "<group>"; };
 		77DD808B2083217700A1D080 /* TextTitleHeadView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TextTitleHeadView.h; sourceTree = "<group>"; };
@@ -1133,13 +1139,13 @@
 			path = head;
 			sourceTree = "<group>";
 		};
-		779C9555209AE0D10029A591 /* 支付成功 */ = {
+		779C9555209AE0D10029A591 /* 支付结果 */ = {
 			isa = PBXGroup;
 			children = (
 				779C9556209AE0EE0029A591 /* PayResultViewController.h */,
 				779C9557209AE0EE0029A591 /* PayResultViewController.m */,
 			);
-			path = "支付成功";
+			path = "支付结果";
 			sourceTree = "<group>";
 		};
 		77A5DE2B208C9174005F97F9 /* Head */ = {
@@ -1204,6 +1210,8 @@
 				77DD8097208346FF00A1D080 /* view */,
 				77DD8094208346EE00A1D080 /* GoodsDetailViewController.h */,
 				77DD8095208346EE00A1D080 /* GoodsDetailViewController.m */,
+				7765066F20B948C500B8B0EB /* SelectSpecificationController.h */,
+				7765067020B948C500B8B0EB /* SelectSpecificationController.m */,
 			);
 			path = "商品详情";
 			sourceTree = "<group>";
@@ -1256,6 +1264,8 @@
 				779C9563209B13D60029A591 /* ShopFeatureViewCell.m */,
 				BE24E00A20A3096A0024A64D /* HomeFeatureViewCell.h */,
 				BE24E00B20A3096A0024A64D /* HomeFeatureViewCell.m */,
+				7765066520B9180700B8B0EB /* MidAdGoodsViewCell.h */,
+				7765066620B9180700B8B0EB /* MidAdGoodsViewCell.m */,
 			);
 			path = Cell;
 			sourceTree = "<group>";
@@ -1265,8 +1275,6 @@
 			children = (
 				77DD807620824FCA00A1D080 /* SlideshowHeadView.h */,
 				77DD807720824FCA00A1D080 /* SlideshowHeadView.m */,
-				77DD808520831DCD00A1D080 /* MidAdHeadView.h */,
-				77DD808620831DCD00A1D080 /* MidAdHeadView.m */,
 				77DD808B2083217700A1D080 /* TextTitleHeadView.h */,
 				77DD808C2083217700A1D080 /* TextTitleHeadView.m */,
 			);
@@ -1938,7 +1946,7 @@
 			children = (
 				775D358520B443CA0047F9EE /* 支付 */,
 				77D258DF20B2F2C800BA83FE /* 商品优惠券 */,
-				779C9555209AE0D10029A591 /* 支付成功 */,
+				779C9555209AE0D10029A591 /* 支付结果 */,
 				7703557A209953D3002B3A8D /* 发票 */,
 				BE44A0922091F3C0001FE5A6 /* 首页 */,
 				BE44A0912091F368001FE5A6 /* 商品清单 */,
@@ -1982,6 +1990,8 @@
 				7783F1FC2095CE9900338459 /* cell */,
 				BE44A08B2091F301001FE5A6 /* OrderConfirmViewController.h */,
 				BE44A08C2091F301001FE5A6 /* OrderConfirmViewController.m */,
+				7765066820B944B100B8B0EB /* SelectTimeController.h */,
+				7765066920B944B100B8B0EB /* SelectTimeController.m */,
 			);
 			path = "确认订单";
 			sourceTree = "<group>";
@@ -2528,6 +2538,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BE9769F42072521300783217 /* CustomDetailViewController.m in Sources */,
+				7765067120B948C500B8B0EB /* SelectSpecificationController.m in Sources */,
 				BE9769E72072505C00783217 /* NSBundle+MJRefresh.m in Sources */,
 				770355A22099C4C5002B3A8D /* AddAddressViewController.m in Sources */,
 				BEEB49F420A4704B00508969 /* DetailTopFootView.m in Sources */,
@@ -2698,7 +2709,6 @@
 				770355B12099E077002B3A8D /* LoginViewController.m in Sources */,
 				BECB90242084B4E200170BC6 /* DetailShowTypeCell.m in Sources */,
 				BE23B596208DFE8D00367E0E /* BlankCollectionFootView.m in Sources */,
-				77DD808720831DCD00A1D080 /* MidAdHeadView.m in Sources */,
 				BE44A0822091D89F001FE5A6 /* OrderItem.m in Sources */,
 				BE9769DE2072505C00783217 /* MJRefreshAutoStateFooter.m in Sources */,
 				77F83A722070E8CE004E9717 /* AFAutoPurgingImageCache.m in Sources */,
@@ -2724,6 +2734,8 @@
 				7703559320995E8E002B3A8D /* BillHeadViewCell.m in Sources */,
 				77FDD579209C644300805709 /* APIParameterHelper.m in Sources */,
 				BECB8FDD20844DD900170BC6 /* UIView+DCExtension.m in Sources */,
+				7765066A20B944B100B8B0EB /* SelectTimeController.m in Sources */,
+				7765066720B9180700B8B0EB /* MidAdGoodsViewCell.m in Sources */,
 				BECB902D2084BAFD00170BC6 /* DetailImagesFooterView.m in Sources */,
 				77F83AB82070E8CE004E9717 /* UIView+WebCache.m in Sources */,
 				77F83A8C2070E8CE004E9717 /* JSONAPI.m in Sources */,

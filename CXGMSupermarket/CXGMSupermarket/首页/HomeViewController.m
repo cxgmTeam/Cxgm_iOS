@@ -66,7 +66,7 @@
             
             _goodsView.showGoodsDetailVC = ^(GoodsModel *model){
                 GoodsDetailViewController* vc = [GoodsDetailViewController new];
-                vc.goodsModel = model;
+                vc.goodsId = model.id;
                 [wself.navigationController pushViewController:vc animated:YES];
             };
         }

@@ -17,4 +17,5 @@
 
 @interface HomeFeatureViewCell : UICollectionViewCell
 
+@property(nonatomic,strong)NSArray* motionArray;
 @end
