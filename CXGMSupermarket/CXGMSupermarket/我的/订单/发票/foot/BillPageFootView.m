@@ -47,7 +47,10 @@
             make.left.equalTo(15);
             make.right.equalTo(-15);
         }];
+        _saveButton = button;
     }
     return self;
 }
+
+
 @end

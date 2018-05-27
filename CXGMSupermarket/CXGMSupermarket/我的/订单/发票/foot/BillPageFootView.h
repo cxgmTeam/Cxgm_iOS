@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface BillPageFootView : UICollectionReusableView
-
+@property(nonatomic,strong)UIButton* saveButton;
 @end

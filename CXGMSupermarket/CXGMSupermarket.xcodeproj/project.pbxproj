@@ -30,7 +30,6 @@
 		774813902071CF17002DDF93 /* CutomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7748138F2071CF17002DDF93 /* CutomNavigationController.m */; };
 		774C47E420A99D2A009B129F /* WGS84TOGCJ02.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C47E320A99D2A009B129F /* WGS84TOGCJ02.m */; };
 		77529E0320AC5BDC0015F7A6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77529E0220AC5BDB0015F7A6 /* MessageUI.framework */; };
-		775B4E9420B66600000A120B /* ReceiptItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 775B4E9320B66600000A120B /* ReceiptItem.m */; };
 		775D358020B3B3D40047F9EE /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D357F20B3B3D40047F9EE /* MessageViewController.m */; };
 		775D358320B3B5740047F9EE /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D358220B3B5740047F9EE /* MessageTableViewCell.m */; };
 		775D358820B444080047F9EE /* PaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D358720B444080047F9EE /* PaymentViewController.m */; };
@@ -357,8 +356,6 @@
 		774C47E220A99D2A009B129F /* WGS84TOGCJ02.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WGS84TOGCJ02.h; sourceTree = "<group>"; };
 		774C47E320A99D2A009B129F /* WGS84TOGCJ02.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WGS84TOGCJ02.m; sourceTree = "<group>"; };
 		77529E0220AC5BDB0015F7A6 /* MessageUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MessageUI.framework; path = System/Library/Frameworks/MessageUI.framework; sourceTree = SDKROOT; };
-		775B4E9220B66600000A120B /* ReceiptItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ReceiptItem.h; sourceTree = "<group>"; };
-		775B4E9320B66600000A120B /* ReceiptItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ReceiptItem.m; sourceTree = "<group>"; };
 		775D357E20B3B3D40047F9EE /* MessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageViewController.h; sourceTree = "<group>"; };
 		775D357F20B3B3D40047F9EE /* MessageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageViewController.m; sourceTree = "<group>"; };
 		775D358120B3B5740047F9EE /* MessageTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MessageTableViewCell.h; sourceTree = "<group>"; };
@@ -961,7 +958,6 @@
 		7703557A209953D3002B3A8D /* 发票 */ = {
 			isa = PBXGroup;
 			children = (
-				775B4E9120B665E7000A120B /* object */,
 				7703559820996B65002B3A8D /* view */,
 				7703559420995EAD002B3A8D /* foot */,
 				7703557E20995AD5002B3A8D /* cell */,
@@ -1055,15 +1051,6 @@
 				773A4B0420AD68EC00F0A5FA /* HYNoticeView.m */,
 			);
 			path = HYNoticeView;
-			sourceTree = "<group>";
-		};
-		775B4E9120B665E7000A120B /* object */ = {
-			isa = PBXGroup;
-			children = (
-				775B4E9220B66600000A120B /* ReceiptItem.h */,
-				775B4E9320B66600000A120B /* ReceiptItem.m */,
-			);
-			path = object;
 			sourceTree = "<group>";
 		};
 		775D357D20B3B2FC0047F9EE /* 消息 */ = {
@@ -2685,7 +2672,6 @@
 				775D358020B3B3D40047F9EE /* MessageViewController.m in Sources */,
 				77F83AAD2070E8CE004E9717 /* SDWebImageManager.m in Sources */,
 				77F83A822070E8CE004E9717 /* IQTextView.m in Sources */,
-				775B4E9420B66600000A120B /* ReceiptItem.m in Sources */,
 				77DD808D2083217700A1D080 /* TextTitleHeadView.m in Sources */,
 				77F83A892070E8CE004E9717 /* JSONModel.m in Sources */,
 				BE44A0852091E84E001FE5A6 /* GoodsScreenshotsGridCell.m in Sources */,

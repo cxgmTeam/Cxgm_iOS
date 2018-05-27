@@ -8,6 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+@interface TimeItem : NSObject
+@property(nonatomic,strong)NSString* title;
+@property(nonatomic,assign)BOOL selected;
+@end
+
+@interface LeftTableCell : UITableViewCell
+
+@end
+
+@interface RightTabelCell : UITableViewCell
+@property(nonatomic,strong)TimeItem* timeItem;
+@end
+
 @interface SelectTimeController : UIViewController
 
+@property(nonatomic,copy)void(^selectedTimeFinish)(NSString *time);
 @end

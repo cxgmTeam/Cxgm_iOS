@@ -10,7 +10,7 @@
 
 
 @interface GoodsArrivedTimeFoot ()
-@property(nonatomic,strong)UILabel* timeLabel;
+
 @end
 
 @implementation GoodsArrivedTimeFoot

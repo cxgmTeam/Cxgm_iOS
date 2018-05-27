@@ -15,12 +15,16 @@
 //foot
 #import "BillPageFootView.h"
 
-#import "ReceiptItem.h"
 
 @interface OrderBillViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,UITextFieldDelegate>
 @property (strong , nonatomic)UICollectionView *collectionView;
 
 @property (strong , nonatomic)ReceiptItem *receiptItem;
+
+@property(nonatomic,strong)UITextField* companyNameTextField;
+@property(nonatomic,strong)UITextField* dutyParagraphTextField;
+
+
 @end
 
 @implementation OrderBillViewController
@@ -41,6 +45,14 @@ static NSString *const BillPageFootViewID = @"BillPageFootView";
     self.receiptItem = [ReceiptItem new];
     self.receiptItem.type = @"1";
     self.receiptItem.phone = [UserInfoManager sharedInstance].userInfo.mobile;
+    self.receiptItem.userId = [UserInfoManager sharedInstance].userInfo.id;
+    self.receiptItem.companyName = @"";
+    self.receiptItem.dutyParagraph = @"";
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+    self.receiptItem.createTime = dateString;
+    
     self.receiptItem.isOpen = NO;
     
     self.collectionView.backgroundColor = [UIColor clearColor];
@@ -49,8 +61,28 @@ static NSString *const BillPageFootViewID = @"BillPageFootView";
     }];
 }
 
+- (void)onTapSaveBtn:(UIButton *)button
+{
+    !_writeReceiptFinish?:_writeReceiptFinish(self.receiptItem);
+    [self.navigationController popViewControllerAnimated:YES];
+}
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField{
-    
+    if (textField == self.companyNameTextField && [textField.text isEqualToString:@"请在此填写准确的抬头名称"]) {
+        textField.text = @"";
+    }
+    if (textField == self.dutyParagraphTextField && [textField.text isEqualToString:@"请在此填写纳税人识别号"]) {
+        textField.text = @"";
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField;{
+    if (textField == self.companyNameTextField && ![textField.text isEqualToString:@"请在此填写准确的抬头名称"]) {
+        self.receiptItem.companyName = textField.text;
+    }
+    if (textField == self.dutyParagraphTextField && ![textField.text isEqualToString:@"请在此填写纳税人识别号"]) {
+        self.receiptItem.dutyParagraph = textField.text;
+    }
 }
 
 #pragma mark-
@@ -88,8 +120,14 @@ static NSString *const BillPageFootViewID = @"BillPageFootView";
             cell.companyNameTextField.delegate = self;
             cell.dutyParagraphTextField.delegate = self;
             
+            self.companyNameTextField = cell.companyNameTextField;
+            self.dutyParagraphTextField = cell.dutyParagraphTextField;
+            
             cell.selectReceiptHead = ^(BOOL isOpen){
                 self.receiptItem.isOpen = isOpen;
+                
+                
+                
                 [collectionView reloadItemsAtIndexPaths:@[indexPath]];
             };
             gridcell = cell;
@@ -132,6 +170,7 @@ static NSString *const BillPageFootViewID = @"BillPageFootView";
     UICollectionReusableView *reusableview = nil;
     if (kind == UICollectionElementKindSectionFooter) {
         BillPageFootView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BillPageFootViewID forIndexPath:indexPath];
+        [footview.saveButton addTarget:self action:@selector(onTapSaveBtn:) forControlEvents:UIControlEventTouchUpInside];
         reusableview = footview;
     }
     return reusableview;

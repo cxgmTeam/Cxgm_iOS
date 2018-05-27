@@ -10,4 +10,7 @@
 
 @interface SelectSpecificationController : UIViewController
 
+@property(nonatomic,strong)GoodsModel* goods;
+
+@property(nonatomic,copy)void(^selectFinished)(NSInteger number);
 @end

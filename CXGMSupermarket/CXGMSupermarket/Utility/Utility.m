@@ -128,7 +128,7 @@
 #pragma mark-
 + (void)CXGMPostRequest:(NSString *)requestUrl token:(NSString *)token parameter:(NSDictionary *)dict success:(void (^)(id JSON, NSError *error))success failure:(void (^)(id JSON, NSError *error))failure
 {
-    NSLog(@"\n\nCXGMPostRequest requestUrl = %@",requestUrl);
+    NSLog(@"\n\nCXGMPostRequest requestUrl = %@ \n %@",requestUrl,dict);
     
     NSURLSession *session = [NSURLSession sharedSession];
     
@@ -162,7 +162,7 @@
 
         }else{
             if (failure) {
-                failure(nil,error);
+                failure(dic,error);
             }
         }
     }];

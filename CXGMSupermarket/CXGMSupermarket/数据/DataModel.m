@@ -69,3 +69,7 @@
 
 @end
 
+@implementation ReceiptItem
+
+@end
+

@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface GoodsArrivedTimeFoot : UICollectionReusableView
-
+@property(nonatomic,strong)UILabel* timeLabel;
 @end

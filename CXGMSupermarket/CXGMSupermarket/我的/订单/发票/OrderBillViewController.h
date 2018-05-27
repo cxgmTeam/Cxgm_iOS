@@ -10,4 +10,5 @@
 
 @interface OrderBillViewController : MyCenterSubViewController
 
+@property(nonatomic,copy)void(^writeReceiptFinish)(ReceiptItem* receipt);
 @end

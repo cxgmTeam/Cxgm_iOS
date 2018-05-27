@@ -40,6 +40,10 @@
 @property (strong , nonatomic)NSArray* couponArray;
 
 @property (strong , nonatomic)NSMutableDictionary* orderParam;
+
+@property (strong , nonatomic)NSDictionary* receiptDic;
+
+@property (strong , nonatomic)GoodsArrivedTimeFoot *timeFootview;
 @end
 
 /* cell */
@@ -64,6 +68,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     self.orderParam = [NSMutableDictionary dictionary];
     
+    self.receiptDic = @{};
+    
     [self setupBottom];
     
     self.collectionView.backgroundColor = [UIColor clearColor];
@@ -81,11 +87,28 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 }
 
 //下单接口
-- (void)addOrder:(NSArray *)array
+- (void)addOrder
 {
+    if (!self.address) {
+        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请添加收获地址"]; return;
+    }
+    
+    [self.orderParam setObject:self.address.id forKey:@"addressId"];
+    [self.orderParam setObject:self.timeFootview.timeLabel.text forKey:@"receiveTime"];
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+    NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
+    [self.orderParam setObject:dateString forKey:@"orderTime"];
     
     
+    [self.orderParam setObject:self.receiptDic forKey:@"receipt"];
     
+    [self.orderParam setObject:@"0" forKey:@"orderAmount"];
+    [self.orderParam setObject:@"0" forKey:@"orderNum"];
+    [self.orderParam setObject:@"0" forKey:@"couponCodeId"];
+    
+
     
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIAddOrder] token:[UserInfoManager sharedInstance].userInfo.token parameter:self.orderParam success:^(id JSON, NSError *error){
         
@@ -202,9 +225,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
 - (void)onTapButton:(id)sender
 {
-    PaymentViewController* vc = [PaymentViewController new];
+    [self addOrder];
     
-    [self.navigationController pushViewController:vc animated:YES];
+//    PaymentViewController* vc = [PaymentViewController new];
+//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark-
@@ -234,11 +258,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     }
     else if (indexPath.section == 3) {
         OrderBillViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderBillViewCellID forIndexPath:indexPath];
-        typeof(self) __weak wself = self;
-        cell.gotoOrderBillPage = ^{
-            OrderBillViewController* vc = [OrderBillViewController new];
-            [wself.navigationController pushViewController:vc animated:YES];
-        };
         gridcell = cell;
     }
     return gridcell;
@@ -262,6 +281,18 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     }
     if (indexPath.section == 3 && indexPath.item == 0) {
         OrderBillViewController* vc = [OrderBillViewController new];
+        vc.writeReceiptFinish = ^(ReceiptItem * receipt){
+            
+            self.receiptDic = @{
+                                @"companyName": receipt.companyName,
+                                @"content": @"不知道是啥",
+                                @"createTime": receipt.createTime,
+                                @"dutyParagraph": receipt.dutyParagraph,
+                                @"phone": receipt.phone,
+                                @"type": receipt.type,
+                                @"userId": receipt.userId
+                                };
+        };
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -288,6 +319,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             GoodsArrivedTimeFoot *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:GoodsArrivedTimeFootID forIndexPath:indexPath];
             [footview addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectTime:)]];
             reusableview = footview;
+            _timeFootview = footview;
         }else{
             BlankCollectionFootView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BlankCollectionFootViewID forIndexPath:indexPath];
             reusableview = footview;
@@ -337,6 +369,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 - (void)selectTime:(UITapGestureRecognizer *)gesture
 {
     SelectTimeController* vc = [SelectTimeController new];
+    vc.selectedTimeFinish = ^(NSString * time){
+        self.timeFootview.timeLabel.text = time;
+    };
     vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     
     UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;

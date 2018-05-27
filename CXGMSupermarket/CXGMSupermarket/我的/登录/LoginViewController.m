@@ -127,7 +127,7 @@
     [Utility CXGMPostRequest:[LoginBaseURL stringByAppendingString:APIUserLogin] token:nil parameter:dict success:^(id JSON, NSError *error){
         
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
-        if ([model.data isKindOfClass:[NSDictionary class]]) {
+        if (  [model.data isKindOfClass:[NSDictionary class]]) {
             
             [UserInfoManager sharedInstance].userInfo = [[UserInfo alloc] initWithDictionary:(NSDictionary *)model.data error:nil];
             [[UserInfoManager sharedInstance] saveUserInfo:(NSDictionary *)model.data];
@@ -138,7 +138,10 @@
             });
         }
     } failure:^(id JSON, NSError *error){
-        
+        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD MBProgressHUDWithView:self.view Str:model.msg];
+        });
     }];
 }
 
