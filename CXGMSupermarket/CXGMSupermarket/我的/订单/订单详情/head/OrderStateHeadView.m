@@ -16,31 +16,12 @@
 @property(nonatomic,strong)UILabel* remainTimeLabel;
 @end
 
-//待付款  配送中  已完成  已取消
+//0待支付，1待配送（已支付），2配送中，3已完成，4退货
 @implementation OrderStateHeadView
 
-- (void)setOrderItem:(OrderItem *)orderItem{
-    switch (orderItem.orderType) {
-        case ForShipping:
-        case InShipping:{
-            _colorView.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
-            _stateimgView.image = [UIImage imageNamed:@"order_deliver"];
-            _stateLabel.text = @"配送中";
-            _descLabel.text = @"订单已经确认，配送小哥正在飞奔配送，请注意查收～";
-            _remainTimeLabel.text = @"";
-        }
-            
-            break;
-        case Finished:{
-            _colorView.backgroundColor = [UIColor colorWithRed:36/255.0 green:158/255.0 blue:226/255.0 alpha:1/1.0];
-            _stateimgView.image = [UIImage imageNamed:@"order_finished"];
-            _stateLabel.text = @"已完成";
-            _descLabel.text = @"订单已经完成，欢迎下次惠顾～";
-            _remainTimeLabel.text = @"";
-        }
-            
-            break;
-        case ForPayment:{
+- (void)setOrderItem:(OrderModel *)orderItem{
+    switch ([orderItem.status intValue]) {
+        case 1:{
             _colorView.backgroundColor = [UIColor colorWithRed:250/255.0 green:142/255.0 blue:46/255.0 alpha:1/1.0];
             _stateimgView.image = [UIImage imageNamed:@"order_toPay"];
             _stateLabel.text = @"配送中";
@@ -49,10 +30,28 @@
         }
             
             break;
+        case 2:{
+            _colorView.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
+            _stateimgView.image = [UIImage imageNamed:@"order_deliver"];
+            _stateLabel.text = @"配送中";
+            _descLabel.text = @"订单已经确认，配送小哥正在飞奔配送，请注意查收～";
+            _remainTimeLabel.text = @"";
+        }
             
-        case TimeoutCancel:
-        case Returning:
-        case Returned:{
+            break;
+        case 3:{
+            _colorView.backgroundColor = [UIColor colorWithRed:36/255.0 green:158/255.0 blue:226/255.0 alpha:1/1.0];
+            _stateimgView.image = [UIImage imageNamed:@"order_finished"];
+            _stateLabel.text = @"已完成";
+            _descLabel.text = @"订单已经完成，欢迎下次惠顾～";
+            _remainTimeLabel.text = @"";
+        }
+            
+            break;
+
+            
+
+        case 4:{
             _colorView.backgroundColor = [UIColor colorWithRed:173/255.0 green:173/255.0 blue:173/255.0 alpha:1/1.0];
             _stateimgView.image = [UIImage imageNamed:@"order_cancelled"];
             _stateLabel.text = @"已取消";

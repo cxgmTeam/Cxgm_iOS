@@ -63,7 +63,17 @@
 
 @end
 
-
+@implementation OrderModel
++(OrderModel *)OrderModelWithJson:(NSDictionary *)json
+{
+    OrderModel* model = [[OrderModel alloc] initWithDictionary:json error:nil];
+    if ([model.productDetails isKindOfClass:[NSArray class]]) {
+        model.productDetails = [GoodsModel arrayOfModelsFromDictionaries:model.productDetails error:nil];
+    }
+    
+    return model;
+}
+@end
 
 @implementation LocationModel
 

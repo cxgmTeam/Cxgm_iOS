@@ -7,10 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OrderItem.h"
 
 @interface OrderCollectionViewCell : UICollectionViewCell
-@property(nonatomic,strong)OrderItem* orderItem;
+
+@property(nonatomic,strong)OrderModel* orderItem;
 
 @property(nonatomic,copy)dispatch_block_t tapBuyButton;;
 @end

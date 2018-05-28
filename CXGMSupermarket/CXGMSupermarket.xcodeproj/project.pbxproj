@@ -57,6 +57,8 @@
 		77193BC120BBFFD70001508E /* base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 77193BB820BBFFD70001508E /* base64.m */; };
 		77193BC220BBFFD70001508E /* DataVerifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 77193BBA20BBFFD70001508E /* DataVerifier.m */; };
 		77193BC320BBFFD70001508E /* RSADataSigner.m in Sources */ = {isa = PBXBuildFile; fileRef = 77193BBB20BBFFD70001508E /* RSADataSigner.m */; };
+		77193BC620BC34470001508E /* InvitationTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77193BC520BC34470001508E /* InvitationTableCell.m */; };
+		77193BC920BC35F50001508E /* InvitationTableHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 77193BC820BC35F50001508E /* InvitationTableHead.m */; };
 		7737987220A86D750050187D /* AnotherCartViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7737987120A86D750050187D /* AnotherCartViewController.m */; };
 		773A4B0620AD68EC00F0A5FA /* HYNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 773A4B0420AD68EC00F0A5FA /* HYNoticeView.m */; };
 		773A4B0920AD9B5C00F0A5FA /* AddressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 773A4B0820AD9B5C00F0A5FA /* AddressTableViewCell.m */; };
@@ -233,7 +235,6 @@
 		BE40AFCC208F684B00D4B690 /* OrderListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE40AFCB208F684B00D4B690 /* OrderListViewController.m */; };
 		BE40AFCF208F697800D4B690 /* CouponCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE40AFCE208F697800D4B690 /* CouponCollectionViewCell.m */; };
 		BE44A07F2091A709001FE5A6 /* OrderCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE44A07E2091A709001FE5A6 /* OrderCollectionViewCell.m */; };
-		BE44A0822091D89F001FE5A6 /* OrderItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BE44A0812091D89F001FE5A6 /* OrderItem.m */; };
 		BE44A0852091E84E001FE5A6 /* GoodsScreenshotsGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE44A0842091E84E001FE5A6 /* GoodsScreenshotsGridCell.m */; };
 		BE44A0892091F106001FE5A6 /* OrderDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE44A0882091F106001FE5A6 /* OrderDetailViewController.m */; };
 		BE44A08D2091F301001FE5A6 /* OrderConfirmViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE44A08C2091F301001FE5A6 /* OrderConfirmViewController.m */; };
@@ -497,6 +498,10 @@
 		77193BB920BBFFD70001508E /* RSADataVerifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RSADataVerifier.h; sourceTree = "<group>"; };
 		77193BBA20BBFFD70001508E /* DataVerifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataVerifier.m; sourceTree = "<group>"; };
 		77193BBB20BBFFD70001508E /* RSADataSigner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RSADataSigner.m; sourceTree = "<group>"; };
+		77193BC420BC34470001508E /* InvitationTableCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InvitationTableCell.h; sourceTree = "<group>"; };
+		77193BC520BC34470001508E /* InvitationTableCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InvitationTableCell.m; sourceTree = "<group>"; };
+		77193BC720BC35F50001508E /* InvitationTableHead.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = InvitationTableHead.h; sourceTree = "<group>"; };
+		77193BC820BC35F50001508E /* InvitationTableHead.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = InvitationTableHead.m; sourceTree = "<group>"; };
 		7737987020A86D750050187D /* AnotherCartViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AnotherCartViewController.h; sourceTree = "<group>"; };
 		7737987120A86D750050187D /* AnotherCartViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AnotherCartViewController.m; sourceTree = "<group>"; };
 		773A4B0420AD68EC00F0A5FA /* HYNoticeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYNoticeView.m; sourceTree = "<group>"; };
@@ -839,8 +844,6 @@
 		BE40AFCE208F697800D4B690 /* CouponCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CouponCollectionViewCell.m; sourceTree = "<group>"; };
 		BE44A07D2091A709001FE5A6 /* OrderCollectionViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrderCollectionViewCell.h; sourceTree = "<group>"; };
 		BE44A07E2091A709001FE5A6 /* OrderCollectionViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrderCollectionViewCell.m; sourceTree = "<group>"; };
-		BE44A0802091D89F001FE5A6 /* OrderItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrderItem.h; sourceTree = "<group>"; };
-		BE44A0812091D89F001FE5A6 /* OrderItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrderItem.m; sourceTree = "<group>"; };
 		BE44A0832091E84E001FE5A6 /* GoodsScreenshotsGridCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsScreenshotsGridCell.h; sourceTree = "<group>"; };
 		BE44A0842091E84E001FE5A6 /* GoodsScreenshotsGridCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsScreenshotsGridCell.m; sourceTree = "<group>"; };
 		BE44A0872091F106001FE5A6 /* OrderDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrderDetailViewController.h; sourceTree = "<group>"; };
@@ -1132,6 +1135,10 @@
 			children = (
 				7703559D2099C2F0002B3A8D /* InvitationViewController.h */,
 				7703559E2099C2F0002B3A8D /* InvitationViewController.m */,
+				77193BC420BC34470001508E /* InvitationTableCell.h */,
+				77193BC520BC34470001508E /* InvitationTableCell.m */,
+				77193BC720BC35F50001508E /* InvitationTableHead.h */,
+				77193BC820BC35F50001508E /* InvitationTableHead.m */,
 			);
 			path = "邀请有礼";
 			sourceTree = "<group>";
@@ -2260,22 +2267,12 @@
 			isa = PBXGroup;
 			children = (
 				BE44A0942091F3E6001FE5A6 /* cell */,
-				BE44A0932091F3D6001FE5A6 /* Object */,
 				BE40AFAB208F5EC600D4B690 /* OrderViewController.h */,
 				BE40AFAC208F5EC600D4B690 /* OrderViewController.m */,
 				BE40AFCA208F684B00D4B690 /* OrderListViewController.h */,
 				BE40AFCB208F684B00D4B690 /* OrderListViewController.m */,
 			);
 			path = "首页";
-			sourceTree = "<group>";
-		};
-		BE44A0932091F3D6001FE5A6 /* Object */ = {
-			isa = PBXGroup;
-			children = (
-				BE44A0802091D89F001FE5A6 /* OrderItem.h */,
-				BE44A0812091D89F001FE5A6 /* OrderItem.m */,
-			);
-			path = Object;
 			sourceTree = "<group>";
 		};
 		BE44A0942091F3E6001FE5A6 /* cell */ = {
@@ -2825,6 +2822,7 @@
 				77DD80A6208355A000A1D080 /* DCZuoWenRightButton.m in Sources */,
 				77DD80A8208355A000A1D080 /* DCCustionButton.m in Sources */,
 				BECB8FDB20844DD900170BC6 /* UIImageView+DCExtension.m in Sources */,
+				77193BC920BC35F50001508E /* InvitationTableHead.m in Sources */,
 				BE40AFA6208F5C7000D4B690 /* CouponViewController.m in Sources */,
 				77193B4720BBEE9D0001508E /* WXApiManager.m in Sources */,
 				BE520E90207CD9D000BA0FA3 /* CategoryViewController.m in Sources */,
@@ -2935,6 +2933,7 @@
 				77F83A902070E8CE004E9717 /* JSONValueTransformer.m in Sources */,
 				BE9769E02072505C00783217 /* MJRefreshBackNormalFooter.m in Sources */,
 				77DD80932083287000A1D080 /* GoodsListGridCell.m in Sources */,
+				77193BC620BC34470001508E /* InvitationTableCell.m in Sources */,
 				BE40AFCC208F684B00D4B690 /* OrderListViewController.m in Sources */,
 				77DD807E2082F76C00A1D080 /* CategoryGridCell.m in Sources */,
 				BECB90272084B5B900170BC6 /* DeatilCustomHeadView.m in Sources */,
@@ -2969,7 +2968,6 @@
 				770355B12099E077002B3A8D /* LoginViewController.m in Sources */,
 				BECB90242084B4E200170BC6 /* DetailShowTypeCell.m in Sources */,
 				BE23B596208DFE8D00367E0E /* BlankCollectionFootView.m in Sources */,
-				BE44A0822091D89F001FE5A6 /* OrderItem.m in Sources */,
 				BE9769DE2072505C00783217 /* MJRefreshAutoStateFooter.m in Sources */,
 				77F83A722070E8CE004E9717 /* AFAutoPurgingImageCache.m in Sources */,
 				77F83A6E2070E8CE004E9717 /* AFSecurityPolicy.m in Sources */,

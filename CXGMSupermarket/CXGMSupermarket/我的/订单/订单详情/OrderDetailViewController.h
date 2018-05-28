@@ -7,8 +7,8 @@
 //
 
 #import "MyCenterSubViewController.h"
-#import "OrderItem.h"
+
 
 @interface OrderDetailViewController : MyCenterSubViewController
-@property(nonatomic,strong)OrderItem* orderItem;
+@property(nonatomic,strong)OrderModel* orderItem;
 @end

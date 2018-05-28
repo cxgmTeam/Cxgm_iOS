@@ -74,7 +74,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     
     self.collectionView.backgroundColor = [UIColor clearColor];
     
-    if (self.orderItem.orderType == ForPayment) {
+    if ([self.orderItem.status intValue] == 0) {
         UIView* bottomView = [UIView new];
         [self.view addSubview:bottomView];
         [bottomView mas_makeConstraints:^(MASConstraintMaker *make){

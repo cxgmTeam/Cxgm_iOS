@@ -92,6 +92,11 @@
 @property (nonatomic,strong)NSString<Optional> * warrantyPeriod;//保质期
 @property (nonatomic,strong)NSString<Optional> * creationDate;
 
+@property (nonatomic,strong)NSString<Optional> * productName;
+@property (nonatomic,strong)NSString<Optional> * productCode;
+@property (nonatomic,strong)NSString<Optional> * productNum;
+@property (nonatomic,strong)NSString<Optional> * productUrl;
+@property (nonatomic,strong)NSString<Optional> * amount;
 @end
 
 //购物车数据模型
@@ -184,6 +189,28 @@
 @property(nonatomic,strong)NSString<Optional> * phone;
 @property(nonatomic,strong)NSString<Optional> * realName;
 @property(nonatomic,strong)NSString<Optional> * isDef;//是否为默认地址
+@end
+
+//订单
+@interface OrderModel : JSONModel
+@property(nonatomic,strong)NSString<Optional> * id;
+@property(nonatomic,strong)NSString<Optional> * userId;
+@property(nonatomic,strong)NSString<Optional> * orderNum;
+@property(nonatomic,strong)NSString<Optional> * status;
+@property(nonatomic,strong)NSString<Optional> * storeId;//门店id
+@property(nonatomic,strong)NSString<Optional> * payType;
+@property(nonatomic,strong)NSString<Optional> * orderTime;
+@property(nonatomic,strong)NSString<Optional> * orderAmount;
+@property(nonatomic,strong)NSString<Optional> * remarks;
+@property(nonatomic,strong)NSString<Optional> * addressId;
+@property(nonatomic,strong)NSString<Optional> * receiveTime;
+@property(nonatomic,strong)NSObject<Optional> * receipt;//发票信息
+@property(nonatomic,strong)NSString<Optional> * couponCodeId;
+@property(nonatomic,strong)NSObject<Optional> * productList;
+@property(nonatomic,strong)NSArray<Optional> * productDetails;
+@property(nonatomic,strong)NSObject<Optional> * categoryAndAmountList;
+
++(OrderModel *)OrderModelWithJson:(NSDictionary *)json;
 @end
 
 

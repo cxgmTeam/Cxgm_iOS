@@ -10,6 +10,9 @@
 #import "GoodsScreenshotsGridCell.h"
 
 @interface OrderCollectionViewCell ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+
+@property(nonatomic,strong)UIView* whiteView;
+
 @property(nonatomic,strong)UILabel* orderNumber; //订单号
 @property(nonatomic,strong)UILabel* orderState; //订单状态
 
@@ -21,37 +24,37 @@
 @property(nonatomic,strong)UIView* bottomView;  //没有按钮的时候要隐藏
 @property(nonatomic,strong)UIButton* buyButton;
 
+
 @end
 
 static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
 
 @implementation OrderCollectionViewCell
 
-- (void)setOrderItem:(OrderItem *)orderItem
+//0待支付，1待配送（已支付），2配送中，3已完成，4退货
+- (void)setOrderItem:(OrderModel *)orderItem
 {
-    switch (orderItem.orderType) {
-        case ForShipping:
-        case InShipping:{
-            _orderState.text = @"配送中";
-            _bottomView.hidden = NO;
-            [_buyButton setTitle:@"申请退款" forState:UIControlStateNormal];
-        }
-            break;
-        case Finished:
-        case TimeoutCancel:{
-            _orderState.text = @"超时取消";
-            _bottomView.hidden = NO;
-            [_buyButton setTitle:@"再次购买" forState:UIControlStateNormal];
-        }
-            break;
-        case ForPayment:{
+    switch ([orderItem.status integerValue]) {
+        case 0:{
             _orderState.text = @"待付款";
             _bottomView.hidden = NO;
             [_buyButton setTitle:@"去支付" forState:UIControlStateNormal];
         }
             break;
-        case Returning:
-        case Returned:{
+        case 2:{
+            _orderState.text = @"配送中";
+            _bottomView.hidden = NO;
+            [_buyButton setTitle:@"申请退款" forState:UIControlStateNormal];
+        }
+            break;
+        case 3:{
+            _orderState.text = @"已完成";
+            _bottomView.hidden = NO;
+            [_buyButton setTitle:@"再次购买" forState:UIControlStateNormal];
+        }
+            break;
+
+        case 4:{
             _orderState.text = @"已退货";
             _bottomView.hidden = YES;
         }
@@ -65,7 +68,6 @@ static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
     
     if (self = [super initWithFrame:frame]) {
         
-        self.backgroundColor = [UIColor whiteColor];
         [self setupUI];
     }
     return self;
@@ -73,11 +75,20 @@ static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
 
 - (void)setupUI
 {
+    
+    _whiteView = [UIView new];
+    _whiteView.backgroundColor = [UIColor whiteColor];
+    [self addSubview:_whiteView];
+    [_whiteView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.edges.equalTo(self).insets(UIEdgeInsetsMake(12, 0, 0, 0));
+    }];
+    
+    
     _orderNumber = [[UILabel alloc] init];
     _orderNumber.text = @"订单号：2190008978676";
     _orderNumber.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     _orderNumber.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
-    [self addSubview:_orderNumber];
+    [_whiteView addSubview:_orderNumber];
     [_orderNumber mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.equalTo(15);
         make.top.equalTo(13);
@@ -87,7 +98,7 @@ static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
     _orderState.text = @"超时取消";
     _orderState.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     _orderState.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
-    [self addSubview:_orderState];
+    [_whiteView addSubview:_orderState];
     [_orderState mas_makeConstraints:^(MASConstraintMaker *make){
         make.right.equalTo(-15);
         make.top.equalTo(13);
@@ -95,7 +106,7 @@ static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
     
     UIView *line = [[UIView alloc] init];
     line.backgroundColor = ColorE8E8E8E;
-    [self addSubview:line];
+    [_whiteView addSubview:line];
     [line mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.right.equalTo(self);
         make.top.equalTo(44);
@@ -113,7 +124,7 @@ static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
     _priceLabel.text = @"¥ 23.90";
     _priceLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
     _priceLabel.textColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
-    [self addSubview:_priceLabel];
+    [_whiteView addSubview:_priceLabel];
     [_priceLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(45+13+(ScreenW-60)/4.f+12);
         make.right.equalTo(-15);
@@ -123,14 +134,14 @@ static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
     _countLabel.text = @"共3种  需付款： ";
     _countLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     _countLabel.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
-    [self addSubview:_countLabel];
+    [_whiteView addSubview:_countLabel];
     [_countLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(self.priceLabel);
         make.right.equalTo(self.priceLabel.left).offset(-10);
     }];
     
     _bottomView = [UIView new];
-    [self addSubview:_bottomView];
+    [_whiteView addSubview:_bottomView];
     [_bottomView mas_makeConstraints:^(MASConstraintMaker *make){
         make.height.equalTo(45);
         make.left.right.bottom.equalTo(self);
@@ -178,7 +189,7 @@ static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
         _collectionView.dataSource = self;
         _collectionView.showsVerticalScrollIndicator = NO;
         [_collectionView registerClass:[GoodsScreenshotsGridCell class] forCellWithReuseIdentifier:GoodsScreenshotsGridCellID];
-        [self addSubview:_collectionView];
+        [_whiteView addSubview:_collectionView];
         _collectionView.contentInset = UIEdgeInsetsMake(0, 15, 0, 15);
         
     }

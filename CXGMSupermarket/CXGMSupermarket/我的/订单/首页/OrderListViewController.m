@@ -13,74 +13,33 @@
 @interface OrderListViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)NSMutableArray *listArray;
+@property (assign , nonatomic)NSInteger pageNum;
 @end
 
 static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
 
 @implementation OrderListViewController
 
-- (UICollectionView *)collectionView
-{
-    if (!_collectionView) {
-        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        layout.minimumLineSpacing = 10;
-        layout.minimumInteritemSpacing = 0;
-        
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.showsVerticalScrollIndicator = NO;
-        [_collectionView registerClass:[OrderCollectionViewCell class] forCellWithReuseIdentifier:OrderCollectionViewCellID];
-        [self.view addSubview:_collectionView];
-        _collectionView.contentInset = UIEdgeInsetsMake(12, 0, 10, 0);
-        
-    }
-    return _collectionView;
-}
-
-- (void)initData
-{
-    OrderItem* item1 = [OrderItem new];
-    item1.orderType = ForShipping;
-    [self.listArray addObject:item1];
-    
-    OrderItem* item2 = [OrderItem new];
-    item2.orderType = InShipping;
-    [self.listArray addObject:item2];
-    
-    OrderItem* item3 = [OrderItem new];
-    item3.orderType = Finished;
-    [self.listArray addObject:item3];
-    
-    OrderItem* item4 = [OrderItem new];
-    item4.orderType = TimeoutCancel;
-    [self.listArray addObject:item4];
-    
-    OrderItem* item5 = [OrderItem new];
-    item5.orderType = ForPayment;
-    [self.listArray addObject:item5];
-    
-    OrderItem* item6 = [OrderItem new];
-    item6.orderType = Returning;
-    [self.listArray addObject:item6];
-    
-    OrderItem* item7 = [OrderItem new];
-    item7.orderType = Returned;
-    [self.listArray addObject:item7];
-    
-    
-}
-
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.pageNum = 1;
     self.listArray = [NSMutableArray array];
-    //初始化数据
-    [self initData];
+
 
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
+    }];
+    typeof(self) __weak wself = self;
+    self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        self.pageNum = 1;
+        [self.listArray removeAllObjects];
+        [wself getOrderList];
+    }];
+    self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        self.pageNum ++;
+        [wself getOrderList];
     }];
 
     [self getOrderList];
@@ -89,13 +48,34 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
 - (void)getOrderList
 {
     NSDictionary* dic = @{@"status":self.status==-1?@"":[NSString stringWithFormat:@"%ld",self.status],
-                          @"pageNum":@"1",
+                          @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
                           @"pageSize":@"10"
                           };
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIOrderList] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
         
-    } failure:^(id JSON, NSError *error){
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        DataModel* model = [DataModel dataModelWith:JSON];
+        if ([model.listModel.list isKindOfClass:[NSArray class]]) {
+            for (NSDictionary* dic in (NSArray *)model.listModel.list) {
+                OrderModel* order = [OrderModel OrderModelWithJson:dic];
+                [self.listArray addObject:order];
+            }
+            [self.collectionView reloadData];
+        }
+        if ([model.listModel.isLastPage boolValue]) {
+            [self.collectionView.mj_footer endRefreshingWithNoMoreData];
+        }else{
+            [self.collectionView.mj_footer endRefreshing];
+        }
         
+        [self.collectionView.mj_header endRefreshing];
+    } failure:^(id JSON, NSError *error){
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [self.collectionView.mj_header endRefreshing];
+        [self.collectionView.mj_footer endRefreshing];
     }];
 }
 
@@ -109,34 +89,20 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     OrderCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderCollectionViewCellID forIndexPath:indexPath];
-    OrderItem* item = self.listArray[indexPath.item];
+    OrderModel* item = self.listArray[indexPath.item];
     cell.orderItem = item;
     cell.tapBuyButton = ^{
-        if (item.orderType == ForPayment) {
-            
-        }
+
     };
     return cell;
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    OrderItem* item = self.listArray[indexPath.item];
-    switch (item.orderType) {
-        case ForShipping:
-        case InShipping:
-        case Finished:
-        case TimeoutCancel:
-        case ForPayment:
-            return CGSizeMake(ScreenW, 145+(ScreenW-60)/4.f);
-            break;
-        case Returning:
-        case Returned:
-            return CGSizeMake(ScreenW, 100+(ScreenW-60)/4.f);
-            break;
-        default:
-            break;
+    OrderModel* item = self.listArray[indexPath.item];
+    if ([item.status intValue] == 4) {
+        return CGSizeMake(ScreenW, 12+100+(ScreenW-60)/4.f);
     }
-    return CGSizeZero;
+    return CGSizeMake(ScreenW, 12+145+(ScreenW-60)/4.f);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
@@ -146,5 +112,26 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     vc.orderItem = self.listArray[indexPath.item];
     [self.navigationController pushViewController:vc animated:YES];
 }
+
+#pragma mark-
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+        layout.minimumLineSpacing = 0;
+        layout.minimumInteritemSpacing = 0;
+        
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.showsVerticalScrollIndicator = NO;
+        [_collectionView registerClass:[OrderCollectionViewCell class] forCellWithReuseIdentifier:OrderCollectionViewCellID];
+        [self.view addSubview:_collectionView];
+        _collectionView.contentInset = UIEdgeInsetsMake(0, 0, 10, 0);
+        
+    }
+    return _collectionView;
+}
+
 
 @end

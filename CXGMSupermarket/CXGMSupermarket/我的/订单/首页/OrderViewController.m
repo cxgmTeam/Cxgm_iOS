@@ -22,8 +22,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     self.title = @"我的订单";
-    NSArray* array = @[@"全部",@"待付款",@"配送中",@"已完成",@"退货"];
+    NSArray* array = @[@"全部",@"待付款",@"配送中",@"已完成",@"申请售后"];
     
     _menuView = [UIView new];
     _menuView.backgroundColor = [UIColor whiteColor];
@@ -82,13 +83,29 @@
     _scrollView.contentSize = CGSizeMake(array.count*ScreenW, 0);
     
     
+    //0待支付，1待配送（已支付），2配送中，3已完成，4退货
     for (NSInteger i = 0; i < array.count; i++) {
         OrderListViewController* vc = [OrderListViewController new];
-        vc.status = i-1;
+        if (i == 0 || i == 1) {
+            vc.status = i-1;
+        }else{
+            vc.status = i;
+        }
         [_scrollView addSubview:vc.view];
         vc.view.frame = CGRectMake(i*ScreenW, 0, ScreenW, ScreenH-NAVIGATION_BAR_HEIGHT-TAB_BAR_HEIGHT-45);
         [self addChildViewController:vc];
     }
+    
+    
+    
+    //定位页面
+    UIButton *button = _menuView.subviews[self.pageIndex];
+    [button sendActionsForControlEvents:UIControlEventTouchUpInside];
+    
+    [_redLine mas_updateConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(button.tag*self.btnWidth+(self.btnWidth-self.redLineWidth)/2.f);
+    }];
+
 }
 
 - (void)clickButton:(UIButton *)button
@@ -134,7 +151,5 @@
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
-
-
 
 @end

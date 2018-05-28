@@ -10,4 +10,5 @@
 
 @interface OrderViewController : MyCenterSubViewController
 
+@property(nonatomic,assign)NSInteger pageIndex;
 @end

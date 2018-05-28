@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "OrderItem.h"
+
 
 @interface OrderStateHeadView : UICollectionReusableView
-@property(nonatomic,strong)OrderItem* orderItem;
+@property(nonatomic,strong)OrderModel* orderItem;
 @end
