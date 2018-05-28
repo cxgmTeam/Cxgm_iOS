@@ -9,6 +9,9 @@
 #import "PaymentViewController.h"
 #import "PaymentButton.h"
 
+#import "WXApi.h"
+#import "MXAliPayHandler.h"
+
 @interface PaymentViewController ()
 
 @property(nonatomic,strong)UIButton* payButon;
@@ -32,6 +35,50 @@
     [self setupMainUI];
 }
 
+
+
+//请求订单信息
+
+
+
+-(void)sendRepweixin:(NSDictionary *)dict
+{
+    NSMutableString *stamp  = [dict objectForKey:@"timestamp"];
+    
+    PayReq* req             = [[PayReq alloc] init];
+    req.openID              = [dict objectForKey:@"appid"];
+    req.partnerId           = [dict objectForKey:@"partnerid"];
+    req.prepayId            = [dict objectForKey:@"prepayid"];
+    req.nonceStr            = [dict objectForKey:@"noncestr"];
+    req.timeStamp           = stamp.intValue;
+    req.package             = [dict objectForKey:@"package"];
+    req.sign                = [dict objectForKey:@"sign"];
+    
+    
+    BOOL isResult = [WXApi sendReq:req];
+    if (isResult) {
+        //添加事件监听微信支付成功消息
+
+    }else {
+        if (![WXApi isWXAppInstalled]) {
+            NSString *tipMsg = @"您的手机未安装手机微信或微信版本过低，请升级微信后方可使用微信支付";
+            [MBProgressHUD MBProgressHUDWithView:self.view Str:tipMsg];
+            return;
+        }
+        else {
+            //用户手机未安装微信、微信版本太低、微信客户端卡住、WXApi的registerApp的appid参数有误
+        }
+    }
+}
+
+
+-(void)doAlipayPay:(NSDictionary *)dict
+{
+    [MXAliPayHandler jumpToAliPay:dict];
+}
+
+
+#pragma mark-
 - (void)setupMainUI
 {
     [self.payButon mas_makeConstraints:^(MASConstraintMaker *make){

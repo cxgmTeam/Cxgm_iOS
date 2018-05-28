@@ -57,7 +57,7 @@
     self.nameLabel.text = model.goodName;
     self.priceLabel.text = [NSString stringWithFormat: @"¥ %.2f",[model.price floatValue]];
     self.numberLabel.text = model.goodNum;
-    self.sizeLabel.text = model.specifications;
+    self.sizeLabel.text = [NSString stringWithFormat:@"规格：%@",model.specifications];
     self.activityLabel.text = model.coupon;
     
     self.selectBtn.selected = [model.select boolValue];

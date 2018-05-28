@@ -103,6 +103,9 @@
 
 #define LoginAccount_Success   @"LoginAccount_Success"
 
+#define AddOrder_Success   @"AddOrder_Success"
+
+
 #define PAGECOUNT  @"10"
 
 #define BackupUserInfo @"BackupUserInfo"   //注册或登录成功后保存到NSUserDefaults中

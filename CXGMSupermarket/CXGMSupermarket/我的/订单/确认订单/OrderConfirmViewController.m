@@ -44,6 +44,9 @@
 @property (strong , nonatomic)NSDictionary* receiptDic;
 
 @property (strong , nonatomic)GoodsArrivedTimeFoot *timeFootview;
+
+@property (assign , nonatomic)CGFloat orderAmount;
+@property (assign , nonatomic)NSInteger orderNum;
 @end
 
 /* cell */
@@ -67,8 +70,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     self.title = @"确认订单";
     
     self.orderParam = [NSMutableDictionary dictionary];
-    
-    self.receiptDic = @{};
     
     [self setupBottom];
     
@@ -101,17 +102,32 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     NSString *dateString = [dateFormatter stringFromDate:[NSDate date]];
     [self.orderParam setObject:dateString forKey:@"orderTime"];
     
+    if (self.receiptDic) {
+        [self.orderParam setObject:self.receiptDic forKey:@"receipt"];
+    }
     
-    [self.orderParam setObject:self.receiptDic forKey:@"receipt"];
+    [self.orderParam setObject:[NSString stringWithFormat:@"%.2f",self.orderAmount] forKey:@"orderAmount"];
+    [self.orderParam setObject:[NSString stringWithFormat:@"%ld",(long)self.orderNum] forKey:@"orderNum"];
     
-    [self.orderParam setObject:@"0" forKey:@"orderAmount"];
-    [self.orderParam setObject:@"0" forKey:@"orderNum"];
-    [self.orderParam setObject:@"0" forKey:@"couponCodeId"];
+    if (self.coupons) {
+       [self.orderParam setObject:self.coupons.codeId forKey:@"couponCodeId"];
+    }
+    [self.orderParam setObject:@"没有" forKey:@"remarks"];
+    [self.orderParam setObject:[DeviceHelper sharedInstance].shop.id forKey:@"storeId"];
     
-
     
+    typeof(self) __weak wself = self;
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIAddOrder] token:[UserInfoManager sharedInstance].userInfo.token parameter:self.orderParam success:^(id JSON, NSError *error){
-        
+        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+        if ([model.code isEqualToString:@"200"]) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddOrder_Success object:nil];
+                
+                PaymentViewController* vc = [PaymentViewController new];
+                [wself.navigationController pushViewController:vc animated:YES];
+
+            });
+        }
     } failure:^(id JSON, NSError *error){
         
     }];
@@ -164,6 +180,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         }
     }
     
+    self.orderNum = categoryArray.count;
+    
     NSMutableArray* array1 = [NSMutableArray array];
     for (NSString * category in categoryArray)
     {
@@ -176,6 +194,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
                 amount = amount + [model.price floatValue];
             }
         }
+        
+        self.orderAmount = self.orderAmount + amount;
+        
         NSDictionary* dic = @{
                               @"categoryId":category,
                               @"amount":[NSString stringWithFormat:@"%.2f",amount]
@@ -227,8 +248,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 {
     [self addOrder];
     
-//    PaymentViewController* vc = [PaymentViewController new];
-//    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark-
@@ -284,10 +303,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         vc.writeReceiptFinish = ^(ReceiptItem * receipt){
             
             self.receiptDic = @{
-                                @"companyName": receipt.companyName,
+                                @"companyName": receipt.companyName.length>0?receipt.companyName:@"不知道",
                                 @"content": @"不知道是啥",
                                 @"createTime": receipt.createTime,
-                                @"dutyParagraph": receipt.dutyParagraph,
+                                @"dutyParagraph": receipt.dutyParagraph.length>0?receipt.dutyParagraph:@"111122222",
                                 @"phone": receipt.phone,
                                 @"type": receipt.type,
                                 @"userId": receipt.userId

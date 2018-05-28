@@ -39,7 +39,8 @@
         
         [self getShopCartList];
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAddGoodsSuccess:) name:AddGoodsSuccess_Notify object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshShopCart:) name:AddGoodsSuccess_Notify object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshShopCart:) name:AddOrder_Success object:nil];
     }
     return self;
 }
@@ -72,7 +73,7 @@
     }];
 }
 
-- (void)onAddGoodsSuccess:(NSNotification *)notiyf
+- (void)refreshShopCart:(NSNotification *)notiy
 {
     self.pageNum = 1;
     [self.dataArray removeAllObjects];
