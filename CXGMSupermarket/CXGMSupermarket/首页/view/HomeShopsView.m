@@ -17,9 +17,11 @@
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (assign , nonatomic)NSInteger pageNum;
 @property (strong , nonatomic)NSMutableArray *shopList;
+
+@property(nonatomic,strong)NSArray* slideDataList;//轮播图数据
+@property(nonatomic,strong)NSMutableArray* slideImageList;//轮播图数据
 @end
 
-#define GoodsHomeSilderImagesArray @[@"http://gfs5.gomein.net.cn/T1obZ_BmLT1RCvBVdK.jpg",@"http://gfs9.gomein.net.cn/T1C3J_B5LT1RCvBVdK.jpg",@"http://gfs5.gomein.net.cn/T1CwYjBCCT1RCvBVdK.jpg",@"http://gfs7.gomein.net.cn/T1u8V_B4ET1RCvBVdK.jpg",@"http://gfs7.gomein.net.cn/T1zODgB5CT1RCvBVdK.jpg"]
 
 /* cell */
 static NSString *const ShopFeatureViewCellID = @"ShopFeatureViewCell";
@@ -34,6 +36,8 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         
+        self.slideImageList = [NSMutableArray array];
+        
         self.collectionView.backgroundColor = [UIColor clearColor];
         [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
             make.edges.equalTo(self);
@@ -43,6 +47,7 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
             wself.pageNum = 1;
             [wself.shopList removeAllObjects];
             [wself getShopList];
+            [wself findAdvertisement];
         }];
         self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
             wself.pageNum ++;
@@ -52,9 +57,51 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
         self.pageNum = 1;
         self.shopList = [NSMutableArray array];
         
+        [self findAdvertisement];
         [self getShopList];
     }
     return self;
+}
+
+//广告位
+- (void)findAdvertisement
+{
+    
+    [self.slideImageList removeAllObjects];
+    
+    NSDictionary* dic = @{@"shopId":@""};
+    if ([DeviceHelper sharedInstance].shop) {
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
+    }
+    WEAKSELF;
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindAdvertisement]  token:nil parameters:dic success:^(id JSON, NSError *error){
+        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            NSArray* array  = [AdvertisementModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            
+            NSMutableArray* array1 = [NSMutableArray array];
+            for (AdvertisementModel* model in array) {
+                if ([model.position isEqualToString:@"1"]) {
+                    [array1 addObject:model];
+                }
+            }
+            
+            
+            self.slideDataList = [array1 sortedArrayUsingComparator:^NSComparisonResult(AdvertisementModel * obj1, AdvertisementModel * obj2){
+                return [obj1.number  compare: obj2.number];
+            }];
+            
+            for (AdvertisementModel* ad in self.slideDataList) {
+                [self.slideImageList addObject:ad.imageUrl.length>0?ad.imageUrl:@""];
+            }
+            
+            [weakSelf.collectionView reloadData];
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
 }
 
 - (void)getShopList
@@ -118,7 +165,7 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
     if (kind == UICollectionElementKindSectionHeader){
         if (indexPath.section == 0) {
             SlideshowHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SlideshowHeadViewID forIndexPath:indexPath];
-            headerView.imageGroupArray = GoodsHomeSilderImagesArray;
+            headerView.imageGroupArray = self.slideImageList;
             reusableview = headerView;
         }
     }

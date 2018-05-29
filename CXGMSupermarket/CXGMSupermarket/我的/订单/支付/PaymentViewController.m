@@ -12,6 +12,11 @@
 #import "WXApi.h"
 #import "MXAliPayHandler.h"
 
+
+#import "PayResultViewController.h"
+
+#import "LogisticsInfoController.h"
+
 @interface PaymentViewController ()
 
 @property(nonatomic,strong)UIButton* payButon;
@@ -36,7 +41,15 @@
 }
 
 
-
+- (void)payOrder:(UIButton*)button
+{
+//    PayResultViewController* vc = [PayResultViewController new];
+//    vc.paySuccess = NO;
+//    [self.navigationController pushViewController:vc animated:YES];
+    
+    LogisticsInfoController* vc = [LogisticsInfoController new];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 //请求订单信息
 
 
@@ -203,6 +216,7 @@
         _payButon.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:18];
         [_payButon setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [self.view addSubview:_payButon];
+        [_payButon addTarget:self action:@selector(payOrder:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _payButon;
 }

@@ -59,7 +59,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         
-        self.categoryNames = @[@"美味生鲜",@"新鲜果蔬",@"休闲零食",@"粮油调味"];
+        self.categoryNames = @[@"新鲜水果",@"放心蔬菜",@"鲜肉蛋品",@"水产海鲜",
+                               @"粮油副食",@"休闲零食",@"中外名酒",@"美妆百货"];
         
         self.collectionView.backgroundColor = [UIColor clearColor];
         [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -299,7 +300,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
     if (section == 0) {//4个分类
-        return 4;
+        return self.categoryNames.count;
     }
     if (section == 4) {
         return self.adBannarList.count;
@@ -385,7 +386,6 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             headerView.subTitleLabel.text = @"看大家都在买什么";
             reusableview = headerView;
         }
-
         
     }
     if (kind == UICollectionElementKindSectionFooter) {

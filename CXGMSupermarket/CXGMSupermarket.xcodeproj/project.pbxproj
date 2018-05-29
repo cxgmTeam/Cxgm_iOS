@@ -81,6 +81,10 @@
 		7783F2062097064700338459 /* GoodsCashViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F2052097064700338459 /* GoodsCashViewCell.m */; };
 		7783F209209707CD00338459 /* OrderCouponViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F208209707CD00338459 /* OrderCouponViewCell.m */; };
 		7783F20C209707F900338459 /* OrderBillViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F20B209707F900338459 /* OrderBillViewCell.m */; };
+		7789515C20BD7C4F002C23C3 /* LogisticsInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7789515B20BD7C4F002C23C3 /* LogisticsInfoController.m */; };
+		7789516020BD7E0A002C23C3 /* CourierViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7789515F20BD7E0A002C23C3 /* CourierViewCell.m */; };
+		7789516320BD7F34002C23C3 /* logisticsProcessCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7789516220BD7F34002C23C3 /* logisticsProcessCell.m */; };
+		7789516620BD8098002C23C3 /* LogisticsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7789516520BD8098002C23C3 /* LogisticsItem.m */; };
 		779C9558209AE0EE0029A591 /* PayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C9557209AE0EE0029A591 /* PayResultViewController.m */; };
 		779C955B209B082C0029A591 /* HomeGoodsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C955A209B082C0029A591 /* HomeGoodsView.m */; };
 		779C955E209B0A7C0029A591 /* HomeShopsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C955D209B0A7C0029A591 /* HomeShopsView.m */; };
@@ -545,6 +549,14 @@
 		7783F208209707CD00338459 /* OrderCouponViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrderCouponViewCell.m; sourceTree = "<group>"; };
 		7783F20A209707F900338459 /* OrderBillViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrderBillViewCell.h; sourceTree = "<group>"; };
 		7783F20B209707F900338459 /* OrderBillViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OrderBillViewCell.m; sourceTree = "<group>"; };
+		7789515A20BD7C4F002C23C3 /* LogisticsInfoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogisticsInfoController.h; sourceTree = "<group>"; };
+		7789515B20BD7C4F002C23C3 /* LogisticsInfoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogisticsInfoController.m; sourceTree = "<group>"; };
+		7789515E20BD7E0A002C23C3 /* CourierViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CourierViewCell.h; sourceTree = "<group>"; };
+		7789515F20BD7E0A002C23C3 /* CourierViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CourierViewCell.m; sourceTree = "<group>"; };
+		7789516120BD7F34002C23C3 /* logisticsProcessCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = logisticsProcessCell.h; sourceTree = "<group>"; };
+		7789516220BD7F34002C23C3 /* logisticsProcessCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = logisticsProcessCell.m; sourceTree = "<group>"; };
+		7789516420BD8098002C23C3 /* LogisticsItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogisticsItem.h; sourceTree = "<group>"; };
+		7789516520BD8098002C23C3 /* LogisticsItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogisticsItem.m; sourceTree = "<group>"; };
 		779C9556209AE0EE0029A591 /* PayResultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PayResultViewController.h; sourceTree = "<group>"; };
 		779C9557209AE0EE0029A591 /* PayResultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PayResultViewController.m; sourceTree = "<group>"; };
 		779C9559209B082C0029A591 /* HomeGoodsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeGoodsView.h; sourceTree = "<group>"; };
@@ -1522,6 +1534,29 @@
 			path = head;
 			sourceTree = "<group>";
 		};
+		7789515920BD7BDC002C23C3 /* 物流 */ = {
+			isa = PBXGroup;
+			children = (
+				7789515D20BD7DBB002C23C3 /* cell */,
+				7789515A20BD7C4F002C23C3 /* LogisticsInfoController.h */,
+				7789515B20BD7C4F002C23C3 /* LogisticsInfoController.m */,
+			);
+			path = "物流";
+			sourceTree = "<group>";
+		};
+		7789515D20BD7DBB002C23C3 /* cell */ = {
+			isa = PBXGroup;
+			children = (
+				7789515E20BD7E0A002C23C3 /* CourierViewCell.h */,
+				7789515F20BD7E0A002C23C3 /* CourierViewCell.m */,
+				7789516120BD7F34002C23C3 /* logisticsProcessCell.h */,
+				7789516220BD7F34002C23C3 /* logisticsProcessCell.m */,
+				7789516420BD8098002C23C3 /* LogisticsItem.h */,
+				7789516520BD8098002C23C3 /* LogisticsItem.m */,
+			);
+			path = cell;
+			sourceTree = "<group>";
+		};
 		779C9555209AE0D10029A591 /* 支付结果 */ = {
 			isa = PBXGroup;
 			children = (
@@ -2202,6 +2237,7 @@
 		BE40AFAA208F5EAC00D4B690 /* 订单 */ = {
 			isa = PBXGroup;
 			children = (
+				7789515920BD7BDC002C23C3 /* 物流 */,
 				775D358520B443CA0047F9EE /* 支付 */,
 				77D258DF20B2F2C800BA83FE /* 商品优惠券 */,
 				779C9555209AE0D10029A591 /* 支付结果 */,
@@ -2932,6 +2968,7 @@
 				77F83AAC2070E8CE004E9717 /* SDWebImageImageIOCoder.m in Sources */,
 				77F83A902070E8CE004E9717 /* JSONValueTransformer.m in Sources */,
 				BE9769E02072505C00783217 /* MJRefreshBackNormalFooter.m in Sources */,
+				7789515C20BD7C4F002C23C3 /* LogisticsInfoController.m in Sources */,
 				77DD80932083287000A1D080 /* GoodsListGridCell.m in Sources */,
 				77193BC620BC34470001508E /* InvitationTableCell.m in Sources */,
 				BE40AFCC208F684B00D4B690 /* OrderListViewController.m in Sources */,
@@ -2948,6 +2985,7 @@
 				77F83A892070E8CE004E9717 /* JSONModel.m in Sources */,
 				BE44A0852091E84E001FE5A6 /* GoodsScreenshotsGridCell.m in Sources */,
 				77193B5120BBF3CB0001508E /* Order.m in Sources */,
+				7789516020BD7E0A002C23C3 /* CourierViewCell.m in Sources */,
 				BE40AFB1208F5F9700D4B690 /* AddressViewController.m in Sources */,
 				BECB902A2084BA5700170BC6 /* DetailTopToolView.m in Sources */,
 				BE44A08D2091F301001FE5A6 /* OrderConfirmViewController.m in Sources */,
@@ -2962,6 +3000,7 @@
 				77F83A872070E8CE004E9717 /* IQUIView+IQKeyboardToolbar.m in Sources */,
 				7703559020995D56002B3A8D /* BillContentViewCell.m in Sources */,
 				77B484F2209EC72300D74DD5 /* SearchHeadView.m in Sources */,
+				7789516620BD8098002C23C3 /* LogisticsItem.m in Sources */,
 				77DD806F20824F7C00A1D080 /* SDCycleScrollView.m in Sources */,
 				BE8E87862093576D005EB719 /* OrderAmountViewCell.m in Sources */,
 				77F83AA12070E8CE004E9717 /* SDAnimatedImageRep.m in Sources */,
@@ -3010,6 +3049,7 @@
 				BE40AFA2208ECE6300D4B690 /* ULBCollectionViewFlowLayout.m in Sources */,
 				77F83A7D2070E8CE004E9717 /* IQUITextFieldView+Additions.m in Sources */,
 				7703557D209953F7002B3A8D /* OrderBillViewController.m in Sources */,
+				7789516320BD7F34002C23C3 /* logisticsProcessCell.m in Sources */,
 				77193BC320BBFFD70001508E /* RSADataSigner.m in Sources */,
 				77DD80362082409F00A1D080 /* DCScanTool.m in Sources */,
 				77F83AAE2070E8CE004E9717 /* SDWebImagePrefetcher.m in Sources */,

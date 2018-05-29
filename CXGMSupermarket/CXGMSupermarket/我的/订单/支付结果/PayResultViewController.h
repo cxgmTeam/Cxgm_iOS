@@ -9,5 +9,5 @@
 #import "MyCenterSubViewController.h"
 
 @interface PayResultViewController : MyCenterSubViewController
-
+@property(nonatomic,assign)BOOL paySuccess;
 @end

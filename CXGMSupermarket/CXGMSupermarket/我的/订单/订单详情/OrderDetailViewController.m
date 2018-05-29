@@ -39,33 +39,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
 @implementation OrderDetailViewController
 
-- (UICollectionView *)collectionView
-{
-    if (!_collectionView) {
-        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        layout.minimumLineSpacing = 0;
-        layout.minimumInteritemSpacing = 0;
-        
-        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        _collectionView.showsVerticalScrollIndicator = NO;
-        
-        [_collectionView registerClass:[OrderCustomerViewCell class] forCellWithReuseIdentifier:OrderCustomerViewCellID];
-        [_collectionView registerClass:[OrderGoodsViewCell class] forCellWithReuseIdentifier:OrderGoodsViewCellID];
-        [_collectionView registerClass:[OrderInvoiceViewCell class] forCellWithReuseIdentifier:OrderInvoiceViewCellID];
-        [_collectionView registerClass:[OrderAmountViewCell class] forCellWithReuseIdentifier:OrderAmountViewCellID];
-        
-        [_collectionView registerClass:[OrderStateHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderStateHeadViewID];
-        [_collectionView registerClass:[ShopAddressHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ShopAddressHeadViewID];
-        
-        [_collectionView registerClass:[GoodsArrivedTimeFoot class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:GoodsArrivedTimeFootID];
-        [_collectionView registerClass:[BlankCollectionFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BlankCollectionFootViewID];
-        
-        [self.view addSubview:_collectionView];
-    }
-    return _collectionView;
-}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -223,4 +197,32 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     return CGSizeMake(ScreenW, 10);
 }
 
+#pragma mark - init
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
+        layout.minimumLineSpacing = 0;
+        layout.minimumInteritemSpacing = 0;
+        
+        _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        _collectionView.showsVerticalScrollIndicator = NO;
+        
+        [_collectionView registerClass:[OrderCustomerViewCell class] forCellWithReuseIdentifier:OrderCustomerViewCellID];
+        [_collectionView registerClass:[OrderGoodsViewCell class] forCellWithReuseIdentifier:OrderGoodsViewCellID];
+        [_collectionView registerClass:[OrderInvoiceViewCell class] forCellWithReuseIdentifier:OrderInvoiceViewCellID];
+        [_collectionView registerClass:[OrderAmountViewCell class] forCellWithReuseIdentifier:OrderAmountViewCellID];
+        
+        [_collectionView registerClass:[OrderStateHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderStateHeadViewID];
+        [_collectionView registerClass:[ShopAddressHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ShopAddressHeadViewID];
+        
+        [_collectionView registerClass:[GoodsArrivedTimeFoot class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:GoodsArrivedTimeFootID];
+        [_collectionView registerClass:[BlankCollectionFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BlankCollectionFootViewID];
+        
+        [self.view addSubview:_collectionView];
+    }
+    return _collectionView;
+}
 @end

@@ -50,6 +50,9 @@
 #define APIFindProductDetail  @"/homePage/findProductDetail"
 //商品详情的猜你喜欢
 #define APIPushProducts  @"/homePage/pushProducts"
+//搜索
+#define APISearch  @"/homePage/serch"
+
 
 /* 分类页面  */
 //根据门店ID查询商品一级分类
