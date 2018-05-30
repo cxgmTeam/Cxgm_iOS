@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface ShopAddressHeadView : UICollectionReusableView
-
+@property(nonatomic,strong)OrderModel* order;
 @end

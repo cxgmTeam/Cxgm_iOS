@@ -57,7 +57,7 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
         self.pageNum = 1;
         self.shopList = [NSMutableArray array];
         
-        [self findAdvertisement];
+//        [self findAdvertisement];
         [self getShopList];
     }
     return self;
@@ -132,30 +132,32 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
 
 #pragma mark-
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 2;
+//    return 2;
+    return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (section == 0) {
-        return 1;
-    }
-    if (section == 1) {
-        return self.shopList.count;
-    }
-    return 0;
+//    if (section == 0) {
+//        return 1;
+//    }
+//    if (section == 1) {
+//        return self.shopList.count;
+//    }
+//    return 0;
+    return self.shopList.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *gridcell = nil;
-    if (indexPath.section == 0) {
-        ShopFeatureViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ShopFeatureViewCellID forIndexPath:indexPath];
-        gridcell = cell;
-        
-    }else if (indexPath.section == 1) {
+//    if (indexPath.section == 0) {
+//        ShopFeatureViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ShopFeatureViewCellID forIndexPath:indexPath];
+//        gridcell = cell;
+//
+//    }else if (indexPath.section == 1) {
         HomeShopViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:HomeShopViewCellID forIndexPath:indexPath];
         cell.shopModel = self.shopList[indexPath.item];
         gridcell = cell;
-    }
+//    }
     return gridcell;
 }
 
@@ -163,47 +165,51 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
     
     UICollectionReusableView *reusableview = nil;
     if (kind == UICollectionElementKindSectionHeader){
-        if (indexPath.section == 0) {
-            SlideshowHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SlideshowHeadViewID forIndexPath:indexPath];
-            headerView.imageGroupArray = self.slideImageList;
-            reusableview = headerView;
-        }
+//        if (indexPath.section == 0) {
+//            SlideshowHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SlideshowHeadViewID forIndexPath:indexPath];
+//            headerView.imageGroupArray = self.slideImageList;
+//            reusableview = headerView;
+//        }
     }
     return reusableview;
 }
 
 #pragma mark - item宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0) {
-        return CGSizeMake(ScreenW , 41);
-    }
-    if (indexPath.section == 1) {
+//    if (indexPath.section == 0) {
+//        return CGSizeMake(ScreenW , 41);
+//    }
+//    if (indexPath.section == 1) {
 //        return CGSizeMake(ScreenW, 66+ScreenW*190/375.f);
-        return CGSizeMake(ScreenW, 256);
-    }
-    return CGSizeZero;
+//        return CGSizeMake(ScreenW, 256);
+//    }
+//    return CGSizeZero;
+    return CGSizeMake(ScreenW, 66+ScreenW*190/375.f);
 }
 
 #pragma mark - head宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
     
-    if (section == 0) {
-        return CGSizeMake(ScreenW, ScreenW*190/375.f); //图片滚动的宽高
-    }
+//    if (section == 0) {
+//        return CGSizeMake(ScreenW, ScreenW*190/375.f); //图片滚动的宽高
+//    }
     return CGSizeZero;
 }
 #pragma mark - <UICollectionViewDelegateFlowLayout>
 
 #pragma mark - Y间距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return (section == 1) ? 10 : 0;
+//    return (section == 1) ? 10 : 0;
+    return 10;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-    if (section == 1) {
-        return UIEdgeInsetsMake(10, 0, 10, 0);
-    }
-    return UIEdgeInsetsZero;
+//    if (section == 1) {
+//        return UIEdgeInsetsMake(10, 0, 10, 0);
+//    }
+//    return UIEdgeInsetsZero;
+    
+    return UIEdgeInsetsMake(10, 0, 10, 0);
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{

@@ -27,4 +27,9 @@
     }
     return self;
 }
+
+- (void)setGoods:(GoodsModel *)goods
+{
+    [_imageView sd_setImageWithURL:[NSURL URLWithString:goods.productUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+}
 @end

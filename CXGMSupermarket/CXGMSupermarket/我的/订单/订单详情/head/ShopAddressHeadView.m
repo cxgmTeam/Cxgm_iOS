@@ -24,6 +24,12 @@
     return self;
 }
 
+- (void)setOrder:(OrderModel *)order
+{
+    _shopNameLabel.text = order.shopName;
+    _shopAddressLabel.text = order.shopAddress;
+}
+
 - (void)setupUI{
     UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"order_store"]];
     [self addSubview:imageView];

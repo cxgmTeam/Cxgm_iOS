@@ -26,6 +26,19 @@
     return self;
 }
 
+- (void)setOrder:(OrderModel *)order
+{
+    _numberLabel.text = order.orderNum;
+    _timeLabel.text = order.orderTime;
+    _paywayLabel.text = order.payType;//这里不知道返回什么数据
+    if (!order.receipt) {
+        _invoiceLabel.text = @"不开发票";
+    }else{
+        
+    }
+}
+
+
 - (void)setupUI
 {
     UILabel *label1 = [[UILabel alloc] init];

@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface OrderAmountViewCell : UICollectionViewCell
-
+@property(nonatomic,strong)OrderModel* order;
 @end

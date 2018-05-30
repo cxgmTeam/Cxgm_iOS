@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface DetailImagesFooterView : UICollectionReusableView
-
+@property(nonatomic,strong)NSString* htmlString;
 @end

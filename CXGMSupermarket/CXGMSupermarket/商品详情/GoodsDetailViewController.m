@@ -26,7 +26,7 @@
 #import "AnotherCartViewController.h"
 #import "SelectSpecificationController.h"
 
-@interface GoodsDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,ULBCollectionViewDelegateFlowLayout>
+@interface GoodsDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,ULBCollectionViewDelegateFlowLayout,UIWebViewDelegate>
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)DetailTopToolView *topToolView;
 
@@ -43,6 +43,12 @@
 
 @property (assign , nonatomic)NSInteger number;
 @property (assign , nonatomic)DetailTopFootView *topFootview;
+
+@property (strong , nonatomic)NSMutableArray *slideImageArray;
+
+//辅助
+@property (strong , nonatomic)UIWebView *auxiliaryWebView;
+@property (assign , nonatomic)CGFloat webViewHeight;
 @end
 
 /* cell */
@@ -57,13 +63,18 @@ static NSString *const DetailImagesFooterViewID = @"DetailImagesFooterView";
 static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 
-#define GoodsHomeSilderImagesArray @[@"http://gfs5.gomein.net.cn/T1obZ_BmLT1RCvBVdK.jpg",@"http://gfs9.gomein.net.cn/T1C3J_B5LT1RCvBVdK.jpg",@"http://gfs5.gomein.net.cn/T1CwYjBCCT1RCvBVdK.jpg",@"http://gfs7.gomein.net.cn/T1u8V_B4ET1RCvBVdK.jpg",@"http://gfs7.gomein.net.cn/T1zODgB5CT1RCvBVdK.jpg"]
 
 
 @implementation GoodsDetailViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    [self.auxiliaryWebView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.edges.equalTo(self.view);
+    }];
+    self.auxiliaryWebView.hidden = YES;
+    
     
     [self.view addSubview:self.addGoodsBtn];
     [self.addGoodsBtn mas_makeConstraints:^(MASConstraintMaker *make){
@@ -100,6 +111,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     
     self.number = 1;
     
+    self.slideImageArray = [NSMutableArray array];
+    
     if (self.goodsId) {
         [self findProductDetail];
     }
@@ -108,6 +121,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 
 - (void)findProductDetail
 {
+    
+    [self.slideImageArray removeAllObjects];
+    
     NSDictionary* dic = @{@"productId":self.goodsId,
                           @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
                           };
@@ -117,6 +133,13 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         if ([model.data isKindOfClass:[NSDictionary class]]) {
             self.goodsDetail = [[GoodsModel alloc] initWithDictionary:(NSDictionary *)model.data error:nil];
             
+            [self.auxiliaryWebView loadHTMLString:self.goodsDetail.introduction baseURL:nil];
+            
+            if ([self.goodsDetail.productImageList isKindOfClass:[NSArray class]]) {
+                for (NSDictionary* dic in self.goodsDetail.productImageList) {
+                    [self.slideImageArray addObject:dic[@"url"]];
+                }
+            }
             self.topToolView.goodNameLabel.text = self.goodsDetail.name;
             [self.collectionView reloadData];
             
@@ -314,7 +337,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     if (kind == UICollectionElementKindSectionHeader){
         if (indexPath.section == 0) {
             DetailShufflingHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:DetailShufflingHeadViewID forIndexPath:indexPath];
-            headerView.shufflingArray = GoodsHomeSilderImagesArray;
+            headerView.shufflingArray = self.slideImageArray;
             reusableview = headerView;
         }else if (indexPath.section == 2){
             DeatilCustomHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:DeatilCustomHeadViewID forIndexPath:indexPath];
@@ -333,6 +356,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         }
         if (indexPath.section == 1) {
             DetailImagesFooterView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:DetailImagesFooterViewID forIndexPath:indexPath];
+            footview.htmlString = self.goodsDetail.introduction;
             reusableview = footview;
         }
     }
@@ -371,7 +395,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         return CGSizeMake(ScreenW, 65);
     }
     if (section == 1) {
-        return CGSizeMake(ScreenW, ScreenW*3/2.f);//详情图片
+        return CGSizeMake(ScreenW, self.webViewHeight);//详情图片
     }
     return CGSizeZero;
 }
@@ -397,6 +421,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     
     if (indexPath.section == 2) {
         GoodsDetailViewController* vc = [GoodsDetailViewController new];
+        GoodsModel* goods = self.pushArray[indexPath.item];
+        vc.goodsId = goods.id;
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -569,6 +595,23 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 }
 
 #pragma mark-
+- (UIWebView *)auxiliaryWebView{
+    if (!_auxiliaryWebView) {
+        _auxiliaryWebView = [UIWebView new];
+        _auxiliaryWebView.delegate = self;
+        _auxiliaryWebView.backgroundColor = [UIColor clearColor];
+        [self.view addSubview:_auxiliaryWebView];
+    }
+    return _auxiliaryWebView;
+}
+
+-(void)webViewDidFinishLoad:(UIWebView *)webView{
+    self.webViewHeight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.scrollHeight"] floatValue];
+    [self.collectionView reloadData];
+}
+
+#pragma mark-
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     

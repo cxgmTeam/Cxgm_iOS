@@ -9,7 +9,7 @@
 #import "DetailImagesFooterView.h"
 
 @interface DetailImagesFooterView ()
-@property(nonatomic,strong)UIImageView* imageView;
+@property(nonatomic,strong)UIWebView* webView;
 @end
 
 @implementation DetailImagesFooterView
@@ -24,25 +24,21 @@
     return self;
 }
 
+- (void)setHtmlString:(NSString *)htmlString{
+    [_webView loadHTMLString:htmlString baseURL:nil];
+}
+
 - (void)setUpUI
 {
     self.backgroundColor = [UIColor whiteColor];
     
-    _imageView = [UIImageView new];
-    _imageView.contentMode = UIViewContentModeScaleAspectFill;
-    [_imageView sd_setImageWithURL:[NSURL URLWithString:@"http://gfs1.gomein.net.cn/T1Ro_vBmbv1RCvBVdK.jpg"]];
-    [self addSubview:_imageView];
-    [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.mas_equalTo(self);
+    _webView = [UIWebView new];
+    _webView.backgroundColor = [UIColor clearColor];
+    [self addSubview:_webView];
+    [_webView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.edges.equalTo(self);
     }];
 }
 
-//- (void)layoutSubviews
-//{
-//    [super layoutSubviews];
-//    
-//    [_imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.edges.mas_equalTo(self);
-//    }];
-//}
+
 @end

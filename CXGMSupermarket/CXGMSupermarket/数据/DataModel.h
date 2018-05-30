@@ -84,7 +84,7 @@
 @property (nonatomic,strong)NSString<Optional> * cname;
 @property (nonatomic,strong)NSString<Optional> * grade;
 @property (nonatomic,strong)NSString<Optional> * parentId;
-@property (nonatomic,strong)NSObject<Optional> * productImageList;
+@property (nonatomic,strong)NSArray<Optional> * productImageList;
 @property (nonatomic,strong)NSString<Optional> * goodCode;
 @property (nonatomic,strong)NSString<Optional> * originalPrice;//原价
 @property (nonatomic,strong)NSString<Optional> * shopCartNum;//再购物车的数量
@@ -97,6 +97,7 @@
 @property (nonatomic,strong)NSString<Optional> * productNum;
 @property (nonatomic,strong)NSString<Optional> * productUrl;
 @property (nonatomic,strong)NSString<Optional> * amount;
+
 @end
 
 //购物车数据模型
@@ -196,11 +197,11 @@
 @property(nonatomic,strong)NSString<Optional> * id;
 @property(nonatomic,strong)NSString<Optional> * userId;
 @property(nonatomic,strong)NSString<Optional> * orderNum;
-@property(nonatomic,strong)NSString<Optional> * status;
+@property(nonatomic,strong)NSString<Optional> * status;//0待支付，1待配送（已支付），2配送中，3已完成，4退货
 @property(nonatomic,strong)NSString<Optional> * storeId;//门店id
 @property(nonatomic,strong)NSString<Optional> * payType;
 @property(nonatomic,strong)NSString<Optional> * orderTime;
-@property(nonatomic,strong)NSString<Optional> * orderAmount;
+
 @property(nonatomic,strong)NSString<Optional> * remarks;
 @property(nonatomic,strong)NSString<Optional> * addressId;
 @property(nonatomic,strong)NSString<Optional> * receiveTime;
@@ -209,6 +210,17 @@
 @property(nonatomic,strong)NSObject<Optional> * productList;
 @property(nonatomic,strong)NSArray<Optional> * productDetails;
 @property(nonatomic,strong)NSObject<Optional> * categoryAndAmountList;
+
+@property(nonatomic,strong)NSString<Optional> * shopName;
+@property(nonatomic,strong)NSString<Optional> * shopAddress;
+@property(nonatomic,strong)NSObject<Optional> * address;
+
+@property(nonatomic,strong)NSString<Optional> * orderAmount;//实付金额
+@property(nonatomic,strong)NSString<Optional> * totalAmount;//订单总金额   提交订单时增加这两个参数
+@property(nonatomic,strong)NSString<Optional> * preferential;//订单优惠
+
+
+@property(nonatomic,strong)AddressModel<Optional> * addressObj;
 
 +(OrderModel *)OrderModelWithJson:(NSDictionary *)json;
 @end

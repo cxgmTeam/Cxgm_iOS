@@ -38,6 +38,20 @@
     
     
     [self setupMainUI];
+    
+//    [self getSurplusTime];
+}
+
+
+- (void)getSurplusTime
+{
+    NSDictionary* dic = @{@"orderId":self.order.id};
+    
+    [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APISurplusTime] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
 }
 
 

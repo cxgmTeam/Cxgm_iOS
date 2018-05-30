@@ -63,6 +63,8 @@
 		773A4B0620AD68EC00F0A5FA /* HYNoticeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 773A4B0420AD68EC00F0A5FA /* HYNoticeView.m */; };
 		773A4B0920AD9B5C00F0A5FA /* AddressTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 773A4B0820AD9B5C00F0A5FA /* AddressTableViewCell.m */; };
 		773A4B0C20AD9D4200F0A5FA /* AddressTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 773A4B0B20AD9D4200F0A5FA /* AddressTopTableViewCell.m */; };
+		77401A0E20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 77401A0D20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.m */; };
+		77401A1420BED810001CCEA5 /* GoodsOneScreenShotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77401A1320BED810001CCEA5 /* GoodsOneScreenShotCell.m */; };
 		774813902071CF17002DDF93 /* CutomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7748138F2071CF17002DDF93 /* CutomNavigationController.m */; };
 		774C47E420A99D2A009B129F /* WGS84TOGCJ02.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C47E320A99D2A009B129F /* WGS84TOGCJ02.m */; };
 		77529E0320AC5BDC0015F7A6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77529E0220AC5BDB0015F7A6 /* MessageUI.framework */; };
@@ -514,6 +516,10 @@
 		773A4B0820AD9B5C00F0A5FA /* AddressTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressTableViewCell.m; sourceTree = "<group>"; };
 		773A4B0A20AD9D4200F0A5FA /* AddressTopTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AddressTopTableViewCell.h; sourceTree = "<group>"; };
 		773A4B0B20AD9D4200F0A5FA /* AddressTopTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AddressTopTableViewCell.m; sourceTree = "<group>"; };
+		77401A0C20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseCarAnimationTool.h; sourceTree = "<group>"; };
+		77401A0D20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseCarAnimationTool.m; sourceTree = "<group>"; };
+		77401A1220BED810001CCEA5 /* GoodsOneScreenShotCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsOneScreenShotCell.h; sourceTree = "<group>"; };
+		77401A1320BED810001CCEA5 /* GoodsOneScreenShotCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsOneScreenShotCell.m; sourceTree = "<group>"; };
 		7748138E2071CF17002DDF93 /* CutomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CutomNavigationController.h; sourceTree = "<group>"; };
 		7748138F2071CF17002DDF93 /* CutomNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CutomNavigationController.m; sourceTree = "<group>"; };
 		774C47E220A99D2A009B129F /* WGS84TOGCJ02.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WGS84TOGCJ02.h; sourceTree = "<group>"; };
@@ -1458,6 +1464,15 @@
 			path = HYNoticeView;
 			sourceTree = "<group>";
 		};
+		77401A0B20BEC0FA001CCEA5 /* CarAnimationTool */ = {
+			isa = PBXGroup;
+			children = (
+				77401A0C20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.h */,
+				77401A0D20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.m */,
+			);
+			path = CarAnimationTool;
+			sourceTree = "<group>";
+		};
 		775D357D20B3B2FC0047F9EE /* 消息 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1823,6 +1838,7 @@
 		77F839B22070E8CE004E9717 /* 第三方 */ = {
 			isa = PBXGroup;
 			children = (
+				77401A0B20BEC0FA001CCEA5 /* CarAnimationTool */,
 				77193B4820BBF3CB0001508E /* Alipay */,
 				77193B0920BBDF240001508E /* UMSocial */,
 				773A4B0320AD68EC00F0A5FA /* HYNoticeView */,
@@ -2316,6 +2332,8 @@
 			children = (
 				BE44A0832091E84E001FE5A6 /* GoodsScreenshotsGridCell.h */,
 				BE44A0842091E84E001FE5A6 /* GoodsScreenshotsGridCell.m */,
+				77401A1220BED810001CCEA5 /* GoodsOneScreenShotCell.h */,
+				77401A1320BED810001CCEA5 /* GoodsOneScreenShotCell.m */,
 				BE44A07D2091A709001FE5A6 /* OrderCollectionViewCell.h */,
 				BE44A07E2091A709001FE5A6 /* OrderCollectionViewCell.m */,
 			);
@@ -2893,6 +2911,7 @@
 				77F83A812070E8CE004E9717 /* IQKeyboardReturnKeyHandler.m in Sources */,
 				77A5DE30208C9456005F97F9 /* MyCenterHeadView.m in Sources */,
 				BE6CFAED207A3C8E00DFD3CA /* AFNetAPIClient.m in Sources */,
+				77401A1420BED810001CCEA5 /* GoodsOneScreenShotCell.m in Sources */,
 				BECB8FD820844DD900170BC6 /* UIBarButtonItem+DCBarButtonItem.m in Sources */,
 				BE44A0892091F106001FE5A6 /* OrderDetailViewController.m in Sources */,
 				779F9FDC208AC08600C38D61 /* SubCategoryController.m in Sources */,
@@ -3073,6 +3092,7 @@
 				77F83AA72070E8CE004E9717 /* SDWebImageCompat.m in Sources */,
 				BECB8FD920844DD900170BC6 /* UIColor+DCColorChange.m in Sources */,
 				BECB8FD620844DD900170BC6 /* NSObject+DCNull.m in Sources */,
+				77401A0E20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.m in Sources */,
 				77F83A752070E8CE004E9717 /* UIActivityIndicatorView+AFNetworking.m in Sources */,
 				BECB90152084B03C00170BC6 /* DCPlaceholderTextView.m in Sources */,
 				77193B5D20BBFF450001508E /* MXAliPayHandler.m in Sources */,

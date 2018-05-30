@@ -70,7 +70,9 @@
     if ([model.productDetails isKindOfClass:[NSArray class]]) {
         model.productDetails = [GoodsModel arrayOfModelsFromDictionaries:model.productDetails error:nil];
     }
-    
+    if ([model.address isKindOfClass:[NSDictionary class]]) {
+        model.addressObj = [[AddressModel alloc] initWithDictionary:(NSDictionary*)model.address error:nil];
+    }
     return model;
 }
 @end

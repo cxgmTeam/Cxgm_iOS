@@ -26,21 +26,7 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
     self.title = @"分类";
     self.view.backgroundColor = [UIColor whiteColor];
     
-//    self.categoryNames = @[@"新鲜水果",
-//                           @"蔬菜净菜",
-//                           @"海鲜水产",
-//                           @"肉禽蛋品",
-//                           @"面点主食",
-//                           @"乳品烘焙",
-//                           @"餐饮熟食",
-//                           @"方便净菜",
-//                           @"粮油副食",
-//                           @"休闲零食",
-//                           @"中外名酒",
-//                           @"饮料冲调",
-//                           @"美妆个护",
-//                           @"母婴保健",
-//                           @"厨卫百货"];
+
     self.collectionView.backgroundColor = [UIColor clearColor];
     [_collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);

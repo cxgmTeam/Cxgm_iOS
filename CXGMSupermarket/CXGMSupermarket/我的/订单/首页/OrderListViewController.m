@@ -79,7 +79,17 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     }];
 }
 
-//取消待付款订单
+//申请退款
+- (void)returnMoney:(NSString *)orderId
+{
+    NSDictionary* dic = @{@"orderId":orderId};
+    
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIReturnMoney] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
 
 
 #pragma mark-
@@ -92,7 +102,10 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     OrderModel* item = self.listArray[indexPath.item];
     cell.orderItem = item;
     cell.tapBuyButton = ^{
-
+//        0待支付，1待配送（已支付），2配送中，3已完成，4退货
+        if ([item.status intValue] == 3) {
+            
+        }
     };
     return cell;
 }
@@ -109,7 +122,8 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
     OrderDetailViewController* vc = [OrderDetailViewController new];
-    vc.orderItem = self.listArray[indexPath.item];
+    OrderModel* orderItem = self.listArray[indexPath.item];
+    vc.orderItem = orderItem;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

@@ -78,8 +78,14 @@
 #define APIOrderList  @"/order/list"
 //用户下单接口
 #define APIAddOrder  @"/order/addOrder"
-//删除订单
+//取消订单订单
 #define APIDeleteOrder  @"/order/deleteOrder"
+//根据订单ID查询订单详情
+#define APIOrderDetail  @"/order/orderDetail"
+//根据订单ID查询剩余支付时间
+#define APISurplusTime  @"/order/surplusTime"
+//申请退款
+#define APIReturnMoney  @"/order/returnMoney"
 
 
 

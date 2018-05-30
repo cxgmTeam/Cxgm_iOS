@@ -8,6 +8,7 @@
 
 #import "OrderCollectionViewCell.h"
 #import "GoodsScreenshotsGridCell.h"
+#import "GoodsOneScreenShotCell.h"
 
 @interface OrderCollectionViewCell ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
@@ -28,12 +29,15 @@
 @end
 
 static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
+static NSString *const GoodsOneScreenShotCellID = @"GoodsOneScreenShotCell";
 
 @implementation OrderCollectionViewCell
 
 //0待支付，1待配送（已支付），2配送中，3已完成，4退货
 - (void)setOrderItem:(OrderModel *)orderItem
 {
+    _orderItem = orderItem;
+    
     switch ([orderItem.status integerValue]) {
         case 0:{
             _orderState.text = @"待付款";
@@ -62,6 +66,13 @@ static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
         default:
             break;
     }
+    
+    _countLabel.text = [NSString stringWithFormat:@"共%ld种  总付款： ",(long)orderItem.productDetails.count];
+    _orderNumber.text = [NSString stringWithFormat:@"订单号：%@",orderItem.orderNum];
+    _priceLabel.text =  [NSString stringWithFormat:@"¥ %.2f",[orderItem.orderAmount floatValue]];
+    
+    [self.collectionView reloadData];
+    
 }
 
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -182,13 +193,14 @@ static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
         UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
         layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 10;
-        layout.itemSize = CGSizeMake((ScreenW-60)/4.f, (ScreenW-60)/4.f);
+
         
         _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.delegate = self;
         _collectionView.dataSource = self;
         _collectionView.showsVerticalScrollIndicator = NO;
         [_collectionView registerClass:[GoodsScreenshotsGridCell class] forCellWithReuseIdentifier:GoodsScreenshotsGridCellID];
+        [_collectionView registerClass:[GoodsOneScreenShotCell class] forCellWithReuseIdentifier:GoodsOneScreenShotCellID];
         [_whiteView addSubview:_collectionView];
         _collectionView.contentInset = UIEdgeInsetsMake(0, 15, 0, 15);
         
@@ -198,12 +210,29 @@ static NSString *const GoodsScreenshotsGridCellID = @"GoodsScreenshotsGridCell";
 
 #pragma mark-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 4;
+    return self.orderItem.productDetails.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    GoodsScreenshotsGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsScreenshotsGridCellID forIndexPath:indexPath];
-    return cell;
+    if (self.orderItem.productDetails.count == 1)
+    {
+        GoodsOneScreenShotCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsOneScreenShotCellID forIndexPath:indexPath];
+        cell.goods = self.orderItem.productDetails[indexPath.item];
+        return cell;
+    }else{
+        GoodsScreenshotsGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsScreenshotsGridCellID forIndexPath:indexPath];
+        cell.goods = self.orderItem.productDetails[indexPath.item];
+        return cell;
+    }
 }
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
+    if (self.orderItem.productDetails.count == 1) {
+        return CGSizeMake(ScreenW-60,(ScreenW-60)/4.f);
+    }else{
+        return CGSizeMake((ScreenW-60)/4.f, (ScreenW-60)/4.f);
+    }
+}
+
 
 @end

@@ -94,6 +94,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请添加收获地址"]; return;
     }
     
+    //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
+    //    orderAmount = totalAmount - preferential + 10
+    
     [self.orderParam setObject:self.address.id forKey:@"addressId"];
     [self.orderParam setObject:self.timeFootview.timeLabel.text forKey:@"receiveTime"];
     
@@ -114,6 +117,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     }
     [self.orderParam setObject:@"没有" forKey:@"remarks"];
     [self.orderParam setObject:[DeviceHelper sharedInstance].shop.id forKey:@"storeId"];
+    
+    
+
     
     
     typeof(self) __weak wself = self;

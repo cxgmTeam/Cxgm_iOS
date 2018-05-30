@@ -1,14 +1,14 @@
 //
-//  OrderGoodsViewCell.m
+//  GoodsOneScreenShotCell.m
 //  CXGMSupermarket
 //
-//  Created by 天闻 on 2018/4/27.
+//  Created by zhu yingmin on 2018/5/30.
 //  Copyright © 2018年 zhu yingmin. All rights reserved.
 //
 
-#import "OrderGoodsViewCell.h"
+#import "GoodsOneScreenShotCell.h"
 
-@interface OrderGoodsViewCell ()
+@interface GoodsOneScreenShotCell ()
 //显示照片
 @property (nonatomic,retain) UIImageView *imageView;
 //商品名
@@ -20,10 +20,9 @@
 @property (nonatomic,retain) UILabel *oldPriceLabel;
 //数量
 @property (nonatomic,retain)UILabel *numberLabel;
-
 @end
 
-@implementation OrderGoodsViewCell
+@implementation GoodsOneScreenShotCell
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
@@ -61,21 +60,12 @@
 
 - (void)setupUI
 {
-    UIView* line = [UIView new];
-    line.backgroundColor = ColorE8E8E8E;
-    [self addSubview:line];
-    [line mas_makeConstraints:^(MASConstraintMaker *make){
-        make.top.left.right.equalTo(self);
-        make.height.equalTo(1);
-    }];
-    
     UIImageView* imageView = [[UIImageView alloc]init];
     imageView.image = [UIImage imageNamed:@"placeholderImage"];
     [self addSubview:imageView];
     [imageView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.centerY.equalTo(self);
-        make.left.equalTo(15);
-        make.size.equalTo(CGSizeMake(78, 56));
+        make.left.top.bottom.equalTo(self);
+        make.width.equalTo(imageView.height);
     }];
     self.imageView = imageView;
     
@@ -87,9 +77,8 @@
     nameLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [self addSubview:nameLabel];
     [nameLabel mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.equalTo(imageView.right).offset(16);
-        make.top.equalTo(14);
-        make.width.equalTo(ScreenW-111-54);
+        make.left.equalTo(imageView.right).offset(8);
+        make.top.right.equalTo(self);
     }];
     self.nameLabel = nameLabel;
     
@@ -112,7 +101,7 @@
     priceLabel.textColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
     [self addSubview:priceLabel];
     [priceLabel mas_makeConstraints:^(MASConstraintMaker *make){
-        make.top.equalTo(sizeLabel.bottom).offset(2);
+        make.bottom.equalTo(self);
         make.left.equalTo(nameLabel);
     }];
     self.priceLabel = priceLabel;
@@ -142,10 +131,9 @@
     _numberLabel.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
     [self addSubview:_numberLabel];
     [_numberLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.right.equalTo(-15);
+        make.right.equalTo(self);
         make.bottom.equalTo(self.priceLabel);
     }];
     
 }
-
 @end

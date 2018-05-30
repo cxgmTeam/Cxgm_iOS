@@ -26,6 +26,13 @@
     return self;
 }
 
+- (void)setOrder:(OrderModel *)order
+{
+    _amountLabel.text = [NSString stringWithFormat:@"¥%.2f",[order.totalAmount floatValue]];
+    _couponLabel.text = [NSString stringWithFormat:@"¥%.2f",[order.preferential floatValue]];
+    _paymentLabel.text = [NSString stringWithFormat:@"¥%.2f",[order.orderAmount floatValue]];
+}
+
 - (void)setupUI
 {
     UILabel *label1 = [[UILabel alloc] init];

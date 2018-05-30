@@ -9,5 +9,5 @@
 #import "MyCenterSubViewController.h"
 
 @interface PaymentViewController : MyCenterSubViewController
-
+@property(nonatomic,strong)OrderModel* order;
 @end

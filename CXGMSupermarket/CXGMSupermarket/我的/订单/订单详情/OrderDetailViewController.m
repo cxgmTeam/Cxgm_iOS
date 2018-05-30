@@ -19,9 +19,11 @@
 #import "GoodsArrivedTimeFoot.h"
 #import "BlankCollectionFootView.h"
 
+#import "PaymentViewController.h"
 
 @interface OrderDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
+@property (strong , nonatomic)OrderModel *orderDetail;
 @end
 
 
@@ -62,6 +64,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
             [cancelBtn setTitleColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0] forState:UIControlStateNormal];
             cancelBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
             [bottomView addSubview:cancelBtn];
+            [cancelBtn addTarget:self action:@selector(cancelOrder:) forControlEvents:UIControlEventTouchUpInside];
             [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make){
                 make.left.top.bottom.equalTo(bottomView);
                 make.width.equalTo(ScreenW/2.f);
@@ -73,6 +76,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
             [payBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             payBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
             [bottomView addSubview:payBtn];
+            [payBtn addTarget:self action:@selector(payOrder:) forControlEvents:UIControlEventTouchUpInside];
             [payBtn mas_makeConstraints:^(MASConstraintMaker *make){
                 make.right.top.bottom.equalTo(bottomView);
                 make.width.equalTo(ScreenW/2.f);
@@ -90,6 +94,59 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
             make.edges.equalTo(self.view);
         }];
     }
+    
+    if (self.orderItem) {
+        [self getOrderDetail];
+    }
+}
+
+
+- (void)getOrderDetail
+{
+    NSDictionary* dic = @{@"orderId":self.orderItem.id};
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIOrderDetail] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSDictionary class]]) {
+            self.orderDetail = [OrderModel OrderModelWithJson:(NSDictionary *)model.data];
+            
+            [self.collectionView reloadData];
+        }
+    } failure:^(id JSON, NSError *error){
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    }];
+    
+}
+
+#pragma mark- 点击按钮事件
+- (void)cancelOrder:(UIButton *)button
+{
+    NSDictionary* dic = @{@"orderId":self.orderItem.id};
+    
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIDeleteOrder] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+
+    } failure:^(id JSON, NSError *error){
+
+    }];
+    
+//    [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APIDeleteOrder] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+//
+//    } failure:^(id JSON, NSError *error){
+//
+//    }];
+    
+}
+
+- (void)payOrder:(UIButton *)button
+{
+    PaymentViewController* vc = [PaymentViewController new];
+    vc.order = self.orderItem;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark-
@@ -102,7 +159,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         return 1;
     }
     if (section == 1) {
-        return 3;
+        return self.orderDetail.productDetails.count;
     }
     if (section == 2 || section == 3) {
         return 1;
@@ -114,18 +171,22 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     UICollectionViewCell *gridcell = nil;
     if (indexPath.section == 0) {
         OrderCustomerViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderCustomerViewCellID forIndexPath:indexPath];
+        cell.address = self.orderDetail.addressObj;
         gridcell = cell;
         
     }else if (indexPath.section == 1) {
         OrderGoodsViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderGoodsViewCellID forIndexPath:indexPath];
+        cell.goods = self.orderDetail.productDetails[indexPath.item];
         gridcell = cell;
     }
     else if (indexPath.section == 2) {
         OrderInvoiceViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderInvoiceViewCellID forIndexPath:indexPath];
+        cell.order = self.orderDetail;
         gridcell = cell;
     }
     else if (indexPath.section == 3) {
         OrderAmountViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderAmountViewCellID forIndexPath:indexPath];
+        cell.order = self.orderDetail;
         gridcell = cell;
         
     }
@@ -143,6 +204,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
             reusableview = headerView;
         }else if (indexPath.section == 1){
             ShopAddressHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ShopAddressHeadViewID forIndexPath:indexPath];
+            headerView.order = self.orderDetail;
             reusableview = headerView;
         }
         
@@ -150,6 +212,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     if (kind == UICollectionElementKindSectionFooter) {
         if (indexPath.section == 0) {
             GoodsArrivedTimeFoot *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:GoodsArrivedTimeFootID forIndexPath:indexPath];
+            footview.timeLabel.text = self.orderDetail.receiveTime;
             reusableview = footview;
         }
         else
