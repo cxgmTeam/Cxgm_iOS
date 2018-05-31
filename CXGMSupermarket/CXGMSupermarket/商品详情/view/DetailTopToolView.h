@@ -18,4 +18,5 @@
 @property (nonatomic, copy) void(^scrollCollectionView)(NSInteger section);//联动collectionView
 - (void)selectButton:(NSInteger)index;
 - (void)setAlphaOfView:(CGFloat)alpha;
+- (void)setShopCarCount:(NSString *)number;
 @end

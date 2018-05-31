@@ -128,17 +128,17 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 {
     NSDictionary* dic = @{@"orderId":self.orderItem.id};
     
-    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIDeleteOrder] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+    [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APICancelOrder] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
 
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.code isEqualToString:@"200"]) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:CancelOrder_Success object:nil];
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        
     } failure:^(id JSON, NSError *error){
 
     }];
-    
-//    [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APIDeleteOrder] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
-//
-//    } failure:^(id JSON, NSError *error){
-//
-//    }];
     
 }
 

@@ -16,6 +16,8 @@
 
 #import "AppDelegate.h"
 
+
+
 @interface ShopCartView ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (strong,nonatomic)UITableView *myTableView;
@@ -196,7 +198,7 @@
     [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APIDeleteShopCart] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.code intValue] == 200) {
-            
+            [[NSNotificationCenter defaultCenter] postNotificationName:DeleteShopCart_Success object:nil];
         }
     } failure:^(id JSON, NSError *error){
         
@@ -384,6 +386,14 @@
         [rootVC presentViewController:alert animated:YES completion:nil];
     }
     
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    LZCartModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    !_gotoGoodsDetail?:_gotoGoodsDetail(model);
+
 }
 #pragma mark-
 - (void)reloadTable {

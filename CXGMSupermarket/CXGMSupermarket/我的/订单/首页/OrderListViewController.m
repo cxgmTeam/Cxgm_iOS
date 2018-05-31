@@ -43,6 +43,15 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     }];
 
     [self getOrderList];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reGetOrderList:) name:CancelOrder_Success object:nil];
+}
+
+- (void)reGetOrderList:(NSNotification *)notify
+{
+    self.pageNum = 1;
+    [self.listArray removeAllObjects];
+    [self getOrderList];
 }
 
 - (void)getOrderList
@@ -101,12 +110,21 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     OrderCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderCollectionViewCellID forIndexPath:indexPath];
     OrderModel* item = self.listArray[indexPath.item];
     cell.orderItem = item;
+    
+    typeof(self) __weak wself = self;
     cell.tapBuyButton = ^{
 //        0待支付，1待配送（已支付），2配送中，3已完成，4退货
         if ([item.status intValue] == 3) {
             
         }
     };
+    cell.showOrderDetail = ^{
+        OrderDetailViewController* vc = [OrderDetailViewController new];
+        OrderModel* orderItem = wself.listArray[indexPath.item];
+        vc.orderItem = orderItem;
+        [wself.navigationController pushViewController:vc animated:YES];
+    };
+    
     return cell;
 }
 
@@ -147,5 +165,7 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     return _collectionView;
 }
 
-
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
 @end

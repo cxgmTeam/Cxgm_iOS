@@ -16,4 +16,6 @@
 - (void)retsetSelectedStatus;
 
 @property(nonatomic,copy)void(^gotoConfirmOrder)(NSArray* array) ;
+
+@property(nonatomic,copy)void(^gotoGoodsDetail)(LZCartModel* model) ;
 @end

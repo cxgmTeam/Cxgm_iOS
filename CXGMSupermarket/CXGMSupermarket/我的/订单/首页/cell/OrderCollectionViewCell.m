@@ -234,5 +234,10 @@ static NSString *const GoodsOneScreenShotCellID = @"GoodsOneScreenShotCell";
     }
 }
 
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    !_showOrderDetail?:_showOrderDetail();
+}
 
 @end

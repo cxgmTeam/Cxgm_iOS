@@ -79,7 +79,7 @@
 //用户下单接口
 #define APIAddOrder  @"/order/addOrder"
 //取消订单订单
-#define APIDeleteOrder  @"/order/deleteOrder"
+#define APICancelOrder  @"/order/cancelOrder"
 //根据订单ID查询订单详情
 #define APIOrderDetail  @"/order/orderDetail"
 //根据订单ID查询剩余支付时间

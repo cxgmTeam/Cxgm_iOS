@@ -28,6 +28,7 @@
 - (id)init{
     if (self = [super init]) {
 
+        self.shopCartNum = @"0";
     }
     return self;
 }

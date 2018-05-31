@@ -98,12 +98,18 @@
 
 #define WindowHomePage_Notify    @"WindowHomePage_Notify"
 #define ShowLoginVC_Notify       @"ShowLoginVC_Notify"
+
 #define AddGoodsSuccess_Notify    @"AddGoodsSuccess_Notify"
+#define DeleteShopCart_Success   @"DeleteShopCart_Success"
+
 #define DontShowCart_Notify      @"DontShowCart_Notify"
 
 #define LoginAccount_Success   @"LoginAccount_Success"
 
 #define AddOrder_Success   @"AddOrder_Success"
+#define CancelOrder_Success   @"CancelOrder_Success"
+
+
 
 
 #define PAGECOUNT  @"10"

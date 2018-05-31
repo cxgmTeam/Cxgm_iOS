@@ -74,6 +74,14 @@
 		7765066720B9180700B8B0EB /* MidAdGoodsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765066620B9180700B8B0EB /* MidAdGoodsViewCell.m */; };
 		7765066A20B944B100B8B0EB /* SelectTimeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765066920B944B100B8B0EB /* SelectTimeController.m */; };
 		7765067120B948C500B8B0EB /* SelectSpecificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765067020B948C500B8B0EB /* SelectSpecificationController.m */; };
+		776A4A4820BFF33600A6F0DF /* HTMLTemplate.html in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A4320BFF33600A6F0DF /* HTMLTemplate.html */; };
+		776A4A4920BFF33600A6F0DF /* jquery-1.7.1.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A4420BFF33600A6F0DF /* jquery-1.7.1.min.js */; };
+		776A4A4A20BFF33600A6F0DF /* news_qa.min.css in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A4520BFF33600A6F0DF /* news_qa.min.css */; };
+		776A4A4B20BFF33600A6F0DF /* news_qa.auto.css in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A4620BFF33600A6F0DF /* news_qa.auto.css */; };
+		776A4A4C20BFF33600A6F0DF /* jjrb.js in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A4720BFF33600A6F0DF /* jjrb.js */; };
+		776A4A5C20BFFE6E00A6F0DF /* img_replace.js in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A5120BFFE6D00A6F0DF /* img_replace.js */; };
+		776A4A6320BFFE6E00A6F0DF /* jquery.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A5820BFFE6E00A6F0DF /* jquery.min.js */; };
+		776A4A6920C0244500A6F0DF /* CartBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776A4A6820C0244500A6F0DF /* CartBadgeView.m */; };
 		776B534E20A69C9000594B32 /* LocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B534D20A69C9000594B32 /* LocationTableViewCell.m */; };
 		776B535720A732B100594B32 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535620A732B100594B32 /* SettingViewController.m */; };
 		776B535B20A7347A00594B32 /* SettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535A20A7347A00594B32 /* SettingTableViewCell.m */; };
@@ -537,6 +545,15 @@
 		7765066920B944B100B8B0EB /* SelectTimeController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SelectTimeController.m; sourceTree = "<group>"; };
 		7765066F20B948C500B8B0EB /* SelectSpecificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectSpecificationController.h; sourceTree = "<group>"; };
 		7765067020B948C500B8B0EB /* SelectSpecificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectSpecificationController.m; sourceTree = "<group>"; };
+		776A4A4320BFF33600A6F0DF /* HTMLTemplate.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = HTMLTemplate.html; sourceTree = "<group>"; };
+		776A4A4420BFF33600A6F0DF /* jquery-1.7.1.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = "jquery-1.7.1.min.js"; sourceTree = "<group>"; };
+		776A4A4520BFF33600A6F0DF /* news_qa.min.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = news_qa.min.css; sourceTree = "<group>"; };
+		776A4A4620BFF33600A6F0DF /* news_qa.auto.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = news_qa.auto.css; sourceTree = "<group>"; };
+		776A4A4720BFF33600A6F0DF /* jjrb.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jjrb.js; sourceTree = "<group>"; };
+		776A4A5120BFFE6D00A6F0DF /* img_replace.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = img_replace.js; sourceTree = "<group>"; };
+		776A4A5820BFFE6E00A6F0DF /* jquery.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.min.js; sourceTree = "<group>"; };
+		776A4A6720C0244500A6F0DF /* CartBadgeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CartBadgeView.h; sourceTree = "<group>"; };
+		776A4A6820C0244500A6F0DF /* CartBadgeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CartBadgeView.m; sourceTree = "<group>"; };
 		776B534C20A69C9000594B32 /* LocationTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LocationTableViewCell.h; sourceTree = "<group>"; };
 		776B534D20A69C9000594B32 /* LocationTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LocationTableViewCell.m; sourceTree = "<group>"; };
 		776B535520A732B100594B32 /* SettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingViewController.h; sourceTree = "<group>"; };
@@ -1506,6 +1523,20 @@
 			path = "支付";
 			sourceTree = "<group>";
 		};
+		776A4A4220BFF33600A6F0DF /* HTML */ = {
+			isa = PBXGroup;
+			children = (
+				776A4A5120BFFE6D00A6F0DF /* img_replace.js */,
+				776A4A5820BFFE6E00A6F0DF /* jquery.min.js */,
+				776A4A4320BFF33600A6F0DF /* HTMLTemplate.html */,
+				776A4A4420BFF33600A6F0DF /* jquery-1.7.1.min.js */,
+				776A4A4520BFF33600A6F0DF /* news_qa.min.css */,
+				776A4A4620BFF33600A6F0DF /* news_qa.auto.css */,
+				776A4A4720BFF33600A6F0DF /* jjrb.js */,
+			);
+			path = HTML;
+			sourceTree = "<group>";
+		};
 		776B535320A7327D00594B32 /* 设置 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1640,6 +1671,7 @@
 		77DD802220823A2100A1D080 /* 商品详情 */ = {
 			isa = PBXGroup;
 			children = (
+				776A4A4220BFF33600A6F0DF /* HTML */,
 				77DD8097208346FF00A1D080 /* view */,
 				77DD8094208346EE00A1D080 /* GoodsDetailViewController.h */,
 				77DD8095208346EE00A1D080 /* GoodsDetailViewController.m */,
@@ -1760,6 +1792,8 @@
 				BECB90192084B0A400170BC6 /* cell */,
 				BECB90282084BA5700170BC6 /* DetailTopToolView.h */,
 				BECB90292084BA5700170BC6 /* DetailTopToolView.m */,
+				776A4A6720C0244500A6F0DF /* CartBadgeView.h */,
+				776A4A6820C0244500A6F0DF /* CartBadgeView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -2810,9 +2844,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				776A4A4C20BFF33600A6F0DF /* jjrb.js in Resources */,
 				77F839A92070E375004E9717 /* LaunchScreen.storyboard in Resources */,
 				77193B3F20BBDF250001508E /* WeiboSDK.bundle in Resources */,
 				77FDD576209BF70300805709 /* mapapi.bundle in Resources */,
+				776A4A4B20BFF33600A6F0DF /* news_qa.auto.css in Resources */,
+				776A4A4820BFF33600A6F0DF /* HTMLTemplate.html in Resources */,
+				776A4A6320BFFE6E00A6F0DF /* jquery.min.js in Resources */,
 				BEC90F99207F809700B5E609 /* cart_addBtn_nomal@2x.png in Resources */,
 				BE677BE1208763320085CBA9 /* PingFang Regular.ttf in Resources */,
 				77F839A62070E375004E9717 /* Assets.xcassets in Resources */,
@@ -2823,14 +2861,17 @@
 				77DD803A2082409F00A1D080 /* sqr_line@2x.png in Resources */,
 				77F83A882070E8CE004E9717 /* IQKeyboardManager.bundle in Resources */,
 				BE677BE32087649A0085CBA9 /* PingFang Medium.ttf in Resources */,
+				776A4A4A20BFF33600A6F0DF /* news_qa.min.css in Resources */,
 				77DD80372082409F00A1D080 /* flash_select@2x.png in Resources */,
 				77DD80352082409F00A1D080 /* navigationbarScanBg.png in Resources */,
 				BEC90F9A207F809700B5E609 /* cart_cutBtn_highlight@2x.png in Resources */,
 				77F83ABB2070E9AE004E9717 /* Default-568h@2x.png in Resources */,
 				77F839A42070E375004E9717 /* Main.storyboard in Resources */,
 				BEC90F98207F809700B5E609 /* cart_addBtn_highlight@2x.png in Resources */,
+				776A4A4920BFF33600A6F0DF /* jquery-1.7.1.min.js in Resources */,
 				BEC90F9B207F809700B5E609 /* cart_cutBtn_nomal@2x.png in Resources */,
 				77193B3420BBDF250001508E /* UMSocialSDKResources.bundle in Resources */,
+				776A4A5C20BFFE6E00A6F0DF /* img_replace.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2987,6 +3028,7 @@
 				77F83AAC2070E8CE004E9717 /* SDWebImageImageIOCoder.m in Sources */,
 				77F83A902070E8CE004E9717 /* JSONValueTransformer.m in Sources */,
 				BE9769E02072505C00783217 /* MJRefreshBackNormalFooter.m in Sources */,
+				776A4A6920C0244500A6F0DF /* CartBadgeView.m in Sources */,
 				7789515C20BD7C4F002C23C3 /* LogisticsInfoController.m in Sources */,
 				77DD80932083287000A1D080 /* GoodsListGridCell.m in Sources */,
 				77193BC620BC34470001508E /* InvitationTableCell.m in Sources */,

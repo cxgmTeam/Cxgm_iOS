@@ -96,8 +96,6 @@
         [self addChildViewController:vc];
     }
     
-    
-    
     //定位页面
     UIButton *button = _menuView.subviews[self.pageIndex];
     [button sendActionsForControlEvents:UIControlEventTouchUpInside];

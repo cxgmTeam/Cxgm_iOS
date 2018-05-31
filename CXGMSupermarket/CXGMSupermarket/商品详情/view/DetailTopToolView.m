@@ -7,9 +7,12 @@
 //
 
 #import "DetailTopToolView.h"
+#import "CartBadgeView.h"
 
-@interface DetailTopToolView ()
-@property (strong , nonatomic)UIButton* cartBtn;
+
+@interface DetailTopToolView ()<CartBadgeDelegate>
+
+@property (strong , nonatomic)CartBadgeView* cartBtn;
 
 @property(nonatomic,strong)UIView* menuView;
 @property(nonatomic,strong)UIView* redLine;
@@ -61,17 +64,18 @@
     [backButton setImage:[UIImage imageNamed:@"arrow_left"] forState:UIControlStateNormal];
     [backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:backButton];
+
     
-    _cartBtn = [UIButton new];
-    [_cartBtn setImage:[UIImage imageNamed:@"top_cart"] forState:UIControlStateNormal];
+    _cartBtn = [CartBadgeView new];
+    _cartBtn.delegate = self;
     [self addSubview:_cartBtn];
     [_cartBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.size.equalTo(CGSizeMake(44, 44));
         make.right.equalTo(-20);
         make.top.equalTo(STATUS_BAR_HEIGHT);
     }];
-    [_cartBtn addTarget:self action:@selector(onTapCartBtn:) forControlEvents:UIControlEventTouchUpInside];
     
+    [_cartBtn setShopCarCount:[DeviceHelper sharedInstance].shopCartNum];
 
     
     _menuView = [[UIView alloc] initWithFrame:CGRectMake(0, NAVIGATION_BAR_HEIGHT, ScreenW, 45)];
@@ -156,15 +160,18 @@
     !_scrollCollectionView?:_scrollCollectionView(button.tag);
 }
 
-
-
-
 - (void)backButtonClicked:(id)sender
 {
     !_backBtnClickBlock ? : _backBtnClickBlock();
 }
 
-- (void)onTapCartBtn:(id)sender
+- (void)setShopCarCount:(NSString *)number
+{
+    [_cartBtn setShopCarCount:number];
+}
+
+#pragma mark- CartBadgeDelegate
+- (void)shopCarButtonClickAction
 {
      !_gotoCartBlock ? : _gotoCartBlock();
 }

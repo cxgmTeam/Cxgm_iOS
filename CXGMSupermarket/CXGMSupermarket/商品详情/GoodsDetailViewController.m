@@ -26,7 +26,9 @@
 #import "AnotherCartViewController.h"
 #import "SelectSpecificationController.h"
 
-@interface GoodsDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,ULBCollectionViewDelegateFlowLayout,UIWebViewDelegate>
+#import <WebKit/WebKit.h>
+
+@interface GoodsDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,ULBCollectionViewDelegateFlowLayout,WKNavigationDelegate>
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)DetailTopToolView *topToolView;
 
@@ -47,7 +49,7 @@
 @property (strong , nonatomic)NSMutableArray *slideImageArray;
 
 //辅助
-@property (strong , nonatomic)UIWebView *auxiliaryWebView;
+@property (strong , nonatomic)WKWebView *auxiliaryWebView;
 @property (assign , nonatomic)CGFloat webViewHeight;
 @end
 
@@ -70,9 +72,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self.auxiliaryWebView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.edges.equalTo(self.view);
-    }];
+
+    self.auxiliaryWebView.frame = self.view.bounds;
     self.auxiliaryWebView.hidden = YES;
     
     
@@ -105,7 +106,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         make.bottom.equalTo(-60);
     }];
     [self.upTopBtn addTarget:self action:@selector(onTapUpTopBtn:) forControlEvents:UIControlEventTouchUpInside];
-    
+    self.upTopBtn.hidden = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
     
@@ -133,7 +134,13 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         if ([model.data isKindOfClass:[NSDictionary class]]) {
             self.goodsDetail = [[GoodsModel alloc] initWithDictionary:(NSDictionary *)model.data error:nil];
             
-            [self.auxiliaryWebView loadHTMLString:self.goodsDetail.introduction baseURL:nil];
+//            [self.auxiliaryWebView loadHTMLString:self.goodsDetail.introduction baseURL:nil];
+            
+            self.goodsDetail.introduction = @"<p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">5月19日，第28次全国助残日前夕，中国盲文图书馆联合中医学院志愿者共同举办了一场中医义诊活动。</span></p><p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">活动现场为残疾人及其家属等免费提供针灸、推拿、按摩、拔罐等服务，并提供中医药类相关咨询，同时发放宣传资料、开展健康宣讲向残疾人及其亲属等普及中医药类养生保健知识，传播“防大于治”的科学健康理念。</span></p><p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">本次活动紧紧围绕今年全国助残日“全面建成小康社会，残疾人一个也不同时能少”的主题，通过义诊志愿服务的开展，落实了“精准健康扶贫”的相关精神，进一步提升了残疾人的健康素养，同时营造了扶残助残的良好氛围。</span></p><p style=\"text-align: center;\"><img src=\"http://filewhzm.blc.org.cn/270/png/B00/0HTYV6BHXZ6QTFFB.png\" title=\"\" alt=\"助残日义诊活动.png\"/></p><p style=\"text-align: center;\"><span style=\"font-family: 黑体, SimHei; font-size: 14px;\">图为义诊活动现场</span></p>";
+            
+            if ([self.goodsDetail.introduction length] > 0) {
+                [wself updateWebVWithContent:self.goodsDetail.introduction];
+            }
             
             if ([self.goodsDetail.productImageList isKindOfClass:[NSArray class]]) {
                 for (NSDictionary* dic in self.goodsDetail.productImageList) {
@@ -150,6 +157,22 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         
     }];
 }
+
+
+-(void)updateWebVWithContent:(NSString*)string
+{
+    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"HTMLTemplate" ofType:@"html"];
+    NSMutableString *htmlString = [NSMutableString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+    
+    NSRange contentRange = [htmlString rangeOfString:@"{content}"];
+    if (contentRange.location != NSNotFound) {
+        [htmlString replaceCharactersInRange:contentRange withString:string];
+    }
+    [self.auxiliaryWebView loadHTMLString:htmlString baseURL:[NSURL fileURLWithPath:htmlPath]];
+}
+
+
+
 
 
 - (void)pushProducts
@@ -212,12 +235,18 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                           @"shopId":goods.shopId.length>0?goods.shopId:@"",
                           @"productId":goods.id.length>0?goods.id:@""
                           };
+    
+    typeof(self) __weak wself = self;
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)self.number];
                 [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
+                
+                NSInteger number = [[DeviceHelper sharedInstance].shopCartNum integerValue]+self.number;
+                [wself.topToolView setShopCarCount:[NSString stringWithFormat:@"%ld",number]];
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
             });
         }
@@ -229,7 +258,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 
 - (void)updateCart:(GoodsModel *)goods
 {
-    CGFloat amount = (1+[goods.shopCartNum integerValue])*[goods.price floatValue];
+    CGFloat amount = (self.number+[goods.shopCartNum integerValue])*[goods.price floatValue];
     
     NSDictionary* dic = @{@"id":goods.id.length>0?goods.id:@"",
                           @"amount":[NSString stringWithFormat:@"%.2f",amount],
@@ -238,6 +267,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                           @"goodNum":[NSString stringWithFormat:@"%d",1+[goods.shopCartNum intValue]],
                           @"shopId":goods.shopId.length>0?goods.shopId:@""
                           };
+    
+    typeof(self) __weak wself = self;
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
@@ -246,6 +277,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                 [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
                 
                 self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)([self.goodsDetail.shopCartNum integerValue]+self.number)];
+                
+                NSInteger number = [[DeviceHelper sharedInstance].shopCartNum integerValue]+self.number;
+                [wself.topToolView setShopCarCount:[NSString stringWithFormat:@"%ld",number]];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
             });
@@ -468,6 +502,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         if (self.alpha > 1) {
             self.alpha = 1;
         }
+        
+        self.upTopBtn.hidden = self.alpha>0?NO:YES;
+        
         [self.topToolView setAlphaOfView:self.alpha];
     }
 }
@@ -595,20 +632,31 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 }
 
 #pragma mark-
-- (UIWebView *)auxiliaryWebView{
+- (WKWebView *)auxiliaryWebView{
     if (!_auxiliaryWebView) {
-        _auxiliaryWebView = [UIWebView new];
-        _auxiliaryWebView.delegate = self;
-        _auxiliaryWebView.backgroundColor = [UIColor clearColor];
+
+        _auxiliaryWebView = [WKWebView new];
+        [_auxiliaryWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+        _auxiliaryWebView.navigationDelegate = self;
+        [_auxiliaryWebView setMultipleTouchEnabled:YES];
+        [_auxiliaryWebView setAutoresizesSubviews:YES];
+        [_auxiliaryWebView.scrollView setAlwaysBounceVertical:YES];
+        _auxiliaryWebView.scrollView.bounces = NO;
         [self.view addSubview:_auxiliaryWebView];
     }
     return _auxiliaryWebView;
 }
 
--(void)webViewDidFinishLoad:(UIWebView *)webView{
-    self.webViewHeight = [[webView stringByEvaluatingJavaScriptFromString:@"document.body.scrollHeight"] floatValue];
-    [self.collectionView reloadData];
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
+{
+    [webView evaluateJavaScript: @"document.body.scrollHeight" completionHandler:^(NSString *string, NSError * error){
+         self.webViewHeight = [string intValue];
+        
+        [self.collectionView reloadData];
+        
+    }];
 }
+
 
 #pragma mark-
 

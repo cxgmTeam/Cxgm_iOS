@@ -21,7 +21,6 @@
 @property(nonatomic,strong)UIScrollView* topScrollView;
 
 
-@property(nonatomic,strong)UIButton* updownBtn;
 
 @property(nonatomic,strong)UIButton* lastBtn;
 @property(nonatomic,assign)NSInteger currentIndex;
@@ -31,6 +30,7 @@
 
 @property(nonatomic,strong)NSArray* secondCategorys;
 @property(nonatomic,strong)NSArray* thirdCategorys;
+@property(nonatomic,strong)NSArray* goodsList;
 @property(nonatomic,strong)NSMutableDictionary* dictionary;//三级分类作key  对应的Goods数组作value
 
 @property(nonatomic,strong)CategoryModel* secondCategory;
@@ -60,30 +60,23 @@ static CGFloat TopBtnWidth = 60;
         make.top.left.bottom.equalTo(self.view);
         make.width.equalTo(93);
     }];
-    
-    [self.updownBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        make.size.equalTo(CGSizeMake(40, 40));
-        make.top.right.equalTo(self.view);
-    }];
-    
-    self.topScrollWidth = ScreenW-93-40;
+
+    self.topScrollWidth = ScreenW-93;
     self.topScrollView.frame = CGRectMake(93, 0, self.topScrollWidth, 40);
 
+    UIView* line = [UIView new];
+    line.backgroundColor = ColorE8E8E8E;
+    [self.view addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker* make){
+        make.left.right.equalTo(self.topScrollView);
+        make.height.equalTo(1);
+        make.top.equalTo(39);
+    }];
     
     [self.rightTableView mas_makeConstraints:^(MASConstraintMaker *make){
         make.bottom.right.equalTo(self.view);
         make.left.equalTo(self.leftTableView.right);
         make.top.equalTo(self.topScrollView.bottom);
-    }];
-    
-    UIView* line = [UIView new];
-    line.backgroundColor = ColorE8E8E8E;
-    [self.view addSubview:line];
-    [line mas_makeConstraints:^(MASConstraintMaker* make){
-        make.left.equalTo(self.topScrollView);
-        make.right.equalTo(self.view);
-        make.height.equalTo(1);
-        make.top.equalTo(39);
     }];
     
     
@@ -102,51 +95,96 @@ static CGFloat TopBtnWidth = 60;
     for (UIImageView* subView in self.topScrollView.subviews) {
         [subView removeFromSuperview];
     }
-    for (NSInteger i = 0; i <  self.thirdCategorys.count; i++)
+    
+    if (self.thirdCategorys.count == 0)
     {
-        CategoryModel* category = self.thirdCategorys[i];
+         self.topScrollView.frame = CGRectMake(93, 0, self.topScrollWidth, 0);
         
-        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-        button.frame = CGRectMake(i * TopBtnWidth, 0, TopBtnWidth, 40);
-        [button setTitle:category.name forState:UIControlStateNormal];
-        [button setTitleColor:[UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0] forState:UIControlStateNormal];
-        [button setTitleColor: [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0] forState:UIControlStateSelected];
-        button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];;
-        button.tag = i;
-        [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
-        if (i==0) {
-            button.selected = YES;
-            self.lastBtn = button;
-        }
-        [self.topScrollView addSubview:button];
+        [self.rightTableView mas_updateConstraints:^(MASConstraintMaker *make){
+            make.top.equalTo(self.topScrollView.bottom);
+        }];
     }
-    self.topScrollView.contentSize = CGSizeMake(TopBtnWidth * self.thirdCategorys.count, 40);
+    else
+    {
+        self.topScrollView.frame = CGRectMake(93, 0, self.topScrollWidth, 40);
+        
+        [self.rightTableView mas_updateConstraints:^(MASConstraintMaker *make){
+            make.top.equalTo(self.topScrollView.bottom);
+        }];
+        
+        
+        CGFloat btnTotalWidth = 0;
+        for (NSInteger i = 0; i <  self.thirdCategorys.count; i++)
+        {
+            CategoryModel* category = self.thirdCategorys[i];
+            
+            CGFloat width = [self sizeLabelWidth:category.name];
+            
+            NSLog(@"with %f",width);
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.frame = CGRectMake(btnTotalWidth, 0, width, 40);
+            [button setTitle:category.name forState:UIControlStateNormal];
+            [button setTitleColor:[UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0] forState:UIControlStateNormal];
+            [button setTitleColor: [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0] forState:UIControlStateSelected];
+            button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+            button.tag = i;
+            [button addTarget:self action:@selector(clickButton:) forControlEvents:UIControlEventTouchUpInside];
+            if (i==0) {
+                button.selected = YES;
+                self.lastBtn = button;
+            }
+            [self.topScrollView addSubview:button];
+            
+            btnTotalWidth = btnTotalWidth+ width;
+        }
+
+        
+        self.topScrollView.contentSize = CGSizeMake(btnTotalWidth, 40);
+    }
+
+    
 }
 
 - (void)sortThirdGoods:(NSArray *)list
 {
     [self.dictionary removeAllObjects];
     
-    for (NSInteger i = 0; i < self.thirdCategorys.count;i++) {
-        CategoryModel* category = self.thirdCategorys[i];
+    if (self.thirdCategorys.count == 0)
+    {
+        [self.rightTableView reloadData];
+    }
+    else
+    {
         
-        NSMutableArray* array = [NSMutableArray array];
+        NSMutableArray* tempArray = [NSMutableArray array];
         
-        for (NSInteger j = 0; j < list.count; j++) {
-            GoodsModel* goods = list[j];
-            if ([goods.productCategoryThirdName isEqualToString:category.name]) {
-                [array addObject:goods];
+        for (NSInteger i = 0; i < self.thirdCategorys.count;i++) {
+            CategoryModel* category = self.thirdCategorys[i];
+            
+            NSMutableArray* array = [NSMutableArray array];
+            
+            for (NSInteger j = 0; j < list.count; j++){
+                GoodsModel* goods = list[j];
+                if ([goods.productCategoryThirdName isEqualToString:category.name]) {
+                    [array addObject:goods];
+                }
+                if (j == list.count-1) {
+                    [self.dictionary setObject:array forKey:category.name];
+                }
+                
+                if ([goods.productCategoryThirdName length] == 0 && ![tempArray containsObject:goods]) {
+                    [tempArray addObject:goods];
+                }
             }
-            if (j == list.count-1) {
-                [self.dictionary setObject:array forKey:category.name];
+            
+            if (i == self.thirdCategorys.count-1) {
+                [array addObjectsFromArray:tempArray];
+                
+                [self.rightTableView reloadData];
             }
-        }
-        
-        if (i == self.thirdCategorys.count-1) {
-            [self.rightTableView reloadData];
         }
     }
-   
 }
 
 
@@ -199,7 +237,8 @@ static CGFloat TopBtnWidth = 60;
         if ([model.data isKindOfClass:[NSArray class]]) {
             self.thirdCategorys = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
             
-            [wself setupThirdCategory];
+           [wself setupThirdCategory];
+            
         }
         
     } failure:^(id JSON, NSError *error){
@@ -226,7 +265,7 @@ static CGFloat TopBtnWidth = 60;
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
             NSArray* array = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
-            
+            self.goodsList = array;
             [wself sortThirdGoods:array];
         }
         
@@ -296,6 +335,9 @@ static CGFloat TopBtnWidth = 60;
     if (tableView == _leftTableView) {
         return 1;
     }
+    if (self.thirdCategorys.count == 0) {
+        return 1;
+    }
     return self.thirdCategorys.count;
 }
 
@@ -303,6 +345,11 @@ static CGFloat TopBtnWidth = 60;
     if (tableView == _leftTableView) {
         return self.secondCategorys.count;
     }
+    
+    if (self.thirdCategorys.count == 0) {
+        return self.goodsList.count;
+    }
+    
     CategoryModel* category = self.thirdCategorys[section];
     NSArray* array = [self.dictionary objectForKey:category.name];
     return array.count;
@@ -322,10 +369,13 @@ static CGFloat TopBtnWidth = 60;
         if (!cell) {
             cell = [[GoodsTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:GoodsTableViewCellID];
         }
-        CategoryModel* category = self.thirdCategorys[indexPath.section];
-        NSArray* array = [self.dictionary objectForKey:category.name];
-        cell.goodsModel = array[indexPath.row];
-        
+        if (self.thirdCategorys.count == 0) {
+            cell.goodsModel = self.goodsList[indexPath.row];
+        }else{
+            CategoryModel* category = self.thirdCategorys[indexPath.section];
+            NSArray* array = [self.dictionary objectForKey:category.name];
+            cell.goodsModel = array[indexPath.row];
+        }
         tableCell = cell;
     }
     return tableCell;
@@ -333,7 +383,7 @@ static CGFloat TopBtnWidth = 60;
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
     UIView* headView = nil;
-    if (tableView == _rightTableView) {
+    if (tableView == _rightTableView && self.thirdCategorys.count > 0) {
         GoodsTableHead* head = [[GoodsTableHead alloc] initWithFrame:CGRectMake(0, 0, ScreenH-93, 34)];
         CategoryModel* category = self.thirdCategorys[section];
         head.contentLabel.text = category.name;
@@ -344,7 +394,7 @@ static CGFloat TopBtnWidth = 60;
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
     if (tableView == _rightTableView) {
-        return 34.f;
+        return self.thirdCategorys.count > 0?34.f:0.0f;
     }
     return 0.f;
 }
@@ -365,10 +415,15 @@ static CGFloat TopBtnWidth = 60;
         
     }else{
         GoodsDetailViewController* vc = [GoodsDetailViewController new];
-        CategoryModel* category = self.thirdCategorys[indexPath.section];
-        NSArray* array = [self.dictionary objectForKey:category.name];
-        GoodsModel* goodsModel = array[indexPath.row];
-        vc.goodsId = goodsModel.id;
+        if (self.thirdCategorys.count == 0) {
+            GoodsModel* goodsModel = self.goodsList[indexPath.row];
+            vc.goodsId = goodsModel.id;
+        }else{
+            CategoryModel* category = self.thirdCategorys[indexPath.section];
+            NSArray* array = [self.dictionary objectForKey:category.name];
+            GoodsModel* goodsModel = array[indexPath.row];
+            vc.goodsId = goodsModel.id;
+        }
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -431,25 +486,26 @@ static CGFloat TopBtnWidth = 60;
     return _topScrollView;
 }
 
-- (UIButton *)updownBtn{
-    if (!_updownBtn) {
-        _updownBtn = [UIButton new];
-        _updownBtn.backgroundColor = [UIColor whiteColor];
-        [_updownBtn setImage:[UIImage imageNamed:@"arrow_down"] forState:UIControlStateNormal];
-        [self.view addSubview:_updownBtn];
-        
-        UIView* line = [UIView new];
-        line.backgroundColor = RGB(0xd8, 0xd8, 0xd8);
-        [_updownBtn addSubview:line];
-        [line mas_makeConstraints:^(MASConstraintMaker *make){
-            make.size.equalTo(CGSizeMake(1, 20));
-            make.centerY.left.equalTo(self.updownBtn);
-        }];
-    }
-    return _updownBtn;
-}
 
 #pragma mark-
+
+
+- (CGFloat)sizeLabelWidth:(NSString *)text
+{
+    CGFloat titleWidth = 60;
+    
+    if (text.length > 0) {
+        NSDictionary *attributes = @{NSFontAttributeName:[UIFont fontWithName:@"PingFangSC-Regular" size:14]};
+        
+        CGSize textSize = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, 40) options:NSStringDrawingTruncatesLastVisibleLine attributes:attributes context:nil].size;
+        
+        titleWidth = ceilf(textSize.width)+20;
+    }
+    
+    return titleWidth;
+}
+
+
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];
 }

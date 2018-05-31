@@ -13,4 +13,6 @@
 @property(nonatomic,strong)OrderModel* orderItem;
 
 @property(nonatomic,copy)dispatch_block_t tapBuyButton;;
+
+@property(nonatomic,copy)dispatch_block_t showOrderDetail;;
 @end

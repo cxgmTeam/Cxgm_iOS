@@ -11,6 +11,7 @@
 #import "OrderConfirmViewController.h"
 
 #import "ShopCartView.h"
+#import "GoodsDetailViewController.h"
 
 @interface ShoppingCartController ()
 
@@ -45,6 +46,11 @@
     _cartView.gotoConfirmOrder = ^(NSArray *array){
         OrderConfirmViewController* vc = [OrderConfirmViewController new];
         vc.goodsArray = array;
+        [wself.navigationController pushViewController:vc animated:YES];
+    };
+    _cartView.gotoGoodsDetail = ^(LZCartModel *model){
+        GoodsDetailViewController* vc = [GoodsDetailViewController new];
+        vc.goodsId = model.id;
         [wself.navigationController pushViewController:vc animated:YES];
     };
 }

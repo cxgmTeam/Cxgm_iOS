@@ -22,6 +22,8 @@
 @property(nonatomic,strong)HomeViewController* homeVC;
 
 @property(nonatomic,assign)NSInteger  currentIndex;
+
+@property(nonatomic,strong)UITabBarItem* cartItem;
 @end
 
 @implementation MainViewController
@@ -82,20 +84,22 @@
         UITabBarItem* barItem = [[UITabBarItem alloc]initWithTitle:title[i] image:[UIImage imageNamed:image[i]] selectedImage:[[UIImage imageNamed:selectedImage[i]] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]];
         barItem.tag = i;
         
+        if (i == 2) {
+            self.cartItem = barItem;
+        }
+        
         nav.tabBarItem = barItem;
         [array addObject:nav];
     }
     self.viewControllers = array;
     
     self.currentIndex = 0;
-
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startLocationCity:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWindowHomeNotify:) name:WindowHomePage_Notify object:nil];
+    //添加通知
+    [self addNotification];
 
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentLoginVC:) name:ShowLoginVC_Notify object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDontShowCart:) name:DontShowCart_Notify object:nil];
+    [self getShopCartNumber];
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
@@ -128,6 +132,23 @@
     }
 }
 
+#pragma mark-
+- (void)addNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startLocationCity:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWindowHomeNotify:) name:WindowHomePage_Notify object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(presentLoginVC:) name:ShowLoginVC_Notify object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onDontShowCart:) name:DontShowCart_Notify object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:AddGoodsSuccess_Notify object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:AddOrder_Success object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:DeleteShopCart_Success object:nil];
+}
+
+
 - (void)onWindowHomeNotify:(NSNotification *)notify{
     self.selectedIndex = 0;
     self.titleLabel.text = @"";
@@ -143,6 +164,34 @@
 
 - (void)onDontShowCart:(NSNotification *)notify{
     self.selectedIndex = self.currentIndex;
+}
+
+- (void)getShopCartNumber
+{
+    if (![UserInfoManager sharedInstance].isLogin) return;
+    
+    UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
+    NSDictionary* dic = @{
+                          @"pageNum":@"1",
+                          @"pageSize":@"1"
+                          };
+
+    [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIShopCartList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model = [DataModel dataModelWith:JSON];
+        if ([model.code isEqualToString:@"200"]) {
+            if ([model.listModel.total intValue]==0) {
+                self.cartItem.badgeValue = nil;
+            }else if ([model.listModel.total intValue]>99){
+                self.cartItem.badgeValue = @"99+";
+            }else{
+                self.cartItem.badgeValue = [NSString stringWithFormat:@"%@",model.listModel.total];
+            }
+            
+            [DeviceHelper sharedInstance].shopCartNum = model.listModel.total;
+        }
+    } failure:^(id JSON, NSError *error){
+
+    }];
 }
 
 #pragma mark- 定位

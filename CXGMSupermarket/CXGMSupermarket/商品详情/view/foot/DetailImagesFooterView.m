@@ -7,9 +7,10 @@
 //
 
 #import "DetailImagesFooterView.h"
+#import <WebKit/WebKit.h>
 
-@interface DetailImagesFooterView ()
-@property(nonatomic,strong)UIWebView* webView;
+@interface DetailImagesFooterView ()<WKNavigationDelegate>
+@property(nonatomic,strong)WKWebView* webView;
 @end
 
 @implementation DetailImagesFooterView
@@ -25,16 +26,33 @@
 }
 
 - (void)setHtmlString:(NSString *)htmlString{
+    
+//    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"HTMLTemplate" ofType:@"html"];
+//    NSMutableString *html = [NSMutableString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+//
+//    NSRange contentRange = [html rangeOfString:@"{content}"];
+//    if (contentRange.location != NSNotFound) {
+//        [html replaceCharactersInRange:contentRange withString:htmlString];
+//    }
+//
+//    [_webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:htmlPath]];
+    
     [_webView loadHTMLString:htmlString baseURL:nil];
 }
+
 
 - (void)setUpUI
 {
     self.backgroundColor = [UIColor whiteColor];
     
-    _webView = [UIWebView new];
-    _webView.backgroundColor = [UIColor clearColor];
-    [self addSubview:_webView];
+    self.webView = [WKWebView new];
+    [self.webView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
+    self.webView.navigationDelegate = self;
+    [self.webView setMultipleTouchEnabled:YES];
+    [self.webView setAutoresizesSubviews:YES];
+    [self.webView.scrollView setAlwaysBounceVertical:YES];
+    self.webView.scrollView.bounces = NO;
+    [self addSubview:self.webView];
     [_webView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self);
     }];

@@ -204,7 +204,7 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
 }
 
 
-#pragma
+#pragma mark-
 - (CGFloat)sizeLabelWidth:(NSString *)text
 {
     CGFloat titleWidth = 80;
@@ -212,7 +212,7 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     if (text.length > 0) {
         NSDictionary *attributes = @{NSFontAttributeName:[UIFont fontWithName:@"PingFangSC-Regular" size:12]};
         
-        CGSize textSize = [text boundingRectWithSize:CGSizeMake(80, 24) options:NSStringDrawingTruncatesLastVisibleLine attributes:attributes context:nil].size;
+        CGSize textSize = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, 24) options:NSStringDrawingTruncatesLastVisibleLine attributes:attributes context:nil].size;
         
         titleWidth = ceilf(textSize.width)+20;
     }

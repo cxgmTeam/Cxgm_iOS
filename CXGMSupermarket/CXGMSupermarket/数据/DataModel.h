@@ -11,6 +11,7 @@
 @interface ListModel : JSONModel
 @property (nonatomic,strong)NSObject<Optional> * list;
 @property (nonatomic,strong)NSString<Optional> * isLastPage;
+@property (nonatomic,strong)NSString<Optional> * total;
 @end
 
 @interface DataModel : JSONModel

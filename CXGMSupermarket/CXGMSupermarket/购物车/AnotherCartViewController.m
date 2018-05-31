@@ -11,6 +11,8 @@
 
 #import "OrderConfirmViewController.h"
 
+#import "GoodsDetailViewController.h"
+
 @interface AnotherCartViewController ()
 
 @property (strong,nonatomic)ShopCartView * cartView;;
@@ -24,7 +26,7 @@
     self.title = @"购物车";
     
     UIButton* editBtn = [UIButton new];
-    [editBtn setTitle:@"编辑" forState:UIControlStateNormal];
+    [editBtn setTitle:@"删除" forState:UIControlStateNormal];
     [editBtn setTitleColor:Color333333 forState:UIControlStateNormal];
     editBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
@@ -39,6 +41,11 @@
     _cartView.gotoConfirmOrder = ^(NSArray *array){
         OrderConfirmViewController* vc = [OrderConfirmViewController new];
         vc.goodsArray = array;
+        [wself.navigationController pushViewController:vc animated:YES];
+    };
+    _cartView.gotoGoodsDetail = ^(LZCartModel *model){
+        GoodsDetailViewController* vc = [GoodsDetailViewController new];
+        vc.goodsId = model.id;
         [wself.navigationController pushViewController:vc animated:YES];
     };
 }

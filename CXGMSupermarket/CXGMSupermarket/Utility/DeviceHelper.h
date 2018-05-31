@@ -20,5 +20,7 @@
 
 @property (nonatomic, strong) ShopModel *shop;//所选店铺的
 
+@property (nonatomic, strong) NSString *shopCartNum;//购物车中商品数量
+
 + (instancetype)sharedInstance;
 @end
