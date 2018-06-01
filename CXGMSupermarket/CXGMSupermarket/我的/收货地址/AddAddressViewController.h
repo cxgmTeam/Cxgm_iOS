@@ -10,4 +10,6 @@
 
 @interface AddAddressViewController : MyCenterSubViewController
 @property(nonatomic,strong)AddressModel* address;
+
+@property(nonatomic,strong)LocationModel* selectedLoacation;
 @end

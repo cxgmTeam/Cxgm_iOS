@@ -27,17 +27,17 @@
 
 - (void)setHtmlString:(NSString *)htmlString{
     
-//    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"HTMLTemplate" ofType:@"html"];
-//    NSMutableString *html = [NSMutableString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-//
-//    NSRange contentRange = [html rangeOfString:@"{content}"];
-//    if (contentRange.location != NSNotFound) {
-//        [html replaceCharactersInRange:contentRange withString:htmlString];
-//    }
-//
-//    [_webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:htmlPath]];
+    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"HTMLTemplate" ofType:@"html"];
+    NSMutableString *html = [NSMutableString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
+
+    NSRange contentRange = [html rangeOfString:@"{content}"];
+    if (contentRange.location != NSNotFound) {
+        [html replaceCharactersInRange:contentRange withString:htmlString];
+    }
+
+    [_webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:htmlPath]];
     
-    [_webView loadHTMLString:htmlString baseURL:nil];
+//    [_webView loadHTMLString:htmlString baseURL:nil];
 }
 
 

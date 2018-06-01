@@ -21,6 +21,8 @@
 
 #import "ULBCollectionViewFlowLayout.h"
 
+#import "PurchaseCarAnimationTool.h"
+
 @interface HomeGoodsView ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,ULBCollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
 
@@ -28,7 +30,7 @@
 
 @property(nonatomic,strong)NSArray* topGoodsList;//精品推荐
 @property(nonatomic,strong)NSArray* xinGoodsList;//新品上市
-@property(nonatomic,strong)NSMutableArray* hotGoodsList;//热销推荐
+@property(nonatomic,strong)NSArray* hotGoodsList;//热销推荐
 @property(assign,nonatomic)NSInteger pageNum;
 
 @property(nonatomic,strong)NSArray* slideDataList;//轮播图数据
@@ -68,9 +70,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         }];
         WEAKSELF
         self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-            weakSelf.pageNum = 1;
-            [weakSelf.hotGoodsList removeAllObjects];
-            
+
             [weakSelf findTopProduct];
             [weakSelf findNewProduct];
             [weakSelf findHotProduct];
@@ -78,22 +78,15 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             [weakSelf findAdvertisement];
             [weakSelf findMotion];
         }];
-        self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-            weakSelf.pageNum ++;
-            [weakSelf findHotProduct];
-        }];
-        
-        
-        
+
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
         
         self.slideImageList = [NSMutableArray array];
         
         self.adBannarList = [NSMutableArray array];
         
-        self.pageNum = 1;
-        self.hotGoodsList = [NSMutableArray array];
+
         
         [self findTopProduct];
         [self findNewProduct];
@@ -111,8 +104,6 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     [self findTopProduct];
     [self findNewProduct];
     
-    self.pageNum = 1;
-    [self.hotGoodsList removeAllObjects];
     [self findHotProduct];
 }
 
@@ -169,13 +160,9 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 //热销推荐
 - (void)findHotProduct
 {
-    NSDictionary* dic = @{@"shopId":@"",
-                          @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
-                          @"pageSize":@"10"};
+    NSDictionary* dic = @{@"shopId":@""};
     if ([DeviceHelper sharedInstance].shop) {
-        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
-                @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
-                @"pageSize":@"10"};
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
     }
     
     NSString* token = @"";
@@ -188,22 +175,15 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
-           NSArray* array  = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
-            [weakSelf.hotGoodsList addObjectsFromArray:array];
+           weakSelf.hotGoodsList  = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+           
             [weakSelf.collectionView reloadData];
-            if (array.count == 0) {
-                [weakSelf.collectionView.mj_footer endRefreshingWithNoMoreData];
-            }else{
-                [weakSelf.collectionView.mj_footer endRefreshing];
-            }
-        }else{
-            [weakSelf.collectionView.mj_footer endRefreshing];
+            
         }
         [weakSelf.collectionView.mj_header endRefreshing];
         
     } failure:^(id JSON, NSError *error){
         [weakSelf.collectionView.mj_header endRefreshing];
-        [weakSelf.collectionView.mj_footer endRefreshing];
     }];
 }
 
@@ -353,6 +333,23 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     else if (indexPath.section == 5) {//热销
         GoodsListGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsListGridCellID forIndexPath:indexPath];
         cell.goodsModel = self.hotGoodsList[indexPath.item];
+        
+//        typeof(cell) __weak weakCell = cell;
+//        cell.PurchaseCarAnimation = ^(UIImageView * imageView){
+//            CGRect rect = [self.collectionView convertRect:weakCell.frame toView:self];
+//            CGRect imageViewRect   = imageView.frame;
+//            imageViewRect.origin.y = rect.origin.y + imageViewRect.origin.y;
+//            imageViewRect.origin.x = rect.origin.x;
+//
+//            [[PurchaseCarAnimationTool shareTool] startAnimationandView:imageView
+//                                                                   rect:imageViewRect
+//                                                            finisnPoint:CGPointMake(ScreenWidth / 4 * 2.5, ScreenHeight - TAB_BAR_HEIGHT)
+//                                                            finishBlock:^(BOOL finish) {
+//                                                                UITabBarController* tabBarController = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+//                                                                UIView *tabbarBtn = tabBarController.tabBar.subviews[3];
+//                                                                [PurchaseCarAnimationTool shakeAnimation:tabbarBtn];
+//                                                            }];
+//        };
         gridcell = cell;
         
     }

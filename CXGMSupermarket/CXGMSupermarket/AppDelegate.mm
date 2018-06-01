@@ -78,7 +78,7 @@
 //        NSLog(@"经纬度类型设置失败");
 //    }
     //这里使用的社区馆的key
-    BOOL ret = [_mapManager start:@"MrcsGObcdwnjA5RNeShQX3RHf5RY5yP5" generalDelegate:self];
+    BOOL ret = [_mapManager start:@"owFG03WzSgLmFh7uyGuUzEIIfHWOnDUG" generalDelegate:self];
     if (!ret) {
         NSLog(@"manager start failed!");
     }

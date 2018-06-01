@@ -243,7 +243,7 @@
     // 强制 成 简体中文
     [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithObjects:@"zh-hans",nil]
                                               forKey:@"AppleLanguages"];
-    
+    WEAKSELF;
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:loc
                    completionHandler:^(NSArray *placemarks, NSError *error){
@@ -252,21 +252,19 @@
                                NSLog(@"placemark.addressDictionary  %@",place.addressDictionary);
                                [DeviceHelper sharedInstance].place = place;
                                
+                               [weakSelf.homeVC setNoticeLocation];
+                               
                                NSString *city = place.locality;
                                NSString *administrativeArea = place.administrativeArea;
                                if ([city isEqualToString:administrativeArea]) {
-                                   //四大直辖市
-//                                   self.addressString = [NSString stringWithFormat:@"%@%@",city,place.subLocality];
-                               }else{
-//                                   self.addressString = [NSString stringWithFormat:@"%@%@",administrativeArea,city];
+
                                }
-                               break;
                            }
                        }
                        // 还原Device 的语言
                        [[NSUserDefaults standardUserDefaults] setObject:userDefaultLanguages forKey:@"AppleLanguages"];
                    }];
-    
+
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
@@ -318,12 +316,15 @@
                 [DeviceHelper sharedInstance].shop = [[ShopModel alloc] initWithDictionary:[array firstObject] error:nil];
                 [weakSelf.homeVC setupMainUI:YES];
             }else{
+                [DeviceHelper sharedInstance].place = nil;
                 [weakSelf.homeVC setupMainUI:NO];
             }
         }else{
+            [DeviceHelper sharedInstance].place = nil;
             [weakSelf.homeVC setupMainUI:NO];
         }
     } failure:^(id JSON, NSError *error){
+        [DeviceHelper sharedInstance].place = nil;
         [weakSelf.homeVC setupMainUI:NO];
     }];
 }

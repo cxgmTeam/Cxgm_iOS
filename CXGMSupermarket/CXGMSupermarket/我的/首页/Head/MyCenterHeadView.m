@@ -41,9 +41,9 @@
     [self addSubview:_nameLabel];
     
 
-    UIButton* editBtn = [UIButton new];
-    [editBtn setImage:[UIImage imageNamed:@"myCenter_edit"] forState:UIControlStateNormal];
-    [self addSubview:editBtn];
+//    UIButton* editBtn = [UIButton new];
+//    [editBtn setImage:[UIImage imageNamed:@"myCenter_edit"] forState:UIControlStateNormal];
+//    [self addSubview:editBtn];
     
     
     _headView.layer.cornerRadius = 40;
@@ -60,11 +60,11 @@
         make.top.equalTo(self.headView.bottom).offset(8);
     }];
     
-    [editBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        make.size.equalTo(CGSizeMake(40, 40));
-        make.right.equalTo(-10);
-        make.top.equalTo(STATUS_BAR_HEIGHT);
-    }];
+//    [editBtn mas_makeConstraints:^(MASConstraintMaker *make){
+//        make.size.equalTo(CGSizeMake(40, 40));
+//        make.right.equalTo(-10);
+//        make.top.equalTo(STATUS_BAR_HEIGHT);
+//    }];
     
     self.userInteractionEnabled = YES;
     [self addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapLabel:)]];

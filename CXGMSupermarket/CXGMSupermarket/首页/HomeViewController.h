@@ -10,5 +10,7 @@
 
 @interface HomeViewController : CustomViewController
 
+- (void)setNoticeLocation;
+
 - (void)setupMainUI:(BOOL)inScope;
 @end

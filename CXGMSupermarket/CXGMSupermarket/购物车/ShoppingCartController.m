@@ -25,16 +25,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = @"购物车";
     
-    UIButton* editBtn = [UIButton new];
-    [editBtn setTitle:@"删除" forState:UIControlStateNormal];
-    [editBtn setTitleColor:Color333333 forState:UIControlStateNormal];
-    editBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-    [editBtn addTarget:self action:@selector(onTapDeleteBtn:) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
- 
-    
+
     _cartView = [[ShopCartView alloc] init];
     [self.view addSubview:_cartView];
     [_cartView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -66,7 +58,19 @@
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     
+    self.title = @"购物车";
+    
+    UIButton* editBtn = [UIButton new];
+    [editBtn setTitle:@"删除" forState:UIControlStateNormal];
+    [editBtn setTitleColor:Color333333 forState:UIControlStateNormal];
+    editBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+    [editBtn addTarget:self action:@selector(onTapDeleteBtn:) forControlEvents:UIControlEventTouchUpInside];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
+    
+    
+    
     [self.cartView retsetSelectedStatus];
+
 }
 
 @end

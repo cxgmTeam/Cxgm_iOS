@@ -19,23 +19,25 @@
     LZCellSelectedBlock cellSelectedBlock;
 }
 //选中按钮
-@property (nonatomic,retain) UIButton *selectBtn;
+@property (nonatomic,strong) UIButton *selectBtn;
 //显示照片
-@property (nonatomic,retain) UIImageView *lzImageView;
+@property (nonatomic,strong) UIImageView *lzImageView;
 //商品名
-@property (nonatomic,retain) UILabel *nameLabel;
+@property (nonatomic,strong) UILabel *nameLabel;
 //规格
-@property (nonatomic,retain) UILabel *sizeLabel;
+@property (nonatomic,strong) UILabel *sizeLabel;
 //价格
-@property (nonatomic,retain) UILabel *priceLabel;
+@property (nonatomic,strong) UILabel *priceLabel;
 //数量
-@property (nonatomic,retain)UILabel *numberLabel;
+@property (nonatomic,strong)UILabel *numberLabel;
 //时间
-@property (nonatomic,retain) UILabel *dateLabel;
+@property (nonatomic,strong) UILabel *dateLabel;
 //优惠活动
-@property (nonatomic,retain) UILabel *activityLabel;
+@property (nonatomic,strong) UILabel *activityLabel;
 //小计
-@property (nonatomic,retain) UILabel *subtotalLabel;
+@property (nonatomic,strong) UILabel *subtotalLabel;
+
+@property (nonatomic,strong)LZCartModel *goodsModel;
 
 @end
 
@@ -52,6 +54,8 @@
 }
 #pragma mark - public method
 - (void)reloadDataWithModel:(LZCartModel*)model {
+    
+    self.goodsModel = model;
     
     [self.lzImageView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     self.nameLabel.text = model.goodName;
@@ -88,6 +92,16 @@
     _lzNumber = lzNumber;
     
     self.numberLabel.text = [NSString stringWithFormat:@"%ld",(long)lzNumber];
+    
+    CGFloat amount = lzNumber* [self.goodsModel.price floatValue];
+    
+    self.subtotalLabel.text = [NSString stringWithFormat:@"小计：¥ %.2f",amount];
+    
+    NSMutableAttributedString* attrStr = [[NSMutableAttributedString alloc] initWithString:self.subtotalLabel.text];
+    [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0] range:NSMakeRange(0, 3)];
+    [attrStr addAttribute:NSForegroundColorAttributeName value: [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0] range:NSMakeRange(3,attrStr.length-3)];
+    self.subtotalLabel.attributedText = attrStr;
+    
 }
 
 - (void)setLzSelected:(BOOL)lzSelected {
@@ -203,14 +217,14 @@
     //数量加按钮
     UIButton *addBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [addBtn setImage:[UIImage imageNamed:@"cart_addBtn_nomal"] forState:UIControlStateNormal];
-//    [addBtn setImage:[UIImage imageNamed:@"cart_addBtn_highlight"] forState:UIControlStateHighlighted];
     [addBtn addTarget:self action:@selector(addBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:addBtn];
     [addBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        make.right.equalTo(-15);
-        make.bottom.equalTo(priceLabel);
-        make.width.height.equalTo(25);
+        make.right.equalTo(-5);
+        make.bottom.equalTo(priceLabel).offset(5);
+        make.width.height.equalTo(40);
     }];
+    
     
     //数量显示
     UILabel* numberLabel = [[UILabel alloc]init];
@@ -219,8 +233,8 @@
     numberLabel.font = [UIFont systemFontOfSize:15];
     [bgView addSubview:numberLabel];
     [numberLabel mas_makeConstraints:^(MASConstraintMaker *make){
-        make.right.equalTo(addBtn.left).offset(-5);
-        make.bottom.equalTo(addBtn);
+        make.right.equalTo(addBtn.left);
+        make.bottom.equalTo(priceLabel);
         make.width.equalTo(30);
         make.height.equalTo(25);
     }];
@@ -230,13 +244,12 @@
     //数量减按钮
     UIButton *cutBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [cutBtn setImage:[UIImage imageNamed:@"cart_cutBtn_nomal"] forState:UIControlStateNormal];
-//    [cutBtn setImage:[UIImage imageNamed:@"cart_cutBtn_highlight"] forState:UIControlStateHighlighted];
     [cutBtn addTarget:self action:@selector(cutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:cutBtn];
     [cutBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.right.equalTo(numberLabel.left);
         make.bottom.equalTo(addBtn);
-        make.width.height.equalTo(25);
+        make.width.height.equalTo(40);
     }];
     
     
@@ -263,7 +276,7 @@
 //    self.activityLabel = activityLabel;
     
     
-    //活动
+    //小计
     UILabel* subtotalLabel = [[UILabel alloc]init];
     subtotalLabel.text = @"小计：¥ 19.90";
     subtotalLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];

@@ -85,6 +85,7 @@
 		776B534E20A69C9000594B32 /* LocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B534D20A69C9000594B32 /* LocationTableViewCell.m */; };
 		776B535720A732B100594B32 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535620A732B100594B32 /* SettingViewController.m */; };
 		776B535B20A7347A00594B32 /* SettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535A20A7347A00594B32 /* SettingTableViewCell.m */; };
+		7776D5F520C12C84008DE606 /* NoAddressTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7776D5F420C12C84008DE606 /* NoAddressTableCell.m */; };
 		777B48CA20B59C0E0048CE78 /* PaymentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 777B48C920B59C0E0048CE78 /* PaymentButton.m */; };
 		7783F2002095CEFA00338459 /* RemainTimeHintHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F1FF2095CEFA00338459 /* RemainTimeHintHead.m */; };
 		7783F2032095D2C100338459 /* OrderGoodsInfoHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F2022095D2C100338459 /* OrderGoodsInfoHead.m */; };
@@ -316,9 +317,7 @@
 		BE9769F42072521300783217 /* CustomDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9769F32072521300783217 /* CustomDetailViewController.m */; };
 		BEC90F7F207F0DC400B5E609 /* ShoppingCartCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC90F7E207F0DC400B5E609 /* ShoppingCartCollectionCell.m */; };
 		BEC90F94207F809700B5E609 /* LZCartTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC90F83207F809600B5E609 /* LZCartTableViewCell.m */; };
-		BEC90F98207F809700B5E609 /* cart_addBtn_highlight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEC90F8D207F809700B5E609 /* cart_addBtn_highlight@2x.png */; };
 		BEC90F99207F809700B5E609 /* cart_addBtn_nomal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEC90F8E207F809700B5E609 /* cart_addBtn_nomal@2x.png */; };
-		BEC90F9A207F809700B5E609 /* cart_cutBtn_highlight@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEC90F8F207F809700B5E609 /* cart_cutBtn_highlight@2x.png */; };
 		BEC90F9B207F809700B5E609 /* cart_cutBtn_nomal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEC90F90207F809700B5E609 /* cart_cutBtn_nomal@2x.png */; };
 		BECB8FD620844DD900170BC6 /* NSObject+DCNull.m in Sources */ = {isa = PBXBuildFile; fileRef = BECB8FC720844DD900170BC6 /* NSObject+DCNull.m */; };
 		BECB8FD720844DD900170BC6 /* NSURL+DCHook.m in Sources */ = {isa = PBXBuildFile; fileRef = BECB8FC920844DD900170BC6 /* NSURL+DCHook.m */; };
@@ -560,6 +559,8 @@
 		776B535620A732B100594B32 /* SettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		776B535920A7347A00594B32 /* SettingTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingTableViewCell.h; sourceTree = "<group>"; };
 		776B535A20A7347A00594B32 /* SettingTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingTableViewCell.m; sourceTree = "<group>"; };
+		7776D5F320C12C84008DE606 /* NoAddressTableCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NoAddressTableCell.h; sourceTree = "<group>"; };
+		7776D5F420C12C84008DE606 /* NoAddressTableCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NoAddressTableCell.m; sourceTree = "<group>"; };
 		777B48C820B59C0E0048CE78 /* PaymentButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaymentButton.h; sourceTree = "<group>"; };
 		777B48C920B59C0E0048CE78 /* PaymentButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaymentButton.m; sourceTree = "<group>"; };
 		7783F1FE2095CEFA00338459 /* RemainTimeHintHead.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemainTimeHintHead.h; sourceTree = "<group>"; };
@@ -1001,9 +1002,7 @@
 		BEC90F82207F809600B5E609 /* LZCartTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZCartTableViewCell.h; sourceTree = "<group>"; };
 		BEC90F83207F809600B5E609 /* LZCartTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZCartTableViewCell.m; sourceTree = "<group>"; };
 		BEC90F85207F809700B5E609 /* LZConfigFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZConfigFile.h; sourceTree = "<group>"; };
-		BEC90F8D207F809700B5E609 /* cart_addBtn_highlight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cart_addBtn_highlight@2x.png"; sourceTree = "<group>"; };
 		BEC90F8E207F809700B5E609 /* cart_addBtn_nomal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cart_addBtn_nomal@2x.png"; sourceTree = "<group>"; };
-		BEC90F8F207F809700B5E609 /* cart_cutBtn_highlight@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cart_cutBtn_highlight@2x.png"; sourceTree = "<group>"; };
 		BEC90F90207F809700B5E609 /* cart_cutBtn_nomal@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "cart_cutBtn_nomal@2x.png"; sourceTree = "<group>"; };
 		BECB8FC620844DD900170BC6 /* NSObject+DCNull.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+DCNull.h"; sourceTree = "<group>"; };
 		BECB8FC720844DD900170BC6 /* NSObject+DCNull.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DCNull.m"; sourceTree = "<group>"; };
@@ -1189,6 +1188,8 @@
 				773A4B0820AD9B5C00F0A5FA /* AddressTableViewCell.m */,
 				773A4B0A20AD9D4200F0A5FA /* AddressTopTableViewCell.h */,
 				773A4B0B20AD9D4200F0A5FA /* AddressTopTableViewCell.m */,
+				7776D5F320C12C84008DE606 /* NoAddressTableCell.h */,
+				7776D5F420C12C84008DE606 /* NoAddressTableCell.m */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -2704,9 +2705,7 @@
 		BEC90F8B207F809700B5E609 /* icons */ = {
 			isa = PBXGroup;
 			children = (
-				BEC90F8D207F809700B5E609 /* cart_addBtn_highlight@2x.png */,
 				BEC90F8E207F809700B5E609 /* cart_addBtn_nomal@2x.png */,
-				BEC90F8F207F809700B5E609 /* cart_cutBtn_highlight@2x.png */,
 				BEC90F90207F809700B5E609 /* cart_cutBtn_nomal@2x.png */,
 			);
 			path = icons;
@@ -2864,10 +2863,8 @@
 				776A4A4A20BFF33600A6F0DF /* news_qa.min.css in Resources */,
 				77DD80372082409F00A1D080 /* flash_select@2x.png in Resources */,
 				77DD80352082409F00A1D080 /* navigationbarScanBg.png in Resources */,
-				BEC90F9A207F809700B5E609 /* cart_cutBtn_highlight@2x.png in Resources */,
 				77F83ABB2070E9AE004E9717 /* Default-568h@2x.png in Resources */,
 				77F839A42070E375004E9717 /* Main.storyboard in Resources */,
-				BEC90F98207F809700B5E609 /* cart_addBtn_highlight@2x.png in Resources */,
 				776A4A4920BFF33600A6F0DF /* jquery-1.7.1.min.js in Resources */,
 				BEC90F9B207F809700B5E609 /* cart_cutBtn_nomal@2x.png in Resources */,
 				77193B3420BBDF250001508E /* UMSocialSDKResources.bundle in Resources */,
@@ -2936,6 +2933,7 @@
 				BECB90132084B03C00170BC6 /* DCKeepNewUserData.m in Sources */,
 				77DD80392082409F00A1D080 /* DCScanIdentifyAreaView.m in Sources */,
 				77F83AB72070E8CE004E9717 /* UIImageView+WebCache.m in Sources */,
+				7776D5F520C12C84008DE606 /* NoAddressTableCell.m in Sources */,
 				77A5DE36208C95B2005F97F9 /* MyCenterCollectionCell.m in Sources */,
 				BE9769E42072505C00783217 /* MJRefreshStateHeader.m in Sources */,
 				77DD807820824FCA00A1D080 /* SlideshowHeadView.m in Sources */,
@@ -3285,7 +3283,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = TNXFBGQBS2;
+				DEVELOPMENT_TEAM = 635273RV4B;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3315,10 +3313,10 @@
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/Alipay",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.twsm.LifeHouse;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cxgm.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c8b7f43e-cb63-486d-b9f9-7dc105652e33";
-				PROVISIONING_PROFILE_SPECIFIER = LifeHouse_dev;
+				PROVISIONING_PROFILE = "204270dc-c19f-4bb3-abef-85845beb7e09";
+				PROVISIONING_PROFILE_SPECIFIER = cxgm_development;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -3330,7 +3328,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = TNXFBGQBS2;
+				DEVELOPMENT_TEAM = 635273RV4B;
 				ENABLE_BITCODE = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -3360,10 +3358,10 @@
 					"$(PROJECT_DIR)/CXGMSupermarket/第三方/Alipay",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_BUNDLE_IDENTIFIER = com.twsm.LifeHouse;
+				PRODUCT_BUNDLE_IDENTIFIER = com.cxgm.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "831a1ce2-d3b2-448e-a344-e7eb297fe883";
-				PROVISIONING_PROFILE_SPECIFIER = LifeHouse_Distribution;
+				PROVISIONING_PROFILE = "46baf1f3-5239-4744-85e2-e72d78d25920";
+				PROVISIONING_PROFILE_SPECIFIER = cxgm_distribution;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

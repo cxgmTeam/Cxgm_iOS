@@ -26,6 +26,8 @@
 @property(nonatomic,strong)UIView* topView;
 
 @property(nonatomic,strong)HYNoticeView *noticeHot;
+
+@property(nonatomic,assign)BOOL inScope;
 @end
 
 
@@ -35,14 +37,35 @@
     [super viewDidLoad];
     
     [self setupTopBar];
+
+}
+
+- (void)setNoticeLocation
+{
+    if (_noticeHot.superview) {
+        [_noticeHot removeFromSuperview];
+        _noticeHot = nil;
+    }
+    NSString* address = @"当前位置不在配送范围内，请选择收获地址";
+    if ([DeviceHelper sharedInstance].place && self.inScope) {
+        NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
+        address = [dic[@"SubLocality"] stringByAppendingString:dic[@"Street"]];
+    }
+
+    CGFloat width = [self sizeLabelWidth:address];
     
-    
-    _noticeHot = [[HYNoticeView alloc] initWithFrame:CGRectMake(10, NAVIGATION_BAR_HEIGHT-25, SCREENW*0.6, 40) text:@"送货至西城区德胜门国际大厦五层" position:HYNoticeViewPositionTopLeft];
+    _noticeHot = [[HYNoticeView alloc] initWithFrame:CGRectMake(10, NAVIGATION_BAR_HEIGHT-25, width, 40) text:address position:HYNoticeViewPositionTopLeft];
     [_noticeHot showType:HYNoticeTypeTestHot inView:self.navigationController.navigationBar];
 }
 
+
+
 - (void)setupMainUI:(BOOL)inScope
 {
+    self.inScope = inScope;
+    
+    [self setNoticeLocation];
+    
     if (inScope)
     {
         if (_shopsView.superview) {
@@ -165,5 +188,21 @@
 {
     SearchViewController* vc = [SearchViewController new];
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark-
+- (CGFloat)sizeLabelWidth:(NSString *)text
+{
+    CGFloat titleWidth = SCREENW*0.6;
+    
+    if (text.length > 0) {
+        NSDictionary *attributes = @{NSFontAttributeName:[UIFont fontWithName:@"PingFangSC-Regular" size:13]};
+        
+        CGSize textSize = [text boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, 40) options:NSStringDrawingTruncatesLastVisibleLine attributes:attributes context:nil].size;
+        
+        titleWidth = ceilf(textSize.width)+20;
+    }
+    
+    return titleWidth;
 }
 @end

@@ -30,10 +30,12 @@
 - (void)setUpUI
 {
     self.backgroundColor = [UIColor whiteColor];
+    
     _cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, ScreenW, self.dc_height) delegate:self placeholderImage:nil];
-    _cycleScrollView.autoScroll = NO;
-//    _cycleScrollView.showPageControl = NO;
+    _cycleScrollView.autoScroll = YES;
+    _cycleScrollView.showPageControl = NO;
     [self addSubview:_cycleScrollView];
+
 }
 
 #pragma mark - 点击图片Bannar跳转

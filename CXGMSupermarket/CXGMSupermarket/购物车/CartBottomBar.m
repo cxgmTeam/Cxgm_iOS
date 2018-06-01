@@ -57,6 +57,9 @@
     UILabel *label = [[UILabel alloc]init];
     label.text = @"合计：¥0.0";
     label.font = [UIFont fontWithName:@"PingFangSC-Medium" size:16];
+    if (ScreenW <= 320) {
+        label.font = [UIFont fontWithName:@"PingFangSC-Medium" size:10];
+    }
     label.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [self addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make){
@@ -67,8 +70,13 @@
     
     //优惠
     label = [[UILabel alloc]init];
+    label.numberOfLines = 0;
     label.text = @"总额：¥0.00   优惠：¥0.00  ";
     label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:12];
+    if (ScreenW <= 320) {
+        label.text = @"总额：¥0.00\n优惠：¥0.00  ";
+        label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:8];
+    }
     label.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
     [self addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make){

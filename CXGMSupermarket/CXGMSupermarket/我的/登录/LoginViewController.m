@@ -211,6 +211,7 @@
     _codeButton.layer.cornerRadius = 3;
     _codeButton.backgroundColor = [UIColor colorWithHexString:@"C6C6C6"];
     [_codeButton setTitle:@"获取验证码" forState:UIControlStateNormal];
+    _codeButton.titleLabel.textAlignment = NSTextAlignmentCenter;
     [_codeButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _codeButton.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     [self.view addSubview:_codeButton];

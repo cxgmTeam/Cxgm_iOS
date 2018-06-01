@@ -14,6 +14,8 @@
 @end
 
 @interface CartBadgeView : UIView
+@property (nonatomic, strong)UIButton *carButton;
+
 @property (nonatomic, assign)id<CartBadgeDelegate> delegate;
 // 为购物车设置角标内数值
 - (void)setShopCarCount:(NSString *)count;

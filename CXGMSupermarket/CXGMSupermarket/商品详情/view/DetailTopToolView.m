@@ -57,6 +57,7 @@
     }
 }
 
+
 - (void)setupUI
 {
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -74,8 +75,7 @@
         make.right.equalTo(-20);
         make.top.equalTo(STATUS_BAR_HEIGHT);
     }];
-    
-    [_cartBtn setShopCarCount:[DeviceHelper sharedInstance].shopCartNum];
+    [_cartBtn.carButton setImage:[UIImage imageNamed:@"top_cart"] forState:UIControlStateNormal];
 
     
     _menuView = [[UIView alloc] initWithFrame:CGRectMake(0, NAVIGATION_BAR_HEIGHT, ScreenW, 45)];
@@ -165,14 +165,9 @@
     !_backBtnClickBlock ? : _backBtnClickBlock();
 }
 
-- (void)setShopCarCount:(NSString *)number
-{
-    [_cartBtn setShopCarCount:number];
+#pragma mark-
+- (void)shopCarButtonClickAction{
+    !_gotoCartBlock?:_gotoCartBlock();
 }
 
-#pragma mark- CartBadgeDelegate
-- (void)shopCarButtonClickAction
-{
-     !_gotoCartBlock ? : _gotoCartBlock();
-}
 @end

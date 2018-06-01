@@ -7,7 +7,7 @@
 //
 
 #import "GoodsListGridCell.h"
-
+#import "PurchaseCarAnimationTool.h"
 
 @interface GoodsListGridCell ()
 @property(nonatomic,strong)UIImageView* gridImageView; //图片
@@ -58,7 +58,7 @@
 }
 
 - (void)setUpUI{
-    _gridImageView = [UIImageView new];
+    _gridImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.dc_width, self.dc_width)];
     _gridImageView.image = [UIImage imageNamed:@"placeholderImage"];
     [self addSubview:_gridImageView];
     
@@ -120,6 +120,9 @@
                           @"shopId":goods.shopId.length>0?goods.shopId:@"",
                           @"productId":goods.id.length>0?goods.id:@""
                           };
+    
+    typeof(self) __weak wself = self;
+    
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
@@ -129,6 +132,11 @@
                 [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
                 
                 self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
+                
+                
+                if (wself.PurchaseCarAnimation) {
+                    wself.PurchaseCarAnimation(wself.gridImageView);
+                }
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
             });
@@ -150,6 +158,9 @@
                           @"goodNum":[NSString stringWithFormat:@"%d",1+[goods.shopCartNum intValue]],
                           @"shopId":goods.shopId.length>0?goods.shopId:@""
                           };
+    
+    typeof(self) __weak wself = self;
+    
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
@@ -158,6 +169,10 @@
                 [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
                 
                 self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
+                
+                if (wself.PurchaseCarAnimation) {
+                    wself.PurchaseCarAnimation(wself.gridImageView);
+                }
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
             });
@@ -173,10 +188,10 @@
 {
     [super layoutSubviews];
     
-    [_gridImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.top.mas_equalTo(self);
-        make.size.mas_equalTo(CGSizeMake(self.dc_width, self.dc_width));
-    }];
+//    [_gridImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.top.mas_equalTo(self);
+//        make.size.mas_equalTo(CGSizeMake(self.dc_width, self.dc_width));
+//    }];
 
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(self);

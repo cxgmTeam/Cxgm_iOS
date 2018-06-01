@@ -10,7 +10,7 @@
 
 #define SIDELENGTH 10.0
 #define TRIANGLE 5.0
-//#define NoticeColor [UIColor colorWithRed:248.0/255.0 green:77.0/255.0 blue:51.0/255.0 alpha:1]
+
 #define NoticeColor [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:.5]
 static NSMutableArray *noticeArray;
 
@@ -125,7 +125,7 @@ static NSMutableArray *noticeArray;
         label.text = text;
         label.numberOfLines = 0;
         label.textColor = [UIColor whiteColor];
-        label.font = [UIFont systemFontOfSize:13];
+        label.font =  [UIFont fontWithName:@"PingFangSC-Regular" size:13];
         label.textAlignment = NSTextAlignmentCenter;
         [self addSubview:label];
         
@@ -134,50 +134,31 @@ static NSMutableArray *noticeArray;
         [viewButton addTarget:self action:@selector(clickNotice:) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:viewButton];
         _viewButton  = viewButton;
-        
-        //关闭按钮
-//        UIButton *closeButton = [[UIButton alloc] init];
-//        [closeButton setImage:[UIImage imageNamed:@"chacha"] forState:UIControlStateNormal];
-//        [closeButton addTarget:self action:@selector(clickClose:) forControlEvents:UIControlEventTouchUpInside];
-//        [self addSubview:closeButton];
-//        _closeButton = closeButton;
+
         
         switch (position) {
             case HYNoticeViewPositionTop:
             case HYNoticeViewPositionTopLeft:
             case HYNoticeViewPositionTopRight:
                 label.frame = CGRectMake(0, 4, frame.size.width, frame.size.height);
-//                closeButton.frame = CGRectMake(frame.size.width-16, 5, 14, 14);
+
                 break;
             case HYNoticeViewPositionLeft:
                 label.frame = CGRectMake(2, 0, frame.size.width, frame.size.height);
-//                closeButton.frame = CGRectMake(frame.size.width-16, 3, 14, 14);
+
                 break;
             case HYNoticeViewPositionBottom:
             case HYNoticeViewPositionBottomRight:
                 label.frame = CGRectMake(0, -2, frame.size.width, frame.size.height);
-//                closeButton.frame = CGRectMake(frame.size.width-16, 3, 14, 14);
+
                 break;
             case HYNoticeViewPositionRight:
                 label.frame = CGRectMake(-2, 0, frame.size.width, frame.size.height);
-//                closeButton.frame = CGRectMake(frame.size.width-20, 3, 14, 14);
+
                 break;
                 
             default:
                 break;
-        }
-//        closeButton.hidden = YES;
-        NSRange rang = [text rangeOfString:@"查看方法"];
-        if (rang.location!=NSNotFound) {
-            
-            NSMutableAttributedString *attString = [[NSMutableAttributedString alloc] initWithString:text];
-            [attString addAttribute:NSUnderlineStyleAttributeName
-                              value:[NSNumber numberWithInt:NSUnderlineStyleSingle]
-                              range:rang];
-            [attString addAttribute:NSFontAttributeName
-                              value:[UIFont fontWithName:@"Palatino-Roman" size:13.0]
-                              range:rang];
-            label.attributedText = attString;
         }
         
     }
@@ -220,13 +201,6 @@ static NSMutableArray *noticeArray;
         }
     }
     [noticeArray addObject:self];
-}
-
--(void)clickClose:(UIButton*)button{
-    [self removeFromSuperview];
-    if (_closeClick) {
-        self.closeClick();
-    }
 }
 
 -(void)clickNotice:(UIButton*)button{

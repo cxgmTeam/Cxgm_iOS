@@ -9,7 +9,7 @@
 #import "CartBadgeView.h"
 
 @interface CartBadgeView ()
-@property (nonatomic, strong)UIButton *carButton;
+
 @property (nonatomic, strong)UILabel *countLabel;
 @end
 
@@ -19,15 +19,20 @@
     self = [super initWithFrame:frame];
     if (self) {
         [self addSubview:self.carButton];
+        
+        [self getShopCartNumber];
+        
+        [self addNotification];
     }
     return self;
 }
 
+
+
 - (UIButton *)carButton{
     if (!_carButton) {
         _carButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _carButton.frame = CGRectMake(0, 8, 32, 32);
-        [_carButton setImage:[UIImage imageNamed:@"top_cart"] forState:UIControlStateNormal];
+        _carButton.frame = CGRectMake(0, 0, 44, 44);
         [_carButton addTarget:self action:@selector(shopCarButtonAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _carButton;
@@ -35,7 +40,7 @@
 
 - (UILabel *)countLabel{
     if (!_countLabel) {
-        _countLabel = [[UILabel alloc] initWithFrame:CGRectMake(24, 5, 20, 20)];
+        _countLabel = [[UILabel alloc] initWithFrame:CGRectMake(28, 0, 20, 20)];
         _countLabel.backgroundColor = [UIColor redColor];
         _countLabel.textAlignment = NSTextAlignmentCenter;
         _countLabel.textColor = [UIColor whiteColor];
@@ -62,10 +67,12 @@
     }
     [self shakeView:_countLabel];
 }
+
 // 实现的代理方法
 - (void)shopCarButtonAction{
     [self.delegate shopCarButtonClickAction];
 }
+
 // 实现抖动效果
 -(void)shakeView:(UIView*)viewToShake
 {
@@ -83,6 +90,39 @@
             } completion:NULL];
         }
     }];
+}
+
+#pragma mark-
+- (void)addNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:AddGoodsSuccess_Notify object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:AddOrder_Success object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:DeleteShopCart_Success object:nil];
+}
+
+- (void)getShopCartNumber
+{
+    if (![UserInfoManager sharedInstance].isLogin) return;
+    
+    UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
+    NSDictionary* dic = @{
+                          @"pageNum":@"1",
+                          @"pageSize":@"1"
+                          };
+    
+    [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIShopCartList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model = [DataModel dataModelWith:JSON];
+        if ([model.code isEqualToString:@"200"]) {
+
+            [self setShopCarCount:model.listModel.total];
+        }
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

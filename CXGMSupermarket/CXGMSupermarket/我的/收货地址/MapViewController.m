@@ -16,7 +16,7 @@
 #import <BaiduMapAPI_Radar/BMKRadarComponent.h>//引入周边雷达功能所有的头文件
 #import <BaiduMapAPI_Map/BMKMapView.h>//只引入所需的单个头文件
 
-
+#import "AddAddressViewController.h"
 
 @interface MapViewController ()<BMKMapViewDelegate,BMKGeoCodeSearchDelegate,BMKLocationServiceDelegate,UITableViewDataSource,UITableViewDelegate,UITextFieldDelegate,BMKPoiSearchDelegate>
 @property(nonatomic,strong) BMKMapView* mapView;
@@ -109,8 +109,8 @@
     _maskView.hidden = YES;
     _searchTable.hidden = YES;
     
-    
-    [self findAllPsfw];
+    [self performSelector:@selector(findAllPsfw) withObject:nil afterDelay:2.f];
+//    [self findAllPsfw];
 }
 
 
@@ -141,8 +141,6 @@
                         NSString* string = array[i];
                         NSArray* arr = [string componentsSeparatedByString:@"_"];
                         if (arr.count>1) {
-                            
-//                            NSLog(@"%f  %f",[arr[0] floatValue],[arr[1] floatValue]);
                             
                             CLLocation *location = [[CLLocation alloc] initWithLatitude:[arr[1] floatValue] longitude:[arr[0] floatValue]];
                             [pointsArr addObject:location];
@@ -349,11 +347,11 @@
     
     //和覆盖范围冲突
     
-//    BMKCoordinateRegion region ;//表示范围的结构体
-//    region.center = _mapView.centerCoordinate;//中心点
-//    region.span.latitudeDelta = 0.004;//经度范围（设置为0.1表示显示范围为0.2的纬度范围）
-//    region.span.longitudeDelta = 0.004;//纬度范围
-//    [_mapView setRegion:region animated:YES];
+    BMKCoordinateRegion region ;//表示范围的结构体
+    region.center = _mapView.centerCoordinate;//中心点
+    region.span.latitudeDelta = 0.004;//经度范围（设置为0.1表示显示范围为0.2的纬度范围）
+    region.span.longitudeDelta = 0.004;//纬度范围
+    [_mapView setRegion:region animated:YES];
     
 }
 
@@ -400,7 +398,8 @@
             model.address=poiInfo.address;
             model.latitude = poiInfo.pt.latitude;
             model.longitude = poiInfo.pt.longitude;
-//            model.inScope = [Utility checkAddress:[NSString stringWithFormat:@"%lf",poiInfo.pt.longitude] dimension:[NSString stringWithFormat:@"%lf",poiInfo.pt.latitude]];
+            
+            model.inScope = [Utility checkAddress:[NSString stringWithFormat:@"%lf",poiInfo.pt.longitude] dimension:[NSString stringWithFormat:@"%lf",poiInfo.pt.latitude]];
             
             [self.locationDataArr addObject:model];
             
@@ -444,7 +443,7 @@
             model.address=poi.address;
             model.latitude = poi.pt.latitude;
             model.longitude = poi.pt.longitude;
-//            model.inScope = [Utility checkAddress:[NSString stringWithFormat:@"%lf",poi.pt.longitude] dimension:[NSString stringWithFormat:@"%lf",poi.pt.latitude]];
+            model.inScope = [Utility checkAddress:[NSString stringWithFormat:@"%lf",poi.pt.longitude] dimension:[NSString stringWithFormat:@"%lf",poi.pt.latitude]];
             
 //            BMKPointAnnotation* item = [[BMKPointAnnotation alloc]init];
 //            item.coordinate = poi.pt;
@@ -513,6 +512,10 @@
     if (self.selectedAddress) {
         self.selectedAddress(model);
         [self.navigationController popViewControllerAnimated:YES];
+    }else{
+        AddAddressViewController* vc = [AddAddressViewController new];
+        vc.selectedLoacation = model;
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 

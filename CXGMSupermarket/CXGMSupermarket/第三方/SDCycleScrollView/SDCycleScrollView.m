@@ -54,6 +54,7 @@ NSString * const ID = @"cycleCell";
 
 @property (nonatomic, assign) NSInteger networkFailedRetryCount;
 
+@property (strong , nonatomic)UILabel *pageControlLabel;
 @end
 
 @implementation SDCycleScrollView
@@ -181,6 +182,24 @@ NSString * const ID = @"cycleCell";
     _showPageControl = showPageControl;
     
     _pageControl.hidden = !showPageControl;
+    
+    if (!showPageControl)
+    {
+        _pageControlLabel = [UILabel new];
+        _pageControlLabel.layer.masksToBounds = YES;
+        _pageControlLabel.layer.cornerRadius = 11;
+        _pageControlLabel.textAlignment = NSTextAlignmentCenter;
+        _pageControlLabel.backgroundColor = Color999999;
+        _pageControlLabel.text = @"1/2";
+        _pageControlLabel.textColor = [UIColor whiteColor];
+        _pageControlLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:12];
+        [self addSubview:_pageControlLabel];
+        [_pageControlLabel mas_makeConstraints:^(MASConstraintMaker *make){
+            make.size.equalTo(CGSizeMake(50, 22));
+            make.right.equalTo(-20);
+            make.bottom.equalTo(-10);
+        }];
+    }
 }
 
 - (void)setCurrentPageDotColor:(UIColor *)currentPageDotColor
@@ -604,6 +623,8 @@ NSString * const ID = @"cycleCell";
         UIPageControl *pageControl = (UIPageControl *)_pageControl;
         pageControl.currentPage = indexOnPageControl;
     }
+    
+    _pageControlLabel.text = [NSString stringWithFormat:@"%d/%ld",indexOnPageControl+1,self.imagePathsGroup.count];
 }
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView

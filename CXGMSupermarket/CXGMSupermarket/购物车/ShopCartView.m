@@ -136,7 +136,8 @@
     [self.bottomView.checkOutButton setTitle:[NSString stringWithFormat:@"结算(%ld)",(long)self.selectedArray.count] forState:UIControlStateNormal];
     //初始化显示状态
     self.bottomView.allSellectedButton.selected = NO;
-    self.bottomView.totlePriceLabel.text = @"总计：￥0.00";
+    self.bottomView.totlePriceLabel.text = @"合计：￥0.00";
+    self.bottomView.preferentialLabel.text = @"总额：¥0.00  优惠：¥0.00";
     
 }
 
@@ -169,15 +170,27 @@
     
     double totlePrice = 0.0;
     
+    double originalTotal = 0.0;
+    
     for (LZCartModel *model in self.selectedArray) {
         
         double price = [model.price doubleValue];
         
         totlePrice += price*[model.goodNum intValue];
+        
+        double original = [model.originalPrice doubleValue];
+        
+        originalTotal += original*[model.goodNum intValue];
     }
     
     //总额为原价总和  优惠为优惠金额总额   合计为两者的差
-    self.bottomView.totlePriceLabel.text = [NSString stringWithFormat:@"总计：￥%.2f",totlePrice];
+    self.bottomView.totlePriceLabel.text = [NSString stringWithFormat:@"合计：￥%.2f",totlePrice];
+    self.bottomView.preferentialLabel.text = [NSString stringWithFormat:@"总额：¥%.2f  优惠：¥%.2f",originalTotal,originalTotal-totlePrice];
+    
+    if (ScreenW <= 320) {
+        self.bottomView.preferentialLabel.text = [NSString stringWithFormat:@"总额：¥%.2f\n优惠：¥%.2f",originalTotal,originalTotal-totlePrice];
+    }
+    
 }
 
 - (void)deleteShopCart:(NSArray *)array

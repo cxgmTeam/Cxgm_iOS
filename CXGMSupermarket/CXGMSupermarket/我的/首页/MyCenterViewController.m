@@ -244,4 +244,11 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     return _collectionView;
 }
 
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    CGFloat off_y = scrollView.contentOffset.y;
+    if (off_y<0) {
+        scrollView.contentOffset = CGPointMake(0, 0);
+    }
+}
+
 @end

@@ -12,9 +12,11 @@
 #import "GoodsTableHead.h"
 #import "GoodsDetailViewController.h"
 
+#import "SearchViewController.h"
+#import "CartBadgeView.h"
+#import "AnotherCartViewController.h"
 
-
-@interface SubCategoryController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate>
+@interface SubCategoryController ()<UITableViewDelegate,UITableViewDataSource,UIScrollViewDelegate,CartBadgeDelegate>
 
 @property(nonatomic,strong)UITableView* leftTableView;
 @property(nonatomic,strong)UITableView* rightTableView;
@@ -52,7 +54,7 @@ static CGFloat TopBtnWidth = 60;
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
    
     
     self.leftTableView.backgroundColor = RGB(0xf7, 0xf8, 0xf7);
@@ -486,6 +488,44 @@ static CGFloat TopBtnWidth = 60;
     return _topScrollView;
 }
 
+
+#pragma mark-
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    UIButton* searchBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+    [searchBtn setImage:[UIImage imageNamed:@"top_search"] forState:UIControlStateNormal];
+    [searchBtn addTarget:self action:@selector(onTapSearchBtn:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem* searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchBtn];
+    
+    
+    CartBadgeView *cartBtn = [[CartBadgeView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+    cartBtn.delegate = self;
+    [cartBtn.carButton setImage:[UIImage imageNamed:@"top_cart"] forState:UIControlStateNormal];
+    UIBarButtonItem* cartItem = [[UIBarButtonItem alloc] initWithCustomView:cartBtn];
+    
+    
+    self.navigationItem.rightBarButtonItems = @[cartItem,searchItem];
+    
+}
+
+- (void)onTapSearchBtn:(id)sender
+{
+    SearchViewController* vc = [SearchViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)shopCarButtonClickAction
+{
+    if (![UserInfoManager sharedInstance].isLogin) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
+        return ;
+    }
+    AnotherCartViewController* vc = [AnotherCartViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
+}
 
 #pragma mark-
 

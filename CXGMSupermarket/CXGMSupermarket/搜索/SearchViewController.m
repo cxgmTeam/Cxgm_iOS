@@ -16,14 +16,21 @@
 #import "ULBCollectionViewFlowLayout.h"
 
 #import "GoodsDetailViewController.h"
+#import "CartBadgeView.h"
 
-@interface SearchViewController ()<UITextFieldDelegate,UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+#import "IQKeyboardManager.h"
+
+#import "AnotherCartViewController.h"
+
+@interface SearchViewController ()<UITextFieldDelegate,UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,CartBadgeDelegate>
 @property (strong,nonatomic)UICollectionView *collectionView;
 @property (nonatomic,strong)UIView* topView;
 @property (nonatomic,strong)CustomTextField* textField;
 @property (nonatomic,strong)NSArray* hotKeyArray;
 @property (nonatomic,strong)NSArray* resultArray;
 @property (nonatomic,assign)BOOL showSearchResult;
+
+@property (strong , nonatomic)CartBadgeView* cartBtn;
 @end
 
 /* cell */
@@ -37,12 +44,27 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    [[IQKeyboardManager sharedManager] setEnable:NO];
+    
     [self setupTopView];
     
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
     }];
+    
+    _cartBtn = [CartBadgeView new];
+    _cartBtn.delegate = self;
+    [self.view addSubview:_cartBtn];
+    [_cartBtn mas_makeConstraints:^(MASConstraintMaker *make){
+        make.size.equalTo(CGSizeMake(44, 44));
+        make.right.equalTo(-20);
+        make.bottom.equalTo(-20);
+    }];
+    [_cartBtn.carButton setImage:[UIImage imageNamed:@"cart_search"] forState:UIControlStateNormal];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
     
     [self findHotProduct];
 }
@@ -104,6 +126,19 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     [self searchGoods:_textField.text];
     
     return YES;
+}
+
+- (void)refreshGoodsInfo:(NSNotification *)notify
+{
+    if (self.showSearchResult) {
+        [self searchGoods:_textField.text];
+    }
+}
+
+#pragma mark -
+- (void)shopCarButtonClickAction{
+    AnotherCartViewController* vc = [AnotherCartViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - <UICollectionViewDataSource>
@@ -222,14 +257,18 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
     _topView.hidden = NO;
     
-    [self.view endEditing:YES];
 }
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
     _topView.hidden = YES;
+    
+    [self.textField resignFirstResponder];
 }
 
 - (void)setupTopView
@@ -267,6 +306,7 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
 
 - (void)onTapButton:(id)sender
 {
+    [self.textField resignFirstResponder];
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -290,4 +330,6 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     }
     return _collectionView;
 }
+
+
 @end

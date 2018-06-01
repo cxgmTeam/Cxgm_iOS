@@ -14,6 +14,7 @@
 
 #import "AddressTopTableViewCell.h"
 #import "AddressTableViewCell.h"
+#import "NoAddressTableCell.h"
 
 @interface AddressViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -119,7 +120,7 @@
         if (section == 0) {
             return 2;
         }
-        return self.addressList.count;
+        return self.addressList.count>0?self.addressList.count:1;;
     }
 }
 
@@ -175,39 +176,50 @@
         }
         else
         {
-            AddressTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"AddressTableViewCell"];
-            if (!cell) {
-                cell = [[AddressTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressTableViewCell"];
+            if (self.addressList.count == 0) {
+                NoAddressTableCell * cell = [tableView dequeueReusableCellWithIdentifier:@"NoAddressTableCell"];
+                if (!cell) {
+                    cell = [[NoAddressTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NoAddressTableCell"];
+                }
+                tableCell = cell;
             }
-            if (indexPath.item < self.addressList.count) {
-                cell.address = self.addressList[indexPath.item];
-            }
-            WEAKSELF;
-            cell.updateAddress = ^{
-                AddAddressViewController* vc = [AddAddressViewController new];
-                vc.address = self.addressList[indexPath.row];
-                [weakSelf.navigationController pushViewController:vc animated:YES];
-            };
-            
-            cell.deleteAddress = ^{
-                UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除该地址?删除后无法恢复!" preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            else
+            {
+                AddressTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"AddressTableViewCell"];
+                if (!cell) {
+                    cell = [[AddressTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressTableViewCell"];
+                }
+                if (indexPath.item < self.addressList.count) {
+                    cell.address = self.addressList[indexPath.item];
+                }
+                WEAKSELF;
+                cell.updateAddress = ^{
+                    AddAddressViewController* vc = [AddAddressViewController new];
+                    vc.address = self.addressList[indexPath.row];
+                    [weakSelf.navigationController pushViewController:vc animated:YES];
+                };
+                
+                cell.deleteAddress = ^{
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除该地址?删除后无法恢复!" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                        
+                        [weakSelf deleteAddress:self.addressList[indexPath.row] indexPath:indexPath];
+                    }];
                     
-                    [weakSelf deleteAddress:self.addressList[indexPath.row] indexPath:indexPath];
-                }];
+                    UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
+                    
+                    [alert addAction:okAction];
+                    [alert addAction:cancel];
+                    
+                    [self presentViewController:alert animated:YES completion:nil];
+                };
                 
-                UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:nil];
-                
-                [alert addAction:okAction];
-                [alert addAction:cancel];
-                
-                [self presentViewController:alert animated:YES completion:nil];
-            };
+                cell.setDefaultAddress = ^(BOOL isDefault){
+                    [weakSelf updateAddress:self.addressList[indexPath.row] isDefault:isDefault];
+                };
+                tableCell = cell;
+            }
             
-            cell.setDefaultAddress = ^(BOOL isDefault){
-                [weakSelf updateAddress:self.addressList[indexPath.row] isDefault:isDefault];
-            };
-            tableCell = cell;
         }
     }
     return tableCell;
@@ -244,7 +256,11 @@
         if (indexPath.section == 0) {
             height = 45;
         }else{
-            height = 128+10;
+            if (self.addressList.count == 0) {
+                height = 45;
+            }else{
+                height = 128+10;
+            }
         }
     }
 
@@ -280,33 +296,7 @@
     return head;
 }
 
-//-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
-//    return @"删除";
-//}
-//
-//-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-//
-//    if (editingStyle == UITableViewCellEditingStyleDelete) {
-//        AddressModel* address = self.addressList[indexPath.row];
-//
-//        [self deleteAddress:address indexPath:indexPath];
-//    }
-//}
-//
-//-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
-//{
-//    if (self.selectedAddress) {
-//        return   UITableViewCellEditingStyleDelete;
-//    }
-//    else
-//    {
-//        if (indexPath.section == 1) {
-//            return   UITableViewCellEditingStyleDelete;
-//        }
-//        return UITableViewCellEditingStyleNone;
-//    }
-//
-//}
+
 
 #pragma mark-
 - (void)deleteAddress:(AddressModel *)address indexPath:(NSIndexPath *)indexPath
@@ -317,7 +307,6 @@
         
         if ([model.code intValue] == 200) {
             [self.addressList removeObjectAtIndex:indexPath.row];
-//            [self.tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
             [self.tableView reloadData];
         }
     } failure:^(id JSON, NSError *error){

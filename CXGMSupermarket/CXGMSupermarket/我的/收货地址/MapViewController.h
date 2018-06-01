@@ -11,6 +11,10 @@
 
 @interface MapViewController : MyCenterSubViewController
 
+//点击新增地址进入
 @property(nonatomic,copy)void(^selectedAddress)(LocationModel *model);
+
+//点击附近地址进入
+@property(nonatomic,copy)void(^toAddAddress)(LocationModel *model);
 
 @end

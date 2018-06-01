@@ -42,10 +42,10 @@
     _goodTitleLabel.text = goods.name;
     _goodSubtitleLabel.text = goods.fullName;
     _goodPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goods.price floatValue]];
-    _unitLabel.text = [NSString stringWithFormat:@"/%@g/%@",goods.weight,goods.unit];
+    _unitLabel.text = [NSString stringWithFormat:@"/%@",goods.unit];
     
-    if ([goods.price floatValue] != [goods.originPlace floatValue] && [goods.originPlace floatValue]>0) {
-        _oldPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goods.originPlace floatValue]];
+    if ([goods.price floatValue] != [goods.originalPrice floatValue] && [goods.originalPrice floatValue]>0) {
+        _oldPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goods.originalPrice floatValue]];
         
         NSUInteger length = [_oldPriceLabel.text length];
         NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:_oldPriceLabel.text];

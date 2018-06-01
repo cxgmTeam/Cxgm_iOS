@@ -172,9 +172,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 }
 
 
-
-
-
 - (void)pushProducts
 {
     NSDictionary* dic = @{@"productCategoryTwoId":self.goodsDetail.productCategoryTwoId.length>0?self.goodsDetail.productCategoryTwoId:@"",
@@ -235,18 +232,14 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                           @"shopId":goods.shopId.length>0?goods.shopId:@"",
                           @"productId":goods.id.length>0?goods.id:@""
                           };
-    
-    typeof(self) __weak wself = self;
+
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)self.number];
                 [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
-                
-                NSInteger number = [[DeviceHelper sharedInstance].shopCartNum integerValue]+self.number;
-                [wself.topToolView setShopCarCount:[NSString stringWithFormat:@"%ld",number]];
-                
+            
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
             });
         }
@@ -268,7 +261,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                           @"shopId":goods.shopId.length>0?goods.shopId:@""
                           };
     
-    typeof(self) __weak wself = self;
+
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
@@ -278,8 +271,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                 
                 self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)([self.goodsDetail.shopCartNum integerValue]+self.number)];
                 
-                NSInteger number = [[DeviceHelper sharedInstance].shopCartNum integerValue]+self.number;
-                [wself.topToolView setShopCarCount:[NSString stringWithFormat:@"%ld",number]];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
             });
