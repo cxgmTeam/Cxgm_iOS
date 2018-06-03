@@ -49,6 +49,8 @@
 
 @property(strong,nonatomic) BMKPolygon *ploygon;
 
+@property(strong,nonatomic) NSMutableArray * pointsArr;//查询到的范围点集
+
 @end
 
 @implementation MapViewController
@@ -56,8 +58,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [self findAllPsfw];
+    
+    
     self.locationDataArr = [NSMutableArray array];
-    self.pointArray = [NSMutableArray array];
+    self.pointsArr = [NSMutableArray array];
     
     [self initTopBar];
     
@@ -109,8 +114,7 @@
     _maskView.hidden = YES;
     _searchTable.hidden = YES;
     
-    [self performSelector:@selector(findAllPsfw) withObject:nil afterDelay:2.f];
-//    [self findAllPsfw];
+    
 }
 
 
@@ -120,7 +124,7 @@
     
     NSDictionary* dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""};
     
-    [self.pointArray removeAllObjects];
+   [self.pointsArr removeAllObjects];
     
     [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIFindAllPsfw] token:nil parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
@@ -132,8 +136,6 @@
                 
                 self.pointNodeNum = array.count;
 
-                NSMutableArray * pointsArr = [NSMutableArray array];
-                
                 if (!self.ploygon)
                 {
                     for (NSInteger i = 0;i < self.pointNodeNum  ;i++)
@@ -143,15 +145,14 @@
                         if (arr.count>1) {
                             
                             CLLocation *location = [[CLLocation alloc] initWithLatitude:[arr[1] floatValue] longitude:[arr[0] floatValue]];
-                            [pointsArr addObject:location];
-
+                            [self.pointsArr addObject:location];
                         }
                     }
 
                     CLLocationCoordinate2D commuterLotCoords[self.pointNodeNum];
                     
-                    for(int i = 0; i < [pointsArr count]; i++) {
-                        commuterLotCoords[i] = [[pointsArr objectAtIndex:i] coordinate];
+                    for(int i = 0; i < [self.pointsArr count]; i++) {
+                        commuterLotCoords[i] = [[self.pointsArr objectAtIndex:i] coordinate];
                     }
 
                     self.ploygon = [BMKPolygon polygonWithCoordinates:commuterLotCoords count:self.pointNodeNum];
@@ -166,7 +167,7 @@
     
 }
 
-// Override
+#pragma mark-
 - (BMKOverlayView *)mapView:(BMKMapView *)mapView viewForOverlay:(id <BMKOverlay>)overlay
 {
     if ([overlay isKindOfClass:[BMKPolygon class]])
@@ -285,6 +286,7 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     self.tabBarController.tabBar.hidden = YES;
 }
+
 -(void)viewWillDisappear:(BOOL)animated
 {
     [_mapView viewWillDisappear];
@@ -345,8 +347,6 @@
 
     _mapView.centerCoordinate = userLocation.location.coordinate;
     
-    //和覆盖范围冲突
-    
     BMKCoordinateRegion region ;//表示范围的结构体
     region.center = _mapView.centerCoordinate;//中心点
     region.span.latitudeDelta = 0.004;//经度范围（设置为0.1表示显示范围为0.2的纬度范围）
@@ -380,15 +380,15 @@
     
 }
 
-#pragma mark BMKGeoCodeSearchDelegate
+#pragma mark 根据定位搜索周边
 -(void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {
+
     //获取周边用户信息
     if (error==BMK_SEARCH_NO_ERROR) {
         
         [self.locationDataArr removeAllObjects];
         
-//        for(BMKPoiInfo *poiInfo in result.poiList)
         for (int i = 0; i < result.poiList.count; i++)
         {
             BMKPoiInfo* poiInfo = [result.poiList objectAtIndex:i];
@@ -399,7 +399,9 @@
             model.latitude = poiInfo.pt.latitude;
             model.longitude = poiInfo.pt.longitude;
             
-            model.inScope = [Utility checkAddress:[NSString stringWithFormat:@"%lf",poiInfo.pt.longitude] dimension:[NSString stringWithFormat:@"%lf",poiInfo.pt.latitude]];
+            CLLocationCoordinate2D coords = CLLocationCoordinate2DMake(model.latitude,model.longitude);
+            model.inScope = [self mutableBoundConrtolAction:self.pointsArr myCoordinate:coords];
+            
             
             [self.locationDataArr addObject:model];
             
@@ -420,14 +422,12 @@
     
 }
 
-#pragma mark -
-#pragma mark implement BMKSearchDelegate
+#pragma mark - 输入地址联想搜索
 - (void)onGetPoiResult:(BMKPoiSearch *)searcher result:(BMKPoiResult*)result errorCode:(BMKSearchErrorCode)error
 {
     // 清楚屏幕中所有的annotation
 //    NSArray* array = [NSArray arrayWithArray:_mapView.annotations];
 //    [_mapView removeAnnotations:array];
-    
     
     
     if (error == BMK_SEARCH_NO_ERROR) {
@@ -443,7 +443,10 @@
             model.address=poi.address;
             model.latitude = poi.pt.latitude;
             model.longitude = poi.pt.longitude;
-            model.inScope = [Utility checkAddress:[NSString stringWithFormat:@"%lf",poi.pt.longitude] dimension:[NSString stringWithFormat:@"%lf",poi.pt.latitude]];
+            
+            CLLocationCoordinate2D coords = CLLocationCoordinate2DMake(model.latitude,model.longitude);
+            model.inScope = [self mutableBoundConrtolAction:self.pointsArr myCoordinate:coords];
+            
             
 //            BMKPointAnnotation* item = [[BMKPointAnnotation alloc]init];
 //            item.coordinate = poi.pt;
@@ -505,9 +508,9 @@
     }else{
         model = self.locationDataArr[indexPath.row];
     }
-//    if (!model.inScope) {
-//        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"不在配送范围内"]; return;
-//    }
+    if (!model.inScope) {
+        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"不在配送范围内"]; return;
+    }
     
     if (self.selectedAddress) {
         self.selectedAddress(model);
@@ -556,6 +559,8 @@
     self.navigationItem.rightBarButtonItem =  nil;
 }
 
+
+
 #pragma mark-
 - (void)initTopBar
 {
@@ -579,6 +584,47 @@
     }];
     [_textField addTarget:self action:@selector(inputaction:) forControlEvents:UIControlEventEditingChanged];
 }
+
+#pragma mark-
+//    在范围内返回1，不在返回0
+-(BOOL)mutableBoundConrtolAction:(NSMutableArray *)arrSome myCoordinate:(CLLocationCoordinate2D )myCoordinate{
+    NSInteger n = arrSome.count;
+    float vertx[n];
+    float verty[n];
+    for (int i=0; i<arrSome.count; i++) {
+        //MyPoint类存储的是经度和纬度
+        CLLocation *location = arrSome[i];
+        
+        vertx[i]=location.coordinate.latitude;
+        verty[i]=location.coordinate.longitude;;
+    }
+    if (arrSome.count==0) {
+        
+        return 1;
+    }
+    BOOL i= pnpoly((int)arrSome.count, vertx, verty, myCoordinate.latitude, myCoordinate.longitude);
+    
+    
+    if (i) {
+        return 1;
+    }else{
+        return 0;
+    }
+    return 1;
+}
+//多边形由边界的坐标点所构成的数组组成，参数格式 该数组的count，  多边形边界点x坐标 的组成的数组，多边形边界点y坐标 的组成的数组，需要判断的点的x坐标，需要判断的点的y坐标
+BOOL pnpoly (int nvert, float *vertx, float *verty, float testx, float testy) {
+    int i, j;
+    BOOL c=NO;
+    for (i = 0, j = nvert-1; i < nvert; j = i++) {
+        
+        if ( ( (verty[i]>testy) != (verty[j]>testy) ) &&
+            (testx < (vertx[j]-vertx[i]) * (testy-verty[i]) / (verty[j]-verty[i]) + vertx[i]) )
+            c = !c;
+    }
+    return c;
+}
+
 #pragma mark-
 - (void)dealloc {
     if (_poiSearch != nil) {

@@ -29,10 +29,23 @@ static NSMutableArray *noticeArray;
 
 -(void)drawTriangle:(CGContextRef)ctx andRect:(CGRect)rect{
     [NoticeColor set];
-    CGContextMoveToPoint(ctx, (rect.size.width-10.0)*0.5, 0.0);
+    
+//    CGContextMoveToPoint(ctx, (rect.size.width-10.0)*0.5, 0.0);
+    
+    CGContextMoveToPoint(ctx, 0, 0.0);
     
     CGPoint sPoints[3];//坐标点
     
+    sPoints[0] =CGPointMake(18, 0);//坐标1
+    sPoints[1] =CGPointMake(13, TRIANGLE);//坐标2
+    sPoints[2] =CGPointMake(23, TRIANGLE);//坐标3
+    
+    
+//    sPoints[0] =CGPointMake(rect.size.width*0.1, 0);//坐标1
+//    sPoints[1] =CGPointMake((rect.size.width*0.1-SIDELENGTH*0.5), TRIANGLE);//坐标2
+//    sPoints[2] =CGPointMake((rect.size.width*0.1+SIDELENGTH*0.5), TRIANGLE);//坐标3
+    
+/*
     switch (_position) {
         case HYNoticeViewPositionTop:
             sPoints[0] =CGPointMake(rect.size.width*0.5, 0);//坐标1
@@ -72,7 +85,7 @@ static NSMutableArray *noticeArray;
         default:
             break;
     }
-    
+*/
     CGContextAddLines(ctx, sPoints, 3);//添加线
     CGContextDrawPath(ctx, kCGPathFillStroke); //根据坐标绘制路径
 }
@@ -99,12 +112,12 @@ static NSMutableArray *noticeArray;
             break;
     }
     
-    UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:rectangleRect cornerRadius:2.0f];
+    UIBezierPath *roundedRect = [UIBezierPath bezierPathWithRoundedRect:rectangleRect cornerRadius:10.0f];
     [NoticeColor setFill];
     [roundedRect fillWithBlendMode:kCGBlendModeNormal alpha:1];
 }
 
--(void)execute:(void(^)())method after:(double)seconds{
+-(void)execute:(void(^)(void))method after:(double)seconds{
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, seconds * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
         method();
@@ -112,7 +125,7 @@ static NSMutableArray *noticeArray;
 }
 
 #pragma mark - public method
--(instancetype)initWithFrame:(CGRect)frame text:(NSString*)text position:(HYNoticeViewPosition)position closeBlock:(void(^)())closeBlock noticeBlock:(void(^)())noticeBlock{
+-(instancetype)initWithFrame:(CGRect)frame text:(NSString*)text position:(HYNoticeViewPosition)position closeBlock:(void(^)(void))closeBlock noticeBlock:(void(^)(void))noticeBlock{
     if (self = [super initWithFrame:frame]) {
         self.backgroundColor = [UIColor clearColor];
         
@@ -173,7 +186,7 @@ static NSMutableArray *noticeArray;
     [view addSubview:self];
 }
 
--(void)showType:(HYNoticeType)type inView:(UIView*)view closeBlock:(void(^)())closeBlock noticeBlock:(void(^)())noticeBlock{
+-(void)showType:(HYNoticeType)type inView:(UIView*)view closeBlock:(void(^)(void))closeBlock noticeBlock:(void(^)(void))noticeBlock{
     _closeClick = closeBlock;
     _noticeClick = noticeBlock;
 }

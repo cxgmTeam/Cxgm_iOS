@@ -53,8 +53,12 @@
     }
 
     CGFloat width = [self sizeLabelWidth:address];
+    CGRect frame = CGRectMake(10, NAVIGATION_BAR_HEIGHT-25, width, 30);
+    if (iPhoneX) {
+        frame = CGRectMake(10, NAVIGATION_BAR_HEIGHT-50, width, 30);
+    }
     
-    _noticeHot = [[HYNoticeView alloc] initWithFrame:CGRectMake(10, NAVIGATION_BAR_HEIGHT-25, width, 40) text:address position:HYNoticeViewPositionTopLeft];
+    _noticeHot = [[HYNoticeView alloc] initWithFrame:frame text:address position:HYNoticeViewPositionTopLeft];
     [_noticeHot showType:HYNoticeTypeTestHot inView:self.navigationController.navigationBar];
 }
 

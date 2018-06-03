@@ -136,7 +136,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
             
 //            [self.auxiliaryWebView loadHTMLString:self.goodsDetail.introduction baseURL:nil];
             
-            self.goodsDetail.introduction = @"<p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">5月19日，第28次全国助残日前夕，中国盲文图书馆联合中医学院志愿者共同举办了一场中医义诊活动。</span></p><p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">活动现场为残疾人及其家属等免费提供针灸、推拿、按摩、拔罐等服务，并提供中医药类相关咨询，同时发放宣传资料、开展健康宣讲向残疾人及其亲属等普及中医药类养生保健知识，传播“防大于治”的科学健康理念。</span></p><p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">本次活动紧紧围绕今年全国助残日“全面建成小康社会，残疾人一个也不同时能少”的主题，通过义诊志愿服务的开展，落实了“精准健康扶贫”的相关精神，进一步提升了残疾人的健康素养，同时营造了扶残助残的良好氛围。</span></p><p style=\"text-align: center;\"><img src=\"http://filewhzm.blc.org.cn/270/png/B00/0HTYV6BHXZ6QTFFB.png\" title=\"\" alt=\"助残日义诊活动.png\"/></p><p style=\"text-align: center;\"><span style=\"font-family: 黑体, SimHei; font-size: 14px;\">图为义诊活动现场</span></p>";
+//            self.goodsDetail.introduction = @"<p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">5月19日，第28次全国助残日前夕，中国盲文图书馆联合中医学院志愿者共同举办了一场中医义诊活动。</span></p><p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">活动现场为残疾人及其家属等免费提供针灸、推拿、按摩、拔罐等服务，并提供中医药类相关咨询，同时发放宣传资料、开展健康宣讲向残疾人及其亲属等普及中医药类养生保健知识，传播“防大于治”的科学健康理念。</span></p><p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">本次活动紧紧围绕今年全国助残日“全面建成小康社会，残疾人一个也不同时能少”的主题，通过义诊志愿服务的开展，落实了“精准健康扶贫”的相关精神，进一步提升了残疾人的健康素养，同时营造了扶残助残的良好氛围。</span></p><p style=\"text-align: center;\"><img src=\"http://filewhzm.blc.org.cn/270/png/B00/0HTYV6BHXZ6QTFFB.png\" title=\"\" alt=\"助残日义诊活动.png\"/></p><p style=\"text-align: center;\"><span style=\"font-family: 黑体, SimHei; font-size: 14px;\">图为义诊活动现场</span></p>";
             
             if ([self.goodsDetail.introduction length] > 0) {
                 [wself updateWebVWithContent:self.goodsDetail.introduction];
@@ -452,14 +452,14 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     }
 }
 
-// CollectionView分区标题即将展示
+//cell 的头部或尾部视图view将要显示出来的时候调用
 - (void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath {
 //         当前CollectionView滚动的方向向上，CollectionView是用户拖拽而产生滚动的（主要是判断CollectionView是用户拖拽而滚动的，还是点击TableView而滚动的）
     if (!_isScrollDown && (collectionView.dragging || collectionView.decelerating)) {
         [self selectRowAtIndexPath:indexPath.section];
     }
 }
-// CollectionView分区标题展示结束
+//cell的头部或尾部视图view将要collectionView中移除的时候调用
 - (void)collectionView:(UICollectionView *)collectionView didEndDisplayingSupplementaryView:(nonnull UICollectionReusableView *)view forElementOfKind:(nonnull NSString *)elementKind atIndexPath:(nonnull NSIndexPath *)indexPath {
 //         当前CollectionView滚动的方向向下，CollectionView是用户拖拽而产生滚动的（主要是判断CollectionView是用户拖拽而滚动的，还是点击TableView而滚动的）
     if (_isScrollDown && (collectionView.dragging || collectionView.decelerating)) {
@@ -500,7 +500,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     }
 }
 
-// 选中 处理collectionView
+// 点击 商品 详情 推荐
 - (void)selectSectionAtIndex:(NSInteger )index
 {
     if (_sectionIndex == index) return;
@@ -509,7 +509,11 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     CGRect headerRect = [self frameForHeaderForSection:_sectionIndex];
     CGPoint topOfHeader = CGPointMake(0, headerRect.origin.y - _collectionView.contentInset.top);
     
-    topOfHeader.y = topOfHeader.y - (NAVIGATION_BAR_HEIGHT+45+20);
+    if (_sectionIndex == 0) {
+        topOfHeader.y = 0;
+    }else{
+        topOfHeader.y = topOfHeader.y - (NAVIGATION_BAR_HEIGHT+45+20);
+    }
     
     [self.collectionView setContentOffset:topOfHeader animated:YES];
 

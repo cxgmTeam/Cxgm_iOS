@@ -92,7 +92,8 @@
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     NSDictionary* dic = @{
                           @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
-                          @"pageSize":@"10"
+                          @"pageSize":@"10",
+                          @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
                           };
     WEAKSELF;
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIShopCartList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){

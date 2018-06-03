@@ -97,9 +97,6 @@
     
     //添加通知
     [self addNotification];
-
-    
-    [self getShopCartNumber];
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
@@ -173,7 +170,8 @@
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     NSDictionary* dic = @{
                           @"pageNum":@"1",
-                          @"pageSize":@"1"
+                          @"pageSize":@"1",
+                          @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
                           };
 
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIShopCartList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){
@@ -314,6 +312,8 @@
             NSArray* array = (NSArray *)model.data;
             if (array.count > 0) {
                 [DeviceHelper sharedInstance].shop = [[ShopModel alloc] initWithDictionary:[array firstObject] error:nil];
+                [weakSelf getShopCartNumber];
+                
                 [weakSelf.homeVC setupMainUI:YES];
             }else{
                 [DeviceHelper sharedInstance].place = nil;
