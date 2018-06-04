@@ -73,7 +73,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     [super viewDidLoad];
     
 
-    self.auxiliaryWebView.frame = self.view.bounds;
+    self.auxiliaryWebView.frame = CGRectMake(0, 0, ScreenW, 5);
     self.auxiliaryWebView.hidden = YES;
     
     
@@ -229,6 +229,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
                           @"goodNum":[NSString stringWithFormat:@"%ld",(long)self.number],
+                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
                           @"shopId":goods.shopId.length>0?goods.shopId:@"",
                           @"productId":goods.id.length>0?goods.id:@""
                           };
@@ -253,12 +254,14 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 {
     CGFloat amount = (self.number+[goods.shopCartNum integerValue])*[goods.price floatValue];
     
-    NSDictionary* dic = @{@"id":goods.id.length>0?goods.id:@"",
+    NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
                           @"amount":[NSString stringWithFormat:@"%.2f",amount],
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
                           @"goodNum":[NSString stringWithFormat:@"%d",1+[goods.shopCartNum intValue]],
-                          @"shopId":goods.shopId.length>0?goods.shopId:@""
+                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
+                          @"shopId":goods.shopId.length>0?goods.shopId:@"",
+                          @"productId":goods.id.length>0?goods.id:@""
                           };
     
 

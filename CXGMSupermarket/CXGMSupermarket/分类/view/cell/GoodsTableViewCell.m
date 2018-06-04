@@ -71,6 +71,7 @@
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
                           @"goodNum":@"1",
+                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
                           @"shopId":goods.shopId.length>0?goods.shopId:@"",
                           @"productId":goods.id.length>0?goods.id:@""
                           };
@@ -97,11 +98,12 @@
 {
     CGFloat amount = (1+[goods.shopCartNum integerValue])*[goods.price floatValue];
     
-    NSDictionary* dic = @{@"id":goods.id.length>0?goods.id:@"",
+    NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
                           @"amount":[NSString stringWithFormat:@"%.2f",amount],
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
                           @"goodNum":[NSString stringWithFormat:@"%d",1+[goods.shopCartNum intValue]],
+                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
                           @"shopId":goods.shopId.length>0?goods.shopId:@""
                           };
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){

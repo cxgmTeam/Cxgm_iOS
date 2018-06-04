@@ -42,7 +42,7 @@
     };
     _cartView.gotoGoodsDetail = ^(LZCartModel *model){
         GoodsDetailViewController* vc = [GoodsDetailViewController new];
-        vc.goodsId = model.id;
+        vc.goodsId = model.productId;
         [wself.navigationController pushViewController:vc animated:YES];
     };
 }

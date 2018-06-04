@@ -148,7 +148,7 @@
     
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:postRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-        NSLog(@"\n\nCXGMPostRequest dic = %@",dic);
+        NSLog(@"\n\nCXGMPostRequest %@\n dic = %@",requestUrl,dic);
         if ([[dic objectForKey:@"code"] integerValue] == 200) {
             if (success) {
                 success(dic,nil);

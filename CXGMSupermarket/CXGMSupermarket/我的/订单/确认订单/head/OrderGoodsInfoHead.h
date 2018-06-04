@@ -10,4 +10,6 @@
 
 @interface OrderGoodsInfoHead : UICollectionReusableView
 @property(nonatomic,copy)dispatch_block_t gotoGoodsList;
+
+@property(nonatomic,strong)NSArray* goodsArray;
 @end

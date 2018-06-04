@@ -182,7 +182,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             }
         }
         if (!flag) {
-            [categoryArray addObject:model.categoryId];
+            [categoryArray addObject:model.categoryId.length>0?model.categoryId:@""];
         }
     }
     
@@ -330,9 +330,11 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
         if (indexPath.section == 1){
             OrderGoodsInfoHead *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderGoodsInfoHeadID forIndexPath:indexPath];
+            headerView.goodsArray = self.goodsArray;
             typeof(self) __weak wself = self;
             headerView.gotoGoodsList = ^{
                 GoodsListingViewController* vc = [GoodsListingViewController new];
+                vc.goodsArray = self.goodsArray;
                 [wself.navigationController pushViewController:vc animated:YES];
             };
             reusableview = headerView;

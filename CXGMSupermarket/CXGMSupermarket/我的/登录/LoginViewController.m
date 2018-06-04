@@ -194,19 +194,6 @@
         make.height.equalTo(1);
     }];
     
-    _phoneField = [UITextField new];
-    _phoneField.delegate = self;
-    _phoneField.placeholder = @"请输入您的手机号";
-    _phoneField.keyboardType = UIKeyboardTypeNumberPad;
-    [self.view addSubview:_phoneField];
-    [_phoneField mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.equalTo(line1);
-        make.bottom.equalTo(line1.top).offset(-8);
-        make.height.equalTo(27);
-        make.width.equalTo(200);
-    }];
-    [_phoneField addTarget:self action:@selector(textFieldTextChange:) forControlEvents:UIControlEventEditingChanged];
-    
     _codeButton = [UIButton new];
     _codeButton.layer.cornerRadius = 3;
     _codeButton.backgroundColor = [UIColor colorWithHexString:@"C6C6C6"];
@@ -222,6 +209,23 @@
     }];
     [_codeButton addTarget:self action:@selector(onTapCodeButton:) forControlEvents:UIControlEventTouchUpInside];
     
+    
+    _phoneField = [UITextField new];
+    _phoneField.clearButtonMode=UITextFieldViewModeWhileEditing;
+    _phoneField.delegate = self;
+    _phoneField.placeholder = @"请输入您的手机号";
+    _phoneField.keyboardType = UIKeyboardTypeNumberPad;
+    [self.view addSubview:_phoneField];
+    [_phoneField mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(line1);
+        make.bottom.equalTo(line1.top).offset(-8);
+        make.height.equalTo(27);
+        make.width.equalTo(ScreenW-(27+27+82+10));
+    }];
+    [_phoneField addTarget:self action:@selector(textFieldTextChange:) forControlEvents:UIControlEventEditingChanged];
+    
+
+    
     UIView* line2 = [UIView new];
     line2.backgroundColor = [UIColor colorWithHexString:@"DFDFDF"];
     [self.view addSubview:line2];
@@ -234,12 +238,14 @@
     
     _codeField = [UITextField new];
     _codeField.placeholder = @"请输入验证码";
+    _codeField.clearButtonMode=UITextFieldViewModeWhileEditing;
+    _codeField.keyboardType = UIKeyboardTypeNumberPad;
     [self.view addSubview:_codeField];
     [_codeField mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.equalTo(line2);
         make.bottom.equalTo(line2.top).offset(-8);
         make.height.equalTo(27);
-        make.width.equalTo(200);
+        make.width.equalTo(ScreenW-27*2);
     }];
     [_codeField addTarget:self action:@selector(textFieldTextChange:) forControlEvents:UIControlEventEditingChanged];
     

@@ -8,6 +8,7 @@
 
 #import "GoodsListingViewController.h"
 #import "OrderGoodsViewCell.h"
+#import "GoodsDetailViewController.h"
 
 @interface GoodsListingViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -18,6 +19,43 @@ static NSString *const OrderGoodsViewCellID = @"OrderGoodsViewCell";
 
 @implementation GoodsListingViewController
 
+- (void)viewDidLoad {
+    [super viewDidLoad];
+     self.title = @"商品清单";
+    
+    self.collectionView.backgroundColor = [UIColor clearColor];
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.edges.equalTo(self.view);
+    }];
+}
+
+- (void)setGoodsArray:(NSArray *)goodsArray{
+    _goodsArray = goodsArray;
+
+}
+
+#pragma mark-
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.goodsArray.count;
+}
+
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+
+    OrderGoodsViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderGoodsViewCellID forIndexPath:indexPath];
+    cell.goods = self.goodsArray[indexPath.item];
+    return  cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    GoodsDetailViewController* vc = [GoodsDetailViewController new];
+    LZCartModel *goods = self.goodsArray[indexPath.item];
+    vc.goodsId = goods.productId;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+#pragma mark-
 - (UICollectionView *)collectionView
 {
     if (!_collectionView) {
@@ -32,35 +70,10 @@ static NSString *const OrderGoodsViewCellID = @"OrderGoodsViewCell";
         _collectionView.showsVerticalScrollIndicator = NO;
         
         [_collectionView registerClass:[OrderGoodsViewCell class] forCellWithReuseIdentifier:OrderGoodsViewCellID];
-       
+        
         [self.view addSubview:_collectionView];
         _collectionView.contentInset = UIEdgeInsetsMake(10, 0, 10, 0);
     }
     return _collectionView;
 }
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-     self.title = @"商品清单";
-    
-    self.collectionView.backgroundColor = [UIColor clearColor];
-    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.edges.equalTo(self.view);
-    }];
-}
-
-- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 3;
-}
-
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-
-    OrderGoodsViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderGoodsViewCellID forIndexPath:indexPath];
-    return  cell;
-}
-
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
-    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
-}
-
 @end

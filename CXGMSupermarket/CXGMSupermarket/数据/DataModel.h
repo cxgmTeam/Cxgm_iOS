@@ -98,6 +98,7 @@
 @property (nonatomic,strong)NSString<Optional> * productNum;
 @property (nonatomic,strong)NSString<Optional> * productUrl;
 @property (nonatomic,strong)NSString<Optional> * amount;
+@property (nonatomic,strong)NSString<Optional> * shopCartId;
 
 @end
 

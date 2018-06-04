@@ -10,5 +10,5 @@
 
 
 @interface GoodsListingViewController : MyCenterSubViewController
-
+@property(nonatomic,strong)NSArray* goodsArray;
 @end

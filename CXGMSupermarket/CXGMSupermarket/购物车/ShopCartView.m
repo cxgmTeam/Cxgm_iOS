@@ -49,6 +49,7 @@
 
 - (void)setupUI
 {
+    self.bottomView.hidden = YES;
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make){
         make.bottom.left.right.equalTo(self);
         make.height.equalTo(0);
@@ -228,6 +229,7 @@
                           @"goodCode":goodsModel.goodCode.length>0?goodsModel.goodCode:@"",
                           @"goodName":goodsModel.goodName.length>0?goodsModel.goodName:@"",
                           @"goodNum":goodsModel.goodNum.length>0?goodsModel.goodNum:@"",
+                          @"categoryId":goodsModel.categoryId.length>0?goodsModel.categoryId:@"",
                           @"shopId":goodsModel.shopId.length>0?goodsModel.shopId:@""
                           };
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){

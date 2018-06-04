@@ -34,11 +34,11 @@
     return self;
 }
 
-- (void)setGoods:(GoodsModel *)goods
+- (void)setGoods:(LZCartModel *)goods
 {
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:goods.productUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
-    self.nameLabel.text = goods.productName;
-    self.sizeLabel.text = [NSString stringWithFormat:@"规格：%@g/%@",goods.weight,goods.unit];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:goods.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    self.nameLabel.text = goods.goodName;
+    self.sizeLabel.text = [NSString stringWithFormat:@"规格：%@",goods.specifications];
     
     self.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",[goods.price floatValue]];
     if ([goods.price floatValue] != [goods.originalPrice floatValue] && [goods.originalPrice floatValue] > 0)
@@ -56,7 +56,7 @@
         _oldPriceLabel.text = @"";
     }
     
-    self.numberLabel.text = [NSString stringWithFormat:@"x%@",goods.productNum];
+    self.numberLabel.text = [NSString stringWithFormat:@"x%@",goods.goodNum];
 }
 
 - (void)setupUI
