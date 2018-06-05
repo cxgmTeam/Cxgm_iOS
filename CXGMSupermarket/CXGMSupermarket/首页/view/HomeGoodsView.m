@@ -198,7 +198,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if ([DeviceHelper sharedInstance].shop) {
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
     }
-    WEAKSELF;
+
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindAdvertisement]  token:nil parameters:dic success:^(id JSON, NSError *error){
         
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
@@ -230,8 +230,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
                 return [obj1.number  compare: obj2.number];
             }];
             
-            
-            [weakSelf.collectionView reloadData];
+            NSLog(@"self.advertiseList  %@",self.advertiseList);
+            [self.collectionView reloadData];
         }
         
     } failure:^(id JSON, NSError *error){
@@ -300,7 +300,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         gridcell = cell;
     }else if (indexPath.section == 1) {
         HomeFeatureViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:HomeFeatureViewCellID forIndexPath:indexPath];
-        
+        cell.motionArray = self.advertiseList;
         gridcell = cell;
     }
     else if (indexPath.section == 2 || indexPath.section == 3){

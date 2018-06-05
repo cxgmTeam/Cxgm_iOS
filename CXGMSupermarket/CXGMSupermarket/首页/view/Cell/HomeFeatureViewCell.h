@@ -10,7 +10,7 @@
 
 @interface FeatureItemView : UIView
 @property(nonatomic,strong)UILabel* desLabel;
-
+@property(nonatomic,strong)AdvertisementModel* advertisement;
 - (void)setImageViewFrame:(BOOL)flag;
 @end
 

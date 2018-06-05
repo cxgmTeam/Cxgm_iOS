@@ -18,8 +18,7 @@
 @property (assign , nonatomic)NSInteger pageNum;
 @property (strong , nonatomic)NSMutableArray *shopList;
 
-@property(nonatomic,strong)NSArray* slideDataList;//轮播图数据
-@property(nonatomic,strong)NSMutableArray* slideImageList;//轮播图数据
+
 @end
 
 
@@ -36,7 +35,6 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         
-        self.slideImageList = [NSMutableArray array];
         
         self.collectionView.backgroundColor = [UIColor clearColor];
         [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -47,7 +45,7 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
             wself.pageNum = 1;
             [wself.shopList removeAllObjects];
             [wself getShopList];
-            [wself findAdvertisement];
+
         }];
         self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
             wself.pageNum ++;
@@ -57,52 +55,12 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
         self.pageNum = 1;
         self.shopList = [NSMutableArray array];
         
-//        [self findAdvertisement];
         [self getShopList];
     }
     return self;
 }
 
-//广告位
-- (void)findAdvertisement
-{
-    
-    [self.slideImageList removeAllObjects];
-    
-    NSDictionary* dic = @{@"shopId":@""};
-    if ([DeviceHelper sharedInstance].shop) {
-        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
-    }
-    WEAKSELF;
-    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindAdvertisement]  token:nil parameters:dic success:^(id JSON, NSError *error){
-        
-        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
-        if ([model.data isKindOfClass:[NSArray class]]) {
-            NSArray* array  = [AdvertisementModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
-            
-            NSMutableArray* array1 = [NSMutableArray array];
-            for (AdvertisementModel* model in array) {
-                if ([model.position isEqualToString:@"1"]) {
-                    [array1 addObject:model];
-                }
-            }
-            
-            
-            self.slideDataList = [array1 sortedArrayUsingComparator:^NSComparisonResult(AdvertisementModel * obj1, AdvertisementModel * obj2){
-                return [obj1.number  compare: obj2.number];
-            }];
-            
-            for (AdvertisementModel* ad in self.slideDataList) {
-                [self.slideImageList addObject:ad.imageUrl.length>0?ad.imageUrl:@""];
-            }
-            
-            [weakSelf.collectionView reloadData];
-        }
-        
-    } failure:^(id JSON, NSError *error){
-        
-    }];
-}
+
 
 - (void)getShopList
 {
@@ -132,83 +90,39 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
 
 #pragma mark-
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-//    return 2;
     return 1;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-//    if (section == 0) {
-//        return 1;
-//    }
-//    if (section == 1) {
-//        return self.shopList.count;
-//    }
-//    return 0;
+
     return self.shopList.count;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *gridcell = nil;
-//    if (indexPath.section == 0) {
-//        ShopFeatureViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ShopFeatureViewCellID forIndexPath:indexPath];
-//        gridcell = cell;
-//
-//    }else if (indexPath.section == 1) {
-        HomeShopViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:HomeShopViewCellID forIndexPath:indexPath];
-        cell.shopModel = self.shopList[indexPath.item];
-        gridcell = cell;
-//    }
+
+    HomeShopViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:HomeShopViewCellID forIndexPath:indexPath];
+    cell.shopModel = self.shopList[indexPath.item];
+    gridcell = cell;
+
     return gridcell;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    
-    UICollectionReusableView *reusableview = nil;
-    if (kind == UICollectionElementKindSectionHeader){
-//        if (indexPath.section == 0) {
-//            SlideshowHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SlideshowHeadViewID forIndexPath:indexPath];
-//            headerView.imageGroupArray = self.slideImageList;
-//            reusableview = headerView;
-//        }
-    }
-    return reusableview;
-}
 
 #pragma mark - item宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-//    if (indexPath.section == 0) {
-//        return CGSizeMake(ScreenW , 41);
-//    }
-//    if (indexPath.section == 1) {
-//        return CGSizeMake(ScreenW, 66+ScreenW*190/375.f);
-//        return CGSizeMake(ScreenW, 256);
-//    }
-//    return CGSizeZero;
     return CGSizeMake(ScreenW, 66+ScreenW*190/375.f);
 }
 
-#pragma mark - head宽高
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
-    
-//    if (section == 0) {
-//        return CGSizeMake(ScreenW, ScreenW*190/375.f); //图片滚动的宽高
-//    }
-    return CGSizeZero;
-}
 #pragma mark - <UICollectionViewDelegateFlowLayout>
 
 #pragma mark - Y间距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-//    return (section == 1) ? 10 : 0;
     return 10;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
-//    if (section == 1) {
-//        return UIEdgeInsetsMake(10, 0, 10, 0);
-//    }
-//    return UIEdgeInsetsZero;
-    
+
     return UIEdgeInsetsMake(10, 0, 10, 0);
 }
 

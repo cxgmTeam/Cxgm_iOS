@@ -16,6 +16,8 @@
 @property(nonatomic,strong)UILabel* priceLabel;   //价格
 @property(nonatomic,strong)UILabel* oldPriceLabel;//旧价格
 @property(nonatomic,strong)UIButton* addBtn;      //添加按钮
+@property(nonatomic,strong)UIButton* cutBtn;      //减小按钮
+@property(nonatomic,strong)UILabel* numberLabel;   //价格
 @end
 
 @implementation GoodsTableViewCell
@@ -29,6 +31,16 @@
     _nameLabel.text = goodsModel.name;
     _desLabel.text = @"";
     _priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",[goodsModel.price floatValue]];
+    
+    _numberLabel.text = self.goodsModel.shopCartNum;
+    
+    if ([self.goodsModel.shopCartNum intValue] > 0) {
+        _numberLabel.hidden = NO;
+        _cutBtn.hidden = NO;
+    }else{
+        _numberLabel.hidden = YES;
+        _cutBtn.hidden = YES;
+    }
     
 //    if ([goodsModel.price floatValue] != [goodsModel.originalPrice floatValue] && [goodsModel.originalPrice floatValue] > 0)
 //    {
@@ -57,13 +69,25 @@
     if (!self.goodsModel) return;
     
     if ([self.goodsModel.shopCartNum intValue] > 0) {
-        [self updateCart:self.goodsModel];
+        [self updateCart:self.goodsModel number:([self.goodsModel.shopCartNum intValue]+1)];
     }else{
         [self addCart:self.goodsModel];
     }
 }
 
-
+- (void)onTapCutBtn:(UIButton *)button
+{
+    if (![UserInfoManager sharedInstance].isLogin) {
+        [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
+        return;
+    }
+    
+    if (!self.goodsModel) return;
+    
+    if ([self.goodsModel.shopCartNum intValue] > 0) {
+        [self updateCart:self.goodsModel number:([self.goodsModel.shopCartNum intValue]-1)];
+    }
+}
 
 - (void)addCart:(GoodsModel *)goods
 {
@@ -84,6 +108,16 @@
                 [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
                 
                 self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
+                self.numberLabel.text = self.goodsModel.shopCartNum;
+                
+                if ([self.goodsModel.shopCartNum intValue] > 0) {
+                    self.numberLabel.hidden = NO;
+                    self.cutBtn.hidden = NO;
+                }else{
+                    self.numberLabel.hidden = YES;
+                    self.cutBtn.hidden = YES;
+                }
+                
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
             });
@@ -94,15 +128,15 @@
     }];
 }
 
-- (void)updateCart:(GoodsModel *)goods
+- (void)updateCart:(GoodsModel *)goods number:(NSInteger)number
 {
-    CGFloat amount = (1+[goods.shopCartNum integerValue])*[goods.price floatValue];
+    CGFloat amount = number*[goods.price floatValue];
     
     NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
                           @"amount":[NSString stringWithFormat:@"%.2f",amount],
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
-                          @"goodNum":[NSString stringWithFormat:@"%d",1+[goods.shopCartNum intValue]],
+                          @"goodNum":[NSString stringWithFormat:@"%ld",number],
                           @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
                           @"shopId":goods.shopId.length>0?goods.shopId:@""
                           };
@@ -111,9 +145,19 @@
         if ([model.code intValue] == 200) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
-                [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
+                [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"更新成功！"];
                 
-                self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
+                self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%ld",number];
+                
+                self.numberLabel.text = self.goodsModel.shopCartNum;
+                
+                if ([self.goodsModel.shopCartNum intValue] > 0) {
+                    self.numberLabel.hidden = NO;
+                    self.cutBtn.hidden = NO;
+                }else{
+                    self.numberLabel.hidden = YES;
+                    self.cutBtn.hidden = YES;
+                }
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
             });
@@ -157,6 +201,21 @@
         [_addBtn addTarget:self action:@selector(onTapAddBtn:) forControlEvents:UIControlEventTouchUpInside];
         
         
+        _numberLabel = [UILabel new];
+        _numberLabel.text = @"1";
+        _numberLabel.textAlignment = NSTextAlignmentCenter;
+        _numberLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:12];
+        _numberLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+        [self.contentView addSubview:_numberLabel];
+        
+        
+        _cutBtn = [UIButton new];
+        [_cutBtn setImage:[UIImage imageNamed:@"add_goods"] forState:UIControlStateNormal];
+        [self.contentView addSubview:_cutBtn];
+        [_cutBtn addTarget:self action:@selector(onTapCutBtn:) forControlEvents:UIControlEventTouchUpInside];
+        
+        
+        
         UIView* line = [UIView new];
         line.backgroundColor = ColorE8E8E8E;
         [self.contentView addSubview:line];
@@ -189,12 +248,28 @@
             make.left.equalTo(self.nameLabel);
         }];
         
+        
+        [_numberLabel mas_makeConstraints:^(MASConstraintMaker *make){
+            make.bottom.equalTo(-10);
+            make.right.equalTo(-35);
+            make.width.equalTo(30);
+        }];
+        
         [_addBtn mas_makeConstraints:^(MASConstraintMaker *make){
             make.size.equalTo(CGSizeMake(40, 40));
             make.right.equalTo(self);
             make.bottom.equalTo(self);
         }];
         
+        
+        [_cutBtn mas_makeConstraints:^(MASConstraintMaker *make){
+            make.size.equalTo(CGSizeMake(40, 40));
+            make.right.equalTo(-55);
+            make.bottom.equalTo(self);
+        }];
+        
+        _numberLabel.hidden = YES;
+        _cutBtn.hidden = YES;
     }
     return self;
 }

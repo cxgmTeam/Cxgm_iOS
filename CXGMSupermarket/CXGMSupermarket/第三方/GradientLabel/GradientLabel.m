@@ -30,6 +30,9 @@
     return _gradientLayer;
 }
 
+- (void)setText:(NSString *)text{
+    self.label.text = text;
+}
 
 - (void) setGradientLabel {
     

@@ -141,6 +141,7 @@
 @property (nonatomic,strong)NSString<Optional> * onShelf;
 @property (nonatomic,strong)NSString<Optional> * shopId;
 @property (nonatomic,strong)NSString<Optional> * number;//广告位的顺序
+@property (nonatomic,strong)NSString<Optional> * adverName;
 @end
 
 //首页大bannar+商品
