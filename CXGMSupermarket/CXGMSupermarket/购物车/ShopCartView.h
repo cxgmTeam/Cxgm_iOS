@@ -17,5 +17,5 @@
 
 @property(nonatomic,copy)void(^gotoConfirmOrder)(NSArray* array) ;
 
-@property(nonatomic,copy)void(^gotoGoodsDetail)(LZCartModel* model) ;
+@property(nonatomic,copy)void(^gotoGoodsDetail)(GoodsModel* model) ;
 @end

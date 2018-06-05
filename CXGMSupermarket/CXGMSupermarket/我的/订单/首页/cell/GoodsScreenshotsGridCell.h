@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface GoodsScreenshotsGridCell : UICollectionViewCell
-@property(nonatomic,strong)LZCartModel* goods;
+@property(nonatomic,strong)GoodsModel* goods;
 @end

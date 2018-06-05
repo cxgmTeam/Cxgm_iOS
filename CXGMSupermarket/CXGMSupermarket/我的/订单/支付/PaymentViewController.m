@@ -39,7 +39,7 @@
     
     [self setupMainUI];
     
-//    [self getSurplusTime];
+    [self getSurplusTime];
 }
 
 

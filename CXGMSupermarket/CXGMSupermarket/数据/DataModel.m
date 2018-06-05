@@ -51,9 +51,7 @@
 
 @end
 
-@implementation LZCartModel
 
-@end
 
 @implementation CouponsModel
 

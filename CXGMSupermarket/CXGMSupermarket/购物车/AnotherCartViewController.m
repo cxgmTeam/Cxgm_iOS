@@ -29,6 +29,7 @@
     [editBtn setTitle:@"删除" forState:UIControlStateNormal];
     [editBtn setTitleColor:Color333333 forState:UIControlStateNormal];
     editBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+    [editBtn addTarget:self action:@selector(onTapDeleteBtn:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
     
     _cartView = [[ShopCartView alloc] init];
@@ -43,7 +44,7 @@
         vc.goodsArray = array;
         [wself.navigationController pushViewController:vc animated:YES];
     };
-    _cartView.gotoGoodsDetail = ^(LZCartModel *model){
+    _cartView.gotoGoodsDetail = ^(GoodsModel *model){
         GoodsDetailViewController* vc = [GoodsDetailViewController new];
         vc.goodsId = model.productId;
         [wself.navigationController pushViewController:vc animated:YES];

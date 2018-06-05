@@ -40,7 +40,7 @@
         vc.goodsArray = array;
         [wself.navigationController pushViewController:vc animated:YES];
     };
-    _cartView.gotoGoodsDetail = ^(LZCartModel *model){
+    _cartView.gotoGoodsDetail = ^(GoodsModel *model){
         GoodsDetailViewController* vc = [GoodsDetailViewController new];
         vc.goodsId = model.productId;
         [wself.navigationController pushViewController:vc animated:YES];

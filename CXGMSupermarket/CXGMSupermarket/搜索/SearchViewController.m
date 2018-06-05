@@ -65,6 +65,7 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:AddGoodsSuccess_Notify object:nil];
     
     [self findHotProduct];
 }

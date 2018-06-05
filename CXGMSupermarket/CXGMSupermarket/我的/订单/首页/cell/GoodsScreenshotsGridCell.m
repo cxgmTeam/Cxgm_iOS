@@ -28,8 +28,10 @@
     return self;
 }
 
-- (void)setGoods:(LZCartModel *)goods
+- (void)setGoods:(GoodsModel *)goods
 {
-    [_imageView sd_setImageWithURL:[NSURL URLWithString:goods.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    if (goods.imageUrl.length > 0) {
+        [_imageView sd_setImageWithURL:[NSURL URLWithString:goods.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    }
 }
 @end

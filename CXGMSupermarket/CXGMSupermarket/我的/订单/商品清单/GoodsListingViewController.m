@@ -50,7 +50,7 @@ static NSString *const OrderGoodsViewCellID = @"OrderGoodsViewCell";
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
     GoodsDetailViewController* vc = [GoodsDetailViewController new];
-    LZCartModel *goods = self.goodsArray[indexPath.item];
+    GoodsModel *goods = self.goodsArray[indexPath.item];
     vc.goodsId = goods.productId;
     [self.navigationController pushViewController:vc animated:YES];
 }

@@ -81,6 +81,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:AddGoodsSuccess_Notify object:nil];
         
         self.slideImageList = [NSMutableArray array];
         
@@ -103,7 +104,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 {
     [self findTopProduct];
     [self findNewProduct];
-    
+    [self findMotion];
     [self findHotProduct];
 }
 

@@ -37,7 +37,7 @@
 //小计
 @property (nonatomic,strong) UILabel *subtotalLabel;
 
-@property (nonatomic,strong)LZCartModel *goodsModel;
+@property (nonatomic,strong)GoodsModel *goodsModel;
 
 @end
 
@@ -53,7 +53,7 @@
     return self;
 }
 #pragma mark - public method
-- (void)reloadDataWithModel:(LZCartModel*)model {
+- (void)reloadDataWithModel:(GoodsModel*)model {
     
     self.goodsModel = model;
     

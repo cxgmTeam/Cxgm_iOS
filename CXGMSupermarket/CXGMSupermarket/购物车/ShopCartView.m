@@ -28,6 +28,7 @@
 @property (strong,nonatomic)NSMutableArray *selectedArray;
 @property(assign,nonatomic)NSInteger pageNum;
 
+@property (strong,nonatomic)NSDictionary *moneyDic;
 @end
 
 @implementation ShopCartView
@@ -100,7 +101,7 @@
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIShopCartList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
-            NSArray* array = [LZCartModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            NSArray* array = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
             [weakSelf.dataArray addObjectsFromArray:array];
             [weakSelf.myTableView reloadData];
             
@@ -128,7 +129,7 @@
     //当进入购物车的时候判断是否有已选择的商品,有就清空
     //主要是提交订单后再返回到购物车,如果不清空,还会显示
     if (self.selectedArray.count > 0) {
-        for (LZCartModel *model in self.selectedArray) {
+        for (GoodsModel *model in self.selectedArray) {
             model.select = @"0";
         }
         [self.selectedArray removeAllObjects];
@@ -141,6 +142,12 @@
     self.bottomView.totlePriceLabel.text = @"合计：￥0.00";
     self.bottomView.preferentialLabel.text = @"总额：¥0.00  优惠：¥0.00";
     
+    //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
+    self.moneyDic = @{
+                      @"totalAmount":@"0.0",
+                      @"preferential":@"0.0",
+                      @"orderAmount":@"0.0"
+                      };
 }
 
 - (void)changeView
@@ -174,7 +181,7 @@
     
     double originalTotal = 0.0;
     
-    for (LZCartModel *model in self.selectedArray) {
+    for (GoodsModel *model in self.selectedArray) {
         
         double price = [model.price doubleValue];
         
@@ -193,6 +200,12 @@
         self.bottomView.preferentialLabel.text = [NSString stringWithFormat:@"总额：¥%.2f\n优惠：¥%.2f",originalTotal,originalTotal-totlePrice];
     }
     
+    //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
+    self.moneyDic = @{
+                      @"totalAmount":[NSString stringWithFormat:@"¥%.2f",originalTotal],
+                      @"preferential":[NSString stringWithFormat:@"¥%.2f",originalTotal-totlePrice],
+                      @"orderAmount":[NSString stringWithFormat:@"¥%.2f",totlePrice]
+                      };
 }
 
 - (void)deleteShopCart:(NSArray *)array
@@ -201,7 +214,7 @@
     
     NSString* idString = @"";
     for (NSInteger i = 0 ; i < array.count ; i++) {
-        LZCartModel * model = array[i];
+        GoodsModel * model = array[i];
         if (i == 0) {
             idString = [idString stringByAppendingString:model.id];
         }else{
@@ -220,7 +233,7 @@
     }];
 }
 
-- (void)updateCart:(LZCartModel *)goodsModel
+- (void)updateCart:(GoodsModel *)goodsModel
 {
     CGFloat amount = [goodsModel.goodNum floatValue]*[goodsModel.price floatValue];
     
@@ -230,7 +243,8 @@
                           @"goodName":goodsModel.goodName.length>0?goodsModel.goodName:@"",
                           @"goodNum":goodsModel.goodNum.length>0?goodsModel.goodNum:@"",
                           @"categoryId":goodsModel.categoryId.length>0?goodsModel.categoryId:@"",
-                          @"shopId":goodsModel.shopId.length>0?goodsModel.shopId:@""
+                          @"shopId":goodsModel.shopId.length>0?goodsModel.shopId:@"",
+                          @"productId":goodsModel.productId.length>0?goodsModel.productId:@""
                           };
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
@@ -271,7 +285,7 @@
             cell = [[LZCartTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LZCartReusableCell"];
         }
         
-        LZCartModel *model = self.dataArray[indexPath.row];
+        GoodsModel *model = self.dataArray[indexPath.row];
         
         __block typeof(cell)wsCell = cell;
         typeof(self) __weak wself = self;
@@ -361,7 +375,7 @@
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除该商品?删除后无法恢复!" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            LZCartModel *model = [self.dataArray objectAtIndex:indexPath.row];
+            GoodsModel *model = [self.dataArray objectAtIndex:indexPath.row];
             
             NSArray* array = [NSArray arrayWithObject:model];
             [wself deleteShopCart:array];
@@ -407,7 +421,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    LZCartModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    GoodsModel *model = [self.dataArray objectAtIndex:indexPath.row];
     !_gotoGoodsDetail?:_gotoGoodsDetail(model);
 
 }
@@ -422,7 +436,7 @@
     button.selected = !button.selected;
     
     //点击全选时,把之前已选择的全部删除
-    for (LZCartModel *model in self.selectedArray) {
+    for (GoodsModel *model in self.selectedArray) {
         model.select = @"0";
     }
     
@@ -430,7 +444,7 @@
     
     if (button.selected) {
         
-        for (LZCartModel *model in self.dataArray) {
+        for (GoodsModel *model in self.dataArray) {
             model.select = @"1";
             [self.selectedArray addObject:model];
         }
@@ -451,7 +465,7 @@
         [wself deleteShopCart:self.selectedArray];
         
         //删除成功后的操作
-        for (LZCartModel* model in wself.selectedArray) {
+        for (GoodsModel* model in wself.selectedArray) {
             [wself.dataArray removeObject:model];
         }
         
@@ -480,7 +494,7 @@
     if (self.selectedArray.count > 0) {
         for (NSInteger i = 0; i < self.selectedArray.count; i++) {
 
-            LZCartModel *model = self.selectedArray[i];
+//            LZCartModel *model = self.selectedArray[i];
             
             if (i == self.selectedArray.count-1) {
                 !_gotoConfirmOrder?:_gotoConfirmOrder(self.selectedArray);

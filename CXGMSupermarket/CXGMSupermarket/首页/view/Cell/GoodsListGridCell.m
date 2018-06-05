@@ -113,13 +113,15 @@
 
 - (void)addCart:(GoodsModel *)goods
 {
-    NSDictionary* dic = @{@"amount":goods.price.length>0?goods.price:@"",
+    NSDictionary* dic = @{
+                          @"id":goods.id.length>0?goods.id:@"",
+                          @"amount":goods.price.length>0?goods.price:@"",
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
                           @"goodNum":@"1",
                           @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
-                          @"shopId":goods.shopId.length>0?goods.shopId:@"",
-                          @"productId":goods.id.length>0?goods.id:@""
+                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
+                          @"productId":goods.id.length>0?goods.id:@"",
                           };
     
     typeof(self) __weak wself = self;
@@ -133,7 +135,7 @@
                 [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
                 
                 self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
-                
+                self.goodsModel.shopCartId = [NSString stringWithFormat:@"%@",model.data];
                 
                 if (wself.PurchaseCarAnimation) {
                     wself.PurchaseCarAnimation(wself.gridImageView);
@@ -158,7 +160,7 @@
                           @"goodName":goods.name.length>0?goods.name:@"",
                           @"goodNum":[NSString stringWithFormat:@"%d",1+[goods.shopCartNum intValue]],
                           @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
-                          @"shopId":goods.shopId.length>0?goods.shopId:@"",
+                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
                           @"productId":goods.id.length>0?goods.id:@""
                           };
     

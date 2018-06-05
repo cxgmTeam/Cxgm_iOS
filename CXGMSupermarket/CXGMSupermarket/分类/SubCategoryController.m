@@ -55,7 +55,7 @@ static CGFloat TopBtnWidth = 60;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
-   
+   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:AddGoodsSuccess_Notify object:nil];
     
     self.leftTableView.backgroundColor = RGB(0xf7, 0xf8, 0xf7);
     [self.leftTableView mas_makeConstraints:^(MASConstraintMaker *make){

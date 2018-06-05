@@ -97,6 +97,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
     //    orderAmount = totalAmount - preferential + 10
     
+
+    
+    
     [self.orderParam setObject:self.address.id forKey:@"addressId"];
     [self.orderParam setObject:self.timeFootview.timeLabel.text forKey:@"receiveTime"];
     
@@ -172,7 +175,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     [self.orderParam removeAllObjects];
     
     NSMutableArray* categoryArray = [NSMutableArray array];
-    for (LZCartModel *model in self.goodsArray)
+    for (GoodsModel *model in self.goodsArray)
     {
         BOOL flag = NO;
         for (NSString * category in categoryArray) {
@@ -193,7 +196,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     {
         CGFloat amount = 0;
         
-        for (LZCartModel *model in self.goodsArray)
+        for (GoodsModel *model in self.goodsArray)
         {
             if ([model.categoryId isEqualToString:category])
             {
@@ -212,7 +215,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     
     NSMutableArray* array2 = [NSMutableArray array];
-    for (LZCartModel *model in self.goodsArray) {
+    for (GoodsModel *model in self.goodsArray) {
         NSDictionary* dic = @{
                               @"goodCode": model.goodCode.length>0?model.goodCode:@"",
                               @"id": model.id.length>0?model.id:@"",

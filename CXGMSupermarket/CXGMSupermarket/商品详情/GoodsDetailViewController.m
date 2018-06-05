@@ -147,6 +147,13 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                     [self.slideImageArray addObject:dic[@"url"]];
                 }
             }
+            
+            if ([self.goodsDetail.goodNum integerValue] > 0) {
+                self.addGoodsBtn.hidden = NO;
+            }else{
+                self.addGoodsBtn.hidden = YES;
+            }
+            
             self.topToolView.goodNameLabel.text = self.goodsDetail.name;
             [self.collectionView reloadData];
             
@@ -225,13 +232,15 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 {
     CGFloat amount = [goods.price floatValue]*self.number;
     
-    NSDictionary* dic = @{@"amount":[NSString stringWithFormat:@"%.2f",amount],
+    NSDictionary* dic = @{
+                          @"id":goods.id.length>0?goods.id:@"",
+                          @"amount":[NSString stringWithFormat:@"%.2f",amount],
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
                           @"goodNum":[NSString stringWithFormat:@"%ld",(long)self.number],
                           @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
-                          @"shopId":goods.shopId.length>0?goods.shopId:@"",
-                          @"productId":goods.id.length>0?goods.id:@""
+                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
+                          @"productId":goods.id.length>0?goods.id:@"",
                           };
 
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
@@ -239,6 +248,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         if ([model.code intValue] == 200) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)self.number];
+                self.goodsDetail.shopCartId = [NSString stringWithFormat:@"%@",model.data];
+                
                 [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
             
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
@@ -254,13 +265,13 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 {
     CGFloat amount = (self.number+[goods.shopCartNum integerValue])*[goods.price floatValue];
     
-    NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
+    NSDictionary* dic = @{@"id":goods.id.length>0?goods.id:@"",
                           @"amount":[NSString stringWithFormat:@"%.2f",amount],
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
                           @"goodNum":[NSString stringWithFormat:@"%d",1+[goods.shopCartNum intValue]],
                           @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
-                          @"shopId":goods.shopId.length>0?goods.shopId:@"",
+                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
                           @"productId":goods.id.length>0?goods.id:@""
                           };
     

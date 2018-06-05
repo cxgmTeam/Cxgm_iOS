@@ -15,7 +15,7 @@ typedef void(^LZCellSelectedBlock)(BOOL select);
 @property (assign,nonatomic)NSInteger lzNumber;
 @property (assign,nonatomic)BOOL lzSelected;
 
-- (void)reloadDataWithModel:(LZCartModel*)model;
+- (void)reloadDataWithModel:(GoodsModel*)model;
 - (void)numberAddWithBlock:(LZNumberChangedBlock)block;
 - (void)numberCutWithBlock:(LZNumberChangedBlock)block;
 - (void)cellSelectedWithBlock:(LZCellSelectedBlock)block;
