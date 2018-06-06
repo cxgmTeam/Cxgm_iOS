@@ -224,6 +224,7 @@
 
 @property(nonatomic,copy)NSString *address;
 @property(nonatomic,copy)NSString *street;
+
 @property(nonatomic,assign)double latitude;
 @property(nonatomic,assign)double longitude;
 

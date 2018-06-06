@@ -108,17 +108,28 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     [self.upTopBtn addTarget:self action:@selector(onTapUpTopBtn:) forControlEvents:UIControlEventTouchUpInside];
     self.upTopBtn.hidden = YES;
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
     
     self.number = 1;
     
     self.slideImageArray = [NSMutableArray array];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    
+    //主要是刷新 shopCartNum 和 shopCartId
     if (self.goodsId) {
         [self findProductDetail];
     }
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
 
 - (void)findProductDetail
 {
@@ -146,12 +157,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                 for (NSDictionary* dic in self.goodsDetail.productImageList) {
                     [self.slideImageArray addObject:dic[@"url"]];
                 }
-            }
-            
-            if ([self.goodsDetail.goodNum integerValue] > 0) {
-                self.addGoodsBtn.hidden = NO;
-            }else{
-                self.addGoodsBtn.hidden = YES;
             }
             
             self.topToolView.goodNameLabel.text = self.goodsDetail.name;
@@ -196,11 +201,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     } failure:^(id JSON, NSError *error){
         
     }];
-}
-
-- (void)refreshGoodsInfo:(NSNotification *)notify
-{
-    [self findProductDetail];
 }
 
 - (void)onTapUpTopBtn:(id)sender
@@ -265,7 +265,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 {
     CGFloat amount = (self.number+[goods.shopCartNum integerValue])*[goods.price floatValue];
     
-    NSDictionary* dic = @{@"id":goods.id.length>0?goods.id:@"",
+    NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
                           @"amount":[NSString stringWithFormat:@"%.2f",amount],
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
@@ -664,25 +664,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         [self.collectionView reloadData];
         
     }];
-}
-
-
-#pragma mark-
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-}
-
-- (void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

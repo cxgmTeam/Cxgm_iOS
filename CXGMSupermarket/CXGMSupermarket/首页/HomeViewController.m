@@ -37,6 +37,8 @@
     [super viewDidLoad];
     
     [self setupTopBar];
+    
+    [self checkAppUpdate];
 
 }
 
@@ -84,6 +86,8 @@
             [_goodsView mas_makeConstraints:^(MASConstraintMaker *make){
                 make.edges.equalTo(self.view);
             }];
+
+            
             typeof(self) __weak wself = self;
             _goodsView.showSubCategoryVC = ^{
                 SubCategoryController* vc = [SubCategoryController new];
@@ -208,5 +212,82 @@
     }
     
     return titleWidth;
+}
+
+#pragma mark- 检查更新
+-(void)checkAppUpdate
+{
+    NSString* appid = @"1394406457";
+    NSDictionary* infoDict=[[NSBundle mainBundle] infoDictionary];
+    NSString* nowVersion=[infoDict objectForKey:@"CFBundleShortVersionString"];
+    
+    NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://itunes.apple.com/lookup?id=%@",appid]];
+    NSString* file=[NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
+    if (!file) {
+        return;
+    }
+    
+    NSError *err = nil;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[file dataUsingEncoding:NSUTF8StringEncoding]
+                                                         options:NSJSONReadingMutableContainers
+                                                           error:&err];
+    if ([dict[@"resultCount"] integerValue] == 0) {
+        return;
+    }
+    NSRange substr=[file rangeOfString:@"\"version\":\""];//判断是不是找到字符
+    NSRange range1=NSMakeRange(substr.location+substr.length,10);
+    NSRange substr2=[file rangeOfString:@"\""options:NSCaseInsensitiveSearch range:range1];
+    NSRange range2=NSMakeRange(substr.location+substr.length,substr2.location-substr.location-substr.length);
+    NSString*newVersion=[file substringWithRange:range2];
+    
+    NSLog(@"nowVersion %@   newVersion %@",nowVersion,newVersion);
+    if (newVersion)
+    {
+        BOOL flag = [self compareEditionNumber:newVersion localNumber:nowVersion];
+        if (flag) {
+            [[[UIAlertView alloc] initWithTitle:@"发现新版本"
+                                        message:@"是否前往App Store更新?"
+                                       delegate:self
+                              cancelButtonTitle:@"取消"
+                              otherButtonTitles:@"更新", nil] show];
+        }
+    }
+    
+}
+
+//输出YES（服务器大与本地） 输出NO（服务器小于本地）
+- (BOOL)compareEditionNumber:(NSString *)serverNumberStr localNumber:(NSString*)localNumberStr {
+    //剔除版本号字符串中的点
+    serverNumberStr = [serverNumberStr stringByReplacingOccurrencesOfString:@"." withString:@""];
+    localNumberStr = [localNumberStr stringByReplacingOccurrencesOfString:@"." withString:@""];
+    //计算版本号位数差
+    int placeMistake = (int)(serverNumberStr.length-localNumberStr.length);
+    //根据placeMistake的绝对值判断两个版本号是否位数相等
+    if (abs(placeMistake) == 0) {
+        //位数相等
+        return [serverNumberStr integerValue] > [localNumberStr integerValue];
+    }else {
+        //位数不等
+        //multipleMistake差的倍数
+        NSInteger multipleMistake = pow(10, abs(placeMistake));
+        NSInteger server = [serverNumberStr integerValue];
+        NSInteger local = [localNumberStr integerValue];
+        if (server > local) {
+            return server > local * multipleMistake;
+        }else {
+            return server * multipleMistake > local;
+        }
+    }
+}
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if (1 == buttonIndex)
+    {
+        NSString* appid = @"1394406457";
+        NSString *str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=%@",appid ];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+    }
 }
 @end

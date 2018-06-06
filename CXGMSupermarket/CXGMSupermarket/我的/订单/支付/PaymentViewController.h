@@ -10,4 +10,8 @@
 
 @interface PaymentViewController : MyCenterSubViewController
 @property(nonatomic,strong)OrderModel* order;
+
+//从确认订单传递过来的参数
+@property(nonatomic,strong)NSString* orderAmount;
+@property(nonatomic,strong)NSString* orderId;
 @end

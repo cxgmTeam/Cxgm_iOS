@@ -202,9 +202,9 @@
     
     //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
     self.moneyDic = @{
-                      @"totalAmount":[NSString stringWithFormat:@"¥%.2f",originalTotal],
-                      @"preferential":[NSString stringWithFormat:@"¥%.2f",originalTotal-totlePrice],
-                      @"orderAmount":[NSString stringWithFormat:@"¥%.2f",totlePrice]
+                      @"totalAmount":[NSString stringWithFormat:@"%.2f",originalTotal],
+                      @"preferential":[NSString stringWithFormat:@"%.2f",originalTotal-totlePrice],
+                      @"orderAmount":[NSString stringWithFormat:@"%.2f",totlePrice]
                       };
 }
 
@@ -273,6 +273,7 @@
     if (self.dataArray.count == 0)
     {
         CartEmptyTableCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CartEmptyTableCell"];
+        cell.shoppingBtn.hidden = self.hideShoppingBtn;
         if (cell == nil) {
             cell = [[CartEmptyTableCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CartEmptyTableCell"];
         }
@@ -421,8 +422,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    GoodsModel *model = [self.dataArray objectAtIndex:indexPath.row];
-    !_gotoGoodsDetail?:_gotoGoodsDetail(model);
+    if (self.dataArray.count > indexPath.row) {
+        GoodsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+        !_gotoGoodsDetail?:_gotoGoodsDetail(model);
+    }
+    
 
 }
 #pragma mark-
@@ -493,11 +497,9 @@
     
     if (self.selectedArray.count > 0) {
         for (NSInteger i = 0; i < self.selectedArray.count; i++) {
-
-//            LZCartModel *model = self.selectedArray[i];
             
             if (i == self.selectedArray.count-1) {
-                !_gotoConfirmOrder?:_gotoConfirmOrder(self.selectedArray);
+                !_gotoConfirmOrder?:_gotoConfirmOrder(self.selectedArray,self.moneyDic);
             }
         }
     } else {

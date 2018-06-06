@@ -61,44 +61,22 @@
             NSLog(@"\n\n%@ \n\n%@\n\n",[NSString stringWithFormat:@"%@",task.response.URL],aString);
             
             DataModel * model = [[DataModel alloc] initWithString:aString error:nil];
-            if ([model.code intValue] == 200) {
-                success(aString,nil);
-//                NSString * url = [NSString stringWithFormat:@"%@",task.response.URL];
-//                [self writeDiskWithData:[aString dataUsingEncoding:NSUTF8StringEncoding] Path:url];
-            }
-            else if ([model.code  integerValue] == 403){
+            
+            if ([model.code  integerValue] == 403){
                 [[UserInfoManager sharedInstance] deleteUserInfo];
                 UIWindow* window = [UIApplication sharedApplication].keyWindow;
                 [MBProgressHUD MBProgressHUDWithView:window Str:@"登录失效，请重新登录"];
             }
             else
             {
-//                NSString * url = [NSString stringWithFormat:@"%@",task.response.URL];
-//                NSString * diskaString = [self readFromDiskWithPath:url];
-//                if (diskaString) {
-//                    success(diskaString,nil);
-//                }
-//                else
-                {
-                    failure(model.msg,nil);
-                }
+                success(aString,nil);
             }
         }
         
     } failure:^(NSURLSessionDataTask * _Nonnull task, NSError * _Nonnull error) {
         NSLog(@"get failure error %@",error);
         if (failure) {
-//            NSString * url = [NSString stringWithFormat:@"%@",[error.userInfo objectForKey:@"NSErrorFailingURLKey"]];
-//            NSString * aString = [self readFromDiskWithPath:url];
-//            if (aString) {
-//                success(aString,nil);
-//            }
-//            else
-            {
-                UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
-                [MBProgressHUD MBProgressHUDWithView:window Str:@"请检查网络连接"];
-                failure(@"请求失败",nil);
-            }
+            failure(@"请求失败",nil);
         }
     }];
     return task;
@@ -130,21 +108,14 @@
             NSLog(@"\n\n%@ \n%@\n\n%@\n\n",[NSString stringWithFormat:@"%@",task.response.URL],parameters,aString);
             
             DataModel * model = [[DataModel alloc] initWithString:aString error:nil];
-            if ([model.code intValue] == 200) {
-                success(aString,nil);
-            }
-            else if ([model.code  integerValue] == 403){
+            if ([model.code  integerValue] == 403){
                 [[UserInfoManager sharedInstance] deleteUserInfo];
                 UIWindow* window = [UIApplication sharedApplication].keyWindow;
                 [MBProgressHUD MBProgressHUDWithView:window Str:@"登录失效，请重新登录"];
             }
             else
             {
-                if (failure)
-                {
-                    aString = [NSString stringWithFormat:@"{\"result\":%@,\"code\":%@,\"msg\":\"%@\"}",model.result,model.code,model.msg];
-                    failure(model,nil);
-                }
+                success(aString,nil);
             }
         }
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error){
@@ -223,8 +194,8 @@
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
         NSLog(@"PostImage... failure");
         if (failure) {
-            UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
-            [MBProgressHUD MBProgressHUDWithView:window Str:error.description];
+//            UIWindow * window = [[[UIApplication sharedApplication] delegate] window];
+//            [MBProgressHUD MBProgressHUDWithView:window Str:error.description];
             failure(@"请求失败",nil);
         }
     }];

@@ -20,17 +20,18 @@
 
 - (void)setupUI
 {
-    UIButton* button = [UIButton new];
-    button.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
-    [button setTitle:@"去逛逛" forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self addSubview:button];
-    [button addTarget:self action:@selector(gotoWindowShopping:) forControlEvents:UIControlEventTouchUpInside];
-    [button mas_makeConstraints:^(MASConstraintMaker *make){
+    _shoppingBtn = [UIButton new];
+    _shoppingBtn.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
+    [_shoppingBtn setTitle:@"去逛逛" forState:UIControlStateNormal];
+    _shoppingBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
+    [_shoppingBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self addSubview:_shoppingBtn];
+    [_shoppingBtn addTarget:self action:@selector(gotoWindowShopping:) forControlEvents:UIControlEventTouchUpInside];
+    [_shoppingBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.size.equalTo(CGSizeMake(120, 42));
         make.center.equalTo(self);
     }];
+    _shoppingBtn.hidden = YES;
     
     UILabel *warnLabel = [[UILabel alloc]init];
     warnLabel.textAlignment = NSTextAlignmentCenter;
@@ -39,7 +40,7 @@
     warnLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
     [self addSubview:warnLabel];
     [warnLabel mas_makeConstraints:^(MASConstraintMaker *make){
-        make.bottom.equalTo(button.top).offset(-24);
+        make.bottom.equalTo(self.shoppingBtn.top).offset(-24);
         make.centerX.equalTo(self);
     }];
     

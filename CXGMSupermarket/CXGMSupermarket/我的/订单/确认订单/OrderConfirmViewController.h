@@ -11,4 +11,5 @@
 @interface OrderConfirmViewController : MyCenterSubViewController
 
 @property(nonatomic,strong)NSArray* goodsArray;
+@property(nonatomic,strong)NSDictionary* moneyDic;
 @end

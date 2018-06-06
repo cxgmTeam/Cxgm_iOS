@@ -13,20 +13,31 @@
 @property(nonatomic,strong)UIImageView* stateimgView;
 @property(nonatomic,strong)UILabel* stateLabel;
 @property(nonatomic,strong)UILabel* descLabel;
-@property(nonatomic,strong)UILabel* remainTimeLabel;
+
 @end
 
 //0待支付，1待配送（已支付），2配送中，3已完成，4退货
 @implementation OrderStateHeadView
 
 - (void)setOrderItem:(OrderModel *)orderItem{
+    _orderItem = orderItem;
+    
     switch ([orderItem.status intValue]) {
+        case 0:{
+            _colorView.backgroundColor =  [UIColor colorWithRed:250/255.0 green:142/255.0 blue:46/255.0 alpha:1/1.0];
+            _stateimgView.image = [UIImage imageNamed:@"order_toPay"];
+            _stateLabel.text = @"待付款";
+            _descLabel.text = @"请在订单提交后，尽快支付，超时将取消订单";
+            _remainTimeLabel.text = @"剩余 00:00:00";
+        }
+            
+            break;
         case 1:{
             _colorView.backgroundColor = [UIColor colorWithRed:250/255.0 green:142/255.0 blue:46/255.0 alpha:1/1.0];
             _stateimgView.image = [UIImage imageNamed:@"order_toPay"];
             _stateLabel.text = @"配送中";
             _descLabel.text = @"订单已经确认，配送小哥正在飞奔配送，请注意查收～";
-            _remainTimeLabel.text = @"剩余 01:59";
+            _remainTimeLabel.text = @"剩余 00:00:00";
         }
             
             break;
@@ -49,8 +60,6 @@
             
             break;
 
-            
-
         case 4:{
             _colorView.backgroundColor = [UIColor colorWithRed:173/255.0 green:173/255.0 blue:173/255.0 alpha:1/1.0];
             _stateimgView.image = [UIImage imageNamed:@"order_cancelled"];
@@ -66,12 +75,14 @@
     }
 }
 
+
+
+
+
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
 
-        
         [self setupUI];
-
     }
     return self;
 }

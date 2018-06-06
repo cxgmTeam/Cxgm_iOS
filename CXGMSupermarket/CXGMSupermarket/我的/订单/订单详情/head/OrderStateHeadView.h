@@ -11,4 +11,6 @@
 
 @interface OrderStateHeadView : UICollectionReusableView
 @property(nonatomic,strong)OrderModel* orderItem;
+
+@property(nonatomic,strong)UILabel* remainTimeLabel;
 @end

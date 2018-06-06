@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface CartEmptyTableCell : UITableViewCell
-
+@property(nonatomic,strong)UIButton* shoppingBtn;
 @end
+

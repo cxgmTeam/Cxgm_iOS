@@ -51,11 +51,7 @@ static CGFloat TopBtnWidth = 60;
     self.title = self.category.name;
     
     self.dictionary = [NSMutableDictionary dictionary];
-    
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
-   [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:AddGoodsSuccess_Notify object:nil];
+
     
     self.leftTableView.backgroundColor = RGB(0xf7, 0xf8, 0xf7);
     [self.leftTableView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -85,11 +81,6 @@ static CGFloat TopBtnWidth = 60;
     if (self.category) {
         [self findSecondCategory:self.category.id];
     }
-}
-
-- (void)refreshGoodsInfo:(NSNotification *)notify
-{
-    [self findProductByCategory:self.secondCategory.id];
 }
 
 - (void)setupThirdCategory
@@ -509,6 +500,11 @@ static CGFloat TopBtnWidth = 60;
     
     self.navigationItem.rightBarButtonItems = @[cartItem,searchItem];
     
+    
+    //主要是刷新 shopCartNum 和 shopCartId
+    if (self.secondCategory) {
+        [self findProductByCategory:self.secondCategory.id];
+    }
 }
 
 - (void)onTapSearchBtn:(id)sender
@@ -546,7 +542,4 @@ static CGFloat TopBtnWidth = 60;
 }
 
 
-- (void)dealloc{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-}
 @end

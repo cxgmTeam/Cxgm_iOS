@@ -109,7 +109,7 @@
 #define AddOrder_Success   @"AddOrder_Success"
 #define CancelOrder_Success   @"CancelOrder_Success"
 
-
+#define Show_PayResult   @"Show_PayResult"
 
 
 #define PAGECOUNT  @"10"

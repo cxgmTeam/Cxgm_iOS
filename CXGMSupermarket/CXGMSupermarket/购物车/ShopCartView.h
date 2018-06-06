@@ -10,12 +10,14 @@
 
 @interface ShopCartView : UIView
 
+@property(nonatomic,assign)BOOL hideShoppingBtn;
+
 //点击右上角的删除按钮调用
 - (void)deleteSelectedGoods;
 
 - (void)retsetSelectedStatus;
 
-@property(nonatomic,copy)void(^gotoConfirmOrder)(NSArray* array) ;
+@property(nonatomic,copy)void(^gotoConfirmOrder)(NSArray* array,NSDictionary* dic) ;
 
 @property(nonatomic,copy)void(^gotoGoodsDetail)(GoodsModel* model) ;
 @end

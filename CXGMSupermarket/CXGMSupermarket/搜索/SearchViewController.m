@@ -62,12 +62,23 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
         make.bottom.equalTo(-20);
     }];
     [_cartBtn.carButton setImage:[UIImage imageNamed:@"cart_search"] forState:UIControlStateNormal];
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:AddGoodsSuccess_Notify object:nil];
+
     
     [self findHotProduct];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    _topView.hidden = NO;
+    
+
+    if (self.showSearchResult && [_textField.text length] > 0) {
+        [self searchGoods:_textField.text];
+    }
+    
 }
 
 
@@ -127,13 +138,6 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     [self searchGoods:_textField.text];
     
     return YES;
-}
-
-- (void)refreshGoodsInfo:(NSNotification *)notify
-{
-    if (self.showSearchResult) {
-        [self searchGoods:_textField.text];
-    }
 }
 
 #pragma mark -
@@ -256,14 +260,7 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     return titleWidth;
 }
 
-- (void)viewWillAppear:(BOOL)animated{
-    [super viewWillAppear:animated];
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    _topView.hidden = NO;
-    
-}
+
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];

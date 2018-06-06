@@ -33,15 +33,17 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:editBtn];
     
     _cartView = [[ShopCartView alloc] init];
+    _cartView.hideShoppingBtn = YES;
     [self.view addSubview:_cartView];
     [_cartView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
     }];
     
     typeof(self) __weak wself = self;
-    _cartView.gotoConfirmOrder = ^(NSArray *array){
+    _cartView.gotoConfirmOrder = ^(NSArray *array,NSDictionary* dic){
         OrderConfirmViewController* vc = [OrderConfirmViewController new];
         vc.goodsArray = array;
+        vc.moneyDic = dic;
         [wself.navigationController pushViewController:vc animated:YES];
     };
     _cartView.gotoGoodsDetail = ^(GoodsModel *model){

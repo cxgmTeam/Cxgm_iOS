@@ -215,7 +215,7 @@
         
         
         _cutBtn = [UIButton new];
-        [_cutBtn setImage:[UIImage imageNamed:@"add_goods"] forState:UIControlStateNormal];
+        [_cutBtn setImage:[UIImage imageNamed:@"cut_goods"] forState:UIControlStateNormal];
         [self.contentView addSubview:_cutBtn];
         [_cutBtn addTarget:self action:@selector(onTapCutBtn:) forControlEvents:UIControlEventTouchUpInside];
         

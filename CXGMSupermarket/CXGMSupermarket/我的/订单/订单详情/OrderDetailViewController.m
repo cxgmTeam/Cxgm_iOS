@@ -24,6 +24,13 @@
 @interface OrderDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)OrderModel *orderDetail;
+
+@property (strong , nonatomic)OrderStateHeadView *stateHeader;
+
+@property(nonatomic,assign)NSInteger surplusTime;
+@property(nonatomic,strong)NSTimer * timer;
+
+@property(nonatomic,strong)UIView* bottomView;
 @end
 
 
@@ -50,10 +57,14 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     
     self.collectionView.backgroundColor = [UIColor clearColor];
     
+    
+    
+    
+    
     if ([self.orderItem.status intValue] == 0) {
-        UIView* bottomView = [UIView new];
-        [self.view addSubview:bottomView];
-        [bottomView mas_makeConstraints:^(MASConstraintMaker *make){
+        _bottomView = [UIView new];
+        [self.view addSubview:_bottomView];
+        [_bottomView mas_makeConstraints:^(MASConstraintMaker *make){
             make.bottom.left.right.equalTo(self.view);
             make.height.equalTo(50);
         }];
@@ -63,10 +74,10 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
             [cancelBtn setTitle:@"取消订单" forState:UIControlStateNormal];
             [cancelBtn setTitleColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0] forState:UIControlStateNormal];
             cancelBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
-            [bottomView addSubview:cancelBtn];
+            [_bottomView addSubview:cancelBtn];
             [cancelBtn addTarget:self action:@selector(cancelOrder:) forControlEvents:UIControlEventTouchUpInside];
             [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make){
-                make.left.top.bottom.equalTo(bottomView);
+                make.left.top.bottom.equalTo(self.bottomView);
                 make.width.equalTo(ScreenW/2.f);
             }];
             
@@ -75,17 +86,17 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
             [payBtn setTitle:@"立即支付" forState:UIControlStateNormal];
             [payBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
             payBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
-            [bottomView addSubview:payBtn];
+            [self.bottomView addSubview:payBtn];
             [payBtn addTarget:self action:@selector(payOrder:) forControlEvents:UIControlEventTouchUpInside];
             [payBtn mas_makeConstraints:^(MASConstraintMaker *make){
-                make.right.top.bottom.equalTo(bottomView);
+                make.right.top.bottom.equalTo(self.bottomView);
                 make.width.equalTo(ScreenW/2.f);
             }];
         }
         
         [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
             make.top.left.right.equalTo(self.view);
-            make.bottom.equalTo(bottomView.top);
+            make.bottom.equalTo(self.bottomView.top);
         }];
     }
     else
@@ -96,6 +107,10 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     }
     
     if (self.orderItem) {
+        self.orderId = self.orderItem.id;
+    }
+    
+    if (self.orderId) {
         [self getOrderDetail];
     }
 }
@@ -103,10 +118,11 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
 - (void)getOrderDetail
 {
-    NSDictionary* dic = @{@"orderId":self.orderItem.id};
+    NSDictionary* dic = @{@"orderId":self.orderId};
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
+    typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIOrderDetail] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
         
         [MBProgressHUD hideHUDForView:self.view animated:YES];
@@ -114,7 +130,9 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSDictionary class]]) {
             self.orderDetail = [OrderModel OrderModelWithJson:(NSDictionary *)model.data];
-            
+            if ([self.orderDetail.status intValue] == 0) {
+                [wself getSurplusTime];
+            }
             [self.collectionView reloadData];
         }
     } failure:^(id JSON, NSError *error){
@@ -123,10 +141,70 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     
 }
 
+
+- (void)getSurplusTime
+{
+    NSDictionary* dic = @{@"orderId":self.orderDetail.id};
+    
+    typeof(self) __weak wself = self;
+    [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APISurplusTime] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        
+        if ([model.code isEqualToString:@"200"]) {
+            self.surplusTime = [(NSNumber *)model.data longValue];
+            [wself setupTimer];
+        }else{
+            self.stateHeader.remainTimeLabel.text = @"已超时";
+            
+            self.bottomView.hidden = YES;
+            [self.collectionView remakeConstraints:^(MASConstraintMaker *make){
+                make.edges.equalTo(self.view);
+            }];
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+- (void)setupTimer
+{
+    if (!_timer) {
+        _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    }
+}
+
+- (void)onTimer
+{
+    self.surplusTime = self.surplusTime-1000;
+    if (self.surplusTime > 1000) {
+        NSString* surplus = [Utility formateDate:self.surplusTime];
+        _stateHeader.remainTimeLabel.text = [NSString stringWithFormat:@"支付剩余时间  %@",surplus];
+    }else{
+        [self stopTimer];
+        _stateHeader.remainTimeLabel.text = @"已超时";
+        
+        self.bottomView.hidden = YES;
+        [self.collectionView remakeConstraints:^(MASConstraintMaker *make){
+            make.edges.equalTo(self.view);
+        }];
+    }
+}
+
+- (void)stopTimer
+{
+    if(_timer != nil){
+        [_timer invalidate];
+        _timer = nil;
+    }
+}
+
 #pragma mark- 点击按钮事件
 - (void)cancelOrder:(UIButton *)button
 {
-    NSDictionary* dic = @{@"orderId":self.orderItem.id};
+    NSDictionary* dic = @{@"orderId":self.orderId};
     
     [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APICancelOrder] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
 
@@ -145,7 +223,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 - (void)payOrder:(UIButton *)button
 {
     PaymentViewController* vc = [PaymentViewController new];
-    vc.order = self.orderItem;
+    vc.order = self.orderDetail;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -200,7 +278,9 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     if (kind == UICollectionElementKindSectionHeader){
         if (indexPath.section == 0) {
             OrderStateHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderStateHeadViewID forIndexPath:indexPath];
-            headerView.orderItem = self.orderItem;
+            headerView.orderItem = self.orderDetail;
+            _stateHeader = headerView;
+            
             reusableview = headerView;
         }else if (indexPath.section == 1){
             ShopAddressHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ShopAddressHeadViewID forIndexPath:indexPath];
@@ -287,5 +367,9 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         [self.view addSubview:_collectionView];
     }
     return _collectionView;
+}
+
+- (void)dealloc{
+    [self stopTimer];
 }
 @end

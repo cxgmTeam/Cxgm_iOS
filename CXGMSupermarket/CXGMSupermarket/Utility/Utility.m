@@ -125,6 +125,32 @@
     return[phoneNum stringByReplacingCharactersInRange:NSMakeRange(3,4)withString:@"****"];
 }
 
++(NSString *)formateDate:(long)ms
+{
+    NSString* dateString = @"";
+    
+    int ss = 1000;
+    int mi = ss * 60;
+    int hh = mi * 60;
+    int dd = hh * 24;
+    
+    
+    long day = ms / dd;
+    long hour = (ms - day * dd) / hh;
+    long minute = (ms - day * dd - hour * hh) / mi;
+    long second = (ms - day * dd - hour * hh - minute * mi) / ss;
+    
+    
+    if (day>0) {
+        dateString = [NSString stringWithFormat:@"%02ld:%02ld%02ld%02ld",day,hour,minute,second];
+    }else if (hour>0){
+        dateString = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",hour,minute,second];
+    }else{
+        dateString = [NSString stringWithFormat:@"%02ld:%02ld",minute,second];
+    }
+    return dateString;
+}
+
 #pragma mark-
 + (void)CXGMPostRequest:(NSString *)requestUrl token:(NSString *)token parameter:(NSDictionary *)dict success:(void (^)(id JSON, NSError *error))success failure:(void (^)(id JSON, NSError *error))failure
 {
@@ -189,4 +215,7 @@
     }];
     return flag;
 }
+
+
+
 @end

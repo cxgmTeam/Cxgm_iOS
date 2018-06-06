@@ -30,7 +30,9 @@
 
 - (void)setGoods:(GoodsModel *)goods
 {
-    if (goods.imageUrl.length > 0) {
+    if (goods.productUrl.length > 0) {
+        [_imageView sd_setImageWithURL:[NSURL URLWithString:goods.productUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    }else if (goods.imageUrl.length > 0){
         [_imageView sd_setImageWithURL:[NSURL URLWithString:goods.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     }
 }

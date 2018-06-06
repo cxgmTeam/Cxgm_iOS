@@ -81,31 +81,30 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:AddGoodsSuccess_Notify object:nil];
+        
+        //页面会闪
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:AddGoodsSuccess_Notify object:nil];
         
         self.slideImageList = [NSMutableArray array];
-        
         self.adBannarList = [NSMutableArray array];
         
-
-        
-        [self findTopProduct];
-        [self findNewProduct];
-        [self findHotProduct];
-        
-        [self findAdvertisement];
-        [self findMotion];
-
+        [self requestGoodsList];
     }
     return self;
 }
 
-- (void)refreshGoodsInfo:(NSNotification *)notify
+- (void)refreshGoodsInfo:(NSNotification *)notify{
+    [self requestGoodsList];
+}
+
+- (void)requestGoodsList
 {
     [self findTopProduct];
     [self findNewProduct];
-    [self findMotion];
     [self findHotProduct];
+    
+    [self findAdvertisement];
+    [self findMotion];
 }
 
 
@@ -231,7 +230,6 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
                 return [obj1.number  compare: obj2.number];
             }];
             
-            NSLog(@"self.advertiseList  %@",self.advertiseList);
             [self.collectionView reloadData];
         }
         
@@ -448,7 +446,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
     if (section == 5) {
-        return UIEdgeInsetsMake(0, 12, 12, 12);
+        return UIEdgeInsetsMake(0, 10, 10, 10);
     }
     return UIEdgeInsetsZero;
 }

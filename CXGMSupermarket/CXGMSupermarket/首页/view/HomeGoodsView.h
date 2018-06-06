@@ -11,4 +11,7 @@
 @interface HomeGoodsView : UIView
 @property(nonatomic,copy)dispatch_block_t showSubCategoryVC;
 @property(nonatomic,copy)void(^showGoodsDetailVC)(GoodsModel* model);
+
+//主要是刷新 shopCartNum 和 shopCartId
+- (void)requestGoodsList;
 @end

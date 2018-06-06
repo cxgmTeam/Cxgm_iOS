@@ -10,6 +10,8 @@
 #import "OrderCollectionViewCell.h"
 #import "OrderDetailViewController.h"
 
+#import "PaymentViewController.h"
+
 @interface OrderListViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)NSMutableArray *listArray;
@@ -114,10 +116,13 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     typeof(self) __weak wself = self;
     cell.tapBuyButton = ^{
 //        0待支付，1待配送（已支付），2配送中，3已完成，4退货
-        if ([item.status intValue] == 3) {
-            
+        if ([item.status intValue] == 0) {
+            PaymentViewController* vc = [PaymentViewController new];
+            vc.order = item;
+            [wself.navigationController pushViewController:vc animated:YES];
         }
     };
+    
     cell.showOrderDetail = ^{
         OrderDetailViewController* vc = [OrderDetailViewController new];
         OrderModel* orderItem = wself.listArray[indexPath.item];

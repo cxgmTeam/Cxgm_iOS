@@ -45,7 +45,6 @@
 
 @property (strong , nonatomic)GoodsArrivedTimeFoot *timeFootview;
 
-@property (assign , nonatomic)CGFloat orderAmount;
 @property (assign , nonatomic)NSInteger orderNum;
 @end
 
@@ -85,6 +84,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
     [self getAddressList];
     
+    
+    _moneyLabel.text = [NSString stringWithFormat:@"¥%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10];
+    
 }
 
 //下单接口
@@ -97,7 +99,12 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
     //    orderAmount = totalAmount - preferential + 10
     
-
+    //这个地方还要减去优惠券的
+    NSString* orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10];
+    
+    [self.orderParam setObject:self.moneyDic[@"totalAmount"] forKey:@"totalAmount"];
+    [self.orderParam setObject:self.moneyDic[@"preferential"]forKey:@"preferential"];
+    [self.orderParam setObject:orderAmount forKey:@"orderAmount"];
     
     
     [self.orderParam setObject:self.address.id forKey:@"addressId"];
@@ -112,7 +119,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         [self.orderParam setObject:self.receiptDic forKey:@"receipt"];
     }
     
-    [self.orderParam setObject:[NSString stringWithFormat:@"%.2f",self.orderAmount] forKey:@"orderAmount"];
+    
     [self.orderParam setObject:[NSString stringWithFormat:@"%ld",(long)self.orderNum] forKey:@"orderNum"];
     
     if (self.coupons) {
@@ -121,10 +128,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     [self.orderParam setObject:@"没有" forKey:@"remarks"];
     [self.orderParam setObject:[DeviceHelper sharedInstance].shop.id forKey:@"storeId"];
     
-    
 
-    
-    
     typeof(self) __weak wself = self;
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIAddOrder] token:[UserInfoManager sharedInstance].userInfo.token parameter:self.orderParam success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
@@ -133,6 +137,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddOrder_Success object:nil];
                 
                 PaymentViewController* vc = [PaymentViewController new];
+                vc.orderAmount = orderAmount;
+                vc.orderId = [NSString stringWithFormat:@"%ld",[(NSNumber *)model.data longValue]];
                 [wself.navigationController pushViewController:vc animated:YES];
 
             });
@@ -203,8 +209,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
                 amount = amount + [model.price floatValue];
             }
         }
-        
-        self.orderAmount = self.orderAmount + amount;
         
         NSDictionary* dic = @{
                               @"categoryId":category,
@@ -277,6 +281,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         
     }else if (indexPath.section == 1) {
         GoodsCashViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsCashViewCellID forIndexPath:indexPath];
+        cell.totalAmountLabel.text = [NSString stringWithFormat:@"¥%@",self.moneyDic[@"totalAmount"]];
+        cell.preferentialLabel.text = [NSString stringWithFormat:@"¥%@",self.moneyDic[@"preferential"]];
         gridcell = cell;
     }
     else if (indexPath.section == 2) {

@@ -19,7 +19,9 @@
 //把手机号第4-7位变成星号
 +(NSString*)phoneNumToAsterisk:(NSString*)phoneNum;
 
++(NSString *)formateDate:(long)ms;
 
+#pragma mark-
 + (void)CXGMPostRequest:(NSString *)requestUrl token:(NSString *)token parameter:(NSDictionary *)dict success:(void (^)(id JSON, NSError *error))success failure:(void (^)(id JSON, NSError *error))failure;
 
 //是否在配送范围

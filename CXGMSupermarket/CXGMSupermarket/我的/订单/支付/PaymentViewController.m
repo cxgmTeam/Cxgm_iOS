@@ -15,7 +15,6 @@
 
 #import "PayResultViewController.h"
 
-#import "LogisticsInfoController.h"
 
 @interface PaymentViewController ()
 
@@ -27,6 +26,9 @@
 
 @property(nonatomic,strong)PaymentButton* weixinBtn;
 @property(nonatomic,strong)PaymentButton* alipayBtn;
+
+@property(nonatomic,assign)double surplusTime;
+@property(nonatomic,strong)NSTimer * timer;
 @end
 
 @implementation PaymentViewController
@@ -36,36 +38,115 @@
     
     self.title = @"支付订单";
     
-    
     [self setupMainUI];
     
-    [self getSurplusTime];
+    if (self.order) {
+        self.orderId = self.order.id;
+        self.orderAmount = self.order.orderAmount;
+    }
+    
+    if (self.orderId) {
+        [self getSurplusTime];
+    }
+    
+    if (self.order) {
+        _moneyLabel.text = [NSString stringWithFormat:@"￥%@",self.order.orderAmount];
+    }else{
+        _moneyLabel.text = [NSString stringWithFormat:@"￥%@",self.orderAmount];
+    }
+     [_payButon setTitle:[NSString stringWithFormat:@"确认支付%@",_moneyLabel.text] forState:UIControlStateNormal];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPayResult:) name:Show_PayResult object:nil];
+}
+
+- (void)showPayResult:(NSNotification *)notify
+{
+    NSDictionary* dic = [notify userInfo];
+    
+    PayResultViewController* vc = [PayResultViewController new];
+    vc.paySuccess = [dic[@"paySuccess"] boolValue];
+    vc.orderAmount = self.orderAmount;
+    vc.orderId = self.orderId;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 
 - (void)getSurplusTime
 {
-    NSDictionary* dic = @{@"orderId":self.order.id};
-    
+    NSDictionary* dic = @{@"orderId":self.orderId};
+    typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APISurplusTime] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        
+        if ([model.code isEqualToString:@"200"]) {
+            self.surplusTime = [(NSNumber *)model.data longValue];
+            [wself setupTimer];
+        }else{
+            self.timeLabel.text = @"已超时";
+        }
         
     } failure:^(id JSON, NSError *error){
         
     }];
 }
 
+- (void)setupTimer
+{
+    if (!_timer) {
+        _timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(onTimer) userInfo:nil repeats:YES];
+        [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSRunLoopCommonModes];
+    }
+}
+
+- (void)onTimer
+{
+    self.surplusTime = self.surplusTime-1000;
+    if (self.surplusTime > 1000) {
+        NSString* surplus = [Utility formateDate:self.surplusTime];
+        _timeLabel.text = [NSString stringWithFormat:@"支付剩余时间  %@",surplus];
+    }else{
+        [self stopTimer];
+        _timeLabel.text = @"已超时";
+    }
+}
+
+- (void)stopTimer
+{
+    if(_timer != nil){
+        [_timer invalidate];
+        _timer = nil;
+    }
+}
 
 - (void)payOrder:(UIButton*)button
 {
-//    PayResultViewController* vc = [PayResultViewController new];
-//    vc.paySuccess = NO;
-//    [self.navigationController pushViewController:vc animated:YES];
-    
-    LogisticsInfoController* vc = [LogisticsInfoController new];
-    [self.navigationController pushViewController:vc animated:YES];
+    if (self.surplusTime == 0) {
+        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"订单已超时"];
+        return;
+    }
+    [self weixinPay];
 }
 //请求订单信息
 
+- (void)weixinPay
+{
+    NSDictionary* dic = @{@"orderId":self.orderId};
+    
+    typeof(self) __weak wself = self;
+    [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APIWeixinPay] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+
+        NSDictionary *dic = [NSJSONSerialization JSONObjectWithData: [JSON dataUsingEncoding:NSUTF8StringEncoding]
+                                        options: NSJSONReadingMutableContainers
+                                          error: nil];
+        
+        [wself sendRepweixin:dic];
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
 
 
 -(void)sendRepweixin:(NSDictionary *)dict
@@ -123,7 +204,7 @@
     }];
     
     UILabel *label = [[UILabel alloc] init];
-    label.text = @"支付剩余时间  4:15";
+    label.text = @"支付剩余时间  00:00:00";
     label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:17];
     label.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [whiteView1 addSubview:label];
@@ -233,5 +314,11 @@
         [_payButon addTarget:self action:@selector(payOrder:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _payButon;
+}
+
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [self stopTimer];
 }
 @end

@@ -11,4 +11,6 @@
 
 @interface OrderDetailViewController : MyCenterSubViewController
 @property(nonatomic,strong)OrderModel* orderItem;
+
+@property(nonatomic,strong)NSString* orderId;
 @end

@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface GoodsCashViewCell : UICollectionViewCell
-
+@property(nonatomic,strong)UILabel* totalAmountLabel;
+@property(nonatomic,strong)UILabel* preferentialLabel;
 @end

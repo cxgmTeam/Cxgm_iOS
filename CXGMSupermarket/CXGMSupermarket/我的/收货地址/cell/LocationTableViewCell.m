@@ -7,10 +7,13 @@
 //
 
 #import "LocationTableViewCell.h"
+#import "WGS84TOGCJ02.h"
 
 @interface LocationTableViewCell ()
 @property(nonatomic,strong)UILabel* nameLabel;
 @property(nonatomic,strong)UILabel* addressLabel;
+
+@property(nonatomic,strong)UIImageView* locationImage;
 @end
 
 @implementation LocationTableViewCell
@@ -40,6 +43,15 @@
             make.top.equalTo(self.nameLabel.bottom).offset(6);
         }];
         _addressLabel = label;
+        
+        
+        UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"location_pin"]];
+        [self.contentView addSubview:imageView];
+        [imageView mas_makeConstraints:^(MASConstraintMaker *make){
+            make.centerY.equalTo(self);
+            make.right.equalTo(-15);
+        }];
+        _locationImage = imageView;
     }
     return self;
 }
@@ -47,6 +59,46 @@
 - (void)setLocation:(LocationModel *)location{
     _nameLabel.text = location.name;
     _addressLabel.text = location.address;
+    
+    
+    
+    
+    
+    CLLocation *curLocation = [DeviceHelper sharedInstance].location;
+    
+    
+    NSLog(@"定位  latitude %f  longitude  %f",curLocation.coordinate.latitude,curLocation.coordinate.longitude);
+    
+    NSLog(@"列表  latitude %f  longitude  %f",location.latitude,location.longitude);
+    
+    
+    
+    if (![WGS84TOGCJ02 isLocationOutOfChina:[curLocation coordinate]]) {
+        //转换后的coord
+        
+        CLLocationCoordinate2D tempCoords = CLLocationCoordinate2DMake(location.latitude,location.longitude);
+        
+        CLLocationCoordinate2D coords = [WGS84TOGCJ02 transformFromWGSToGCJ:tempCoords];
+        
+        CLLocationCoordinate2D curCoord = [WGS84TOGCJ02 transformFromWGSToGCJ:[curLocation coordinate]];
+        
+        NSLog(@"定位转换  latitude %f  longitude  %f",curCoord.latitude,curCoord.longitude);
+        
+        if (curCoord.latitude == coords.latitude && curCoord.longitude == coords.longitude) {
+            _locationImage.hidden = NO;
+        }else{
+            _locationImage.hidden = YES;
+        }
+    }
+    else
+    {
+        if (curLocation.coordinate.latitude == location.latitude && curLocation.coordinate.longitude == location.longitude) {
+            _locationImage.hidden = NO;
+        }else{
+            _locationImage.hidden = YES;
+        }
+    }
+    
     
     if (location.inScope) {
         _nameLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];

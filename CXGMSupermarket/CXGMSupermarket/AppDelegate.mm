@@ -45,7 +45,7 @@
     [WXApi startLogByLevel:WXLogLevelNormal logBlock:^(NSString *log) {
         NSLog(@"log : %@", log);
     }];
-    [WXApi registerApp:@"wx51dfda9cc637160c"];
+    [WXApi registerApp:@"wxd2f7d73babd9de68"];
     
     return YES;
 }

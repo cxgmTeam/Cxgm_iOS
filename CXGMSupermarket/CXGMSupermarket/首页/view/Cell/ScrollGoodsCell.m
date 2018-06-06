@@ -19,28 +19,6 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
 
 @implementation ScrollGoodsCell
 
-#pragma mark - lazyload
-- (UICollectionView *)collectionView
-{
-    if (!_collectionView) {
-        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
-        layout.minimumLineSpacing = 10;
-        layout.itemSize = CGSizeMake(96, self.dc_height-10);
-        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal; //滚动方向
-        
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
-        [self addSubview:_collectionView];
-        _collectionView.frame = self.bounds;
-        _collectionView.showsHorizontalScrollIndicator = NO;
-        _collectionView.delegate = self;
-        _collectionView.dataSource = self;
-        
-        [_collectionView registerClass:[GoodsListGridCell class] forCellWithReuseIdentifier:GoodsListGridCellID];
-        
-        _collectionView.contentInset = UIEdgeInsetsMake(0, 10, 10, 10);
-    }
-    return _collectionView;
-}
 
 #pragma mark - Intial
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -90,4 +68,28 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     GoodsModel* goods = self.goodsList[indexPath.item];
     !self.showGoodsDetail?:self.showGoodsDetail(goods);
 }
+
+#pragma mark - lazyload
+- (UICollectionView *)collectionView
+{
+    if (!_collectionView) {
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
+        layout.minimumLineSpacing = 10;
+        layout.itemSize = CGSizeMake(96, self.dc_height-10);
+        layout.scrollDirection = UICollectionViewScrollDirectionHorizontal; //滚动方向
+        
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        [self addSubview:_collectionView];
+        _collectionView.frame = self.bounds;
+        _collectionView.showsHorizontalScrollIndicator = NO;
+        _collectionView.delegate = self;
+        _collectionView.dataSource = self;
+        
+        [_collectionView registerClass:[GoodsListGridCell class] forCellWithReuseIdentifier:GoodsListGridCellID];
+        
+        _collectionView.contentInset = UIEdgeInsetsMake(0, 10, 10, 10);
+    }
+    return _collectionView;
+}
+
 @end

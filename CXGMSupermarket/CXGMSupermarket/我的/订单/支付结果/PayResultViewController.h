@@ -10,4 +10,7 @@
 
 @interface PayResultViewController : MyCenterSubViewController
 @property(nonatomic,assign)BOOL paySuccess;
+
+@property(nonatomic,strong)NSString* orderAmount;
+@property(nonatomic,strong)NSString* orderId;
 @end

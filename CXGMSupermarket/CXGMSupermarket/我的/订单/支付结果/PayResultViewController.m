@@ -86,7 +86,7 @@
     }];
     
     UILabel *label1 = [[UILabel alloc] init];
-    label1.text = @"微信支付：¥189.80";
+    label1.text = [NSString stringWithFormat:@"微信支付：¥%@",self.orderAmount];
     label1.font = [UIFont fontWithName:@"PingFangSC-Regular" size:20];
     label1.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
     [self.view addSubview:label1];
@@ -170,17 +170,22 @@
 
 - (void)gotoHomePage:(id)sender
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:WindowHomePage_Notify object:nil];
+    NSArray* vcs = self.navigationController.childViewControllers;
+    if (vcs.count > 1) {
+        [self.navigationController popToViewController:vcs[1] animated:YES];
+    }
+    
 }
 
 - (void)gotoRepay:(UIButton *)button
 {
-    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)gotoOrderDetail:(id)sender
 {
     OrderDetailViewController* vc = [OrderDetailViewController new];
+    vc.orderId = self.orderId;
     [self.navigationController pushViewController:vc animated:YES];
 }
 @end

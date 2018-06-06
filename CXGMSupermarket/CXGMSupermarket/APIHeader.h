@@ -86,7 +86,8 @@
 #define APISurplusTime  @"/order/surplusTime"
 //申请退款
 #define APIReturnMoney  @"/order/returnMoney"
-
+//支付接口
+#define APIWeixinPay  @"/payments/weixinPay"
 
 
 /*购物车相关*/

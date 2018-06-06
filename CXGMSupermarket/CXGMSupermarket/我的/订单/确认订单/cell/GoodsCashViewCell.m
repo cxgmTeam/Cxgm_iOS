@@ -9,8 +9,7 @@
 #import "GoodsCashViewCell.h"
 
 @interface GoodsCashViewCell ()
-@property(nonatomic,strong)UILabel* valueLabel1;
-@property(nonatomic,strong)UILabel* valueLabel2;
+
 @property(nonatomic,strong)UILabel* valueLabel3;
 @end
 
@@ -24,6 +23,8 @@
     }
     return self;
 }
+
+
 
 - (void)setupUP
 {
@@ -57,22 +58,22 @@
         make.left.equalTo(15);
     }];
     
-    _valueLabel1 = [[UILabel alloc] init];
-    _valueLabel1.text = @"¥460.00";
-    _valueLabel1.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
-    _valueLabel1.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
-    [self addSubview:_valueLabel1];
-    [_valueLabel1 mas_makeConstraints:^(MASConstraintMaker *make){
+    _totalAmountLabel = [[UILabel alloc] init];
+    _totalAmountLabel.text = @"¥460.00";
+    _totalAmountLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
+    _totalAmountLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+    [self addSubview:_totalAmountLabel];
+    [_totalAmountLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(label1);
         make.right.equalTo(-15);
     }];
 
-    _valueLabel2 = [[UILabel alloc] init];
-    _valueLabel2.text = @"¥0.00";
-    _valueLabel2.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
-    _valueLabel2.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
-    [self addSubview:_valueLabel2];
-    [_valueLabel2 mas_makeConstraints:^(MASConstraintMaker *make){
+    _preferentialLabel = [[UILabel alloc] init];
+    _preferentialLabel.text = @"¥0.00";
+    _preferentialLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
+    _preferentialLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+    [self addSubview:_preferentialLabel];
+    [_preferentialLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(label2);
         make.right.equalTo(-15);
     }];
