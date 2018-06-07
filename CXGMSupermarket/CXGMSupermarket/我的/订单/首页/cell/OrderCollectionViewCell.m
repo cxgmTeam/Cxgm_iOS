@@ -45,6 +45,12 @@ static NSString *const GoodsOneScreenShotCellID = @"GoodsOneScreenShotCell";
             [_buyButton setTitle:@"去支付" forState:UIControlStateNormal];
         }
             break;
+        case 1:{
+            _orderState.text = @"配送中";
+            _bottomView.hidden = NO;
+            [_buyButton setTitle:@"申请退款" forState:UIControlStateNormal];
+        }
+            break;
         case 2:{
             _orderState.text = @"配送中";
             _bottomView.hidden = NO;

@@ -411,7 +411,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         return CGSizeMake(ScreenW, 45);
     }
     if (indexPath.section == 2) {//猜你喜欢
-        return CGSizeMake((ScreenW - 12*3)/2, (ScreenW - 12*3)/2+72);
+        return CGSizeMake((ScreenW - 12*3)/2, (ScreenW - 12*3)/2+72+15);
     }
     return CGSizeZero;
 }

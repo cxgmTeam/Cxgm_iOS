@@ -97,7 +97,7 @@ static NSTimeInterval DCLineanimateDuration = 0.01;
     [UIView animateWithDuration:DCLineanimateDuration animations:^{
         
         CGRect rect = weakSelf.sqrImageView.frame;
-        rect.origin.y = _qrImageLineY;
+        rect.origin.y = self.qrImageLineY;
         weakSelf.sqrImageView.frame = rect;
         
     } completion:^(BOOL finished) {

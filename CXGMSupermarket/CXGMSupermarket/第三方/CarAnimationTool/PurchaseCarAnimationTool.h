@@ -26,7 +26,7 @@ typedef void (^animationFinisnBlock)(BOOL finish);
  *  @param view        添加动画的view
  *  @param rect        view 的绝对frame
  *  @param finishPoint 下落的位置
- *  @param finishBlock 动画完成回调
+ *  @param  动画完成回调
  */
 - (void)startAnimationandView:(UIView *)view
                          rect:(CGRect)rect

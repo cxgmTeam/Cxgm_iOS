@@ -30,7 +30,13 @@
 {
     _numberLabel.text = order.orderNum;
     _timeLabel.text = order.orderTime;
-    _paywayLabel.text = order.payType;//这里不知道返回什么数据
+    
+    if ([order.payType isEqualToString:@"wx"]) {
+        _paywayLabel.text = @"微信支付";
+    }else{
+        _paywayLabel.text = @"支付宝支付";
+    }
+
     if (!order.receipt) {
         _invoiceLabel.text = @"不开发票";
     }else{

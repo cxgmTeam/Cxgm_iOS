@@ -29,7 +29,8 @@
 {
     if([resp isKindOfClass:[PayResp class]]){
         //支付返回结果，实际支付结果需要去微信服务器端查询
-        NSString *strMsg,*strTitle = [NSString stringWithFormat:@"支付结果"];
+        NSString *strMsg;
+        NSString *strTitle = [NSString stringWithFormat:@"支付结果"];
         
         switch (resp.errCode) {
             case WXSuccess:
@@ -44,17 +45,18 @@
                 self.paySuccess = NO;
                 break;
         }
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [alert show];
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+//        [alert show];
+        [[NSNotificationCenter defaultCenter] postNotificationName:Show_PayResult object:nil userInfo:@{@"paySuccess":[NSNumber numberWithBool:self.paySuccess]}];
     }else {
         
     }
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:Show_PayResult object:nil userInfo:@{@"paySuccess":[NSNumber numberWithBool:self.paySuccess]}];
-}
+//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+//
+//    [[NSNotificationCenter defaultCenter] postNotificationName:Show_PayResult object:nil userInfo:@{@"paySuccess":[NSNumber numberWithBool:self.paySuccess]}];
+//}
 
 - (void)onReq:(BaseReq *)req {
     

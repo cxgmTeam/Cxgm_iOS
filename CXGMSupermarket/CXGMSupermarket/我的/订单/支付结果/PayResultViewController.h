@@ -13,4 +13,5 @@
 
 @property(nonatomic,strong)NSString* orderAmount;
 @property(nonatomic,strong)NSString* orderId;
+@property(nonatomic,strong)NSString* payType;
 @end

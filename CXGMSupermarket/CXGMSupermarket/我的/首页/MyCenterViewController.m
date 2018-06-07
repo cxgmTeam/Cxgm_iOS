@@ -45,7 +45,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     self.sectionArr0 = @[@"全部订单",@"待付款",@"配送中",@"已完成",@"申请售后"];
     self.sectionArr1 = @[@"邀请有礼"];
     self.sectionArr2 = @[@"优惠券",@"收货地址",@"帮助中心",@"联系客服",@"设置"];
-    
+
     
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -92,7 +92,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     UICollectionViewCell *gridcell = nil;
     if (indexPath.section == 0) {
         MyCenterGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterGridCellID forIndexPath:indexPath];
-        [cell setImage:[NSString stringWithFormat:@"dingdan_item%ld",indexPath.item] title:self.sectionArr0[indexPath.item]];
+        [cell setImage:[NSString stringWithFormat:@"dingdan_item%ld",(long)indexPath.item] title:self.sectionArr0[indexPath.item]];
         gridcell = cell;
         
     }else if (indexPath.section == 1) {
@@ -102,7 +102,8 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     }
     else if (indexPath.section == 2) {
         MyCenterCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterCollectionCellID forIndexPath:indexPath];
-        [cell setImage:[NSString stringWithFormat:@"myCenter_item%ld",indexPath.item] title:self.sectionArr2[indexPath.item] subTitle:indexPath.item ==0? @"兑换吃、查看优惠券":@""];
+            [cell setImage:[NSString stringWithFormat:@"myCenter_item%ld",(long)indexPath.item] title:self.sectionArr2[indexPath.item] subTitle:indexPath.item ==0? @"兑换吃、查看优惠券":@""];
+
         gridcell = cell;
     }
     return gridcell;

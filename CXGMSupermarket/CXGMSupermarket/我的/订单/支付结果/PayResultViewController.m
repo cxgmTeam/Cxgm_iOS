@@ -22,10 +22,25 @@
     if (self.paySuccess) {
         self.title = @"支付成功";
         [self setupSucceessUI];
+        [self updateOrderStatus];
     }else{
         self.title = @"支付失败";
         [self setupFailureUI];
     }
+}
+
+- (void)updateOrderStatus
+{
+    NSDictionary* dic = @{
+                          @"orderId":self.orderId,
+                          @"payType":self.payType
+                          };
+    
+    [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APIUpdateStatus] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
 }
 
 - (void)setupSucceessUI

@@ -58,7 +58,7 @@ typedef NS_ENUM(NSInteger, HYNoticeType) {
  
  @return An initialized view object.
  */
--(instancetype)initWithFrame:(CGRect)frame text:(NSString*)text position:(HYNoticeViewPosition)position closeBlock:(void(^)())closeBlock noticeBlock:(void(^)())noticeBlock;
+-(instancetype)initWithFrame:(CGRect)frame text:(NSString*)text position:(HYNoticeViewPosition)position closeBlock:(void(^)(void))closeBlock noticeBlock:(void(^)(void))noticeBlock;
 
 
 /** 显示notiveView

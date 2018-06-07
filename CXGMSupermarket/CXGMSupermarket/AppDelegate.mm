@@ -155,7 +155,7 @@
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
             NSLog(@"result = %@",resultDic);
         }];
-        return nil;
+        return YES;
     }
     if ([url.host isEqualToString:@"pay"])
     {

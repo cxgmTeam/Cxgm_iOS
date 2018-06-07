@@ -88,7 +88,8 @@
 #define APIReturnMoney  @"/order/returnMoney"
 //支付接口
 #define APIWeixinPay  @"/payments/weixinPay"
-
+//修改订单状态
+#define APIUpdateStatus  @"/payments/updateStatus"
 
 /*购物车相关*/
 //我的购物车列表

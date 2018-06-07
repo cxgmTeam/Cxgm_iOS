@@ -409,7 +409,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         return CGSizeMake(ScreenW, ScreenW*159/375.f+212);
     }
     if (indexPath.section == 5) {//热销
-        return CGSizeMake((ScreenW - 12*3)/2, (ScreenW - 12*3)/2+72);
+        return CGSizeMake((ScreenW - 12*3)/2, (ScreenW - 12*3)/2+72+15);
     }
     return CGSizeZero;
 }

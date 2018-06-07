@@ -29,6 +29,8 @@
 
 @property(nonatomic,assign)double surplusTime;
 @property(nonatomic,strong)NSTimer * timer;
+
+@property(nonatomic,strong)NSString * payType; //微信wx，支付宝zfb
 @end
 
 @implementation PaymentViewController
@@ -37,6 +39,8 @@
     [super viewDidLoad];
     
     self.title = @"支付订单";
+    
+    self.payType = @"wx";
     
     [self setupMainUI];
     
@@ -68,6 +72,7 @@
     vc.paySuccess = [dic[@"paySuccess"] boolValue];
     vc.orderAmount = self.orderAmount;
     vc.orderId = self.orderId;
+    vc.payType = self.payType;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -296,9 +301,13 @@
     if (button.tag == 1) {
         _weixinBtn.markView.hidden = NO;
         _alipayBtn.markView.hidden = YES;
+        
+        self.payType = @"wx";
     }else{
         _weixinBtn.markView.hidden = YES;
         _alipayBtn.markView.hidden = NO;
+        
+        self.payType = @"zfb";
     }
 }
 
