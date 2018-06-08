@@ -72,6 +72,7 @@
     count++;
     
     self.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
+    self.selectedLabel.text = [NSString stringWithFormat:@"已选：%ld份",count];
 }
 
 - (void)cutBtnClick:(UIButton*)button {
@@ -81,6 +82,7 @@
         return ;
     }
     self.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
+    self.selectedLabel.text = [NSString stringWithFormat:@"已选：%ld份",count];
 }
 
 - (void)onTapConfirmBtn:(UIButton *)button
@@ -132,7 +134,7 @@
     }];
     
     _iconView = [UIImageView new];
-    [_iconView sd_setImageWithURL:[NSURL URLWithString:self.goods.image] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    _iconView.image = [UIImage imageNamed:@"placeholderImage"];
     [contentView addSubview:_iconView];
     [_iconView mas_makeConstraints:^(MASConstraintMaker *make){
         make.width.height.equalTo(80);
@@ -140,8 +142,13 @@
         make.left.equalTo(15);
     }];
     
+    if (self.goods.productImageList.count > 0) {
+        NSDictionary* dic = [self.goods.productImageList firstObject];
+        [_iconView sd_setImageWithURL:[NSURL URLWithString:dic[@"url"]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
+    }
+    
     _goodPriceLabel = [[UILabel alloc] init];
-    _goodPriceLabel.text = @"￥19.90";
+    _goodPriceLabel.text =[NSString stringWithFormat:@"￥%.2f",[self.goods.price floatValue]] ;
     _goodPriceLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:22];
     _goodPriceLabel.textColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
     [contentView addSubview:_goodPriceLabel];
@@ -151,7 +158,7 @@
     }];
     
     _unitLabel = [UILabel new];
-    _unitLabel.text = @"/个";
+    _unitLabel.text = [NSString stringWithFormat:@"/%@",self.goods.unit];
     _unitLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     _unitLabel.textColor = [UIColor colorWithRed:63/255.0 green:63/255.0 blue:63/255.0 alpha:1/1.0];
     [contentView addSubview:_unitLabel];
@@ -170,15 +177,19 @@
         make.bottom.mas_equalTo(self.goodPriceLabel);
     }];
     
-    NSUInteger length = [_oldPriceLabel.text length];
-    NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:_oldPriceLabel.text];
-    [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, length)];
-    [attri addAttribute:NSStrikethroughColorAttributeName value:[UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1/1.0] range:NSMakeRange(0, length)];
-    [_oldPriceLabel setAttributedText:attri];
-    
-    
+    if ([self.goods.price floatValue] != [self.goods.originalPrice floatValue] && [self.goods.originalPrice floatValue]>0) {
+        NSUInteger length = [_oldPriceLabel.text length];
+        NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:_oldPriceLabel.text];
+        [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, length)];
+        [attri addAttribute:NSStrikethroughColorAttributeName value:[UIColor colorWithRed:216/255.0 green:216/255.0 blue:216/255.0 alpha:1/1.0] range:NSMakeRange(0, length)];
+        [_oldPriceLabel setAttributedText:attri];
+    }else{
+        _oldPriceLabel.text = @"";
+    }
+
+
     _selectedLabel = [[UILabel alloc] init];
-    _selectedLabel.text = @"已选：1盒";
+    _selectedLabel.text = [NSString stringWithFormat:@"已选：%ld份",self.number];
     _selectedLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
     _selectedLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [contentView addSubview:_selectedLabel];
@@ -189,7 +200,7 @@
     
     
     _specificationLabel = [[UILabel alloc] init];
-    _specificationLabel.text = @"规格：50g/个";
+    _specificationLabel.text = [NSString stringWithFormat:@"规格：%@g/%@",self.goods.weight.length>0?self.goods.weight:@"0.0",self.goods.unit];
     _specificationLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
     _specificationLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [contentView addSubview:_specificationLabel];
@@ -200,7 +211,7 @@
     
     
     UILabel *label = [[UILabel alloc] init];
-    label.text = @"购买数量(个）";
+    label.text = @"购买数量 ";
     label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
     label.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [contentView addSubview:label];
@@ -224,7 +235,7 @@
     //数量显示
     UILabel* numberLabel = [[UILabel alloc]init];
     numberLabel.textAlignment = NSTextAlignmentCenter;
-    numberLabel.text = @"1";
+    numberLabel.text = [NSString stringWithFormat:@"%ld",self.number];
     numberLabel.font = [UIFont systemFontOfSize:15];
     [contentView addSubview:numberLabel];
     [numberLabel mas_makeConstraints:^(MASConstraintMaker *make){

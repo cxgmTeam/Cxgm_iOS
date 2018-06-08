@@ -107,12 +107,8 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSCameraUsageDescription</key>
-	<string>允许此权限才能拍摄视频、照片和扫描二维码</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>允许此权限才能访问地理位置</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>允许此权限才能访问照片库</string>
+	<string>菜鲜果美想访问您的位置，这样可以为您自动匹配附近的门店</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>PingFang Regular.ttf</string>

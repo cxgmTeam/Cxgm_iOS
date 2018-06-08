@@ -269,7 +269,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                           @"amount":[NSString stringWithFormat:@"%.2f",amount],
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
-                          @"goodNum":[NSString stringWithFormat:@"%d",1+[goods.shopCartNum intValue]],
+                          @"goodNum":[NSString stringWithFormat:@"%ld",self.number+[goods.shopCartNum integerValue]],
                           @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
                           @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
                           @"productId":goods.id.length>0?goods.id:@""
@@ -549,6 +549,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     }
     SelectSpecificationController* vc = [SelectSpecificationController new];
     vc.goods = self.goodsDetail;
+    vc.number = self.number;
     
     typeof(self) __weak wself = self;
     vc.selectFinished = ^(NSInteger number){

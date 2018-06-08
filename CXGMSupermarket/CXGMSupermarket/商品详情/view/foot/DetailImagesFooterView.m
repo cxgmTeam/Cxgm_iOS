@@ -36,8 +36,7 @@
     }
 
     [_webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:htmlPath]];
-    
-//    [_webView loadHTMLString:htmlString baseURL:nil];
+
 }
 
 

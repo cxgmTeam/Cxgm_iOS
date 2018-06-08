@@ -220,6 +220,7 @@
     _timeLabel = label;
     
     label = [[UILabel alloc] init];
+    label.numberOfLines = 0;
     label.frame = CGRectMake(25, 123, 326, 18);
     label.text = @"请在规定的时间内完成支付，否则订单将会被自动取消！";
     label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];
@@ -228,6 +229,7 @@
     [label mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(self.timeLabel.bottom).offset(5);
         make.centerX.equalTo(whiteView1);
+        make.width.equalTo(ScreenW-20);
     }];
     
     UIView* whiteView2 = [UIView new];

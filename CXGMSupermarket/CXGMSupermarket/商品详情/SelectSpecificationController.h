@@ -12,5 +12,7 @@
 
 @property(nonatomic,strong)GoodsModel* goods;
 
+@property(nonatomic,assign)NSInteger number;//已选择的份数
+
 @property(nonatomic,copy)void(^selectFinished)(NSInteger number);
 @end

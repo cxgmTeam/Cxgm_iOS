@@ -21,6 +21,8 @@
 
 #import "PaymentViewController.h"
 
+#import "GoodsDetailViewController.h"
+
 @interface OrderDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)OrderModel *orderDetail;
@@ -304,6 +306,16 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         return CGSizeMake(ScreenW, 55);
     }
     return CGSizeMake(ScreenW, 10);
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    GoodsModel* goods = self.orderDetail.productDetails[indexPath.item];
+    
+    GoodsDetailViewController* vc = [GoodsDetailViewController new];
+    vc.goodsId = goods.productId;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark - init

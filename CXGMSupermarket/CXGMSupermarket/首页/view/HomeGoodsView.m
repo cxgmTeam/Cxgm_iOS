@@ -61,6 +61,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         
+        
+        
         self.categoryNames = @[@"新鲜水果",@"放心蔬菜",@"鲜肉蛋品",@"水产海鲜",
                                @"粮油副食",@"休闲零食",@"中外名酒",@"美妆百货"];
         

@@ -33,7 +33,7 @@
     
     if ([order.payType isEqualToString:@"wx"]) {
         _paywayLabel.text = @"微信支付";
-    }else{
+    }else if ([order.payType isEqualToString:@"zfb"]){
         _paywayLabel.text = @"支付宝支付";
     }
 
