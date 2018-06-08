@@ -223,7 +223,7 @@
     self.navigationItem.leftBarButtonItem =  [[UIBarButtonItem alloc] initWithCustomView:self.backButton];
     self.navigationItem.rightBarButtonItem =  nil;
 }
-#pragma mark --初始化poi类
+#pragma mark -- 搜索
 -(void)initPoiSearch
 {
     self.currentPage = 0;
@@ -315,7 +315,7 @@
 - (void)didUpdateUserHeading:(BMKUserLocation *)userLocation
 {
     [_mapView updateLocationData:userLocation];
-//    NSLog(@"heading is %@",userLocation.heading);
+//    NSLog(@"heading is %f  %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
 }
 
 /**
@@ -490,10 +490,15 @@
         cell=[[LocationTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellID];
         cell.selectionStyle=UITableViewCellSelectionStyleNone;
     }
+    cell.showPin = NO;
+    
     if (tableView == _searchTable) {
         cell.location = self.poiResultArray[indexPath.row];
     }else{
         cell.location = self.locationDataArr[indexPath.row];
+        if (indexPath.row == 0) {
+            cell.showPin = YES;
+        }
     }
     
     return cell;

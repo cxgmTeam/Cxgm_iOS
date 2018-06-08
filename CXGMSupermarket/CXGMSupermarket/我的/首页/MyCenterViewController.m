@@ -102,7 +102,10 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     }
     else if (indexPath.section == 2) {
         MyCenterCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterCollectionCellID forIndexPath:indexPath];
-            [cell setImage:[NSString stringWithFormat:@"myCenter_item%ld",(long)indexPath.item] title:self.sectionArr2[indexPath.item] subTitle:indexPath.item ==0? @"兑换吃、查看优惠券":@""];
+        [cell setImage:[NSString stringWithFormat:@"myCenter_item%ld",(long)indexPath.item] title:self.sectionArr2[indexPath.item] subTitle:indexPath.item ==0? @"兑换吃、查看优惠券":@""];
+        if (indexPath.item == 2) {
+            [cell setImage:@"myCenter_item4" title:self.sectionArr2[indexPath.item] subTitle:indexPath.item ==0? @"兑换吃、查看优惠券":@""];
+        }
 
         gridcell = cell;
     }

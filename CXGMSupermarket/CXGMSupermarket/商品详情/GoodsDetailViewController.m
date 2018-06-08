@@ -219,12 +219,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     }
     
     if (!self.goodsDetail) return;
-    
-    if ([self.goodsDetail.shopCartNum intValue] > 0) {
-        [self updateCart:self.goodsDetail];
-    }else{
-        [self addGoodsToCart:self.goodsDetail];
-    }
+
+    [self selectSpecification:nil];
 }
 
 
@@ -263,13 +259,13 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 
 - (void)updateCart:(GoodsModel *)goods
 {
-    CGFloat amount = (self.number+[goods.shopCartNum integerValue])*[goods.price floatValue];
+    CGFloat amount = self.number*[goods.price floatValue];
     
     NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
                           @"amount":[NSString stringWithFormat:@"%.2f",amount],
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
-                          @"goodNum":[NSString stringWithFormat:@"%ld",self.number+[goods.shopCartNum integerValue]],
+                          @"goodNum":[NSString stringWithFormat:@"%ld",self.number],
                           @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
                           @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
                           @"productId":goods.id.length>0?goods.id:@""
@@ -283,7 +279,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                 UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
                 [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
                 
-                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)([self.goodsDetail.shopCartNum integerValue]+self.number)];
+                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)self.number];
                 
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
@@ -387,7 +383,12 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     if (kind == UICollectionElementKindSectionFooter) {
         if (indexPath.section == 0 ) {
             DetailTopFootView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:DetailTopFootViewID forIndexPath:indexPath];
-            footview.leftTitleLable.text = [NSString stringWithFormat:@"已选择   %ld份",(long)self.number];
+            if ([self.goodsDetail.shopCartNum intValue]>0) {
+                footview.leftTitleLable.text = [NSString stringWithFormat:@"已添加   %@份",self.goodsDetail.shopCartNum];
+            }else{
+                footview.leftTitleLable.text = @"请选择 规格";
+            }
+            
             [footview addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectSpecification:)]];
             reusableview = footview;
             
@@ -555,7 +556,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     vc.selectFinished = ^(NSInteger number){
         self.number = number;
         
-        self.topFootview.leftTitleLable.text = [NSString stringWithFormat:@"已选择   %ld份",(long)self.number];
+        self.topFootview.leftTitleLable.text = [NSString stringWithFormat:@"已添加   %ld份",(long)self.number];
         
         if ([self.goodsDetail.shopCartNum intValue] > 0) {
             [wself updateCart:self.goodsDetail];

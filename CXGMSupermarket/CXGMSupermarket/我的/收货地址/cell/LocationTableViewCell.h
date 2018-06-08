@@ -11,4 +11,6 @@
 @interface LocationTableViewCell : UITableViewCell
 
 @property(nonatomic,strong)LocationModel* location;
+
+@property(nonatomic,assign)BOOL showPin;
 @end

@@ -16,8 +16,10 @@
 #import "SearchViewController.h"
 #import "AddressViewController.h"
 
-#import "HYNoticeView.h"
+
 #import "MessageViewController.h"
+
+#import "HYNoticeView.h"
 
 @interface HomeViewController ()
 @property(nonatomic,strong)HomeGoodsView* goodsView;
@@ -25,9 +27,9 @@
 
 @property(nonatomic,strong)UIView* topView;
 
-@property(nonatomic,strong)HYNoticeView *noticeHot;
-
 @property(nonatomic,assign)BOOL inScope;
+
+@property(nonatomic,strong)HYNoticeView *noticeHot;
 @end
 
 
@@ -37,6 +39,8 @@
     [super viewDidLoad];
     
     [self setupTopBar];
+    
+    [self setNoticeLocation];
     
     [self checkAppUpdate];
 
@@ -48,12 +52,14 @@
         [_noticeHot removeFromSuperview];
         _noticeHot = nil;
     }
+    
     NSString* address = @"当前位置不在配送范围内，请选择收获地址";
     if ([DeviceHelper sharedInstance].place && self.inScope) {
         NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
-        address = [dic[@"SubLocality"] stringByAppendingString:dic[@"Street"]];
+        address = [@"送货至：" stringByAppendingString:[dic[@"SubLocality"] stringByAppendingString:dic[@"Street"]]] ;
+    
     }
-
+    
     CGFloat width = [self sizeLabelWidth:address];
     CGRect frame = CGRectMake(10, NAVIGATION_BAR_HEIGHT-25, width, 30);
     if (iPhoneX) {
@@ -69,8 +75,6 @@
 - (void)setupMainUI:(BOOL)inScope
 {
     self.inScope = inScope;
-    
-    [self setNoticeLocation];
     
     if (inScope)
     {
@@ -131,14 +135,25 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     _topView.hidden = NO;
-    _noticeHot.hidden = NO;
+    
+//    _noticeHot.hidden = NO;
+    
+    [self setNoticeLocation];
 }
 
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    
     _topView.hidden = YES;
-    _noticeHot.hidden = YES;
+    
+    
+//    _noticeHot.hidden = YES;
+    
+    if (_noticeHot.superview) {
+        [_noticeHot removeFromSuperview];
+        _noticeHot = nil;
+    }
 }
 
 - (void)setupTopBar

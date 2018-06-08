@@ -105,6 +105,7 @@
 #define DontShowCart_Notify      @"DontShowCart_Notify"
 
 #define LoginAccount_Success   @"LoginAccount_Success"
+#define LogoutAccount_Success   @"LogoutAccount_Success"
 
 #define AddOrder_Success   @"AddOrder_Success"
 #define CancelOrder_Success   @"CancelOrder_Success"

@@ -65,6 +65,9 @@
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
         [[UserInfoManager sharedInstance] deleteUserInfo];
         [weakSelf.navigationController popViewControllerAnimated:YES];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:LogoutAccount_Success object:nil];
     }];
     [alter addAction:okAction];
     

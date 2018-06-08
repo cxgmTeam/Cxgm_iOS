@@ -12,6 +12,12 @@
 #define TRIANGLE 5.0
 
 #define NoticeColor [UIColor colorWithRed:0.0/255.0 green:0.0/255.0 blue:0.0/255.0 alpha:.5]
+
+
+@interface HYNoticeView ()
+@property(nonatomic,strong)UILabel* textLabel;
+@end
+
 static NSMutableArray *noticeArray;
 
 @implementation HYNoticeView
@@ -142,6 +148,9 @@ static NSMutableArray *noticeArray;
         label.textAlignment = NSTextAlignmentCenter;
         [self addSubview:label];
         
+        self.textLabel = label;
+        
+        
         //
         UIButton *viewButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
         [viewButton addTarget:self action:@selector(clickNotice:) forControlEvents:UIControlEventTouchUpInside];
@@ -230,6 +239,8 @@ static NSMutableArray *noticeArray;
     }
 }
 
-
+- (void)setText:(NSString *)text{
+    self.textLabel.text = text;
+}
 
 @end

@@ -35,7 +35,7 @@
     
     UIButton* button = [UIButton new];
     button.backgroundColor = Color00A862;
-    [button setTitle:@"加入购物车" forState:UIControlStateNormal];
+    [button setTitle:@"确定" forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:18];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [self.view addSubview:button];
@@ -70,7 +70,9 @@
     
     NSInteger count = [self.numberLabel.text integerValue];
     count++;
-    
+    if (count>99) {
+        return;
+    }
     self.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
     self.selectedLabel.text = [NSString stringWithFormat:@"已选：%ld份",count];
 }
@@ -78,7 +80,7 @@
 - (void)cutBtnClick:(UIButton*)button {
     NSInteger count = [self.numberLabel.text integerValue];
     count--;
-    if(count <= 0){
+    if(count < 0){
         return ;
     }
     self.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
@@ -134,18 +136,14 @@
     }];
     
     _iconView = [UIImageView new];
-    _iconView.image = [UIImage imageNamed:@"placeholderImage"];
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:self.goods.image] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     [contentView addSubview:_iconView];
     [_iconView mas_makeConstraints:^(MASConstraintMaker *make){
         make.width.height.equalTo(80);
         make.top.equalTo(17);
         make.left.equalTo(15);
     }];
-    
-    if (self.goods.productImageList.count > 0) {
-        NSDictionary* dic = [self.goods.productImageList firstObject];
-        [_iconView sd_setImageWithURL:[NSURL URLWithString:dic[@"url"]] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
-    }
+
     
     _goodPriceLabel = [[UILabel alloc] init];
     _goodPriceLabel.text =[NSString stringWithFormat:@"￥%.2f",[self.goods.price floatValue]] ;
@@ -189,7 +187,11 @@
 
 
     _selectedLabel = [[UILabel alloc] init];
-    _selectedLabel.text = [NSString stringWithFormat:@"已选：%ld份",self.number];
+    if ([self.goods.shopCartNum integerValue] > 0) {
+        _selectedLabel.text = [NSString stringWithFormat:@"已选：%@份",self.goods.shopCartNum];
+    }else{
+        _selectedLabel.text = [NSString stringWithFormat:@"已选：%ld份",self.number];
+    }
     _selectedLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
     _selectedLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [contentView addSubview:_selectedLabel];
@@ -235,7 +237,12 @@
     //数量显示
     UILabel* numberLabel = [[UILabel alloc]init];
     numberLabel.textAlignment = NSTextAlignmentCenter;
-    numberLabel.text = [NSString stringWithFormat:@"%ld",self.number];
+    
+    if ([self.goods.shopCartNum integerValue] > 0) {
+        numberLabel.text = self.goods.shopCartNum;
+    }else{
+        numberLabel.text = @"1";
+    }
     numberLabel.font = [UIFont systemFontOfSize:15];
     [contentView addSubview:numberLabel];
     [numberLabel mas_makeConstraints:^(MASConstraintMaker *make){

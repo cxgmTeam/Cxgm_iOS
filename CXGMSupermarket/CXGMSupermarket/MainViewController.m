@@ -143,6 +143,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:AddGoodsSuccess_Notify object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:AddOrder_Success object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:DeleteShopCart_Success object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:LoginAccount_Success object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:LogoutAccount_Success object:nil];
 }
 
 
@@ -165,7 +167,10 @@
 
 - (void)getShopCartNumber
 {
-    if (![UserInfoManager sharedInstance].isLogin) return;
+    if (![UserInfoManager sharedInstance].isLogin){
+        self.cartItem.badgeValue = nil;
+        return;
+    }
     
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     NSDictionary* dic = @{
