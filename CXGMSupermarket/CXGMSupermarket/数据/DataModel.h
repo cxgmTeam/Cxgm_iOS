@@ -151,6 +151,7 @@
 @interface CategoryModel : JSONModel
 @property (nonatomic,strong)NSString<Optional> * id;
 @property (nonatomic,strong)NSString<Optional> * name;
+@property (nonatomic,strong)NSString<Optional> * imageUrl;
 @property (nonatomic,strong)NSObject<Optional> * shopCategoryList;
 
 @property (nonatomic,strong)NSString<Optional> * selected;

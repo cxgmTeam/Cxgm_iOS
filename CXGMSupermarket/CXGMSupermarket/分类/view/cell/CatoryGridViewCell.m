@@ -19,6 +19,7 @@
 - (void)setCategory:(CategoryModel *)category
 {
     _titleLabel.text = category.name;
+    [_imgView sd_setImageWithURL:[NSURL URLWithString:category.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {

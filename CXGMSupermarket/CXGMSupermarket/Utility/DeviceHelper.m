@@ -8,6 +8,7 @@
 
 #import "DeviceHelper.h"
 
+
 @implementation DeviceHelper
 
 + (instancetype)sharedInstance
@@ -28,11 +29,10 @@
 - (id)init{
     if (self = [super init]) {
 
-        self.shopCartNum = @"0";
+        self.shopCartNum = @"0";        
     }
     return self;
 }
-
 
 #pragma mark- 有关uuid
 //提取保存的uuid
@@ -90,5 +90,6 @@
     OSStatus status = SecItemAdd((__bridge CFDictionaryRef)keychainQuery,NULL);
     [self keychainErrorToString:status];
 }
+
 
 @end

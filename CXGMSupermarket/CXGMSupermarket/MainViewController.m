@@ -95,6 +95,8 @@
     
     self.currentIndex = 0;
     
+    [self getAddressList];
+    
     //添加通知
     [self addNotification];
 }
@@ -129,10 +131,11 @@
     }
 }
 
+
 #pragma mark-
 - (void)addNotification
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startLocationCity:) name:UIApplicationDidBecomeActiveNotification object:nil];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startLocationCity:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWindowHomeNotify:) name:WindowHomePage_Notify object:nil];
     
@@ -198,6 +201,36 @@
 }
 
 #pragma mark- 定位
+
+
+- (void)getAddressList
+{
+    if (![UserInfoManager sharedInstance].isLogin) return;
+
+    UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
+    
+    typeof(self) __weak wself = self;
+    [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIAddressList] token:userInfo.token parameters:nil success:^(id JSON, NSError *error){
+
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            NSArray* array = [AddressModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            if (array.count > 0) {
+                AddressModel* address = [array firstObject];
+                
+                [DeviceHelper sharedInstance].defaultAddress = address;
+                [wself checkAddress:address.longitude dimension:address.dimension];
+            }else{
+                [wself startLocationCity:nil];
+            }
+        }
+        
+    } failure:^(id JSON, NSError *error){
+
+    }];
+}
+
+
 - (void)startLocationCity:(NSNotification *)notify{
     if (!self.locationManager)
     {

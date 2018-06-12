@@ -54,7 +54,10 @@
     }
     
     NSString* address = @"当前位置不在配送范围内，请选择收获地址";
-    if ([DeviceHelper sharedInstance].place && self.inScope) {
+    if ([DeviceHelper sharedInstance].defaultAddress) {
+        address = [@"送货至：" stringByAppendingString:[DeviceHelper sharedInstance].defaultAddress.address] ;
+        
+    }else if ([DeviceHelper sharedInstance].place && self.inScope) {
         NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
         address = [@"送货至：" stringByAppendingString:[dic[@"SubLocality"] stringByAppendingString:dic[@"Street"]]] ;
     
@@ -136,8 +139,6 @@
     
     _topView.hidden = NO;
     
-//    _noticeHot.hidden = NO;
-    
     [self setNoticeLocation];
 }
 
@@ -146,9 +147,6 @@
     [super viewWillDisappear:animated];
     
     _topView.hidden = YES;
-    
-    
-//    _noticeHot.hidden = YES;
     
     if (_noticeHot.superview) {
         [_noticeHot removeFromSuperview];

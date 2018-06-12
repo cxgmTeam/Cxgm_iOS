@@ -340,6 +340,8 @@
 #pragma mark BMKLocationServiceDelegate
 - (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
 {
+    
+    NSLog(@"didUpdateBMKUserLocation-------****");
     _mapView.showsUserLocation = YES;//显示定位图层
     //设置地图中心为用户经纬度
     [_mapView updateLocationData:userLocation];
@@ -359,6 +361,8 @@
 
 - (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
+    
+    NSLog(@"regionDidChangeAnimated-------!!!!!");
     //屏幕坐标转地图经纬度
     CLLocationCoordinate2D MapCoordinate=[_mapView convertPoint:_mapPin.center toCoordinateFromView:_mapView];
 
@@ -380,10 +384,11 @@
     
 }
 
-#pragma mark 根据定位搜索周边
+#pragma mark 根据定位 搜索周边
 -(void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {
 
+    NSLog(@"onGetReverseGeoCodeResult---------1");
     //获取周边用户信息
     if (error==BMK_SEARCH_NO_ERROR) {
         
@@ -425,6 +430,7 @@
 #pragma mark - 输入地址联想搜索
 - (void)onGetPoiResult:(BMKPoiSearch *)searcher result:(BMKPoiResult*)result errorCode:(BMKSearchErrorCode)error
 {
+    NSLog(@"onGetPoiResult----------2");
     // 清楚屏幕中所有的annotation
 //    NSArray* array = [NSArray arrayWithArray:_mapView.annotations];
 //    [_mapView removeAnnotations:array];

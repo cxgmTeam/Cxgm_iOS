@@ -128,7 +128,7 @@ static NSString *const AddAddressFootViewID = @"AddAddressFootView";
                 @"longitude": [NSString stringWithFormat:@"%lf",self.location.longitude],
                 @"phone": self.phoneField.text,
                 @"realName": self.nameField.text,
-                @"isDef": self.address.isDef,
+                @"isDef": @"",
                 };
     }
     

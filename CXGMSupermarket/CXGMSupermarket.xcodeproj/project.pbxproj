@@ -96,6 +96,7 @@
 		7789516020BD7E0A002C23C3 /* CourierViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7789515F20BD7E0A002C23C3 /* CourierViewCell.m */; };
 		7789516320BD7F34002C23C3 /* logisticsProcessCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7789516220BD7F34002C23C3 /* logisticsProcessCell.m */; };
 		7789516620BD8098002C23C3 /* LogisticsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7789516520BD8098002C23C3 /* LogisticsItem.m */; };
+		7798DD5D20CF7BAD00FE708D /* BMKLocationkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7798DD5C20CF7BAD00FE708D /* BMKLocationkit.framework */; };
 		779C9558209AE0EE0029A591 /* PayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C9557209AE0EE0029A591 /* PayResultViewController.m */; };
 		779C955B209B082C0029A591 /* HomeGoodsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C955A209B082C0029A591 /* HomeGoodsView.m */; };
 		779C955E209B0A7C0029A591 /* HomeShopsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C955D209B0A7C0029A591 /* HomeShopsView.m */; };
@@ -581,6 +582,7 @@
 		7789516220BD7F34002C23C3 /* logisticsProcessCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = logisticsProcessCell.m; sourceTree = "<group>"; };
 		7789516420BD8098002C23C3 /* LogisticsItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogisticsItem.h; sourceTree = "<group>"; };
 		7789516520BD8098002C23C3 /* LogisticsItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogisticsItem.m; sourceTree = "<group>"; };
+		7798DD5C20CF7BAD00FE708D /* BMKLocationkit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BMKLocationkit.framework; sourceTree = "<group>"; };
 		779C9556209AE0EE0029A591 /* PayResultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PayResultViewController.h; sourceTree = "<group>"; };
 		779C9557209AE0EE0029A591 /* PayResultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PayResultViewController.m; sourceTree = "<group>"; };
 		779C9559209B082C0029A591 /* HomeGoodsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeGoodsView.h; sourceTree = "<group>"; };
@@ -1053,6 +1055,7 @@
 				77193B5820BBF4BE0001508E /* CoreMotion.framework in Frameworks */,
 				77193B3620BBDF250001508E /* UMShare.framework in Frameworks */,
 				77FDD572209BF54200805709 /* OpenGLES.framework in Frameworks */,
+				7798DD5D20CF7BAD00FE708D /* BMKLocationkit.framework in Frameworks */,
 				BE639A022073A33500C223E8 /* CoreGraphics.framework in Frameworks */,
 				77529E0320AC5BDC0015F7A6 /* MessageUI.framework in Frameworks */,
 				77193B5420BBF3CB0001508E /* libssl.a in Frameworks */,
@@ -2219,6 +2222,7 @@
 		77FDD555209BF1F600805709 /* BaiduMap */ = {
 			isa = PBXGroup;
 			children = (
+				7798DD5C20CF7BAD00FE708D /* BMKLocationkit.framework */,
 				77FDD575209BF70300805709 /* mapapi.bundle */,
 				77FDD556209BF1F600805709 /* BaiduMapAPI_Location.framework */,
 				77FDD557209BF1F600805709 /* BaiduMapAPI_Map.framework */,
