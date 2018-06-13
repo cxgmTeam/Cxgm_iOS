@@ -99,18 +99,20 @@
 #define WindowHomePage_Notify    @"WindowHomePage_Notify"
 #define ShowLoginVC_Notify       @"ShowLoginVC_Notify"
 
-#define AddGoodsSuccess_Notify    @"AddGoodsSuccess_Notify"
+#define AddGoodsSuccess_Notify   @"AddGoodsSuccess_Notify"
 #define DeleteShopCart_Success   @"DeleteShopCart_Success"
 
 #define DontShowCart_Notify      @"DontShowCart_Notify"
 
-#define LoginAccount_Success   @"LoginAccount_Success"
-#define LogoutAccount_Success   @"LogoutAccount_Success"
+#define LoginAccount_Success     @"LoginAccount_Success"
+#define LogoutAccount_Success    @"LogoutAccount_Success"
 
-#define AddOrder_Success   @"AddOrder_Success"
-#define CancelOrder_Success   @"CancelOrder_Success"
+#define AddOrder_Success         @"AddOrder_Success"
+#define CancelOrder_Success      @"CancelOrder_Success"
 
-#define Show_PayResult   @"Show_PayResult"
+#define Show_PayResult           @"Show_PayResult"
+
+
 
 
 #define PAGECOUNT  @"10"

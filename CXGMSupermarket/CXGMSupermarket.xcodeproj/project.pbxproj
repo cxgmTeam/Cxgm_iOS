@@ -79,7 +79,6 @@
 		776A4A4A20BFF33600A6F0DF /* news_qa.min.css in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A4520BFF33600A6F0DF /* news_qa.min.css */; };
 		776A4A4B20BFF33600A6F0DF /* news_qa.auto.css in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A4620BFF33600A6F0DF /* news_qa.auto.css */; };
 		776A4A4C20BFF33600A6F0DF /* jjrb.js in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A4720BFF33600A6F0DF /* jjrb.js */; };
-		776A4A5C20BFFE6E00A6F0DF /* img_replace.js in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A5120BFFE6D00A6F0DF /* img_replace.js */; };
 		776A4A6320BFFE6E00A6F0DF /* jquery.min.js in Resources */ = {isa = PBXBuildFile; fileRef = 776A4A5820BFFE6E00A6F0DF /* jquery.min.js */; };
 		776A4A6920C0244500A6F0DF /* CartBadgeView.m in Sources */ = {isa = PBXBuildFile; fileRef = 776A4A6820C0244500A6F0DF /* CartBadgeView.m */; };
 		776B534E20A69C9000594B32 /* LocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B534D20A69C9000594B32 /* LocationTableViewCell.m */; };
@@ -550,7 +549,6 @@
 		776A4A4520BFF33600A6F0DF /* news_qa.min.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = news_qa.min.css; sourceTree = "<group>"; };
 		776A4A4620BFF33600A6F0DF /* news_qa.auto.css */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.css; path = news_qa.auto.css; sourceTree = "<group>"; };
 		776A4A4720BFF33600A6F0DF /* jjrb.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jjrb.js; sourceTree = "<group>"; };
-		776A4A5120BFFE6D00A6F0DF /* img_replace.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = img_replace.js; sourceTree = "<group>"; };
 		776A4A5820BFFE6E00A6F0DF /* jquery.min.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.min.js; sourceTree = "<group>"; };
 		776A4A6720C0244500A6F0DF /* CartBadgeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CartBadgeView.h; sourceTree = "<group>"; };
 		776A4A6820C0244500A6F0DF /* CartBadgeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CartBadgeView.m; sourceTree = "<group>"; };
@@ -1530,7 +1528,6 @@
 		776A4A4220BFF33600A6F0DF /* HTML */ = {
 			isa = PBXGroup;
 			children = (
-				776A4A5120BFFE6D00A6F0DF /* img_replace.js */,
 				776A4A5820BFFE6E00A6F0DF /* jquery.min.js */,
 				776A4A4320BFF33600A6F0DF /* HTMLTemplate.html */,
 				776A4A4420BFF33600A6F0DF /* jquery-1.7.1.min.js */,
@@ -2872,7 +2869,6 @@
 				776A4A4920BFF33600A6F0DF /* jquery-1.7.1.min.js in Resources */,
 				BEC90F9B207F809700B5E609 /* cart_cutBtn_nomal@2x.png in Resources */,
 				77193B3420BBDF250001508E /* UMSocialSDKResources.bundle in Resources */,
-				776A4A5C20BFFE6E00A6F0DF /* img_replace.js in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3364,8 +3360,8 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_BUNDLE_IDENTIFIER = com.cxgm.app;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "46baf1f3-5239-4744-85e2-e72d78d25920";
-				PROVISIONING_PROFILE_SPECIFIER = cxgm_distribution;
+				PROVISIONING_PROFILE = "1f8d417e-da29-499f-b6f7-4e3ed8f8f554";
+				PROVISIONING_PROFILE_SPECIFIER = cxgm_adhoc;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

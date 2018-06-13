@@ -54,13 +54,14 @@
     }
     
     NSString* address = @"当前位置不在配送范围内，请选择收获地址";
-    if ([DeviceHelper sharedInstance].defaultAddress) {
-        address = [@"送货至：" stringByAppendingString:[DeviceHelper sharedInstance].defaultAddress.address] ;
-        
-    }else if ([DeviceHelper sharedInstance].place && self.inScope) {
+    if ([DeviceHelper sharedInstance].place && self.inScope) {
         NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
         address = [@"送货至：" stringByAppendingString:[dic[@"SubLocality"] stringByAppendingString:dic[@"Street"]]] ;
     
+    }else if ([DeviceHelper sharedInstance].defaultAddress) {
+        AddressModel* defAddress = [DeviceHelper sharedInstance].defaultAddress;
+        address = [@"送货至：" stringByAppendingString:defAddress.area] ;
+        
     }
     
     CGFloat width = [self sizeLabelWidth:address];
@@ -78,6 +79,8 @@
 - (void)setupMainUI:(BOOL)inScope
 {
     self.inScope = inScope;
+    
+    [self setNoticeLocation];
     
     if (inScope)
     {
@@ -223,7 +226,9 @@
         
         titleWidth = ceilf(textSize.width)+20;
     }
-    
+    if (titleWidth >= SCREENW) {
+        titleWidth = SCREENW-20;
+    }
     return titleWidth;
 }
 

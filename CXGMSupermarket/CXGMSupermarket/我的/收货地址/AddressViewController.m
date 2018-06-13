@@ -16,11 +16,15 @@
 #import "AddressTableViewCell.h"
 #import "NoAddressTableCell.h"
 
-@interface AddressViewController ()<UITableViewDelegate,UITableViewDataSource>
+#import <CoreLocation/CoreLocation.h>
+
+@interface AddressViewController ()<UITableViewDelegate,UITableViewDataSource,CLLocationManagerDelegate>
 
 @property (strong , nonatomic)UITableView *tableView;
 
 @property (strong , nonatomic)NSMutableArray *addressList;
+
+@property(nonatomic,strong)CLLocationManager* locationManager;//定位
 @end
 
 
@@ -172,6 +176,12 @@
                 cell = [[AddressTopTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressTopTableViewCell"];
             }
             cell.indexPath = indexPath;
+            
+            typeof(self) __weak wself = self;
+            cell.relocationHandler = ^{
+                [wself startLocation];
+            };
+            
             tableCell = cell;
         }
         else
@@ -339,6 +349,89 @@
     } failure:^(id JSON, NSError *error){
         
     }];
+}
+
+
+- (void)startLocation{
+    NSLog(@"startLocation....");
+    if (!self.locationManager)
+    {
+        self.locationManager = [[CLLocationManager alloc] init];
+        self.locationManager.delegate = self;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        self.locationManager.distanceFilter = 1000.0f;
+    }
+    //定位服务是否可用
+    BOOL enable=[CLLocationManager locationServicesEnabled];
+    //是否具有定位权限
+    int status=[CLLocationManager authorizationStatus];
+    if(!enable || status<3){
+        //请求权限
+        [self.locationManager requestWhenInUseAuthorization];
+    }
+    [self.locationManager startUpdatingLocation];
+}
+
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+    CLLocation *loc = [locations firstObject];
+
+    // 保存 Device 的现语言
+    NSMutableArray *userDefaultLanguages = [[NSUserDefaults standardUserDefaults]
+                                            objectForKey:@"AppleLanguages"];
+    // 强制 成 简体中文
+    [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithObjects:@"zh-hans",nil]
+                                              forKey:@"AppleLanguages"];
+
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder reverseGeocodeLocation:loc
+                   completionHandler:^(NSArray *placemarks, NSError *error){
+                       if(!error){
+                           for (CLPlacemark *place in placemarks) {
+                               NSLog(@"placemark.addressDictionary  %@",place.addressDictionary);
+                               
+                               [self.locationManager stopUpdatingLocation];
+                               
+                               [DeviceHelper sharedInstance].place = place;
+                               
+                               NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];
+                               
+                               [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationNone];
+                           }
+                       }
+                       // 还原Device 的语言
+                       [[NSUserDefaults standardUserDefaults] setObject:userDefaultLanguages forKey:@"AppleLanguages"];
+                   }];
+    
+}
+
+- (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
+    
+    NSString *errorString;
+    [manager stopUpdatingLocation];
+    
+    switch([error code]) {
+        case kCLErrorDenied:
+        {
+            errorString = @"Access to Location Services denied by user";
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"定位失败" message:@"前往设置打开定位功能" delegate:self cancelButtonTitle:@"好" otherButtonTitles:nil, nil];
+            [alert show];
+        }
+            break;
+        case kCLErrorLocationUnknown:
+            errorString = @"Location data unavailable";
+            break;
+        default:
+            errorString = @"An unknown error has occurred";
+            break;
+    }
+    
+    if (errorString) {
+        NSLog(@"定位失败信息  %@",errorString);
+    }
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
 
 #pragma mark- init

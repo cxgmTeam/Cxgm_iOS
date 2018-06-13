@@ -123,6 +123,7 @@
     if (![DeviceHelper sharedInstance].shop) return;
     
     NSDictionary* dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""};
+//    NSDictionary* dic = @{@"shopId":@""};
     
    [self.pointsArr removeAllObjects];
     
@@ -315,6 +316,8 @@
 - (void)didUpdateUserHeading:(BMKUserLocation *)userLocation
 {
     [_mapView updateLocationData:userLocation];
+    
+    
 //    NSLog(@"heading is %f  %f",userLocation.location.coordinate.latitude,userLocation.location.coordinate.longitude);
 }
 
@@ -351,8 +354,8 @@
     
     BMKCoordinateRegion region ;//表示范围的结构体
     region.center = _mapView.centerCoordinate;//中心点
-    region.span.latitudeDelta = 0.004;//经度范围（设置为0.1表示显示范围为0.2的纬度范围）
-    region.span.longitudeDelta = 0.004;//纬度范围
+    region.span.latitudeDelta = 0.1;//经度范围（设置为0.1表示显示范围为0.2的纬度范围）
+    region.span.longitudeDelta = 0.1;//纬度范围
     [_mapView setRegion:region animated:YES];
     
 }

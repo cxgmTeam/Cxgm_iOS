@@ -95,8 +95,6 @@
     
     self.currentIndex = 0;
     
-    [self getAddressList];
-    
     //添加通知
     [self addNotification];
 }
@@ -135,7 +133,7 @@
 #pragma mark-
 - (void)addNotification
 {
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startLocationCity:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startLocationCity:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWindowHomeNotify:) name:WindowHomePage_Notify object:nil];
     
@@ -205,7 +203,15 @@
 
 - (void)getAddressList
 {
-    if (![UserInfoManager sharedInstance].isLogin) return;
+    //当前地址不在配送范围内，未登录请求不到地址列表
+    if (![UserInfoManager sharedInstance].isLogin){
+        
+        [DeviceHelper sharedInstance].place = nil;
+        [self.homeVC setupMainUI:NO];
+    
+        return;
+    }
+    
 
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     
@@ -219,9 +225,13 @@
                 AddressModel* address = [array firstObject];
                 
                 [DeviceHelper sharedInstance].defaultAddress = address;
+                
                 [wself checkAddress:address.longitude dimension:address.dimension];
             }else{
-                [wself startLocationCity:nil];
+//                [wself startLocationCity:nil];
+
+                [DeviceHelper sharedInstance].place = nil;
+                [self.homeVC setupMainUI:NO];
             }
         }
         
@@ -230,6 +240,12 @@
     }];
 }
 
+/*
+ 第一规则是
+ 1.实际地址在配送范围 显示实际地址
+ 2.不在配送范围显示最后一次送达地址，首页展示该地址对应的店铺首页
+ 3.不在配送范围 又没有配送过 显示不在配送范围
+ */
 
 - (void)startLocationCity:(NSNotification *)notify{
     if (!self.locationManager)
@@ -286,6 +302,9 @@
                        if(!error){
                            for (CLPlacemark *place in placemarks) {
                                NSLog(@"placemark.addressDictionary  %@",place.addressDictionary);
+                               
+                               [self.locationManager stopUpdatingLocation];
+                               
                                [DeviceHelper sharedInstance].place = place;
                                
                                [weakSelf.homeVC setNoticeLocation];
@@ -348,14 +367,19 @@
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
             NSArray* array = (NSArray *)model.data;
+            //在配送范围内
             if (array.count > 0) {
                 [DeviceHelper sharedInstance].shop = [[ShopModel alloc] initWithDictionary:[array firstObject] error:nil];
+                
                 [weakSelf getShopCartNumber];
                 
                 [weakSelf.homeVC setupMainUI:YES];
             }else{
-                [DeviceHelper sharedInstance].place = nil;
-                [weakSelf.homeVC setupMainUI:NO];
+
+                [weakSelf getAddressList];
+                
+//                [DeviceHelper sharedInstance].place = nil;
+//                [weakSelf.homeVC setupMainUI:NO];
             }
         }else{
             [DeviceHelper sharedInstance].place = nil;

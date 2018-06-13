@@ -50,6 +50,7 @@
         button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
         [button setTitleColor:[UIColor colorWithRed:58/255.0 green:176/255.0 blue:242/255.0 alpha:1/1.0] forState:UIControlStateNormal];
         [self addSubview:button];
+        [button addTarget:self action:@selector(reLocation:) forControlEvents:UIControlEventTouchUpInside];
         [button mas_makeConstraints:^(MASConstraintMaker *make){
             make.centerY.equalTo(self);
             make.right.equalTo(-10);
@@ -71,8 +72,15 @@
     return self;
 }
 
+- (void)reLocation:(UIButton *)button
+{
+    !_relocationHandler?:_relocationHandler();
+}
+
 - (void)setIndexPath:(NSIndexPath *)indexPath
 {
+    _leftLabel.text = @"";
+    
     if (indexPath.item == 0) {
         NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
         _leftLabel.text = dic[@"Street"];
