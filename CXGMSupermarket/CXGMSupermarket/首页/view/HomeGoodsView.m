@@ -84,9 +84,6 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
         
-        //页面会闪
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:AddGoodsSuccess_Notify object:nil];
-        
         self.slideImageList = [NSMutableArray array];
         self.adBannarList = [NSMutableArray array];
         

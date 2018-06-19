@@ -10,5 +10,8 @@
 
 @interface AddressTopTableViewCell : UITableViewCell
 @property(nonatomic,strong)NSIndexPath* indexPath;
+
+@property(nonatomic,strong)UILabel* leftLabel;
+
 @property(nonatomic,copy)dispatch_block_t relocationHandler;
 @end

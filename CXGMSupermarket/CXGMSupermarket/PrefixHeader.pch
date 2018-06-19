@@ -112,7 +112,7 @@
 
 #define Show_PayResult           @"Show_PayResult"
 
-
+#define AddedNewScope_Notify     @"AddedNewScope_Notify"
 
 
 #define PAGECOUNT  @"10"

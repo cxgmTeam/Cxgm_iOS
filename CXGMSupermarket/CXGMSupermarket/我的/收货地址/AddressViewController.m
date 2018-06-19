@@ -25,6 +25,9 @@
 @property (strong , nonatomic)NSMutableArray *addressList;
 
 @property(nonatomic,strong)CLLocationManager* locationManager;//定位
+
+@property (nonatomic, strong) CLPlacemark *currentPlace;
+
 @end
 
 
@@ -61,6 +64,7 @@
         [wself getAddressList];
     }];
     
+    [self startLocation];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
@@ -84,9 +88,21 @@
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
-        if ([model.data isKindOfClass:[NSArray class]]) {
+        if ([model.data isKindOfClass:[NSArray class]])
+        {
             NSArray* array = [AddressModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
             [self.addressList addObjectsFromArray:array];
+            //首页是不在配送范围之内
+            
+            NSLog(@"[DeviceHelper sharedInstance].place %@",[DeviceHelper sharedInstance].place);
+            NSLog(@"[DeviceHelper sharedInstance].defaultAddress %@",[DeviceHelper sharedInstance].defaultAddress);
+            if (array.count > 0 && (self.needNewAddress && ![DeviceHelper sharedInstance].defaultAddress)) {
+                //测试发现最新地址在下面
+                [DeviceHelper sharedInstance].defaultAddress = [array lastObject];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddedNewScope_Notify object:nil];
+            }
+            
             [self.tableView reloadData];
         }
         
@@ -111,14 +127,14 @@
 #pragma mark- UITableView
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
-    if (self.selectedAddress) {
+    if (self.chooseAddress) {
         return 1;
     }
     return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    if (self.selectedAddress) {
+    if (self.chooseAddress) {
         return self.addressList.count;
     }else{
         if (section == 0) {
@@ -132,7 +148,7 @@
     
     UITableViewCell* tableCell = nil;
     
-    if (self.selectedAddress)
+    if (self.chooseAddress)
     {
         AddressTableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"AddressTableViewCell"];
         if (!cell) {
@@ -166,6 +182,13 @@
         cell.setDefaultAddress = ^(BOOL isDefault){
             [weakSelf updateAddress:self.addressList[indexPath.row] isDefault:isDefault];
         };
+        
+        AddressModel* address = self.addressList[indexPath.row];
+        CLLocationCoordinate2D coords = CLLocationCoordinate2DMake([address.dimension doubleValue],[address.longitude doubleValue]);
+        BOOL flag = [Utility mutableBoundConrtolAction:self.pointsArr myCoordinate:coords];
+        address.inScope = flag == YES? @"1":@"0";
+        cell.isInScope = flag;
+        
         tableCell = cell;
     }
     else
@@ -176,6 +199,10 @@
                 cell = [[AddressTopTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"AddressTopTableViewCell"];
             }
             cell.indexPath = indexPath;
+            
+            if (indexPath.row == 0) {
+                cell.leftLabel.text = [self.currentPlace.addressDictionary objectForKey:@"Street"];
+            }
             
             typeof(self) __weak wself = self;
             cell.relocationHandler = ^{
@@ -238,9 +265,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (self.selectedAddress)
+    if (self.chooseAddress)
     {
         AddressModel* address = self.addressList[indexPath.row];
+        if (![address.inScope boolValue]) {
+            [MBProgressHUD MBProgressHUDWithView:self.view Str:@"该地址不在当前店铺配送范围内"]; return;
+        }
         if (self.selectedAddress) {
             self.selectedAddress(address);
             [self.navigationController popViewControllerAnimated:YES];
@@ -258,7 +288,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
     CGFloat height = 0;
-    if (self.selectedAddress) {
+    if (self.chooseAddress) {
         height = 128+10;
     }
     else
@@ -278,14 +308,14 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    if (self.selectedAddress) {
+    if (self.chooseAddress) {
         return 0;
     }
     return 42;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    if (self.selectedAddress) {
+    if (self.chooseAddress) {
         return nil;
     }
     UIView* head = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenW, 42)];
@@ -351,9 +381,9 @@
     }];
 }
 
-
+#pragma mark-
 - (void)startLocation{
-    NSLog(@"startLocation....");
+
     if (!self.locationManager)
     {
         self.locationManager = [[CLLocationManager alloc] init];
@@ -369,6 +399,8 @@
         //请求权限
         [self.locationManager requestWhenInUseAuthorization];
     }
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
     [self.locationManager startUpdatingLocation];
 }
 
@@ -387,15 +419,17 @@
                    completionHandler:^(NSArray *placemarks, NSError *error){
                        if(!error){
                            for (CLPlacemark *place in placemarks) {
-                               NSLog(@"placemark.addressDictionary  %@",place.addressDictionary);
+//                               NSLog(@"placemark.addressDictionary  %@",place.addressDictionary);
                                
                                [self.locationManager stopUpdatingLocation];
                                
-                               [DeviceHelper sharedInstance].place = place;
+                               self.currentPlace = place;
                                
                                NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];
                                
                                [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationNone];
+                               
+                               [MBProgressHUD hideHUDForView:self.view animated:YES];
                            }
                        }
                        // 还原Device 的语言
@@ -428,11 +462,13 @@
     if (errorString) {
         NSLog(@"定位失败信息  %@",errorString);
     }
+    [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
 }
+
 
 #pragma mark- init
 

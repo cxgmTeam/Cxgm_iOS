@@ -16,8 +16,8 @@
 @property (nonatomic, strong) NSString *deviceID;//设备标识符
 
 @property (nonatomic, strong) CLLocation *location;//用户定位地址
-@property (nonatomic, strong) CLPlacemark *place;//用户定位地址
 
+@property (nonatomic, strong) CLPlacemark *place;//用户定位含有店铺的地址 
 
 @property (nonatomic, strong) AddressModel *defaultAddress;//用户的默认地址 也可能是地址列表中的第一个
 @property (nonatomic, strong) ShopModel *shop;//所选店铺的

@@ -17,4 +17,6 @@
 
 @property(nonatomic,copy)void(^setDefaultAddress)(BOOL isDefault);
 
+@property(nonatomic,assign)BOOL isInScope;
+
 @end

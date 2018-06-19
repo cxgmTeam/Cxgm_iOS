@@ -46,6 +46,8 @@
 @property (strong , nonatomic)GoodsArrivedTimeFoot *timeFootview;
 
 @property (assign , nonatomic)NSInteger orderNum;
+
+@property(strong,nonatomic) NSMutableArray * pointsArr;//查询到的范围点集
 @end
 
 /* cell */
@@ -68,6 +70,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     [super viewDidLoad];
     self.title = @"确认订单";
     
+    self.pointsArr = [NSMutableArray array];
+    
     self.orderParam = [NSMutableDictionary dictionary];
     
     [self setupBottom];
@@ -77,6 +81,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         make.left.top.right.equalTo(self.view);
         make.bottom.equalTo(-50);
     }];
+    
+    
+    [self findAllPsfw];
+    
     
     if (self.goodsArray.count > 0) {
         [self checkCoupon];
@@ -94,6 +102,14 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 {
     if (!self.address) {
         [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请添加收获地址"]; return;
+    }else{
+        if (self.pointsArr.count > 0) {
+            CLLocationCoordinate2D coords = CLLocationCoordinate2DMake([self.address.dimension doubleValue],[self.address.longitude doubleValue]);
+            BOOL flag = [Utility mutableBoundConrtolAction:self.pointsArr myCoordinate:coords];
+            if (!flag) {
+                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"送货地址不在当前店铺配送范围内"]; return;
+            }
+        }
     }
     
     //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
@@ -302,6 +318,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     if (indexPath.section == 0 && indexPath.item == 0) {
         AddressViewController* vc = [AddressViewController new];
+        vc.chooseAddress = YES;
+        vc.pointsArr = self.pointsArr;
         vc.selectedAddress = ^(AddressModel* address){
             self.address = address;
             [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
@@ -487,4 +505,46 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         }];
     }
 }
+
+#pragma mark-  选择送货地址时需要判断是否在所选店铺的范围内
+- (void)findAllPsfw
+{
+    NSDictionary* dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""};
+    
+    [self.pointsArr removeAllObjects];
+    
+    [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIFindAllPsfw] token:nil parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            if ([(NSArray*)model.data count] > 0) {
+                NSDictionary* dic = [(NSArray *)model.data objectAtIndex:0];
+                NSString* psfw = dic[@"psfw"];
+                NSArray* array = [psfw componentsSeparatedByString:@","];
+                
+                NSInteger pointNodeNum = array.count;
+                
+                for (NSInteger i = 0;i < pointNodeNum  ;i++)
+                {
+                    NSString* string = array[i];
+                    NSArray* arr = [string componentsSeparatedByString:@"_"];
+                    if (arr.count>1) {
+                        
+                        CLLocation *location = [[CLLocation alloc] initWithLatitude:[arr[1] floatValue] longitude:[arr[0] floatValue]];
+                        [self.pointsArr addObject:location];
+                    }
+                }
+                
+                CLLocationCoordinate2D commuterLotCoords[pointNodeNum];
+                
+                for(int i = 0; i < [self.pointsArr count]; i++) {
+                    commuterLotCoords[i] = [[self.pointsArr objectAtIndex:i] coordinate];
+                }
+            }
+        }
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+    
+}
+
 @end

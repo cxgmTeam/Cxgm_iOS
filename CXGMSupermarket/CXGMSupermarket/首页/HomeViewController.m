@@ -30,6 +30,10 @@
 @property(nonatomic,assign)BOOL inScope;
 
 @property(nonatomic,strong)HYNoticeView *noticeHot;
+
+@property(nonatomic,assign)BOOL isVisible;
+
+@property(nonatomic,assign)BOOL needNewAddress;//需要添加新地址，寻找店铺
 @end
 
 
@@ -38,7 +42,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    NSLog(@"%s",__func__);
+    
     [self setupTopBar];
+    
+    [self setupMainUI:NO];
     
     [self setNoticeLocation];
     
@@ -48,19 +56,21 @@
 
 - (void)setNoticeLocation
 {
-    if (_noticeHot.superview) {
-        [_noticeHot removeFromSuperview];
-        _noticeHot = nil;
-    }
+    [_noticeHot removeFromSuperview];
+    _noticeHot = nil;
     
     NSString* address = @"当前位置不在配送范围内，请选择收获地址";
+    self.needNewAddress = YES;
     if ([DeviceHelper sharedInstance].place && self.inScope) {
         NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
         address = [@"送货至：" stringByAppendingString:[dic[@"SubLocality"] stringByAppendingString:dic[@"Street"]]] ;
+        self.needNewAddress = NO;
     
     }else if ([DeviceHelper sharedInstance].defaultAddress) {
         AddressModel* defAddress = [DeviceHelper sharedInstance].defaultAddress;
         address = [@"送货至：" stringByAppendingString:defAddress.area] ;
+        
+        self.needNewAddress = NO;
         
     }
     
@@ -80,7 +90,13 @@
 {
     self.inScope = inScope;
     
-    [self setNoticeLocation];
+    if (self.isVisible) {
+        [self setNoticeLocation];
+    }else{
+        [_noticeHot removeFromSuperview];
+        _noticeHot = nil;
+    }
+    
     
     if (inScope)
     {
@@ -110,6 +126,8 @@
                 vc.goodsId = model.id;
                 [wself.navigationController pushViewController:vc animated:YES];
             };
+        }else{
+            [_goodsView requestGoodsList];
         }
     }
     else
@@ -132,13 +150,13 @@
             };
         }
     }
-    
-    [self.view bringSubviewToFront:_noticeHot];
 }
 
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
+    
+    self.isVisible = YES;
     
     _topView.hidden = NO;
     
@@ -148,13 +166,13 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+
+    self.isVisible = NO;
     
     _topView.hidden = YES;
     
-    if (_noticeHot.superview) {
-        [_noticeHot removeFromSuperview];
-        _noticeHot = nil;
-    }
+    [_noticeHot removeFromSuperview];
+    _noticeHot = nil;
 }
 
 - (void)setupTopBar
@@ -199,6 +217,7 @@
 - (void)showAddressVC:(id)sender
 {
     AddressViewController* vc = [AddressViewController new];
+    vc.needNewAddress = self.needNewAddress;
     [self.navigationController pushViewController:vc animated:YES];
 }
 

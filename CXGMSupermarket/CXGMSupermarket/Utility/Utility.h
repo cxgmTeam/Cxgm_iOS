@@ -21,6 +21,7 @@
 
 +(NSString *)formateDate:(long)ms;
 
++(BOOL)mutableBoundConrtolAction:(NSMutableArray *)arrSome myCoordinate:(CLLocationCoordinate2D )myCoordinate;
 #pragma mark-
 + (void)CXGMPostRequest:(NSString *)requestUrl token:(NSString *)token parameter:(NSDictionary *)dict success:(void (^)(id JSON, NSError *error))success failure:(void (^)(id JSON, NSError *error))failure;
 

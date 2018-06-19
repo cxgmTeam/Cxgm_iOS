@@ -32,6 +32,19 @@
     _selectedBtn.selected = [address.isDef boolValue];
 }
 
+- (void)setIsInScope:(BOOL)isInScope
+{
+    if (isInScope) {
+        _nameLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+        _phoneLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+        _addressLabel.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
+    }else{
+        _nameLabel.textColor = Color999999;
+        _phoneLabel.textColor = Color999999;
+        _addressLabel.textColor = Color999999;
+    }
+}
+
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         

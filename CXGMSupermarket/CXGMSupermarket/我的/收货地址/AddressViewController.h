@@ -10,8 +10,10 @@
 
 @interface AddressViewController : MyCenterSubViewController
 
-@property(nonatomic,assign)BOOL selectAddress;
+@property(nonatomic,assign)BOOL chooseAddress;//提交订单的时候需要选择地址
+@property(strong,nonatomic) NSMutableArray * pointsArr;//查询到的范围点集
 
 @property(nonatomic,copy)void(^selectedAddress)(AddressModel* address);
 
+@property(nonatomic,assign)BOOL needNewAddress;//需要添加新地址，寻找店铺
 @end

@@ -24,6 +24,8 @@
 @property(nonatomic,assign)NSInteger  currentIndex;
 
 @property(nonatomic,strong)UITabBarItem* cartItem;
+
+@property(nonatomic,assign)NSInteger  requestCount;
 @end
 
 @implementation MainViewController
@@ -133,6 +135,7 @@
 #pragma mark-
 - (void)addNotification
 {
+    //这个地方不能总是去刷新
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startLocationCity:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWindowHomeNotify:) name:WindowHomePage_Notify object:nil];
@@ -146,6 +149,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:DeleteShopCart_Success object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:LoginAccount_Success object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:LogoutAccount_Success object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHomePage:) name:AddedNewScope_Notify object:nil];
 }
 
 
@@ -198,6 +203,14 @@
     }];
 }
 
+- (void)refreshHomePage:(NSNotification *)notify
+{
+    NSLog(@"%s",__func__);
+    AddressModel* address = [DeviceHelper sharedInstance].defaultAddress;
+    
+    [self checkAddress:address.longitude dimension:address.dimension isLocation:NO];
+}
+
 #pragma mark- 定位
 
 
@@ -221,16 +234,29 @@
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
             NSArray* array = [AddressModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
-            if (array.count > 0) {
-                AddressModel* address = [array firstObject];
+            if (array.count > 0)
+            {
+                AddressModel* address;
+                //这里是默认地址  还需要判断最后一个地址
+                if (self.requestCount == 0) {
+                    address = [array firstObject];
+                    
+                    [DeviceHelper sharedInstance].defaultAddress = address;
+                    
+                    self.requestCount = 1;
+                }else{
+                    address = [array lastObject];
+                    
+                    [DeviceHelper sharedInstance].defaultAddress = address;
+                    
+                    self.requestCount = 2;
+                }
                 
-                [DeviceHelper sharedInstance].defaultAddress = address;
-                
-                [wself checkAddress:address.longitude dimension:address.dimension];
+                [wself checkAddress:address.longitude dimension:address.dimension isLocation:NO];
             }else{
-//                [wself startLocationCity:nil];
 
                 [DeviceHelper sharedInstance].place = nil;
+                [DeviceHelper sharedInstance].defaultAddress = nil;
                 [self.homeVC setupMainUI:NO];
             }
         }
@@ -247,7 +273,10 @@
  3.不在配送范围 又没有配送过 显示不在配送范围
  */
 
-- (void)startLocationCity:(NSNotification *)notify{
+- (void)startLocationCity:(NSNotification *)notify
+{
+    self.requestCount = 0;
+    
     if (!self.locationManager)
     {
         self.locationManager = [[CLLocationManager alloc] init];
@@ -281,11 +310,11 @@
         //转换后的coord
         CLLocationCoordinate2D coord = [WGS84TOGCJ02 transformFromWGSToGCJ:[loc coordinate]];
         
-        [self checkAddress:[NSString stringWithFormat:@"%lf",coord.longitude] dimension:[NSString stringWithFormat:@"%lf",coord.latitude]];
+        [self checkAddress:[NSString stringWithFormat:@"%lf",coord.longitude] dimension:[NSString stringWithFormat:@"%lf",coord.latitude] isLocation:YES];
     }
     else
     {
-        [self checkAddress:[NSString stringWithFormat:@"%lf",loc.coordinate.longitude] dimension:[NSString stringWithFormat:@"%lf",loc.coordinate.latitude]];
+        [self checkAddress:[NSString stringWithFormat:@"%lf",loc.coordinate.longitude] dimension:[NSString stringWithFormat:@"%lf",loc.coordinate.latitude] isLocation:YES];
     }
     
     
@@ -355,7 +384,7 @@
 }
 
 
-- (void)checkAddress:(NSString *)longitude dimension:(NSString *)dimension
+- (void)checkAddress:(NSString *)longitude dimension:(NSString *)dimension isLocation:(BOOL)location
 {
     NSDictionary* dic = @{
                           @"longitude":longitude,
@@ -375,11 +404,15 @@
                 
                 [weakSelf.homeVC setupMainUI:YES];
             }else{
-
-                [weakSelf getAddressList];
-                
-//                [DeviceHelper sharedInstance].place = nil;
-//                [weakSelf.homeVC setupMainUI:NO];
+                //这个地方要出去
+                if (location || self.requestCount == 1) {
+                    [weakSelf getAddressList];
+                }else{
+                    
+                    [DeviceHelper sharedInstance].place = nil;
+                    [DeviceHelper sharedInstance].defaultAddress = nil;
+                    [weakSelf.homeVC setupMainUI:NO];
+                }
             }
         }else{
             [DeviceHelper sharedInstance].place = nil;

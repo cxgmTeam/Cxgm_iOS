@@ -10,7 +10,7 @@
 
 @interface AddressTopTableViewCell ()
 
-@property(nonatomic,strong)UILabel* leftLabel;
+
 @property(nonatomic,strong)UIButton* anchorBtn;
 @property(nonatomic,strong)UIImageView* arrowView;
 @property(nonatomic,strong)UIView* lineView;
@@ -82,8 +82,8 @@
     _leftLabel.text = @"";
     
     if (indexPath.item == 0) {
-        NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
-        _leftLabel.text = dic[@"Street"];
+//        NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
+//        _leftLabel.text = dic[@"Street"];
         
         _anchorBtn.hidden = NO;
         _arrowView.hidden = YES;

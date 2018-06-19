@@ -96,8 +96,13 @@ static NSString *const AddAddressFootViewID = @"AddAddressFootView";
     if (self.biotopeField.text.length == 0) {
         [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请选择小区/大厦"]; return;
     }
-    if (self.buildingField.text.length == 0) {
-        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请填写门牌号"]; return;
+//    if (self.buildingField.text.length == 0) {
+//        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请填写门牌号"]; return;
+//    }
+    
+    
+    if (self.selectedLoacation) {
+        self.location = self.selectedLoacation;
     }
     
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
@@ -191,6 +196,7 @@ static NSString *const AddAddressFootViewID = @"AddAddressFootView";
             break;
         case 1:
             self.phoneField = cell.textField;//手机号码
+            self.phoneField.keyboardType = UIKeyboardTypeNumberPad;
             if (self.address) {
                 self.phoneField.text = self.address.phone;
             }
