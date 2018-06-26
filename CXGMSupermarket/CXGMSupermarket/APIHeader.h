@@ -46,12 +46,18 @@
 #define APIFindAdvertisement  @"/homePage/findAdvertisement"
 //根据门店ID查询首页运营位置
 #define APIFindMotion  @"/homePage/findMotion"
+//根据门店ID查询首页简报列表
+#define APIFindReport  @"/homePage/findReport"
+
+
 //根据商品ID查询商品详情
 #define APIFindProductDetail  @"/homePage/findProductDetail"
 //商品详情的猜你喜欢
 #define APIPushProducts  @"/homePage/pushProducts"
 //搜索
 #define APISearch  @"/homePage/serch"
+
+
 
 
 /* 分类页面  */

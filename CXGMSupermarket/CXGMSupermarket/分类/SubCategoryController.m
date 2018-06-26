@@ -488,6 +488,8 @@ static CGFloat TopBtnWidth = 60;
     
     UIButton* searchBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     [searchBtn setImage:[UIImage imageNamed:@"top_search"] forState:UIControlStateNormal];
+    searchBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+    
     [searchBtn addTarget:self action:@selector(onTapSearchBtn:) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem* searchItem = [[UIBarButtonItem alloc] initWithCustomView:searchBtn];
     
@@ -495,8 +497,12 @@ static CGFloat TopBtnWidth = 60;
     CartBadgeView *cartBtn = [[CartBadgeView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     cartBtn.delegate = self;
     [cartBtn.carButton setImage:[UIImage imageNamed:@"top_cart"] forState:UIControlStateNormal];
+    cartBtn.carButton.imageEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     UIBarButtonItem* cartItem = [[UIBarButtonItem alloc] initWithCustomView:cartBtn];
     
+    
+//    searchBtn.backgroundColor = [UIColor redColor];
+//    cartBtn.backgroundColor = [UIColor  blueColor];
     
     self.navigationItem.rightBarButtonItems = @[cartItem,searchItem];
     

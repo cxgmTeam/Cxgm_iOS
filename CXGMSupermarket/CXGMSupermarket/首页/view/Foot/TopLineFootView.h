@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface TopLineFootView : UICollectionReusableView
-
+@property(nonatomic,strong)NSArray* roTitles;
 @end

@@ -37,6 +37,14 @@
 
 #import "Masonry.h"
 
+
+/* 友盟
+ Appkey
+ 5b2c54328f4a9d3b2a00003f
+ App Master Secret
+ p3qvfqpedv9vq0aluqe32ptcj8eey7wq
+ */
+
 #define CLog(format, ...)  NSLog(format, ## __VA_ARGS__)
 #define NSLog(FORMAT, ...) printf("%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
 

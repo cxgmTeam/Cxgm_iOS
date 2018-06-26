@@ -275,6 +275,9 @@
 
 - (void)startLocationCity:(NSNotification *)notify
 {
+    
+    if ([DeviceHelper sharedInstance].shop) return;
+        
     self.requestCount = 0;
     
     if (!self.locationManager)

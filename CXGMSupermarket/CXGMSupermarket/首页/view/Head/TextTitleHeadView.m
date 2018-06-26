@@ -42,7 +42,7 @@
     [super layoutSubviews];
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.mas_equalTo(21);
+        make.top.mas_equalTo(20);
         make.centerX.mas_equalTo(self);
     }];
     

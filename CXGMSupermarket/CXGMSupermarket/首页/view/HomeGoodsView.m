@@ -39,6 +39,8 @@
 @property(nonatomic,strong)NSArray* advertiseList;//三个广告位
 @property(nonatomic,strong)NSMutableArray* adBannarList;//下面的广告位
 
+@property(nonatomic,strong)NSArray* reportList;//滚动简报
+@property(nonatomic,strong)NSMutableArray* motionNameList;//滚动简报title
 @end
 
 
@@ -61,8 +63,6 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         
-        
-        
         self.categoryNames = @[@"新鲜水果",@"放心蔬菜",@"鲜肉蛋品",@"水产海鲜",
                                @"粮油副食",@"休闲零食",@"中外名酒",@"美妆百货"];
         
@@ -79,6 +79,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             
             [weakSelf findAdvertisement];
             [weakSelf findMotion];
+            
+            [weakSelf findReport];
         }];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
@@ -86,6 +88,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         
         self.slideImageList = [NSMutableArray array];
         self.adBannarList = [NSMutableArray array];
+        self.motionNameList = [NSMutableArray array];
         
         [self requestGoodsList];
     }
@@ -104,6 +107,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     
     [self findAdvertisement];
     [self findMotion];
+    
+    [self findReport];
 }
 
 
@@ -264,6 +269,31 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     }];
 }
 
+//简报
+- (void)findReport
+{
+    NSDictionary* dic = @{@"shopId":@""};
+    if ([DeviceHelper sharedInstance].shop) {
+        dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
+    }
+    WEAKSELF;
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindReport]  token:nil parameters:dic success:^(id JSON, NSError *error){
+        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            
+            self.reportList = [AdBannarModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            for (AdBannarModel* model in self.reportList) {
+                [self.motionNameList addObject:model.motionName];
+            }
+            [weakSelf.collectionView reloadData];
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
 
 #pragma mark - <UICollectionViewDataSource>
 - (UIColor *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout colorForSectionAtIndex:(NSInteger)section{
@@ -386,6 +416,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if (kind == UICollectionElementKindSectionFooter) {
         if (indexPath.section == 0) {
             TopLineFootView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:TopLineFootViewID forIndexPath:indexPath];
+            footview.roTitles = self.motionNameList;
             reusableview = footview;
         }
     }

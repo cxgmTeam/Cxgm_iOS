@@ -23,6 +23,8 @@
 #import <UMPush/UMessage.h>
 #import <UserNotifications/UserNotifications.h>
 #import <UserNotifications/UNUserNotificationCenter.h>
+#import <UMAnalytics/MobClick.h>
+
 
 @interface AppDelegate ()<BMKGeneralDelegate,UNUserNotificationCenterDelegate>
 @property(nonatomic,strong)  BMKMapManager* mapManager;
@@ -120,15 +122,23 @@
     // 配置友盟SDK产品并并统一初始化
     // [UMConfigure setEncryptEnabled:YES]; // optional: 设置加密传输, 默认NO.
     
-    
     [UMConfigure setLogEnabled:YES]; // 开发调试时可在console查看友盟日志显示，发布产品必须移除。
     
+    [UMConfigure initWithAppkey:@"5b2c9d5d8f4a9d6fa1000018" channel:@"App Store"];
     
-    [UMConfigure initWithAppkey:@"5af6acadb27b0a761e000306" channel:nil];
+    
+    NSString* deviceID =  [UMConfigure deviceIDForIntegration];
+    if ([deviceID isKindOfClass:[NSString class]]) {
+        NSLog(@"服务器端成功返回deviceID  %@",deviceID);
+    }
+    else{
+        NSLog(@"服务器端还没有返回deviceID");
+    }
+
     /* appkey: 开发者在友盟后台申请的应用获得（可在统计后台的 “统计分析->设置->应用信息” 页面查看）*/
     
     // 统计组件配置
-//    [MobClick setScenarioType:E_UM_NORMAL];
+    [MobClick setScenarioType:E_UM_NORMAL];
     // [MobClick setScenarioType:E_UM_GAME];  // optional: 游戏场景设置
     
     // Push组件基本功能配置
@@ -139,7 +149,7 @@
     }
     UMessageRegisterEntity * entity = [[UMessageRegisterEntity alloc] init];
     //type是对推送的几个参数的选择，可以选择一个或者多个。默认是三个全部打开，即：声音，弹窗，角标等
-    entity.types = UMessageAuthorizationOptionBadge|UMessageAuthorizationOptionAlert;
+    entity.types = UMessageAuthorizationOptionBadge|UMessageAuthorizationOptionAlert|UMessageAuthorizationOptionSound;
     if (@available(iOS 10.0, *)) {
         [UNUserNotificationCenter currentNotificationCenter].delegate = self;
     } else {
@@ -148,15 +158,18 @@
     [UMessage registerForRemoteNotificationsWithLaunchOptions:launchOptions Entity:entity completionHandler:^(BOOL granted, NSError * _Nullable error) {
         if (granted) {
             // 用户选择了接收Push消息
+            NSLog(@"用户选择了接收+++++Push消息");
         }else{
             // 用户拒绝接收Push消息
+            NSLog(@"用户拒绝接收------Push消息");
         }
     }];
-
 }
 
-
-
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    [UMessage setAutoAlert:NO];
+    [UMessage didReceiveRemoteNotification:userInfo];
+}
 
 //iOS10以下使用这两个方法接收通知，
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
@@ -219,6 +232,12 @@
     }else{
         //应用处于后台时的本地推送接受
     }
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken{
+    NSLog(@"deviceToken >>>>  %@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
+                  stringByReplacingOccurrencesOfString: @">" withString: @""]
+                 stringByReplacingOccurrencesOfString: @" " withString: @""]);
 }
 #pragma mark-
 - (void)applicationWillResignActive:(UIApplication *)application {

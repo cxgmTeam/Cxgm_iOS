@@ -179,12 +179,14 @@
 {
     UIButton* locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
     [locationBtn setImage:[UIImage imageNamed:@"order_address"] forState:UIControlStateNormal];
+    locationBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
     [locationBtn addTarget:self action:@selector(showAddressVC:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:locationBtn];
 
     
     UIButton* messageBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
     [messageBtn setImage:[UIImage imageNamed:@"top_message"] forState:UIControlStateNormal];
+    messageBtn.imageEdgeInsets = UIEdgeInsetsMake(0, 5, 0, 0);
     [messageBtn addTarget:self action:@selector(showMessageVC:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:messageBtn];
     

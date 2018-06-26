@@ -12,8 +12,6 @@
 @interface TopLineFootView ()<UIScrollViewDelegate,CDDRollingDelegate>
 /* 滚动 */
 @property (strong , nonatomic)DCTitleRolling *numericalScrollView;
-/* 底部 */
-@property (strong , nonatomic)UIView *bottomLineView;
 @end
 
 @implementation TopLineFootView
@@ -22,23 +20,37 @@
     
     self = [super initWithFrame:frame];
     if (self) {
-        
-        [self setUpUI];
-        
+
         [self setUpBase];
+        
+        [self setUpRollingTitle];
         
     }
     return self;
 }
 
-- (void)setUpUI
+- (void)setRoTitles:(NSArray *)roTitles
 {
+    _roTitles = roTitles;
+    
+    [self setUpRollingTitle];
+}
+
+- (void)setUpRollingTitle
+{
+    
+    if (_numericalScrollView) {
+        [_numericalScrollView removeFromSuperview];
+        _numericalScrollView = nil;
+    }
+    
     //初始化
     _numericalScrollView = [[DCTitleRolling alloc] initWithFrame:CGRectMake(94, 0, self.dc_width-100, 70) WithTitleData:^(CDDRollingGroupStyle *rollingGroupStyle, NSString *__autoreleasing *leftImage, NSArray *__autoreleasing *rolTitles, NSArray *__autoreleasing *rolTags, NSArray *__autoreleasing *rightImages, NSString *__autoreleasing *rightbuttonTitle, NSInteger *interval, float *rollingTime, NSInteger *titleFont, UIColor *__autoreleasing *titleColor, BOOL *isShowTagBorder) {
         
         *rollingTime = 0.25;
 //        *rolTags = @[@"冬季健康日",@"新手上路",@"年终内购会",@"GitHub星星走一波"];
-        *rolTitles = @[@"这里是生鲜的头条信息展示区域，轮播展示标题内容一行时居中，两行时折行展示。",@"2000元热门手机推荐",@"好奇么？点进去哈",@"这套家具比房子还贵"];
+//        *rolTitles = @[@"这里是生鲜的头条信息展示区域，轮播展示标题内容一行时居中，两行时折行展示。",@"2000元热门手机推荐",@"好奇么？点进去哈",@"这套家具比房子还贵"];
+        *rolTitles = self.roTitles;
 //        *leftImage = @"shouye_img_toutiao";
         *interval = 6.0;
         *titleFont = 13;
@@ -54,11 +66,6 @@
     [_numericalScrollView dc_beginRolling];
     _numericalScrollView.backgroundColor = [UIColor whiteColor];
     [self addSubview:_numericalScrollView];
-    
-    _bottomLineView = [[UIView alloc] init];
-    _bottomLineView.backgroundColor = RGB(245, 245, 245);
-    [self addSubview:_bottomLineView];
-    _bottomLineView.frame = CGRectMake(0, self.dc_height - 8, ScreenW, 8);
 }
 
 - (void)layoutSubviews
@@ -93,6 +100,11 @@
         make.top.left.right.equalTo(self);
         make.height.equalTo(1);
     }];
+    
+    UIView* bottomLineView = [[UIView alloc] init];
+    bottomLineView.backgroundColor = RGB(245, 245, 245);
+    [self addSubview:bottomLineView];
+    bottomLineView.frame = CGRectMake(0, self.dc_height - 8, ScreenW, 8);
 }
 
 #pragma mark - Setter Getter Methods

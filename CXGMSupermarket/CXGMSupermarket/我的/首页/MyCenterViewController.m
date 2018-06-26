@@ -157,11 +157,9 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
 #pragma mark - foot宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
-    if (section == 0) {
-        return CGSizeMake(ScreenW, 7);
-    }
-    if (section == 1) {
-        return CGSizeMake(ScreenW,11);
+
+    if (section == 0 || section == 1) {
+        return CGSizeMake(ScreenW,10);
     }
     return CGSizeZero;
 }
