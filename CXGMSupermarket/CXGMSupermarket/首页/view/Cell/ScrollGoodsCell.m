@@ -39,7 +39,7 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     _bottomLineView = [[UIView alloc] init];
     _bottomLineView.backgroundColor = RGB(245,245,245);
     [self addSubview:_bottomLineView];
-    _bottomLineView.frame = CGRectMake(0, self.dc_height - 8, ScreenW, 8);
+    _bottomLineView.frame = CGRectMake(0, self.dc_height - 10, ScreenW, 10);
 }
 
 

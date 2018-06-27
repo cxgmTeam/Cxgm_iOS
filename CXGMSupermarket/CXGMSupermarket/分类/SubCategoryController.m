@@ -276,9 +276,15 @@ static CGFloat TopBtnWidth = 60;
     CGFloat xx = self.topScrollWidth * (button.tag - 1) * (TopBtnWidth / self.topScrollWidth) - TopBtnWidth;
     [self.topScrollView scrollRectToVisible:CGRectMake(xx, 0, self.topScrollWidth, 40) animated:YES];
     
-    //移动下方的table
-    NSIndexPath *moveToIndexpath = [NSIndexPath indexPathForRow:0 inSection:button.tag];
-    [self.rightTableView scrollToRowAtIndexPath:moveToIndexpath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    
+    CategoryModel* category = self.thirdCategorys[button.tag];
+    NSArray* array = [self.dictionary objectForKey:category.name];
+    if (array.count > 0) {
+        //移动下方的table
+        NSIndexPath *moveToIndexpath = [NSIndexPath indexPathForRow:0 inSection:button.tag];
+        [self.rightTableView scrollToRowAtIndexPath:moveToIndexpath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+    }
+    
 }
 
 #pragma mark-
@@ -400,6 +406,9 @@ static CGFloat TopBtnWidth = 60;
         }
         CategoryModel* item = self.secondCategorys[indexPath.row];
         item.selected = @"1";
+        
+        self.secondCategory = item;
+        
         [_leftTableView reloadData];
         
         [self findThirdCategory:item.id];
@@ -499,10 +508,7 @@ static CGFloat TopBtnWidth = 60;
     [cartBtn.carButton setImage:[UIImage imageNamed:@"top_cart"] forState:UIControlStateNormal];
     cartBtn.carButton.imageEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
     UIBarButtonItem* cartItem = [[UIBarButtonItem alloc] initWithCustomView:cartBtn];
-    
-    
-//    searchBtn.backgroundColor = [UIColor redColor];
-//    cartBtn.backgroundColor = [UIColor  blueColor];
+
     
     self.navigationItem.rightBarButtonItems = @[cartItem,searchItem];
     

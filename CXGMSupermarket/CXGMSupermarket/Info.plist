@@ -38,7 +38,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>7</string>
+	<string>8</string>
 	<key>LSApplicationQueriesSchemes</key>
 	<array>
 		<string>wechat</string>
@@ -59,8 +59,6 @@
 	<string>菜鲜果美想访问您的位置，这样可以为您自动匹配附近的门店</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>菜鲜果美需要您的同意,才能访问相册</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>location obtain</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>PingFang Regular.ttf</string>

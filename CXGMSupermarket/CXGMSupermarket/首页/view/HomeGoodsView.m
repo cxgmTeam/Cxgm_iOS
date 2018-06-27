@@ -433,7 +433,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         return CGSizeMake(ScreenW , 196+12);
     }
     if (indexPath.section == 2 || indexPath.section == 3) {
-        return CGSizeMake(ScreenW, 212);
+        return CGSizeMake(ScreenW, 214);
     }
     if (indexPath.section ==4) {
         return CGSizeMake(ScreenW, ScreenW*159/375.f+212);

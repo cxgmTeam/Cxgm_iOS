@@ -311,11 +311,14 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
-    GoodsModel* goods = self.orderDetail.productDetails[indexPath.item];
-    
-    GoodsDetailViewController* vc = [GoodsDetailViewController new];
-    vc.goodsId = goods.productId;
-    [self.navigationController pushViewController:vc animated:YES];
+    if (indexPath.section == 1){
+        GoodsModel* goods = self.orderDetail.productDetails[indexPath.item];
+        
+        GoodsDetailViewController* vc = [GoodsDetailViewController new];
+        vc.goodsId = goods.productId;
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+
 }
 
 #pragma mark - init

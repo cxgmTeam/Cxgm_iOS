@@ -59,7 +59,7 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     [self addSubview:_bottomLineView];
     [_bottomLineView mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.right.bottom.equalTo(self);
-        make.height.equalTo(8);
+        make.height.equalTo(10);
     }];
     
     self.collectionView.backgroundColor = [UIColor clearColor];

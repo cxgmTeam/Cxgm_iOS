@@ -104,7 +104,7 @@
     UIView* bottomLineView = [[UIView alloc] init];
     bottomLineView.backgroundColor = RGB(245, 245, 245);
     [self addSubview:bottomLineView];
-    bottomLineView.frame = CGRectMake(0, self.dc_height - 8, ScreenW, 8);
+    bottomLineView.frame = CGRectMake(0, self.dc_height - 10, ScreenW, 10);
 }
 
 #pragma mark - Setter Getter Methods

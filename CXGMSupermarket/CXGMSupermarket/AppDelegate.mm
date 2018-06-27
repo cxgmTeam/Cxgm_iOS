@@ -122,7 +122,7 @@
     // 配置友盟SDK产品并并统一初始化
     // [UMConfigure setEncryptEnabled:YES]; // optional: 设置加密传输, 默认NO.
     
-    [UMConfigure setLogEnabled:YES]; // 开发调试时可在console查看友盟日志显示，发布产品必须移除。
+//    [UMConfigure setLogEnabled:YES]; // 开发调试时可在console查看友盟日志显示，发布产品必须移除。
     
     [UMConfigure initWithAppkey:@"5b2c9d5d8f4a9d6fa1000018" channel:@"App Store"];
     
