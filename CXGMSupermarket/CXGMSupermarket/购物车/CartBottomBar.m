@@ -80,7 +80,7 @@
     label.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
     [self addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make){
-        make.bottom.equalTo(-5);
+        make.top.equalTo(self.totlePriceLabel.bottom);
         make.left.equalTo(80);
     }];
     self.preferentialLabel = label;

@@ -163,7 +163,11 @@
         
         self.bottomView.hidden = NO;
         [self.bottomView updateConstraints:^(MASConstraintMaker *make){
-            make.height.equalTo(50);
+            if (self.hideShoppingBtn) {
+                make.height.equalTo(TAB_BAR_HEIGHT);
+            }else{
+                make.height.equalTo(50);
+            }
         }];
     }else{
         self.bottomView.hidden = YES;

@@ -36,7 +36,7 @@
 @property (assign , nonatomic)NSInteger sectionIndex;
 @property (assign , nonatomic)CGFloat alpha;
 
-@property (strong , nonatomic)UIButton * addGoodsBtn;
+@property (strong , nonatomic)UIView * addGoodsBtn;
 @property (strong , nonatomic)UIButton * upTopBtn;
 
 @property (strong , nonatomic)GoodsModel * goodsDetail;
@@ -77,10 +77,11 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     self.auxiliaryWebView.hidden = YES;
     
     
+    
     [self.view addSubview:self.addGoodsBtn];
     [self.addGoodsBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.bottom.left.right.equalTo(self.view);
-        make.height.equalTo(50);
+        make.height.equalTo(TAB_BAR_HEIGHT);
     }];
     
     
@@ -103,7 +104,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     [self.upTopBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.size.equalTo(CGSizeMake(40, 40));
         make.right.equalTo(-10);
-        make.bottom.equalTo(-60);
+        make.bottom.equalTo(-TAB_BAR_HEIGHT-10);
     }];
     [self.upTopBtn addTarget:self action:@selector(onTapUpTopBtn:) forControlEvents:UIControlEventTouchUpInside];
     self.upTopBtn.hidden = YES;
@@ -144,10 +145,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSDictionary class]]) {
             self.goodsDetail = [[GoodsModel alloc] initWithDictionary:(NSDictionary *)model.data error:nil];
-            
-//            [self.auxiliaryWebView loadHTMLString:self.goodsDetail.introduction baseURL:nil];
-            
-//            self.goodsDetail.introduction = @"<p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">5月19日，第28次全国助残日前夕，中国盲文图书馆联合中医学院志愿者共同举办了一场中医义诊活动。</span></p><p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">活动现场为残疾人及其家属等免费提供针灸、推拿、按摩、拔罐等服务，并提供中医药类相关咨询，同时发放宣传资料、开展健康宣讲向残疾人及其亲属等普及中医药类养生保健知识，传播“防大于治”的科学健康理念。</span></p><p style=\"line-height: 2em; text-indent: 2em;\"><span style=\"font-family: 黑体, SimHei; font-size: 16px;\">本次活动紧紧围绕今年全国助残日“全面建成小康社会，残疾人一个也不同时能少”的主题，通过义诊志愿服务的开展，落实了“精准健康扶贫”的相关精神，进一步提升了残疾人的健康素养，同时营造了扶残助残的良好氛围。</span></p><p style=\"text-align: center;\"><img src=\"http://filewhzm.blc.org.cn/270/png/B00/0HTYV6BHXZ6QTFFB.png\" title=\"\" alt=\"助残日义诊活动.png\"/></p><p style=\"text-align: center;\"><span style=\"font-family: 黑体, SimHei; font-size: 14px;\">图为义诊活动现场</span></p>";
+            if ([self.goodsDetail.introduction length] == 0) {
+                self.goodsDetail.introduction = @"暂无详情的描述";
+            }
             
             if ([self.goodsDetail.introduction length] > 0) {
                 [wself updateWebVWithContent:self.goodsDetail.introduction];
@@ -596,14 +596,22 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     return _topToolView;
 }
 
-- (UIButton *)addGoodsBtn{
+- (UIView *)addGoodsBtn{
     if (!_addGoodsBtn) {
-        _addGoodsBtn = [UIButton new];
-        _addGoodsBtn.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
-        [_addGoodsBtn setTitle:@"加入购物车" forState:UIControlStateNormal];
-        [_addGoodsBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        _addGoodsBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:18];
-        [_addGoodsBtn addTarget:self action:@selector(onTapAddCartBtn:) forControlEvents:UIControlEventTouchUpInside];
+        _addGoodsBtn = [UIView new];
+        _addGoodsBtn.backgroundColor = [UIColor colorWithHexString:@"f7f7f7"];
+        
+        UIButton* button = [UIButton new];
+        button.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
+        [button setTitle:@"加入购物车" forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:18];
+        [button addTarget:self action:@selector(onTapAddCartBtn:) forControlEvents:UIControlEventTouchUpInside];
+        [_addGoodsBtn addSubview:button];
+        [button mas_makeConstraints:^(MASConstraintMaker *make){
+            make.top.left.right.equalTo(self.addGoodsBtn);
+            make.height.equalTo(49);
+        }];
     }
     return _addGoodsBtn;
 }

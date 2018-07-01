@@ -194,9 +194,18 @@
 #pragma mark-
 - (void)setupMainUI
 {
+    UIView* bottomView = [UIView new];
+    bottomView.backgroundColor = [UIColor colorWithHexString:@"f7f7f7"];
+    [self.view addSubview:bottomView];
+    [bottomView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.right.bottom.equalTo(self.view);
+        make.height.equalTo(TAB_BAR_HEIGHT);
+    }];
+    
+    [bottomView addSubview:self.payButon];
     [self.payButon mas_makeConstraints:^(MASConstraintMaker *make){
-        make.bottom.left.right.equalTo(self.view);
-        make.height.equalTo(50);
+        make.top.left.right.equalTo(bottomView);
+        make.height.equalTo(49);
     }];
 
     
@@ -321,7 +330,6 @@
         [_payButon setTitle:@"确认支付￥642.14" forState:UIControlStateNormal];
         _payButon.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:18];
         [_payButon setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [self.view addSubview:_payButon];
         [_payButon addTarget:self action:@selector(payOrder:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _payButon;

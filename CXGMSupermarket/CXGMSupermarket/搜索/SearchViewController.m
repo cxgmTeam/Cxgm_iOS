@@ -59,7 +59,11 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     [_cartBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.size.equalTo(CGSizeMake(44, 44));
         make.right.equalTo(-20);
-        make.bottom.equalTo(-20);
+        if (iPhoneX) {
+            make.bottom.equalTo(-40);
+        }else{
+            make.bottom.equalTo(-20);
+        }
     }];
     [_cartBtn.carButton setImage:[UIImage imageNamed:@"cart_search"] forState:UIControlStateNormal];
 

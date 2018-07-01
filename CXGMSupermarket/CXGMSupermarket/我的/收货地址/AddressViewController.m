@@ -39,16 +39,24 @@
     
     self.title = @"收货地址";
     
+    UIView* bottomView = [UIView new];
+    bottomView.backgroundColor = [UIColor colorWithHexString:@"f7f7f7"];
+    [self.view addSubview:bottomView];
+    [bottomView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.right.bottom.equalTo(self.view);
+        make.height.equalTo(TAB_BAR_HEIGHT);
+    }];
+    
     UIButton* addBtn = [UIButton new];
     addBtn.backgroundColor = Color00A862;
     [addBtn setTitle:@"新增收获地址" forState:UIControlStateNormal];
     [addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     addBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:18];
-    [self.view addSubview:addBtn];
+    [bottomView addSubview:addBtn];
     [addBtn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
     [addBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.right.bottom.equalTo(self.view);
-        make.height.equalTo(50);
+        make.left.right.top.equalTo(bottomView);
+        make.height.equalTo(49);
     }];
 
     self.addressList = [NSMutableArray array];

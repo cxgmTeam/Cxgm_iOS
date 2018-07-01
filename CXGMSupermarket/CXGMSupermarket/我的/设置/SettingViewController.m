@@ -9,6 +9,8 @@
 #import "SettingViewController.h"
 #import "SettingTableViewCell.h"
 
+#import "AboutViewController.h"
+
 @interface SettingViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView* tableView;
 @property(nonatomic,strong)NSArray* titleArray;
@@ -32,24 +34,27 @@
         make.edges.equalTo(self.view);
     }];
     
-    UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 20, ScreenW, 42)];
-    
-    UIButton* button = [UIButton new];
-    button.layer.cornerRadius = 4;
-    button.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
-    [button setTitle:@"注销账号" forState:UIControlStateNormal];
-    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
-    [view addSubview:button];
-    [button mas_makeConstraints:^(MASConstraintMaker *make){
-        make.top.equalTo(20);
-        make.height.equalTo(42);
-        make.left.equalTo(25);
-        make.width.equalTo(ScreenW-50);
-    }];
-    [button addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
-    _tableView.tableFooterView = view;
-    
+    if ([UserInfoManager sharedInstance].isLogin){
+        UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 20, ScreenW, 42)];
+        
+        UIButton* button = [UIButton new];
+        button.layer.cornerRadius = 4;
+        button.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
+        [button setTitle:@"注销账号" forState:UIControlStateNormal];
+        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
+        [view addSubview:button];
+        [button mas_makeConstraints:^(MASConstraintMaker *make){
+            make.top.equalTo(20);
+            make.height.equalTo(42);
+            make.left.equalTo(25);
+            make.width.equalTo(ScreenW-50);
+        }];
+        [button addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
+        _tableView.tableFooterView = view;
+    }else{
+        _tableView.tableFooterView = [UIView new];
+    }
 }
 
 - (void)onTapButton:(id)sender
@@ -133,6 +138,10 @@
             [MBProgressHUD MBProgressHUDWithView:self.view Str:@"清理完成"];
         }];
 
+    }
+    if (indexPath.row == 3) {
+        AboutViewController* vc = [AboutViewController new];
+        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 

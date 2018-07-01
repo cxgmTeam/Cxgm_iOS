@@ -100,6 +100,12 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 //下单接口
 - (void)addOrder
 {
+    
+    PaymentViewController* vc = [PaymentViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
+    return;
+    
+    
     if (!self.address) {
         [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请添加收获地址"]; return;
     }else{
@@ -469,7 +475,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     [self.view addSubview:bottomView];
     [bottomView mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.right.bottom.equalTo(self.view);
-        make.height.equalTo(50);
+        make.height.equalTo(TAB_BAR_HEIGHT);
     }];
     {
         UILabel *label = [[UILabel alloc] init];
@@ -500,7 +506,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         [bottomView addSubview:btn];
         [btn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
         [btn mas_makeConstraints:^(MASConstraintMaker *make){
-            make.top.bottom.right.equalTo(bottomView);
+            make.top.right.equalTo(bottomView);
+            make.height.equalTo(49);
             make.width.equalTo(118);
         }];
     }

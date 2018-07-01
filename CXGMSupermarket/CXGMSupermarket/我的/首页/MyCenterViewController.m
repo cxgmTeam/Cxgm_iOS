@@ -193,6 +193,13 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
             
             break;
         case 2:{
+            
+            if (indexPath.item == 4) {//设置
+                SettingViewController * vc = [SettingViewController new];
+                [self.navigationController pushViewController:vc animated:YES];
+                return;
+            }
+            
             if ([self needJumpToLogin]) return;
             
             if (indexPath.item == 0) {//优惠券
@@ -203,10 +210,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
                 AddressViewController * vc = [AddressViewController new];
                 [self.navigationController pushViewController:vc animated:YES];
             }
-            if (indexPath.item == 4) {//设置
-                SettingViewController * vc = [SettingViewController new];
-                [self.navigationController pushViewController:vc animated:YES];
-            }
+            
         }
             break;
             
