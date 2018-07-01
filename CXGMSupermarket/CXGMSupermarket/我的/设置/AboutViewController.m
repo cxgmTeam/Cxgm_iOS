@@ -41,7 +41,9 @@
     }];
     
     label = [[UILabel alloc] init];
-    label.text = [NSString stringWithFormat:@"版本:V %@",[[NSBundle mainBundle] objectForInfoDictionaryKey:(NSString*)kCFBundleVersionKey]];
+    NSDictionary *infoDic = [[NSBundle mainBundle] infoDictionary];
+    NSString *appVersion = [infoDic objectForKey:@"CFBundleShortVersionString"];
+    label.text = [NSString stringWithFormat:@"版本:V %@",appVersion];
     label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:12];
     label.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
     [self.view addSubview:label];
