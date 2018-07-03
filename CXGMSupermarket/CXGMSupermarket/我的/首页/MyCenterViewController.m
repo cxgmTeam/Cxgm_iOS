@@ -42,7 +42,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.sectionArr0 = @[@"全部订单",@"待付款",@"配送中",@"已完成",@"申请售后"];
+    self.sectionArr0 = @[@"全部订单",@"待付款",@"待配送",@"待收货",@"轻松退"];
     self.sectionArr1 = @[@"邀请有礼"];
     self.sectionArr2 = @[@"优惠券",@"收货地址",@"帮助中心",@"联系客服",@"设置"];
     

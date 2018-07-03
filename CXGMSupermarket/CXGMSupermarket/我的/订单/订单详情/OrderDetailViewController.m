@@ -12,6 +12,7 @@
 #import "OrderGoodsViewCell.h"
 #import "OrderInvoiceViewCell.h"
 #import "OrderAmountViewCell.h"
+#import "RefundAmountViewCell.h"
 //head
 #import "OrderStateHeadView.h"
 #import "ShopAddressHeadView.h"
@@ -41,6 +42,7 @@ static NSString *const OrderCustomerViewCellID = @"OrderCustomerViewCell";
 static NSString *const OrderGoodsViewCellID = @"OrderGoodsViewCell";
 static NSString *const OrderInvoiceViewCellID = @"OrderInvoiceViewCell";
 static NSString *const OrderAmountViewCellID = @"OrderAmountViewCell";
+static NSString *const RefundAmountViewCellID = @"RefundAmountViewCell";
 /* head */
 static NSString *const OrderStateHeadViewID = @"OrderStateHeadView";
 static NSString *const ShopAddressHeadViewID = @"ShopAddressHeadView";
@@ -93,7 +95,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSDictionary class]]) {
             self.orderDetail = [OrderModel OrderModelWithJson:(NSDictionary *)model.data];
-            if ([self.orderDetail.status intValue] == 0) {
+            if ([self.orderDetail.status intValue] == STATUS_TO_BE_PAID) {
                 [wself getSurplusTime];
             }else{
                 self.bottomView.hidden = YES;
@@ -215,10 +217,17 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *gridcell = nil;
-    if (indexPath.section == 0) {
-        OrderCustomerViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderCustomerViewCellID forIndexPath:indexPath];
-        cell.address = self.orderDetail.addressObj;
-        gridcell = cell;
+    if (indexPath.section == 0)
+    {
+        if ([self.orderDetail.status intValue] == STATUS_WAIT_REFUND || [self.orderDetail.status intValue] == STATUS_REFUNDED){
+            RefundAmountViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:RefundAmountViewCellID forIndexPath:indexPath];
+
+            gridcell = cell;
+        }else{
+            OrderCustomerViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderCustomerViewCellID forIndexPath:indexPath];
+            cell.address = self.orderDetail.addressObj;
+            gridcell = cell;
+        }
         
     }else if (indexPath.section == 1) {
         OrderGoodsViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderGoodsViewCellID forIndexPath:indexPath];
@@ -258,10 +267,16 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         
     }
     if (kind == UICollectionElementKindSectionFooter) {
-        if (indexPath.section == 0) {
-            GoodsArrivedTimeFoot *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:GoodsArrivedTimeFootID forIndexPath:indexPath];
-            footview.timeLabel.text = self.orderDetail.receiveTime;
-            reusableview = footview;
+        if (indexPath.section == 0)
+        {
+            if ([self.orderDetail.status intValue] == STATUS_WAIT_REFUND || [self.orderDetail.status intValue] == STATUS_REFUNDED){
+                BlankCollectionFootView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BlankCollectionFootViewID forIndexPath:indexPath];
+                reusableview = footview;
+            }else{
+                GoodsArrivedTimeFoot *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:GoodsArrivedTimeFootID forIndexPath:indexPath];
+                footview.timeLabel.text = self.orderDetail.receiveTime;
+                reusableview = footview;
+            }
         }
         else
         {
@@ -275,6 +290,9 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
+        if ([self.orderDetail.status intValue] == STATUS_WAIT_REFUND || [self.orderDetail.status intValue] == STATUS_REFUNDED){
+            return CGSizeMake(ScreenW , 45);
+        }
         return CGSizeMake(ScreenW , 93);
     }
     if (indexPath.section == 1 ) {
@@ -303,6 +321,9 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 #pragma mark - foot宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
     if (section == 0) {
+        if ([self.orderDetail.status intValue] == STATUS_WAIT_REFUND || [self.orderDetail.status intValue] == STATUS_REFUNDED){
+            return CGSizeMake(ScreenW, 10);
+        }
         return CGSizeMake(ScreenW, 55);
     }
     return CGSizeMake(ScreenW, 10);
@@ -338,6 +359,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         [_collectionView registerClass:[OrderGoodsViewCell class] forCellWithReuseIdentifier:OrderGoodsViewCellID];
         [_collectionView registerClass:[OrderInvoiceViewCell class] forCellWithReuseIdentifier:OrderInvoiceViewCellID];
         [_collectionView registerClass:[OrderAmountViewCell class] forCellWithReuseIdentifier:OrderAmountViewCellID];
+        [_collectionView registerClass:[RefundAmountViewCell class] forCellWithReuseIdentifier:RefundAmountViewCellID];
         
         [_collectionView registerClass:[OrderStateHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderStateHeadViewID];
         [_collectionView registerClass:[ShopAddressHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:ShopAddressHeadViewID];

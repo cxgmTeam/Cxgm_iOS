@@ -63,7 +63,13 @@
     self.needNewAddress = YES;
     if ([DeviceHelper sharedInstance].place && self.inScope) {
         NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
-        address = [@"送货至：" stringByAppendingString:[dic[@"SubLocality"] stringByAppendingString:dic[@"Street"]]] ;
+        if (dic[@"SubLocality"]) {
+            address = [@"送货至：" stringByAppendingString:dic[@"SubLocality"]];
+        }
+         if (dic[@"Street"]) {
+             address = [address stringByAppendingString:dic[@"Street"]] ;
+         }
+        
         self.needNewAddress = NO;
     
     }else if ([DeviceHelper sharedInstance].defaultAddress) {

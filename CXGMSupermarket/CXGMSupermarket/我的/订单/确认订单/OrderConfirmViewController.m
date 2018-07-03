@@ -12,6 +12,7 @@
 #import "OrderCouponViewCell.h"
 #import "OrderBillViewCell.h"
 #import "OrderCustomerViewCell.h"
+#import "NoteInfoViewCell.h"
 //head
 #import "RemainTimeHintHead.h"
 #import "OrderGoodsInfoHead.h"
@@ -30,7 +31,7 @@
 #import "PaymentViewController.h"
 #import "SelectTimeController.h"
 
-@interface OrderConfirmViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface OrderConfirmViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,UITextFieldDelegate>
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)UILabel *moneyLabel;
 
@@ -48,6 +49,8 @@
 @property (assign , nonatomic)NSInteger orderNum;
 
 @property(strong,nonatomic) NSMutableArray * pointsArr;//查询到的范围点集
+
+@property(strong , nonatomic)UITextField *textField;
 @end
 
 /* cell */
@@ -56,6 +59,7 @@ static NSString *const OrderCouponViewCellID = @"OrderCouponViewCell";
 static NSString *const OrderBillViewCellID = @"OrderBillViewCell";
 
 static NSString *const OrderCustomerViewCellID = @"OrderCustomerViewCell";
+static NSString *const NoteInfoViewCellID = @"NoteInfoViewCell";
 /* head */
 static NSString *const OrderGoodsInfoHeadID = @"OrderGoodsInfoHead";
 /* foot */
@@ -100,12 +104,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 //下单接口
 - (void)addOrder
 {
-    
-    PaymentViewController* vc = [PaymentViewController new];
-    [self.navigationController pushViewController:vc animated:YES];
-    return;
-    
-    
     if (!self.address) {
         [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请添加收获地址"]; return;
     }else{
@@ -147,7 +145,13 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (self.coupons) {
        [self.orderParam setObject:self.coupons.codeId forKey:@"couponCodeId"];
     }
-    [self.orderParam setObject:@"没有" forKey:@"remarks"];
+    
+    if ([self.textField.text length] == 0) {
+        [self.orderParam setObject:@"无备注信息" forKey:@"remarks"];
+    }else{
+        [self.orderParam setObject:self.textField.text forKey:@"remarks"];
+    }
+    
     [self.orderParam setObject:[DeviceHelper sharedInstance].shop.id forKey:@"storeId"];
     
 
@@ -213,7 +217,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             }
         }
         if (!flag) {
-            [categoryArray addObject:model.categoryId.length>0?model.categoryId:@""];
+            [categoryArray addObject:model.categoryId.length>0?model.categoryId:@"0"];
         }
     }
     
@@ -287,7 +291,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
 #pragma mark-
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 4;
+    return 5;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -314,6 +318,12 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     }
     else if (indexPath.section == 3) {
         OrderBillViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderBillViewCellID forIndexPath:indexPath];
+        gridcell = cell;
+    }
+    else if (indexPath.section == 4) {
+        NoteInfoViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NoteInfoViewCellID forIndexPath:indexPath];
+        cell.textField.delegate = self;
+        self.textField = cell.textField;
         gridcell = cell;
     }
     return gridcell;
@@ -397,7 +407,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (indexPath.section == 1 ) {
         return CGSizeMake(ScreenW, 128);
     }
-    if (indexPath.section == 2 || indexPath.section == 3 ) {
+    if (indexPath.section == 2 || indexPath.section == 3 || indexPath.section == 4) {
         return CGSizeMake(ScreenW, 45);
     }
 
@@ -418,7 +428,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (section == 0) {
         return CGSizeMake(ScreenW, 55);
     }
-    else if (section == 1 || section == 2 || section == 3)
+    else if (section == 1 || section == 2 || section == 3 || section == 4 )
     {
         return CGSizeMake(ScreenW, 10);
     }
@@ -457,6 +467,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         [_collectionView registerClass:[OrderCouponViewCell class] forCellWithReuseIdentifier:OrderCouponViewCellID];
         [_collectionView registerClass:[OrderBillViewCell class] forCellWithReuseIdentifier:OrderBillViewCellID];
         [_collectionView registerClass:[OrderCustomerViewCell class] forCellWithReuseIdentifier:OrderCustomerViewCellID];
+        [_collectionView registerClass:[NoteInfoViewCell class] forCellWithReuseIdentifier:NoteInfoViewCellID];
 
         [_collectionView registerClass:[OrderGoodsInfoHead class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderGoodsInfoHeadID];
         

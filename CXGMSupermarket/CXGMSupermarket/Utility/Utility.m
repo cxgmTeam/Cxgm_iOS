@@ -214,22 +214,26 @@ BOOL pnpoly (int nvert, float *vertx, float *verty, float testx, float testy) {
     }
     
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:postRequest completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-        NSLog(@"\n\nCXGMPostRequest %@\n dic = %@",requestUrl,dic);
-        if ([[dic objectForKey:@"code"] integerValue] == 200) {
-            if (success) {
-                success(dic,nil);
-            }
-        }else if ([[dic objectForKey:@"code"] integerValue] == 403){
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[UserInfoManager sharedInstance] deleteUserInfo];
-                UIWindow* window = [UIApplication sharedApplication].keyWindow;
-                [MBProgressHUD MBProgressHUDWithView:window Str:@"登录失效，请重新登录"];
-            });
-
-        }else{
-            if (failure) {
-                failure(dic,error);
+        
+        if (data)
+        {
+            NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+            NSLog(@"\n\nCXGMPostRequest %@\n dic = %@",requestUrl,dic);
+            if ([[dic objectForKey:@"code"] integerValue] == 200) {
+                if (success) {
+                    success(dic,nil);
+                }
+            }else if ([[dic objectForKey:@"code"] integerValue] == 403){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [[UserInfoManager sharedInstance] deleteUserInfo];
+                    UIWindow* window = [UIApplication sharedApplication].keyWindow;
+                    [MBProgressHUD MBProgressHUDWithView:window Str:@"登录失效，请重新登录"];
+                });
+                
+            }else{
+                if (failure) {
+                    failure(dic,error);
+                }
             }
         }
     }];

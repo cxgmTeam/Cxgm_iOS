@@ -74,6 +74,8 @@
 		776B534E20A69C9000594B32 /* LocationTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B534D20A69C9000594B32 /* LocationTableViewCell.m */; };
 		776B535720A732B100594B32 /* SettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535620A732B100594B32 /* SettingViewController.m */; };
 		776B535B20A7347A00594B32 /* SettingTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 776B535A20A7347A00594B32 /* SettingTableViewCell.m */; };
+		7770377420EB2BB70000254D /* RefundAmountViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7770377320EB2BB70000254D /* RefundAmountViewCell.m */; };
+		7770377720EB45C40000254D /* NoteInfoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7770377620EB45C40000254D /* NoteInfoViewCell.m */; };
 		7776D5F520C12C84008DE606 /* NoAddressTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7776D5F420C12C84008DE606 /* NoAddressTableCell.m */; };
 		777A302A20DB7D5E003F14C1 /* UMPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777A302720DB7D5E003F14C1 /* UMPush.framework */; };
 		777B48CA20B59C0E0048CE78 /* PaymentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 777B48C920B59C0E0048CE78 /* PaymentButton.m */; };
@@ -469,6 +471,10 @@
 		776B535620A732B100594B32 /* SettingViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingViewController.m; sourceTree = "<group>"; };
 		776B535920A7347A00594B32 /* SettingTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SettingTableViewCell.h; sourceTree = "<group>"; };
 		776B535A20A7347A00594B32 /* SettingTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SettingTableViewCell.m; sourceTree = "<group>"; };
+		7770377220EB2BB70000254D /* RefundAmountViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RefundAmountViewCell.h; sourceTree = "<group>"; };
+		7770377320EB2BB70000254D /* RefundAmountViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RefundAmountViewCell.m; sourceTree = "<group>"; };
+		7770377520EB45C40000254D /* NoteInfoViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NoteInfoViewCell.h; sourceTree = "<group>"; };
+		7770377620EB45C40000254D /* NoteInfoViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NoteInfoViewCell.m; sourceTree = "<group>"; };
 		7776D5F320C12C84008DE606 /* NoAddressTableCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NoAddressTableCell.h; sourceTree = "<group>"; };
 		7776D5F420C12C84008DE606 /* NoAddressTableCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NoAddressTableCell.m; sourceTree = "<group>"; };
 		777A302720DB7D5E003F14C1 /* UMPush.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMPush.framework; sourceTree = "<group>"; };
@@ -1487,6 +1493,8 @@
 				7783F208209707CD00338459 /* OrderCouponViewCell.m */,
 				7783F20A209707F900338459 /* OrderBillViewCell.h */,
 				7783F20B209707F900338459 /* OrderBillViewCell.m */,
+				7770377520EB45C40000254D /* NoteInfoViewCell.h */,
+				7770377620EB45C40000254D /* NoteInfoViewCell.m */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -2450,6 +2458,8 @@
 				BE8E87852093576D005EB719 /* OrderAmountViewCell.m */,
 				BE8E878720935C91005EB719 /* OrderCustomerViewCell.h */,
 				BE8E878820935C91005EB719 /* OrderCustomerViewCell.m */,
+				7770377220EB2BB70000254D /* RefundAmountViewCell.h */,
+				7770377320EB2BB70000254D /* RefundAmountViewCell.m */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -3115,6 +3125,7 @@
 				77B33AE420E267BE00B4611E /* Order.m in Sources */,
 				77DD808D2083217700A1D080 /* TextTitleHeadView.m in Sources */,
 				77F83A892070E8CE004E9717 /* JSONModel.m in Sources */,
+				7770377720EB45C40000254D /* NoteInfoViewCell.m in Sources */,
 				BE44A0852091E84E001FE5A6 /* GoodsScreenshotsGridCell.m in Sources */,
 				7789516020BD7E0A002C23C3 /* CourierViewCell.m in Sources */,
 				BE40AFB1208F5F9700D4B690 /* AddressViewController.m in Sources */,
@@ -3131,6 +3142,7 @@
 				77F83A872070E8CE004E9717 /* IQUIView+IQKeyboardToolbar.m in Sources */,
 				7703559020995D56002B3A8D /* BillContentViewCell.m in Sources */,
 				77B484F2209EC72300D74DD5 /* SearchHeadView.m in Sources */,
+				7770377420EB2BB70000254D /* RefundAmountViewCell.m in Sources */,
 				7789516620BD8098002C23C3 /* LogisticsItem.m in Sources */,
 				77DD806F20824F7C00A1D080 /* SDCycleScrollView.m in Sources */,
 				BE8E87862093576D005EB719 /* OrderAmountViewCell.m in Sources */,

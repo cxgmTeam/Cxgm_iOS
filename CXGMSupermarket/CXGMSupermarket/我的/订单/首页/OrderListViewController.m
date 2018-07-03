@@ -11,6 +11,7 @@
 #import "OrderDetailViewController.h"
 
 #import "PaymentViewController.h"
+#import "OrderConfirmViewController.h"
 
 @interface OrderListViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -115,11 +116,49 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     
     typeof(self) __weak wself = self;
     cell.tapBuyButton = ^{
-//        0待支付，1待配送（已支付），2配送中，3已完成，4退货
-        if ([item.status intValue] == 0) {
-            PaymentViewController* vc = [PaymentViewController new];
-            vc.order = item;
-            [wself.navigationController pushViewController:vc animated:YES];
+//        0待支付，1待配送（已支付），4配送中，5已完成，7退货
+        
+        switch ([item.status intValue]) {
+            case STATUS_TO_BE_PAID://去支付
+            {
+                PaymentViewController* vc = [PaymentViewController new];
+                vc.order = item;
+                [wself.navigationController pushViewController:vc animated:YES];
+            }
+                break;
+            case STATUS_TO_BE_SORT://申请退款
+            case STATUS_BE_SORTING:
+            case STATUS_DISTRIBUTION:
+            case STATUS_DISTRIBUTING:
+            {
+                [wself returnMoney:item.id];
+            }
+                break;
+            case STATUS_COMPLETE://再次购买
+            case STATUS_TIMEOUT_CANCEL:
+            case STATUS_SYSTEM_CANCEL:
+            case STATUS_USER_CANCEL:
+            {
+                
+                for (GoodsModel* goods in item.productDetails) {
+                    goods.goodCode = goods.productCode;
+                }
+                
+                //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
+                NSDictionary* dic = @{
+                                      @"totalAmount":item.totalAmount,
+                                      @"preferential":item.preferential,
+                                      @"orderAmount":item.orderAmount
+                                      };
+                
+                OrderConfirmViewController* vc = [OrderConfirmViewController new];
+                vc.goodsArray = item.productDetails;
+                vc.moneyDic = dic;
+                [wself.navigationController pushViewController:vc animated:YES];
+            }
+                break;
+            default:
+                break;
         }
     };
     

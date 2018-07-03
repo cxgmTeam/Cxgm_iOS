@@ -45,6 +45,21 @@
  p3qvfqpedv9vq0aluqe32ptcj8eey7wq
  */
 
+typedef NS_ENUM(NSInteger, OrderStatus) {
+    STATUS_TO_BE_PAID = 0,          //待支付
+    STATUS_TO_BE_SORT = 1,          //待分拣
+    STATUS_BE_SORTING = 2,          //分拣中
+    STATUS_DISTRIBUTION = 3,        //待配送
+    STATUS_DISTRIBUTING = 4,        //配送中
+    STATUS_COMPLETE = 5,            //已完成
+    STATUS_WAIT_REFUND = 6,         //待退款
+    STATUS_REFUNDED = 7,            //已退款
+    STATUS_TIMEOUT_CANCEL = 8,      //超时取消
+    STATUS_SYSTEM_CANCEL = 9,       //系统取消
+    STATUS_USER_CANCEL = 10         //自主取消
+};
+
+
 #define CLog(format, ...)  NSLog(format, ## __VA_ARGS__)
 #define NSLog(FORMAT, ...) printf("%s\n", [[NSString stringWithFormat:FORMAT, ##__VA_ARGS__] UTF8String]);
 

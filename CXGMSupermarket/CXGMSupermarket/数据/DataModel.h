@@ -190,7 +190,8 @@
 @property(nonatomic,strong)NSString<Optional> * id;
 @property(nonatomic,strong)NSString<Optional> * userId;
 @property(nonatomic,strong)NSString<Optional> * orderNum;
-@property(nonatomic,strong)NSString<Optional> * status;//0待支付，1待配送（已支付），2配送中，3已完成，4退货
+
+@property(nonatomic,strong)NSString<Optional> * status;
 @property(nonatomic,strong)NSString<Optional> * storeId;//门店id
 @property(nonatomic,strong)NSString<Optional> * payType;
 @property(nonatomic,strong)NSString<Optional> * orderTime;

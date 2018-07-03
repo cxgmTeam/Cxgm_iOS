@@ -32,7 +32,7 @@
         make.edges.equalTo(self.view);
     }];
     
-    NSURLRequest* request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://47.104.226.173:8076/"]];
+    NSURLRequest* request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://47.104.226.173"]];
     [self.webView loadRequest:request];
 }
 

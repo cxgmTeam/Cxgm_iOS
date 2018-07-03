@@ -432,10 +432,10 @@
                                [self.locationManager stopUpdatingLocation];
                                
                                self.currentPlace = place;
+                               [self.tableView reloadData];
                                
-                               NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];
-                               
-                               [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationNone];
+//                               NSIndexPath *index = [NSIndexPath indexPathForRow:0 inSection:0];
+//                               [self.tableView reloadRowsAtIndexPaths:@[index] withRowAnimation:UITableViewRowAnimationNone];
                                
                                [MBProgressHUD hideHUDForView:self.view animated:YES];
                            }

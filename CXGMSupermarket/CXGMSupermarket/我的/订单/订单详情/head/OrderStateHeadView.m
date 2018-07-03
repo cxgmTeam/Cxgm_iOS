@@ -16,14 +16,14 @@
 
 @end
 
-//0待支付，1待配送（已支付），2配送中，3已完成，4退货
+//0待支付，1待配送（已支付），4配送中，5已完成，6待退款，7退货
 @implementation OrderStateHeadView
 
 - (void)setOrderItem:(OrderModel *)orderItem{
     _orderItem = orderItem;
     
     switch ([orderItem.status intValue]) {
-        case 0:{
+        case 0:{//待支付
             _colorView.backgroundColor =  [UIColor colorWithRed:250/255.0 green:142/255.0 blue:46/255.0 alpha:1/1.0];
             _stateimgView.image = [UIImage imageNamed:@"order_toPay"];
             _stateLabel.text = @"待付款";
@@ -32,7 +32,19 @@
         }
             
             break;
-        case 1:{
+        case 1://待分拣
+        case 2://分拣中
+        case 3://分拣完成或待配送
+        {
+            _colorView.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
+            _stateimgView.image = [UIImage imageNamed:@"order_deliver"];
+            _stateLabel.text = @"待配送";
+            _descLabel.text = @"订单已经确认，正在等待配送";
+            _remainTimeLabel.text = @"";
+        }
+            
+            break;
+        case 4:{//配送中
             _colorView.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
             _stateimgView.image = [UIImage imageNamed:@"order_deliver"];
             _stateLabel.text = @"配送中";
@@ -41,16 +53,7 @@
         }
             
             break;
-        case 2:{
-            _colorView.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
-            _stateimgView.image = [UIImage imageNamed:@"order_deliver"];
-            _stateLabel.text = @"配送中";
-            _descLabel.text = @"订单已经确认，配送小哥正在飞奔配送，请注意查收～";
-            _remainTimeLabel.text = @"";
-        }
-            
-            break;
-        case 3:{
+        case 5:{//已完成
             _colorView.backgroundColor = [UIColor colorWithRed:36/255.0 green:158/255.0 blue:226/255.0 alpha:1/1.0];
             _stateimgView.image = [UIImage imageNamed:@"order_finished"];
             _stateLabel.text = @"已完成";
@@ -60,11 +63,39 @@
             
             break;
 
-        case 4:{
+
+        case 6:{//待退款
+            _colorView.backgroundColor = [UIColor colorWithRed:152/255.0 green:152/255.0 blue:152/255.0 alpha:1/1.0];
+            _stateimgView.image = [UIImage imageNamed:@"order_toRefund"];
+            _stateLabel.text = @"待退款";
+            _descLabel.text = @"退款流程正在处理中，请耐心等待~";
+            _remainTimeLabel.text = @"";
+        }
+            
+            break;
+        case 7:{//已退款
+            _colorView.backgroundColor =  [UIColor colorWithRed:243/255.0 green:63/255.0 blue:49/255.0 alpha:1/1.0];
+            _stateimgView.image = [UIImage imageNamed:@"order_hasRefund"];
+            _stateLabel.text = @"已退款";
+            _descLabel.text = @"订单已成功退款——2018年6月6号  12:59";
+            _remainTimeLabel.text = @"";
+        }
+            
+            break;
+        case 8://超时取消
+        case 9://系统取消
+        case 10://自主取消
+        {
             _colorView.backgroundColor = [UIColor colorWithRed:173/255.0 green:173/255.0 blue:173/255.0 alpha:1/1.0];
             _stateimgView.image = [UIImage imageNamed:@"order_cancelled"];
             _stateLabel.text = @"已取消";
-            _descLabel.text = @"订单取消成功(订单超市未支付,系统取消订单)";
+            if ([orderItem.status intValue] == 8) {
+                _descLabel.text = @"订单取消（超时取消）";
+            }else if ([orderItem.status intValue] == 9){
+                _descLabel.text = @"订单取消（系统取消）";
+            }else{
+                _descLabel.text = @"订单取消成功";
+            }
             _remainTimeLabel.text = @"";
         }
             
@@ -124,15 +155,7 @@
         make.top.equalTo(14);
         make.right.equalTo(-40);
     }];
-    
-    
-    UIImageView* arrow = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"arrow_right"]];
-    [self addSubview:arrow];
-    [arrow mas_makeConstraints:^(MASConstraintMaker *make){
-        make.centerY.equalTo(self);
-        make.right.equalTo(-15);
-    }];
-    
+
     _descLabel = [[UILabel alloc] init];
     _descLabel.text = @"订单已经完成，欢迎下次惠顾～";
     _descLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];

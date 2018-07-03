@@ -33,40 +33,55 @@ static NSString *const GoodsOneScreenShotCellID = @"GoodsOneScreenShotCell";
 
 @implementation OrderCollectionViewCell
 
-//0待支付，1待配送（已支付），2配送中，3已完成，4退货
+//0待支付，1待配送（已支付），4配送中，5已完成，6待退款，7退货
 - (void)setOrderItem:(OrderModel *)orderItem
 {
     _orderItem = orderItem;
     
     switch ([orderItem.status integerValue]) {
-        case 0:{
+        case 0:{//待支付
             _orderState.text = @"待付款";
             _bottomView.hidden = NO;
             [_buyButton setTitle:@"去支付" forState:UIControlStateNormal];
         }
             break;
-        case 1:{
-            _orderState.text = @"配送中";
+        case 1://待分拣
+        case 2://分拣中
+        case 3://分拣完成或待配送
+        {
+            _orderState.text = @"待配送";
             _bottomView.hidden = NO;
-            [_buyButton setTitle:@"申请退款" forState:UIControlStateNormal];
+            [_buyButton setTitle:@"申请退货" forState:UIControlStateNormal];
         }
             break;
-        case 2:{
+        case 4:{//配送中
             _orderState.text = @"配送中";
             _bottomView.hidden = NO;
-            [_buyButton setTitle:@"申请退款" forState:UIControlStateNormal];
+            [_buyButton setTitle:@"申请退货" forState:UIControlStateNormal];
         }
             break;
-        case 3:{
+        case 5:{//已完成
             _orderState.text = @"已完成";
             _bottomView.hidden = NO;
             [_buyButton setTitle:@"再次购买" forState:UIControlStateNormal];
         }
             break;
-
-        case 4:{
-            _orderState.text = @"已退货";
+        case 6:{//退货
+            _orderState.text = @"待退款";
             _bottomView.hidden = YES;
+        }
+        case 7:{//退货
+            _orderState.text = @"已退款";
+            _bottomView.hidden = YES;
+        }
+            break;
+        case 8://超时取消
+        case 9://系统取消
+        case 10://自主取消
+        {
+            _orderState.text = @"已取消";
+            _bottomView.hidden = NO;
+            [_buyButton setTitle:@"再次购买" forState:UIControlStateNormal];
         }
             break;
         default:
