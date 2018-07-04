@@ -44,6 +44,7 @@
         cell = [[MessageTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MessageTableViewCell"];
     }
     cell.iconView.image = [UIImage imageNamed:[NSString stringWithFormat:@"message_%ld",(long)indexPath.row]];
+    cell.titleLabel.text = self.titleArray[indexPath.row];
     return cell;
 }
 

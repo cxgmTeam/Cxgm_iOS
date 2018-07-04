@@ -28,14 +28,13 @@
     
     _menuView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, ScreenW, 45)];
     _menuView.delegate = self;
-    _menuView.pagingEnabled = YES;
     _menuView.backgroundColor = [UIColor whiteColor];
     _menuView.showsHorizontalScrollIndicator = NO;
     [self.view addSubview:_menuView];
     
     
     _lastBtn = nil;
-    _btnWidth = ScreenW/5;
+    _btnWidth = 75;
     _redLineWidth = _btnWidth;
     
     for (NSInteger i = 0; i < array.count; i++)
@@ -54,7 +53,6 @@
             _lastBtn = btn;
         }
     }
-    
     _menuView.contentSize = CGSizeMake(_btnWidth * array.count, 45);
     
     
@@ -130,11 +128,9 @@
     }];
     
     float xx = ScreenW * (button.tag - 1) * (_btnWidth / ScreenW) - _btnWidth;
-
     [_menuView scrollRectToVisible:CGRectMake(xx, 0, ScreenW, _menuView.frame.size.height) animated:YES];
     
-    NSLog(@"=========xxx  %f",xx);
-    
+
     //下方大的滑动视图的滚动
     CGFloat offsetX = button.tag * _scrollView.frame.size.width;
     CGFloat offsetY = _scrollView.contentOffset.y;
@@ -147,13 +143,11 @@
 {
     if (scrollView == _scrollView)
     {
-        
         NSUInteger index = scrollView.contentOffset.x / _scrollView.frame.size.width;
         
-        NSLog(@"scrollViewDidEndScrollingAnimation-------  %d",index);
-
         _lastBtn.selected = NO;
         UIButton *button = _menuView.subviews[index];
+
         if ([button isKindOfClass:[UIButton class]]) {
             button.selected = YES;
             _lastBtn = button;
@@ -170,7 +164,6 @@
     [self scrollViewDidEndScrollingAnimation:scrollView];
     
     if (scrollView == _scrollView) {
-        NSLog(@"scrollViewDidEndDecelerating++++++");
         float xx = scrollView.contentOffset.x * (_btnWidth / ScreenW) - _btnWidth;
         [_menuView scrollRectToVisible:CGRectMake(xx, 0, ScreenW, _menuView.frame.size.height) animated:YES];
     }
