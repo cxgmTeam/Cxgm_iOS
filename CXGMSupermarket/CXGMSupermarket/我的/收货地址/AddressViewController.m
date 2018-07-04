@@ -102,8 +102,7 @@
             [self.addressList addObjectsFromArray:array];
             //首页是不在配送范围之内
             
-            NSLog(@"[DeviceHelper sharedInstance].place %@",[DeviceHelper sharedInstance].place);
-            NSLog(@"[DeviceHelper sharedInstance].defaultAddress %@",[DeviceHelper sharedInstance].defaultAddress);
+            
             if (array.count > 0 && (self.needNewAddress && ![DeviceHelper sharedInstance].defaultAddress)) {
                 //测试发现最新地址在下面
                 [DeviceHelper sharedInstance].defaultAddress = [array lastObject];
@@ -225,6 +224,11 @@
                 NoAddressTableCell * cell = [tableView dequeueReusableCellWithIdentifier:@"NoAddressTableCell"];
                 if (!cell) {
                     cell = [[NoAddressTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"NoAddressTableCell"];
+                }
+                if (![UserInfoManager sharedInstance].isLogin){
+                    cell.contentLabel.text = @"登录后查看收货地址～";
+                }else{
+                    cell.contentLabel.text = @"您还没有设置收货地址～";
                 }
                 tableCell = cell;
             }

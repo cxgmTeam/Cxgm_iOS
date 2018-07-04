@@ -61,7 +61,16 @@
     
     NSString* address = @"当前位置不在配送范围内，请选择收获地址";
     self.needNewAddress = YES;
-    if ([DeviceHelper sharedInstance].place && self.inScope) {
+    
+    if ([DeviceHelper sharedInstance].defaultAddress) {
+        AddressModel* defAddress = [DeviceHelper sharedInstance].defaultAddress;
+        address = [@"送货至：" stringByAppendingString:defAddress.area] ;
+        
+        self.needNewAddress = NO;
+        
+    }
+    else if ([DeviceHelper sharedInstance].place && self.inScope)
+    {
         NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
         if (dic[@"SubLocality"]) {
             address = [@"送货至：" stringByAppendingString:dic[@"SubLocality"]];
@@ -72,12 +81,6 @@
         
         self.needNewAddress = NO;
     
-    }else if ([DeviceHelper sharedInstance].defaultAddress) {
-        AddressModel* defAddress = [DeviceHelper sharedInstance].defaultAddress;
-        address = [@"送货至：" stringByAppendingString:defAddress.area] ;
-        
-        self.needNewAddress = NO;
-        
     }
     
     CGFloat width = [self sizeLabelWidth:address];

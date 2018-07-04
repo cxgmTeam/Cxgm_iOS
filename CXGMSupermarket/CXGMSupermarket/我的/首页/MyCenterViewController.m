@@ -89,17 +89,21 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *gridcell = nil;
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0)
+    {
         MyCenterGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterGridCellID forIndexPath:indexPath];
         [cell setImage:[NSString stringWithFormat:@"dingdan_item%ld",(long)indexPath.item] title:self.sectionArr0[indexPath.item]];
         gridcell = cell;
         
-    }else if (indexPath.section == 1) {
+    }
+    else if (indexPath.section == 1)
+    {
         MyCenterCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterCollectionCellID forIndexPath:indexPath];
         [cell setImage:@"gift_icon" title:self.sectionArr1[indexPath.item] subTitle:@"新鲜生鲜水果邀请好友共享！"];
         gridcell = cell;
     }
-    else if (indexPath.section == 2) {
+    else if (indexPath.section == 2)
+    {
         MyCenterCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterCollectionCellID forIndexPath:indexPath];
         [cell setImage:[NSString stringWithFormat:@"myCenter_item%ld",(long)indexPath.item] title:self.sectionArr2[indexPath.item] subTitle:indexPath.item ==0? @"兑换吃、查看优惠券":@""];
 
@@ -140,7 +144,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     if (indexPath.section == 0) {
         return CGSizeMake(ScreenW/5 , 70);
     }
-    if (indexPath.section == 1 || indexPath.section == 2) {//精品推荐 新品上市
+    if (indexPath.section == 1 || indexPath.section == 2) {
         return CGSizeMake(ScreenW, 45);
     }
     return CGSizeZero;
@@ -190,18 +194,18 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
             InvitationViewController* vc = [InvitationViewController new];
             [self.navigationController pushViewController:vc animated:YES];
         }
-            
+
             break;
         case 2:{
-            
+
             if (indexPath.item == 4) {//设置
                 SettingViewController * vc = [SettingViewController new];
                 [self.navigationController pushViewController:vc animated:YES];
                 return;
             }
-            
+
             if ([self needJumpToLogin]) return;
-            
+
             if (indexPath.item == 0) {//优惠券
                 CouponViewController * vc = [CouponViewController new];
                 [self.navigationController pushViewController:vc animated:YES];
@@ -210,10 +214,10 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
                 AddressViewController * vc = [AddressViewController new];
                 [self.navigationController pushViewController:vc animated:YES];
             }
-            
         }
             break;
-            
+
+
         default:
             break;
     }

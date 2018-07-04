@@ -484,7 +484,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 0) {        
+    if (indexPath.section == 0) {
         !_showSubCategoryVC?:_showSubCategoryVC();
     }
     if (indexPath.section == 5) {

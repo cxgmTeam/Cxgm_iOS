@@ -15,7 +15,11 @@
         self.backgroundColor = [UIColor whiteColor];
         
         UILabel *label = [[UILabel alloc] init];
-        label.text = @"您还没有设置收货地址～";
+        if (![UserInfoManager sharedInstance].isLogin){
+            label.text = @"登录后查看收货地址～";
+        }else{
+            label.text = @"您还没有设置收货地址～";
+        }
         label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
         label.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
         [self.contentView addSubview:label];
@@ -23,6 +27,8 @@
             make.centerY.equalTo(self);
             make.left.equalTo(15);
         }];
+        
+        self.contentLabel = label;
     }
     return self;
 }

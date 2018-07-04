@@ -118,7 +118,7 @@
 #pragma mark- init
 - (void)setupMenuView
 {
-    NSArray* array = @[@"可用（2）",@"不可用（0）"];
+    NSArray* array = @[@"可用（0）",@"不可用（0）"];
     
     _menuView = [UIView new];
     _menuView.backgroundColor = [UIColor whiteColor];

@@ -31,7 +31,7 @@
     if (address){
         _noAddressLbel.hidden = YES;
         
-        _customerLbel.text =[NSString stringWithFormat:@"%@            %@",address.realName,address.phone];
+        _customerLbel.text =[NSString stringWithFormat:@"%@            %@",address.realName,[Utility phoneNumToAsterisk:address.phone]];
         _addressLbel.text = [NSString stringWithFormat:@"收货地址：%@%@",address.area,address.address];
     }else{
         _noAddressLbel.hidden = NO;

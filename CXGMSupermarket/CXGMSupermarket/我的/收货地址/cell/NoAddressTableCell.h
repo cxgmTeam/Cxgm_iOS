@@ -9,5 +9,5 @@
 #import <UIKit/UIKit.h>
 
 @interface NoAddressTableCell : UITableViewCell
-
+@property(nonatomic,strong)UILabel * contentLabel;
 @end

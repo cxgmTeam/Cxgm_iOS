@@ -102,7 +102,11 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
         }];
         
         UILabel *label = [[UILabel alloc] init];
-        label.text = @"目前没有可用优惠券";
+        if (self.isExpire) {
+            label.text = @"目前没有过期优惠券";
+        }else{
+            label.text = @"目前没有可用优惠券";
+        }
         label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
         label.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
         [_emptyView addSubview:label];

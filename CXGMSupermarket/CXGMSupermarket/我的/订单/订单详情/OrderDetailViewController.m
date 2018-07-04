@@ -13,6 +13,7 @@
 #import "OrderInvoiceViewCell.h"
 #import "OrderAmountViewCell.h"
 #import "RefundAmountViewCell.h"
+#import "NoteInfoViewCell.h"
 //head
 #import "OrderStateHeadView.h"
 #import "ShopAddressHeadView.h"
@@ -24,7 +25,7 @@
 
 #import "GoodsDetailViewController.h"
 
-@interface OrderDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
+@interface OrderDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,UITextFieldDelegate>
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)OrderModel *orderDetail;
 
@@ -43,6 +44,7 @@ static NSString *const OrderGoodsViewCellID = @"OrderGoodsViewCell";
 static NSString *const OrderInvoiceViewCellID = @"OrderInvoiceViewCell";
 static NSString *const OrderAmountViewCellID = @"OrderAmountViewCell";
 static NSString *const RefundAmountViewCellID = @"RefundAmountViewCell";
+static NSString *const NoteInfoViewCellID = @"NoteInfoViewCell";
 /* head */
 static NSString *const OrderStateHeadViewID = @"OrderStateHeadView";
 static NSString *const ShopAddressHeadViewID = @"ShopAddressHeadView";
@@ -199,7 +201,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
 #pragma mark-
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 4;
+    return 5;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -209,7 +211,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     if (section == 1) {
         return self.orderDetail.productDetails.count;
     }
-    if (section == 2 || section == 3) {
+    if (section == 2 || section == 3 || section == 4) {
         return 1;
     }
     return 0;
@@ -240,6 +242,13 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         gridcell = cell;
     }
     else if (indexPath.section == 3) {
+        NoteInfoViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NoteInfoViewCellID forIndexPath:indexPath];
+        cell.textField.text = self.orderDetail.remarks;
+        cell.textField.delegate = self;
+        gridcell = cell;
+        
+    }
+    else if (indexPath.section == 4) {
         OrderAmountViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderAmountViewCellID forIndexPath:indexPath];
         cell.order = self.orderDetail;
         gridcell = cell;
@@ -302,9 +311,17 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         return CGSizeMake(ScreenW, 154);
     }
     if (indexPath.section == 3 ) {
+        return CGSizeMake(ScreenW, 45);
+    }
+    if (indexPath.section == 4 ) {
         return CGSizeMake(ScreenW, 174);
     }
     return CGSizeZero;
+}
+
+#pragma mark-
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+    return NO;
 }
 #pragma mark - head宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
@@ -359,6 +376,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         [_collectionView registerClass:[OrderGoodsViewCell class] forCellWithReuseIdentifier:OrderGoodsViewCellID];
         [_collectionView registerClass:[OrderInvoiceViewCell class] forCellWithReuseIdentifier:OrderInvoiceViewCellID];
         [_collectionView registerClass:[OrderAmountViewCell class] forCellWithReuseIdentifier:OrderAmountViewCellID];
+        [_collectionView registerClass:[NoteInfoViewCell class] forCellWithReuseIdentifier:NoteInfoViewCellID];
         [_collectionView registerClass:[RefundAmountViewCell class] forCellWithReuseIdentifier:RefundAmountViewCellID];
         
         [_collectionView registerClass:[OrderStateHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderStateHeadViewID];
