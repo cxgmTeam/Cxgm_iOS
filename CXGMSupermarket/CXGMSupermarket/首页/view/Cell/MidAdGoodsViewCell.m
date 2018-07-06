@@ -66,7 +66,7 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(self.adImageView.bottom).offset(10);
         make.left.right.equalTo(self);
-        make.bottom.equalTo(self.bottomLineView.top);
+        make.bottom.equalTo(self.bottomLineView.top).offset(-10);
     }];
 }
 
@@ -96,7 +96,8 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
         layout.minimumLineSpacing = 10;
-        layout.itemSize = CGSizeMake(96, 212-10);
+        layout.minimumInteritemSpacing = 0;
+        layout.itemSize = CGSizeMake(96, 212-30);
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal; //滚动方向
         
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
@@ -107,7 +108,7 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
         
         [_collectionView registerClass:[GoodsListGridCell class] forCellWithReuseIdentifier:GoodsListGridCellID];
         
-        _collectionView.contentInset = UIEdgeInsetsMake(0, 10, 10, 10);
+        _collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 10);
     }
     return _collectionView;
 }

@@ -11,8 +11,7 @@
 
 @interface MessageViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView* tableView;
-
-@property(nonatomic,strong)NSArray* titleArray;
+@property(nonatomic,strong)NSMutableArray* dataArray;
 @end
 
 @implementation MessageViewController
@@ -21,10 +20,14 @@
     [super viewDidLoad];
     self.title = @"消息";
     
-    self.titleArray = @[@"限时抢购",
-                        @"客服助手",
-                        @"通知消息",
-                        @"最新资讯"];
+    self.dataArray = [NSMutableArray array];
+    
+    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
+    NSArray* array = [userDefault objectForKey:RemoteNotification_KEY];
+    if (array.count > 0) {
+        [self.dataArray addObjectsFromArray:array];
+    }
+
     
     self.tableView.backgroundColor = [UIColor clearColor];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -35,7 +38,7 @@
 #pragma mark-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.titleArray.count;
+    return self.dataArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -43,10 +46,56 @@
     if (!cell) {
         cell = [[MessageTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MessageTableViewCell"];
     }
-    cell.iconView.image = [UIImage imageNamed:[NSString stringWithFormat:@"message_%ld",(long)indexPath.row]];
-    cell.titleLabel.text = self.titleArray[indexPath.row];
+    NSDictionary* dic = self.dataArray[indexPath.row];
+    NSDictionary* apsDic = [dic objectForKey:@"aps"];
+    
+    if (apsDic)
+    {
+        NSString* alert = [apsDic objectForKey:@"alert"];
+        if (alert)
+        {
+            if ([alert isEqualToString:@"限时抢购"]) {
+                cell.iconView.image = [UIImage imageNamed:@"message_0"];
+            }
+            if ([alert isEqualToString:@"客服助手"]) {
+                cell.iconView.image = [UIImage imageNamed:@"message_1"];
+            }
+            if ([alert isEqualToString:@"通知消息"]) {
+                cell.iconView.image = [UIImage imageNamed:@"message_2"];
+            }
+            if ([alert isEqualToString:@"最新资讯"]) {
+                cell.iconView.image = [UIImage imageNamed:@"message_3"];
+            }
+            
+            cell.titleLabel.text = alert;
+            cell.descLabel.text = [dic objectForKey:alert];
+        }
+    }
     return cell;
 }
+
+-(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return UITableViewCellEditingStyleDelete;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForDeleteConfirmationButtonForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return @"删除";
+}
+
+-(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        [self.dataArray removeObjectAtIndex:indexPath.row];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
+        [userDefault setObject:self.dataArray forKey:RemoteNotification_KEY];
+        [userDefault synchronize];
+    }
+}
+
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

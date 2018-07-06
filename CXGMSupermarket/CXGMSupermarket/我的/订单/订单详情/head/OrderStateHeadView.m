@@ -92,9 +92,9 @@
             if ([orderItem.status intValue] == 8) {
                 _descLabel.text = @"订单取消（超时取消）";
             }else if ([orderItem.status intValue] == 9){
-                _descLabel.text = @"订单取消（系统取消）";
-            }else{
                 _descLabel.text = @"订单取消成功";
+            }else{
+                _descLabel.text = @"订单取消（系统取消）";
             }
             _remainTimeLabel.text = @"";
         }

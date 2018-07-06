@@ -55,8 +55,9 @@ typedef NS_ENUM(NSInteger, OrderStatus) {
     STATUS_WAIT_REFUND = 6,         //待退款
     STATUS_REFUNDED = 7,            //已退款
     STATUS_TIMEOUT_CANCEL = 8,      //超时取消
-    STATUS_SYSTEM_CANCEL = 9,       //系统取消
-    STATUS_USER_CANCEL = 10         //自主取消
+    STATUS_USER_CANCEL = 9,         //自主取消
+    STATUS_SYSTEM_CANCEL = 10       //系统取消
+    
 };
 
 
@@ -136,6 +137,9 @@ typedef NS_ENUM(NSInteger, OrderStatus) {
 #define Show_PayResult           @"Show_PayResult"
 
 #define AddedNewScope_Notify     @"AddedNewScope_Notify"
+
+
+#define RemoteNotification_KEY     @"RemoteNotification_KEY"
 
 
 #define PAGECOUNT  @"10"

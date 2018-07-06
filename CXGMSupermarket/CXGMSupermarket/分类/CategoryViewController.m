@@ -42,10 +42,13 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
     [searchBtn setImage:[UIImage imageNamed:@"top_search"] forState:UIControlStateNormal];
     [searchBtn addTarget:self action:@selector(onTapSearchBtn:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:searchBtn];
-    
+
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
     
     [self findFirstCategory];
-
 }
 
 //一级分类

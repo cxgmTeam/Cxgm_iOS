@@ -196,8 +196,6 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (void)findAdvertisement
 {
     
-    [self.slideImageList removeAllObjects];
-    
     NSDictionary* dic = @{@"shopId":@""};
     if ([DeviceHelper sharedInstance].shop) {
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
@@ -220,11 +218,11 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
                 }
             }
 
-            
             self.slideDataList = [array1 sortedArrayUsingComparator:^NSComparisonResult(AdvertisementModel * obj1, AdvertisementModel * obj2){
                 return [obj1.number  compare: obj2.number];
             }];
             
+            [self.slideImageList removeAllObjects];
             for (AdvertisementModel* ad in self.slideDataList) {
                 [self.slideImageList addObject:ad.imageUrl.length>0?ad.imageUrl:@""];
             }
@@ -436,7 +434,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         return CGSizeMake(ScreenW, 214);
     }
     if (indexPath.section ==4) {
-        return CGSizeMake(ScreenW, ScreenW*159/375.f+212);
+        return CGSizeMake(ScreenW, ScreenW*159/375.f+222);
     }
     if (indexPath.section == 5) {//热销
         return CGSizeMake((ScreenW - 12*3)/2, (ScreenW - 12*3)/2+72+15);

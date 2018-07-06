@@ -141,12 +141,7 @@
     [MobClick setScenarioType:E_UM_NORMAL];
     // [MobClick setScenarioType:E_UM_GAME];  // optional: 游戏场景设置
     
-    // Push组件基本功能配置
-    if (@available(iOS 10.0, *)) {
-        [UNUserNotificationCenter currentNotificationCenter].delegate = self;
-    } else {
-        // Fallback on earlier versions
-    }
+
     UMessageRegisterEntity * entity = [[UMessageRegisterEntity alloc] init];
     //type是对推送的几个参数的选择，可以选择一个或者多个。默认是三个全部打开，即：声音，弹窗，角标等
     entity.types = UMessageAuthorizationOptionBadge|UMessageAuthorizationOptionAlert|UMessageAuthorizationOptionSound;
@@ -159,6 +154,8 @@
         if (granted) {
             // 用户选择了接收Push消息
             NSLog(@"用户选择了接收+++++Push消息");
+            NSDictionary* remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+            [self showNotificationAlert:remoteNotification];
         }else{
             // 用户拒绝接收Push消息
             NSLog(@"用户拒绝接收------Push消息");
@@ -167,45 +164,64 @@
     
     NSDictionary* remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (remoteNotification) {
-        
+        [self saveRemoteNotification:remoteNotification];
     }
+
 }
 
+//iOS10以下使用这两个方法接收通知，
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo{
+    
+    NSLog(@">>>>>>>>>iOS10  userInfo  %@",userInfo);
+    
+    [self saveRemoteNotification:userInfo];
+    
     [UMessage setAutoAlert:NO];
     [UMessage didReceiveRemoteNotification:userInfo];
 }
 
-//iOS10以下使用这两个方法接收通知，
+
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
+    
+    NSLog(@"<<<<<<<<<iOS10  userInfo  %@",userInfo);
+    
+    [self saveRemoteNotification:userInfo];
+    
+    
     //关闭友盟自带的弹出框
     [UMessage setAutoAlert:NO];
     if([[[UIDevice currentDevice] systemVersion]intValue] < 10){
         [UMessage didReceiveRemoteNotification:userInfo];
         
-//    self.userInfo = userInfo;
 //    //定制自定的的弹出框
     if([UIApplication sharedApplication].applicationState == UIApplicationStateActive)
     {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"标题"
-                                                            message:@"Test On ApplicationStateActive"
-                                                           delegate:self
-                                                  cancelButtonTitle:@"确定"
-                                                  otherButtonTitles:nil];
-
-        [alertView show];
-
+        [self showNotificationAlert:userInfo];
     }
         completionHandler(UIBackgroundFetchResultNewData);
     }
 }
 
 //iOS10新增：处理前台收到通知的代理方法
--(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler API_AVAILABLE(ios(10.0)){
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+
+API_AVAILABLE(ios(10.0)){
+
     NSDictionary * userInfo = notification.request.content.userInfo;
+    
+    NSLog(@"》》》》》》》》》iOS10  willPresentNotification   userInfo  %@  \n content %@",userInfo,notification.request.content);
+
+    [self saveRemoteNotification:userInfo];
+    
     if (@available(iOS 10.0, *)) {
         if([notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+            
+            NSLog(@"willPresentNotification-------11");
+            
+            [self showNotificationAlert:userInfo];
+            
+            
             //应用处于前台时的远程推送接受
             //关闭U-Push自带的弹出框
             [UMessage setAutoAlert:NO];
@@ -214,6 +230,8 @@
             
         }else{
             //应用处于前台时的本地推送接受
+            
+            NSLog(@"willPresentNotification-------22");
         }
     } else {
         // Fallback on earlier versions
@@ -221,21 +239,44 @@
     //当应用处于前台时提示设置，需要哪个可以设置哪一个
     if (@available(iOS 10.0, *)) {
         completionHandler(UNNotificationPresentationOptionSound|UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionAlert);
+        
+        NSLog(@"willPresentNotification-------33");
+        
+        [self showNotificationAlert:userInfo];
+        
     } else {
         // Fallback on earlier versions
+        
+        NSLog(@"willPresentNotification-------44");
     }
 }
 
 //iOS10新增：处理后台点击通知的代理方法
--(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler API_AVAILABLE(ios(10.0)){
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
+
+API_AVAILABLE(ios(10.0)){
     NSDictionary * userInfo = response.notification.request.content.userInfo;
+    
+    
+    NSLog(@"》》》》》》》》》iOS10  didReceiveNotificationResponse   userInfo  %@ \n content  %@",userInfo,response.notification.request.content);
+    
+    [self saveRemoteNotification:userInfo];
+    
+    
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
+        
+        NSLog(@"didReceiveNotificationResponse-------1");
+        
+        [self showNotificationAlert:userInfo];
+
         //应用处于后台时的远程推送接受
         //必须加这句代码
         [UMessage didReceiveRemoteNotification:userInfo];
         
     }else{
         //应用处于后台时的本地推送接受
+        
+        NSLog(@"didReceiveNotificationResponse-------2");
     }
 }
 
@@ -244,6 +285,38 @@
                   stringByReplacingOccurrencesOfString: @">" withString: @""]
                  stringByReplacingOccurrencesOfString: @" " withString: @""]);
 }
+
+#pragma mark-
+- (void)showNotificationAlert:(NSDictionary *)userInfo
+{
+    NSString* title = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
+    NSString* message = [userInfo objectForKey:title];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                        message:message
+                                                       delegate:self
+                                              cancelButtonTitle:@"取消"
+                                              otherButtonTitles:@"查看",nil];
+    [alertView show];
+}
+
+- (void)saveRemoteNotification:(NSDictionary *)userInfo
+{
+    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
+    
+    NSMutableArray * contentArray = [NSMutableArray array];
+    NSArray* array = [userDefault objectForKey:RemoteNotification_KEY];
+    if (array.count > 0) {
+        [contentArray addObjectsFromArray:array];
+    }
+    [contentArray addObject:userInfo];
+    
+    [userDefault setObject:array forKey:RemoteNotification_KEY];
+    [userDefault synchronize];
+}
+
+
+
 #pragma mark-
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

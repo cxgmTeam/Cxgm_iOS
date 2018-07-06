@@ -59,6 +59,7 @@
 
 - (void)setUpUI{
     _gridImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.dc_width, self.dc_width)];
+    _gridImageView.contentMode = UIViewContentModeScaleToFill;
     _gridImageView.image = [UIImage imageNamed:@"placeholderImage"];
     [self addSubview:_gridImageView];
     
@@ -193,10 +194,10 @@
 {
     [super layoutSubviews];
     
-//    [_gridImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.top.mas_equalTo(self);
-//        make.size.mas_equalTo(CGSizeMake(self.dc_width, self.dc_width));
-//    }];
+    [_gridImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.top.mas_equalTo(self);
+        make.size.mas_equalTo(CGSizeMake(self.dc_width, self.dc_width));
+    }];
 
     [_nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.mas_equalTo(self);
