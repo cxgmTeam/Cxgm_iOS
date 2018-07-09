@@ -55,6 +55,7 @@
 		77529E0320AC5BDC0015F7A6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77529E0220AC5BDB0015F7A6 /* MessageUI.framework */; };
 		77535E3120E90ECF008EA366 /* AboutViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77535E3020E90ECF008EA366 /* AboutViewController.m */; };
 		77535E3420E9175C008EA366 /* EmployeesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77535E3320E9175C008EA366 /* EmployeesViewController.m */; };
+		7754862820F333E300CFBE52 /* WebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7754862720F333E300CFBE52 /* WebViewController.m */; };
 		77559BE420DCD71B00798AD0 /* UMCommonLog.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77559BE220DCD71B00798AD0 /* UMCommonLog.framework */; };
 		77559BE520DCD71B00798AD0 /* UMCommonLog.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 77559BE320DCD71B00798AD0 /* UMCommonLog.bundle */; };
 		77559BEF20DCD85200798AD0 /* SecurityEnvSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77559BED20DCD85200798AD0 /* SecurityEnvSDK.framework */; };
@@ -442,6 +443,8 @@
 		77535E3020E90ECF008EA366 /* AboutViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AboutViewController.m; sourceTree = "<group>"; };
 		77535E3220E9175C008EA366 /* EmployeesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmployeesViewController.h; sourceTree = "<group>"; };
 		77535E3320E9175C008EA366 /* EmployeesViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmployeesViewController.m; sourceTree = "<group>"; };
+		7754862620F333E300CFBE52 /* WebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WebViewController.h; sourceTree = "<group>"; };
+		7754862720F333E300CFBE52 /* WebViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebViewController.m; sourceTree = "<group>"; };
 		77559BE220DCD71B00798AD0 /* UMCommonLog.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMCommonLog.framework; sourceTree = "<group>"; };
 		77559BE320DCD71B00798AD0 /* UMCommonLog.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = UMCommonLog.bundle; sourceTree = "<group>"; };
 		77559BED20DCD85200798AD0 /* SecurityEnvSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SecurityEnvSDK.framework; sourceTree = "<group>"; };
@@ -1413,6 +1416,8 @@
 				775D358420B3B5780047F9EE /* cell */,
 				775D357E20B3B3D40047F9EE /* MessageViewController.h */,
 				775D357F20B3B3D40047F9EE /* MessageViewController.m */,
+				7754862620F333E300CFBE52 /* WebViewController.h */,
+				7754862720F333E300CFBE52 /* WebViewController.m */,
 			);
 			path = "消息";
 			sourceTree = "<group>";
@@ -3172,6 +3177,7 @@
 				774C47E420A99D2A009B129F /* WGS84TOGCJ02.m in Sources */,
 				77F83A8A2070E8CE004E9717 /* JSONModelClassProperty.m in Sources */,
 				77B33AE720E267BE00B4611E /* openssl_wrapper.m in Sources */,
+				7754862820F333E300CFBE52 /* WebViewController.m in Sources */,
 				779C9558209AE0EE0029A591 /* PayResultViewController.m in Sources */,
 				77B484EF209EC70300D74DD5 /* SearchGridCell.m in Sources */,
 				7703559320995E8E002B3A8D /* BillHeadViewCell.m in Sources */,

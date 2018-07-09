@@ -16,6 +16,8 @@
 + (NSString *)convertToJsonData:(NSDictionary *)dict;
 // JSON字符串转化为字典
 + (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
+
++ (id)toArrayOrNSDictionary:(NSString *)jsonString;
 //把手机号第4-7位变成星号
 +(NSString*)phoneNumToAsterisk:(NSString*)phoneNum;
 

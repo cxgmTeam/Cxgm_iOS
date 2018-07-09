@@ -16,10 +16,12 @@
 #import "SearchViewController.h"
 #import "AddressViewController.h"
 
-
 #import "MessageViewController.h"
 
 #import "HYNoticeView.h"
+
+#import "GoodsDetailViewController.h"
+#import "WebViewController.h"
 
 @interface HomeViewController ()
 @property(nonatomic,strong)HomeGoodsView* goodsView;
@@ -42,7 +44,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSLog(@"%s",__func__);
     
     [self setupTopBar];
     
@@ -51,6 +52,8 @@
     [self setNoticeLocation];
     
     [self checkAppUpdate];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRemoteNotification:) name:Show_RemoteNotification object:nil];
 
 }
 
@@ -244,6 +247,27 @@
     [self.navigationController pushViewController:vc animated:YES];
 }
 
+- (void)showRemoteNotification:(NSNotification *)notify
+{
+    NSDictionary* dic = [notify userInfo];
+    
+    //type为0时跳转商品详情，type为1时直接打开H5连接
+    if ([dic[@"type"] intValue] == 0)
+    {
+        GoodsDetailViewController* vc = [GoodsDetailViewController new];
+        vc.goodsId = dic[@"goodcode"];
+        vc.shopId = dic[@"shopId"];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else if ([dic[@"type"] intValue] == 1)
+    {
+        WebViewController* vc = [WebViewController new];
+        vc.urlString = dic[@"goodcode"];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+}
+
 #pragma mark-
 - (CGFloat)sizeLabelWidth:(NSString *)text
 {
@@ -337,5 +361,10 @@
         NSString *str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=%@",appid ];
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
     }
+}
+
+#pragma mark-
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 @end

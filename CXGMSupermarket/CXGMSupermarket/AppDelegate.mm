@@ -26,10 +26,13 @@
 #import <UMAnalytics/MobClick.h>
 
 
-@interface AppDelegate ()<BMKGeneralDelegate,UNUserNotificationCenterDelegate>
+@interface AppDelegate ()<BMKGeneralDelegate,UNUserNotificationCenterDelegate,UIAlertViewDelegate>
 @property(nonatomic,strong)  BMKMapManager* mapManager;
 
 @property(nonatomic,strong)CLLocationManager* locationManager;//定位
+
+@property(nonatomic,assign)BOOL isLaunchedByNotification;
+@property(nonatomic,strong)NSDictionary* userInfo;//通知
 @end
 
 @implementation AppDelegate
@@ -56,6 +59,43 @@
         NSLog(@"log : %@", log);
     }];
     [WXApi registerApp:@"wxd2f7d73babd9de68"];
+    
+    
+    /*
+    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
+    
+    NSMutableArray * contentArray = [NSMutableArray array];
+    
+    NSDictionary* userInfo = @{
+                               @"d" : @"umy2sjs153110654223700",
+                               @"p" : @"0",
+                               @"限时抢购" : @[@{@"time":@"2018-07-09 11:22:21",@"type":@"0",@"goodcode":@"114586",@"content":@"小企鹅梅洛红葡萄酒原价120元，现价100元"}],
+                               @"aps" : @{
+                                       @"badge" : @"0",
+                                       @"alert" : @"限时抢购",
+                                       @"sound" : @"default"
+                                       }
+                               };
+    
+    
+    [contentArray addObject:userInfo];
+    
+    
+    NSArray* array = [userDefault objectForKey:RemoteNotification_KEY];
+    if (array.count > 0) {
+        [contentArray addObjectsFromArray:array];
+    }
+
+    NSLog(@"1---  %@",contentArray);
+    
+    [userDefault setObject:contentArray forKey:RemoteNotification_KEY];
+    [userDefault synchronize];
+    
+    
+    array = [userDefault objectForKey:RemoteNotification_KEY];
+    
+    NSLog(@"2---  %@",array);
+    */
     
     return YES;
 }
@@ -154,8 +194,6 @@
         if (granted) {
             // 用户选择了接收Push消息
             NSLog(@"用户选择了接收+++++Push消息");
-            NSDictionary* remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
-            [self showNotificationAlert:remoteNotification];
         }else{
             // 用户拒绝接收Push消息
             NSLog(@"用户拒绝接收------Push消息");
@@ -164,9 +202,10 @@
     
     NSDictionary* remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (remoteNotification) {
-        [self saveRemoteNotification:remoteNotification];
+        self.isLaunchedByNotification = YES;
+    }else{
+        self.isLaunchedByNotification = NO;
     }
-
 }
 
 //iOS10以下使用这两个方法接收通知，
@@ -180,7 +219,7 @@
     [UMessage didReceiveRemoteNotification:userInfo];
 }
 
-
+//收到推送后调用的方法（iOS 10 以下）
 -(void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler
 {
     
@@ -203,7 +242,7 @@
     }
 }
 
-//iOS10新增：处理前台收到通知的代理方法
+//收到推送后调用的方法（iOS 10 及以上）
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
 
 API_AVAILABLE(ios(10.0)){
@@ -241,15 +280,13 @@ API_AVAILABLE(ios(10.0)){
         completionHandler(UNNotificationPresentationOptionSound|UNNotificationPresentationOptionBadge|UNNotificationPresentationOptionAlert);
         
         NSLog(@"willPresentNotification-------33");
-        
-        [self showNotificationAlert:userInfo];
-        
     } else {
         // Fallback on earlier versions
         
         NSLog(@"willPresentNotification-------44");
     }
 }
+
 
 //iOS10新增：处理后台点击通知的代理方法
 -(void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler
@@ -279,44 +316,84 @@ API_AVAILABLE(ios(10.0)){
         NSLog(@"didReceiveNotificationResponse-------2");
     }
 }
-
+///// 用户同意接收通知后，会调用此程序
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken{
     NSLog(@"deviceToken >>>>  %@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
                   stringByReplacingOccurrencesOfString: @">" withString: @""]
                  stringByReplacingOccurrencesOfString: @" " withString: @""]);
 }
 
+//成功注册registerUserNotificationSettings:后，回调的方法
+- (void)application:(UIApplication *)application didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings{
+    
+}
+
+/// 注册失败调用
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error{
+    
+}
 #pragma mark-
 - (void)showNotificationAlert:(NSDictionary *)userInfo
 {
-    NSString* title = [[userInfo objectForKey:@"aps"] objectForKey:@"alert"];
-    NSString* message = [userInfo objectForKey:title];
+    NSString* title = @"";
+    NSString* message = @"";
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                        message:message
-                                                       delegate:self
-                                              cancelButtonTitle:@"取消"
-                                              otherButtonTitles:@"查看",nil];
-    [alertView show];
+    NSDictionary* apsDic = [userInfo objectForKey:@"aps"];
+    
+    if (apsDic)
+    {
+        NSString* alert = [apsDic objectForKey:@"alert"];
+        title = [apsDic objectForKey:@"alert"];
+        if (alert)
+        {
+            NSString* string  = [userInfo objectForKey:alert];
+            if ([string isKindOfClass:[NSString class]]) {
+                NSArray* array = [Utility toArrayOrNSDictionary:string];
+                
+                if ([array isKindOfClass:[NSArray class]] && array.count > 0) {
+                    
+                    NSDictionary* dictionary = [array firstObject];
+                    message = [dictionary objectForKey:@"content"];
+                    
+                    self.userInfo = dictionary;
+                    
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+                                                                        message:message
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"取消"
+                                                              otherButtonTitles:@"查看",nil];
+                    [alertView show];
+                }
+            }
+        }
+    }
 }
 
 - (void)saveRemoteNotification:(NSDictionary *)userInfo
 {
-    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
-    
     NSMutableArray * contentArray = [NSMutableArray array];
+    [contentArray addObject:userInfo];
+    
+    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
     NSArray* array = [userDefault objectForKey:RemoteNotification_KEY];
     if (array.count > 0) {
         [contentArray addObjectsFromArray:array];
     }
-    [contentArray addObject:userInfo];
     
-    [userDefault setObject:array forKey:RemoteNotification_KEY];
+    [userDefault setObject:contentArray forKey:RemoteNotification_KEY];
     [userDefault synchronize];
 }
 
 
+#pragma mark-
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
 
+    if (buttonIndex == 1) {
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:Show_RemoteNotification object:nil userInfo:self.userInfo];
+        
+    }
+}
 #pragma mark-
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

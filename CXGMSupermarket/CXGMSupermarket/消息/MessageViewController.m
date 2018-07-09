@@ -9,6 +9,9 @@
 #import "MessageViewController.h"
 #import "MessageTableViewCell.h"
 
+#import "GoodsDetailViewController.h"
+#import "WebViewController.h"
+
 @interface MessageViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView* tableView;
 @property(nonatomic,strong)NSMutableArray* dataArray;
@@ -28,6 +31,7 @@
         [self.dataArray addObjectsFromArray:array];
     }
 
+    NSLog(@"---  %@",self.dataArray);
     
     self.tableView.backgroundColor = [UIColor clearColor];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -68,7 +72,20 @@
             }
             
             cell.titleLabel.text = alert;
-            cell.descLabel.text = [dic objectForKey:alert];
+            NSString * string = [dic objectForKey:alert];
+            
+            if ([string isKindOfClass:[NSString class]]) {
+                NSArray * array = [Utility toArrayOrNSDictionary:string];
+                
+                if (array.count > 0) {
+                    NSDictionary* dictionary = [array firstObject];
+                    cell.descLabel.text = [dictionary objectForKey:@"content"];
+                    cell.timeLabel.text = [dictionary objectForKey:@"time"];
+                }
+            }
+            
+            
+            
         }
     }
     return cell;
@@ -99,6 +116,41 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    
+    NSDictionary* dic = self.dataArray[indexPath.row];
+    NSDictionary* apsDic = [dic objectForKey:@"aps"];
+    
+    if (apsDic)
+    {
+        NSString* alert = [apsDic objectForKey:@"alert"];
+        if (alert)
+        {
+            NSString * string = [dic objectForKey:alert];
+            
+            if ([string isKindOfClass:[NSString class]]) {
+                NSArray * array = [Utility toArrayOrNSDictionary:string];
+                
+                if (array.count > 0) {
+                    NSDictionary* dictionary = [array firstObject];
+                    
+                    if ([dictionary[@"type"] intValue] == 0)
+                    {
+                        GoodsDetailViewController* vc = [GoodsDetailViewController new];
+                        vc.goodsId = dictionary[@"goodcode"];
+                        vc.shopId = dictionary[@"shopId"];
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }
+                    else if ([dictionary[@"type"] intValue] == 1)
+                    {
+                        WebViewController* vc = [WebViewController new];
+                        vc.urlString = dictionary[@"goodcode"];
+                        [self.navigationController pushViewController:vc animated:YES];
+                    }
+                }
+            }
+        }
+    }
 }
 
 #pragma mark- init

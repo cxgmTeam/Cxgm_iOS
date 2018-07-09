@@ -14,6 +14,7 @@
 @interface SettingViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView* tableView;
 @property(nonatomic,strong)NSArray* titleArray;
+@property(nonatomic,assign)BOOL notifyLauched;
 @end
 
 @implementation SettingViewController
@@ -57,6 +58,17 @@
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    if ([[UIApplication sharedApplication] currentUserNotificationSettings].types  == UIUserNotificationTypeNone) {
+        self.notifyLauched = NO;
+    }else{
+        self.notifyLauched = YES;
+    }
+}
+
+
 - (void)onTapButton:(id)sender
 {
     UIAlertController *alter = [UIAlertController alertControllerWithTitle:nil message:@"确认注销账号" preferredStyle:UIAlertControllerStyleAlert];
@@ -96,9 +108,10 @@
     cell.leftLabel.text = self.titleArray[indexPath.row];
     switch (indexPath.row) {
         case 0:{
-            cell.rightLabel.hidden = YES;
-            cell.switchButton.hidden = NO;
+            cell.rightLabel.hidden = NO;
+            cell.switchButton.hidden = YES;
             cell.arrowView.hidden = YES;
+            cell.rightLabel.text = self.notifyLauched==YES?@"已开启":@"未开启";
         }
             break;
         case 1:{
@@ -131,6 +144,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if (indexPath.row == 0) {
+        [[UIApplication sharedApplication]openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+        [self.navigationController popViewControllerAnimated:NO];
+    }
     
     if (indexPath.row == 1) {
         [[[SDWebImageManager sharedManager] imageCache] clearMemory];

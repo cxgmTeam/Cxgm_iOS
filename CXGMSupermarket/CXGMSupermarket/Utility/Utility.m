@@ -119,6 +119,29 @@
     return dic;
 }
 
++ (id)toArrayOrNSDictionary:(NSString *)jsonString{
+    
+    if (jsonString == nil) {
+        return nil;
+    }
+    
+    NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
+    NSError *error;
+    
+    id jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData
+                                                    options:NSJSONReadingAllowFragments
+                                                      error:&error];
+    if (jsonObject != nil && error == nil){
+        
+        return jsonObject;
+    }else{
+        // 解析错误
+        return nil;
+    }
+}
+
+
+
 //把手机号第4-7位变成星号
 +(NSString*)phoneNumToAsterisk:(NSString*)phoneNum
 {
@@ -218,7 +241,7 @@ BOOL pnpoly (int nvert, float *vertx, float *verty, float testx, float testy) {
         if (data)
         {
             NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-            NSLog(@"\n\nCXGMPostRequest %@\n dic = %@",requestUrl,dic);
+//            NSLog(@"\n\nCXGMPostRequest %@\n dic = %@",requestUrl,dic);
             if ([[dic objectForKey:@"code"] integerValue] == 200) {
                 if (success) {
                     success(dic,nil);

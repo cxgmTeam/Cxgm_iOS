@@ -10,4 +10,5 @@
 
 @interface GoodsDetailViewController : CustomDetailViewController
 @property(nonatomic,strong)NSString* goodsId;
+@property(nonatomic,strong)NSString* shopId;
 @end

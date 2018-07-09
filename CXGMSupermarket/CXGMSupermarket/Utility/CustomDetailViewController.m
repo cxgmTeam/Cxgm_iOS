@@ -17,11 +17,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    UISwipeGestureRecognizer* swipe = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(swipeBack:)];
-//    swipe.direction = UISwipeGestureRecognizerDirectionRight;
-//    [self.view addGestureRecognizer:swipe];
-    
-    
+
     UIButton *backButton = [UIButton buttonWithType:UIButtonTypeCustom];
     backButton.frame = CGRectMake(0, 0, 44, 44);
     [backButton setImage:[UIImage imageNamed:@"arrow_left"] forState:UIControlStateNormal];
@@ -32,10 +28,6 @@
 
 }
 
-//- (void)swipeBack:(UISwipeGestureRecognizer *)gesture
-//{
-//    [self.navigationController popViewControllerAnimated:YES];
-//}
 
 - (void)backButtonClicked:(UIButton *)button{
     [self.navigationController popViewControllerAnimated:YES];

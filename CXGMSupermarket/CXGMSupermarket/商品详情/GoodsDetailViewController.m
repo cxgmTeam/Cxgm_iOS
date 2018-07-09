@@ -137,9 +137,18 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     
     [self.slideImageArray removeAllObjects];
     
-    NSDictionary* dic = @{@"productId":self.goodsId,
-                          @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
-                          };
+    NSDictionary* dic;
+    if (self.shopId) {
+        dic = @{@"productId":self.goodsId,
+                @"shopId":self.shopId
+                };
+    }else{
+        dic = @{@"productId":self.goodsId,
+                @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
+                };
+    }
+    
+    
     typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindProductDetail] token:nil parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];

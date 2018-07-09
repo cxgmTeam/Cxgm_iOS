@@ -141,6 +141,8 @@ typedef NS_ENUM(NSInteger, OrderStatus) {
 
 #define RemoteNotification_KEY     @"RemoteNotification_KEY"
 
+#define Show_RemoteNotification    @"Show_RemoteNotification"
+
 
 #define PAGECOUNT  @"10"
 
