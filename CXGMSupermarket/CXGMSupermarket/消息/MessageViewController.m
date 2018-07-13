@@ -37,6 +37,23 @@
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
     }];
+    
+    
+    
+    
+    NSString* string = @"alipay_sdk=alipay-sdk-java-3.1.0&app_id=2018051860090884&biz_content=%7B%22out_trade_no%22%3A%22E20180708165455013400015%22%2C%22passback_params%22%3A%22%E6%B5%8B%E8%AF%95%E6%95%B0%E6%8D%AE%22%2C%22product_code%22%3A%22QUICK_MSECURITY_PAY%22%2C%22subject%22%3A%22%E9%AD%85%E6%A0%BC%22%2C%22timeout_express%22%3A%2230m%22%2C%22total_amount%22%3A%2298.10%22%7D&charset=UTF-8&format=json&method=alipay.trade.app.pay&sign=mVbfl%2B6IDvtP375AKfv3wJXCjIQS5jXLUoc6io%2BZPidMWjMiPLeb5%2FOH%2FZkuqtszGlIQB2KhHhwWe8nrp6triXaaaP3pK4TS%2B8LIjydd6Upl1mzVxabBMuo1KKDBO0jZs7bITyEf%2BxH59ZWYGlJtcd3o4jsSSKJUgthafTG0tGc%3D&sign_type=RSA2&timestamp=2018-07-13+15%3A17%3A59&version=1.0";
+    
+    
+    NSArray* array1 = [string componentsSeparatedByString:@"&"];
+    NSMutableDictionary* dic = [NSMutableDictionary dictionary];
+    
+    for (NSString * subStr in array1) {
+        NSArray* subArr = [subStr componentsSeparatedByString:@"="];
+        [dic setObject:subArr[1] forKey:subArr[0]];
+    }
+    
+    NSLog(@"dic \n%@",dic);
+    
 }
 
 #pragma mark-

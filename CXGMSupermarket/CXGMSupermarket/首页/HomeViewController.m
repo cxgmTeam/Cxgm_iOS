@@ -127,9 +127,9 @@
 
             
             typeof(self) __weak wself = self;
-            _goodsView.showSubCategoryVC = ^{
+            _goodsView.showSubCategoryVC = ^(NSString * categoryId){
                 SubCategoryController* vc = [SubCategoryController new];
-                //        vc.title = wself.categoryNames[indexPath.item];
+                vc.categoryId = categoryId;
                 [wself.navigationController pushViewController:vc animated:YES];
             };
             
@@ -137,6 +137,18 @@
                 GoodsDetailViewController* vc = [GoodsDetailViewController new];
                 vc.goodsId = model.id;
                 [wself.navigationController pushViewController:vc animated:YES];
+            };
+            _goodsView.showBusinessDetailVC = ^(AdBannarModel* model){
+                if ([model.urlType isEqualToString:@"1"]) {
+                    WebViewController* vc = [WebViewController new];
+                    vc.urlString = model.productCode;
+                    [wself.navigationController pushViewController:vc animated:YES];
+                }
+                if ([model.urlType isEqualToString:@"2"]){
+                    GoodsDetailViewController* vc = [GoodsDetailViewController new];
+                    vc.goodsId = model.productCode;
+                    [wself.navigationController pushViewController:vc animated:YES];
+                }
             };
         }else{
             [_goodsView requestGoodsList];

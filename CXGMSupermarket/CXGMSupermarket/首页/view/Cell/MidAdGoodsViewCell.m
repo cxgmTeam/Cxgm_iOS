@@ -40,6 +40,11 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     [self.collectionView reloadData];
 }
 
+- (void)onTapImageView:(UITapGestureRecognizer *)gesture
+{
+    !_tapAdImageHandler?:_tapAdImageHandler();
+}
+
 - (void)setUpUI
 {
     _adImageView = [[UIImageView alloc] init];
@@ -53,6 +58,9 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
         make.right.equalTo(-10);
         make.height.equalTo(ScreenW*159/375.f);
     }];
+    _adImageView.userInteractionEnabled = YES;
+    [_adImageView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapImageView:)]];
+    
     
     _bottomLineView = [[UIView alloc] init];
     _bottomLineView.backgroundColor = RGB(245,245,245);
@@ -87,6 +95,7 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
 #pragma mark - <UICollectionViewDelegate>
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
     GoodsModel* goods = self.adBannar.productList[indexPath.item];
     !self.showGoodsDetail?:self.showGoodsDetail(goods);
 }

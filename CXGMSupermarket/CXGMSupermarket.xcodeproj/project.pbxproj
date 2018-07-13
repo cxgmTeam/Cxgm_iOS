@@ -1710,9 +1710,9 @@
 		77B33AF220E2688100B4611E /* AliPayTool */ = {
 			isa = PBXGroup;
 			children = (
+				77B33AF520E2688100B4611E /* MXAliPayHandler.h */,
 				77B33AF320E2688100B4611E /* MXAliPayHandler.m */,
 				77B33AF420E2688100B4611E /* MXAlipayConfig.h */,
-				77B33AF520E2688100B4611E /* MXAliPayHandler.h */,
 			);
 			path = AliPayTool;
 			sourceTree = "<group>";

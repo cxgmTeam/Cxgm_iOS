@@ -259,6 +259,7 @@
     _leftTable = [UITableView new];
     _leftTable.delegate = self;
     _leftTable.dataSource = self;
+    _leftTable.separatorStyle = UITableViewCellSelectionStyleNone;
     _leftTable.backgroundColor = [UIColor colorWithHexString:@"F2F5F5"];
     [contentView addSubview:_leftTable];
     [_leftTable mas_makeConstraints:^(MASConstraintMaker *make){

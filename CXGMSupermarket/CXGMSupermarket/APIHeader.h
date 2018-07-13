@@ -92,8 +92,10 @@
 #define APISurplusTime  @"/order/surplusTime"
 //申请退款
 #define APIReturnMoney  @"/order/returnMoney"
-//支付接口
+//微信支付接口
 #define APIWeixinPay  @"/payments/weixinPay"
+//支付宝支付接口
+#define APIAliPay  @"/payments/aliPay"
 //修改订单状态
 #define APIUpdateStatus  @"/payments/updateStatus"
 

@@ -350,7 +350,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                 break;
             case 3:
                 cell.leftTitleLable.text = @"生产日期";
-                cell.contentLabel.text = self.goodsDetail.creationDate;
+                cell.contentLabel.text = @"详情见包装";
                 break;
             case 4:
                 cell.leftTitleLable.text = @"保质期";

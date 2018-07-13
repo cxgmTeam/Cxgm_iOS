@@ -131,10 +131,16 @@
         [MBProgressHUD MBProgressHUDWithView:self.view Str:@"订单已超时"];
         return;
     }
-    [self weixinPay];
+    if ([self.payType isEqualToString:@"wx"]) {
+        [self weixinPay];
+    }else{
+        [self alipay];
+    }
+    
 }
-//请求订单信息
 
+#pragma mark- 微信支付
+//请求订单信息
 - (void)weixinPay
 {
     NSDictionary* dic = @{@"orderId":self.orderId};
@@ -182,6 +188,37 @@
             //用户手机未安装微信、微信版本太低、微信客户端卡住、WXApi的registerApp的appid参数有误
         }
     }
+}
+
+#pragma mark- 支付宝支付
+
+- (void)alipay
+{
+    NSDictionary* dic = @{@"orderId":self.orderId};
+    
+    typeof(self) __weak wself = self;
+    [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APIAliPay] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        
+        NSString* string = (NSString *)JSON;
+        
+        NSArray* array = [string componentsSeparatedByString:@"&"];
+        NSMutableDictionary* dic = [NSMutableDictionary dictionary];
+        
+        for (NSInteger i =0 ; i < array.count ; i++) {
+            NSString * subStr = array[i];
+            NSArray* subArr = [subStr componentsSeparatedByString:@"="];
+            if (subArr.count > 1) {
+                [dic setObject:subArr[1] forKey:subArr[0]];
+            }
+            
+            if (i == array.count-1) {
+                [wself doAlipayPay:dic];
+            }
+        }
+
+    } failure:^(id JSON, NSError *error){
+        
+    }];
 }
 
 

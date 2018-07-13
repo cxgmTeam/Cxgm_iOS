@@ -10,6 +10,10 @@
 
 //ScreenW*159/375.f+212
 @interface MidAdGoodsViewCell : UICollectionViewCell
+
 @property(nonatomic,copy)void(^showGoodsDetail)(GoodsModel *model) ;
+
+@property(nonatomic,copy)void(^tapAdImageHandler)(void) ;
+
 @property(nonatomic,strong)AdBannarModel* adBannar;
 @end

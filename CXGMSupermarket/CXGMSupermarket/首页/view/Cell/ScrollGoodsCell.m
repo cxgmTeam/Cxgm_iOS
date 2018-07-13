@@ -75,7 +75,7 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
         layout.minimumLineSpacing = 10;
-        layout.itemSize = CGSizeMake(96, self.dc_height-10);
+        layout.itemSize = CGSizeMake((ScreenW-40)/3.f, self.dc_height);
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal; //滚动方向
         
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
@@ -87,7 +87,7 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
         
         [_collectionView registerClass:[GoodsListGridCell class] forCellWithReuseIdentifier:GoodsListGridCellID];
         
-        _collectionView.contentInset = UIEdgeInsetsMake(0, 10, 10, 10);
+        _collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 10);
     }
     return _collectionView;
 }

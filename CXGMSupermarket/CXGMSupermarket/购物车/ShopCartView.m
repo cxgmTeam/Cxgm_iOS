@@ -186,6 +186,8 @@
     
     double originalTotal = 0.0;
     
+    double preferential = 0.0;
+    
     for (GoodsModel *model in self.selectedArray) {
         
         double price = [model.price doubleValue];
@@ -194,7 +196,16 @@
         
         double original = [model.originalPrice doubleValue];
         
-        originalTotal += original*[model.goodNum intValue];
+        if (original > 0 && original > price) {
+            
+            originalTotal += original*[model.goodNum intValue];
+            
+            preferential += originalTotal - totlePrice;
+        }else{
+            
+            originalTotal += price*[model.goodNum intValue];
+        }
+
     }
     
     //总额为原价总和  优惠为优惠金额总额   合计为两者的差

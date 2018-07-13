@@ -194,17 +194,17 @@
         if (granted) {
             // 用户选择了接收Push消息
             NSLog(@"用户选择了接收+++++Push消息");
+            self.isLaunchedByNotification = YES;
         }else{
             // 用户拒绝接收Push消息
             NSLog(@"用户拒绝接收------Push消息");
+            self.isLaunchedByNotification = NO;
         }
     }];
     
     NSDictionary* remoteNotification = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
     if (remoteNotification) {
-        self.isLaunchedByNotification = YES;
-    }else{
-        self.isLaunchedByNotification = NO;
+        
     }
 }
 
@@ -298,14 +298,24 @@ API_AVAILABLE(ios(10.0)){
     NSLog(@"》》》》》》》》》iOS10  didReceiveNotificationResponse   userInfo  %@ \n content  %@",userInfo,response.notification.request.content);
     
     [self saveRemoteNotification:userInfo];
-    
-    
+
     if([response.notification.request.trigger isKindOfClass:[UNPushNotificationTrigger class]]) {
         
         NSLog(@"didReceiveNotificationResponse-------1");
-        
-        [self showNotificationAlert:userInfo];
+        //程序关闭状态点击推送消息打开
 
+        if (self.isLaunchedByNotification) {
+            [self showNotificationAlert:userInfo];
+        }
+        else
+        {//前台运行
+            if ([UIApplication sharedApplication].applicationState == UIApplicationStateActive) {
+                [self showNotificationAlert:userInfo];
+            }
+            else{//后台挂起时
+                [self openRemoteNotifyDetail:userInfo];
+            }
+        }
         //应用处于后台时的远程推送接受
         //必须加这句代码
         [UMessage didReceiveRemoteNotification:userInfo];
@@ -315,6 +325,8 @@ API_AVAILABLE(ios(10.0)){
         
         NSLog(@"didReceiveNotificationResponse-------2");
     }
+    
+    
 }
 ///// 用户同意接收通知后，会调用此程序
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken{
@@ -382,6 +394,31 @@ API_AVAILABLE(ios(10.0)){
     
     [userDefault setObject:contentArray forKey:RemoteNotification_KEY];
     [userDefault synchronize];
+}
+
+- (void)openRemoteNotifyDetail:(NSDictionary *)userInfo
+{
+    NSDictionary* apsDic = [userInfo objectForKey:@"aps"];
+    if (apsDic)
+    {
+        NSString* alert = [apsDic objectForKey:@"alert"];
+        if (alert)
+        {
+            NSString* string  = [userInfo objectForKey:alert];
+            if ([string isKindOfClass:[NSString class]]) {
+                NSArray* array = [Utility toArrayOrNSDictionary:string];
+                
+                if ([array isKindOfClass:[NSArray class]] && array.count > 0) {
+                    
+                    NSDictionary* dictionary = [array firstObject];
+                    self.userInfo = dictionary;
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:Show_RemoteNotification object:nil userInfo:self.userInfo];
+                    
+                }
+            }
+        }
+    }
 }
 
 

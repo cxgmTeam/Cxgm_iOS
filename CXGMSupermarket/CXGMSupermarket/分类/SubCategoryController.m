@@ -81,6 +81,9 @@ static CGFloat TopBtnWidth = 60;
     if (self.category) {
         [self findSecondCategory:self.category.id];
     }
+    if (self.categoryId) {
+        [self findSecondCategory:self.categoryId];
+    }
 }
 
 - (void)setupThirdCategory
@@ -113,8 +116,7 @@ static CGFloat TopBtnWidth = 60;
             
             CGFloat width = [self sizeLabelWidth:category.name];
             
-            NSLog(@"with %f",width);
-            
+
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             button.frame = CGRectMake(btnTotalWidth, 0, width, 40);
             [button setTitle:category.name forState:UIControlStateNormal];

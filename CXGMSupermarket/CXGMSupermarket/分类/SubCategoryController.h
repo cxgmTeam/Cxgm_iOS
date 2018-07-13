@@ -10,4 +10,5 @@
 
 @interface SubCategoryController : CustomDetailViewController
 @property(nonatomic,strong)CategoryModel* category;
+@property(nonatomic,strong)NSString* categoryId;
 @end

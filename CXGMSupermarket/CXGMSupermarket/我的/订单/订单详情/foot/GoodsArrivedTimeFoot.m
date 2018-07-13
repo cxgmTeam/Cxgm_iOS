@@ -61,7 +61,7 @@
     }];
     
     _timeLabel = [[UILabel alloc] init];
-    _timeLabel.text = @"今天 8:00-9:45";
+    _timeLabel.text = @"09:00-18:00";
     _timeLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     _timeLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [whiteView addSubview:_timeLabel];

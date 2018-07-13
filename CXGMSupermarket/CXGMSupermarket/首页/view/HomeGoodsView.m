@@ -63,8 +63,10 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         
-        self.categoryNames = @[@"新鲜水果",@"放心蔬菜",@"鲜肉蛋品",@"水产海鲜",
-                               @"粮油副食",@"休闲零食",@"中外名酒",@"美妆百货"];
+        //休闲零食 88  放心蔬菜 102 新鲜水果 113 鲜肉蛋品112 水鲜海产109 粮油副食 105 中外名酒 115 美妆个护106
+        self.categoryNames = @[@[@"新鲜水果",@""],@[@"放心蔬菜",@""],@[@"鲜肉蛋品",@""],@[@"水产海鲜",@""],
+                               @[@"粮油副食",@""],@[@"休闲零食",@""],@[@"中外名酒",@""],@[@"美妆百货",@""]];
+
         
         self.collectionView.backgroundColor = [UIColor clearColor];
         [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -322,7 +324,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     
     if (indexPath.section == 0) {//分类
         CategoryGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryGridCellID forIndexPath:indexPath];
-        [cell setImage:[NSString stringWithFormat:@"homeCategory_%ld",indexPath.item] title:self.categoryNames[indexPath.item]];
+        [cell setImage:[NSString stringWithFormat:@"homeCategory_%ld",indexPath.item] title:[self.categoryNames[indexPath.item] objectAtIndex:0]];
         gridcell = cell;
     }else if (indexPath.section == 1) {
         HomeFeatureViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:HomeFeatureViewCellID forIndexPath:indexPath];
@@ -353,6 +355,9 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         WEAKSELF;
         cell.showGoodsDetail = ^(GoodsModel *model){
             !weakSelf.showGoodsDetailVC?:weakSelf.showGoodsDetailVC(model);
+        };
+        cell.tapAdImageHandler = ^{
+            !weakSelf.showBusinessDetailVC?:weakSelf.showBusinessDetailVC(self.adBannarList[indexPath.item]);
         };
         gridcell = cell;
     }
@@ -431,7 +436,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         return CGSizeMake(ScreenW , 196+12);
     }
     if (indexPath.section == 2 || indexPath.section == 3) {
-        return CGSizeMake(ScreenW, 214);
+        return CGSizeMake(ScreenW, 98+(ScreenW-40)/3.f);
     }
     if (indexPath.section ==4) {
         return CGSizeMake(ScreenW, ScreenW*159/375.f+222);
@@ -483,7 +488,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0) {
-        !_showSubCategoryVC?:_showSubCategoryVC();
+        !_showSubCategoryVC?:_showSubCategoryVC([self.categoryNames[indexPath.item] objectAtIndex:1]);
     }
     if (indexPath.section == 5) {
         GoodsModel* goods = self.hotGoodsList[indexPath.item];

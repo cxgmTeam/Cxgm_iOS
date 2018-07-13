@@ -121,7 +121,7 @@
 @interface AdvertisementModel : JSONModel
 @property (nonatomic,strong)NSString<Optional> * id;
 @property (nonatomic,strong)NSString<Optional> * position;//1 代表轮播图  2 代表下面三个广告位
-@property (nonatomic,strong)NSString<Optional> * type;
+@property (nonatomic,strong)NSString<Optional> * type;    //广告  type 1是网页 2是商品详情
 @property (nonatomic,strong)NSString<Optional> * imageUrl;
 @property (nonatomic,strong)NSString<Optional> * notifyUrl;
 @property (nonatomic,strong)NSString<Optional> * productCode;
@@ -142,6 +142,8 @@
 @property (nonatomic,strong)NSString<Optional> * shopId;
 @property (nonatomic,strong)NSString<Optional> * onShelf;
 @property (nonatomic,strong)NSString<Optional> * motionName;
+@property (nonatomic,strong)NSString<Optional> * urlType;//1是网页 2是商品详情
+@property (nonatomic,strong)NSString<Optional> * productCode;
 @property (nonatomic,strong)NSArray<Optional> * productList;
 
 +(AdBannarModel *)AdBannarModelWithJson:(NSDictionary *)json;
