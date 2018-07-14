@@ -185,6 +185,10 @@
     _topView.hidden = NO;
     
     [self setNoticeLocation];
+    
+    if (_goodsView){
+        [_goodsView requestGoodsList];
+    }
 }
 
 

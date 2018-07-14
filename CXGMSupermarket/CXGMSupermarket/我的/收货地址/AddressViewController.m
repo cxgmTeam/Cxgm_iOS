@@ -379,6 +379,7 @@
                         @"phone": address.phone,
                         @"realName": address.realName,
                         @"isDef": flag == YES?@"1":@"0",
+                        @"yn": address.yn
                         };
     
     WEAKSELF;

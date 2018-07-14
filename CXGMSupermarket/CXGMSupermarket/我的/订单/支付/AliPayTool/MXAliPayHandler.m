@@ -22,23 +22,24 @@
     
     NSDictionary* bizDic = [Utility dictionaryWithJsonString:content];
 
-
+    NSLog(@"jumpToAliPay ... \n\n %@",bizDic);
+    
     //将商品信息赋予AlixPayOrder的成员变量
     Order* order    = [Order new];
     order.app_id    = dict[@"app_id"];// NOTE: app_id设置
     order.method    = dict[@"method"];  // NOTE: 支付接口名称
     order.charset = dict[@"charset"];       // NOTE: 参数编码格式
-    
+    order.notify_url = dict[@"notify_url"];
 
-//    NSString* timeString = [dict[@"timestamp"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-//    NSArray* array = [timeString componentsSeparatedByString:@"+"];
-//    
-//    order.timestamp = [NSString stringWithFormat:@"%@ %@",array[0],array[1]];   // NOTE: 当前时间点
+    NSString* timeString = [dict[@"timestamp"] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    NSArray* array = [timeString componentsSeparatedByString:@"+"];
+    
+    order.timestamp = [NSString stringWithFormat:@"%@ %@",array[0],array[1]];   // NOTE: 当前时间点
     
     
-    NSDateFormatter* formatter = [NSDateFormatter new];
-    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-     order.timestamp = [formatter stringFromDate:[NSDate date]];
+//    NSDateFormatter* formatter = [NSDateFormatter new];
+//    [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+//     order.timestamp = [formatter stringFromDate:[NSDate date]];
     
     NSLog(@"order.timestamp  %@",order.timestamp);
     
@@ -55,39 +56,56 @@
     order.biz_content.product_code      = bizDic[@"product_code"];
     
     //将商品信息拼接成字符串
-//    NSString *orderInfo         = [order orderInfoEncoded:NO];
+    NSString *orderInfo         = [order orderInfoEncoded:NO];
     NSString *orderInfoEncoded  = [order orderInfoEncoded:YES];
 //    NSLog(@"orderSpec = %@",orderInfo);
     
     // NOTE: 获取私钥并将商户信息签名，外部商户的加签过程请务必放在服务端，防止公私钥数据泄露；
     //       需要遵循RSA签名规范，并将签名字符串base64编码和UrlEncode
-//    id<DataSigner> signer = CreateRSADataSigner(MXAlipayPrivateKey);
-//    NSString *signedString = [signer signString:orderInfo];
+    
+    NSString* privateKey = @"MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMKRYdKPzksg6JKDAPpNKKY7ddFCDZGapOVc/vIsd/r623PObxRUaIF88SKyadn1aHxRrv/fclQe5ujlFvDFrSSyQ1AcudYDCQVVdtbq+aYGBIPI/4LV2KkDcCAcaOuvFxRnVINZ+WFdXgS8/JVc3UVZkzPbpJTzD/vnWjrUKZMhAgMBAAECgYBW8GdpkuB3KYlCjk8NiRS00rTegElX2mX8JwW0aLJj71vH72IrD1xzH8UP3/D0d3fstQMhSlLny7caMeOCSpIGnrlIOyrvI4JjXT4sWn5Q7ph6y3241u32mXY4hpFGLeJMpaOsCUeVdfxWItjZRMzvfYb3nBDodQMQ44SQkzs3kQJBAPxz7y3Qtlmmv+NrlhCoPYzSmU+Fy4l19dkQBUE/bxVbzB81kzsjO82yg4aDhfbHG9j9AlEWx2beFIJnyHNAuDcCQQDFTTy8zxZfsXLNVOqvokJHztb2cjrgfC2X2kzjZhReWhWdIAHgNlq70ZVubi8inT2WWad2IM2rtIcADU0jt7NnAkEA3HMswHhKVD1NwX04fPE9VlStNgki9LWCavsXa6PGEAOqWvKA0BpzZatmOTdu61FxmulNdZwLomN5y2pvW11/vwJANtJpSAU6sEg8H/WyaC7rv8wnSr8ewPWALauIpb7ddgIN82TLYKN5vqpTnSWcjz+ltzseHuKqg0VcJZWMk5odjQJACza4jfqjefaMY4ieFX7/b1hQEOO/O/IPi0LEQItQpcFD0EgxikYQfnS1IG38rmc7ELuv0XPL91mH6zp0Il5FJA==";
+
+    
+    id<DataSigner> signer = CreateRSADataSigner(privateKey);
+    NSString *signedString = [signer signString:orderInfo];
     
     // NOTE: 如果加签成功，则继续执行支付
-//    if (signedString != nil)
+    if (signedString != nil)
     {
         //应用注册scheme,在AliSDKDemo-Info.plist定义URL types
-        NSString *appScheme = @"CaiXianGuoMei";
+        NSString *appScheme = @"app1394406457";
         
         // NOTE: 将签名成功字符串格式化为订单字符串,请严格按照该格式
-        NSString *orderString = [NSString stringWithFormat:@"%@&sign=%@",
-                                 orderInfoEncoded, dict[@"sign"]];
+//        NSString *orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"", orderInfoEncoded, dict[@"sign"]];
         
+
+        NSString *orderString = [NSString stringWithFormat:@"%@&sign=\"%@\"&sign_type=\"%@\"",orderInfo, dict[@"sign"], dict[@"sign_type"]];
         
-        NSLog(@"orderString=====\n\n %@",orderString);
+        NSLog(@"orderString=====\n\n %@ \n\n",orderString);
         
         // NOTE: 调用支付结果开始支付
         [[AlipaySDK defaultService] payOrder:orderString fromScheme:appScheme callback:^(NSDictionary *resultDic) {
+            
             NSLog(@"reslut = %@",resultDic);
-            
-            
+            if ([resultDic[@"resultStatus"] intValue]==9000) {
+                //进入充值列表页面
+                NSLog(@"支付成功");
+                
+            }
+            else{
+                NSString *resultMes = resultDic[@"memo"];
+                resultMes = (resultMes.length<=0?@"支付失败":resultMes);
+                NSLog(@"%@",resultMes);
+            }
             
             
             
         }];
     }
 }
+
+
+
 
 #pragma mark - Private Method
 

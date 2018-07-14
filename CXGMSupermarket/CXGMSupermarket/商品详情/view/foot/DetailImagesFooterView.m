@@ -40,7 +40,7 @@
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
-    [webView evaluateJavaScript:@"adjustImagePosition()" completionHandler:nil];
+
 }
 
 - (void)setUpUI

@@ -64,6 +64,8 @@
     
     WEAKSELF
     self.myTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self.myTableView.mj_header endRefreshing];
+        
         weakSelf.pageNum = 1;
         [weakSelf.dataArray removeAllObjects];
         
@@ -73,6 +75,8 @@
     }];
     
     self.myTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        [self.myTableView.mj_footer endRefreshing];
+        
         weakSelf.pageNum ++;
         [weakSelf getShopCartList];
     }];
@@ -110,16 +114,11 @@
             
             if (array.count == 0) {
                 [weakSelf.myTableView.mj_footer endRefreshingWithNoMoreData];
-            }else{
-                [weakSelf.myTableView.mj_footer endRefreshing];
             }
-        }else{
-            [weakSelf.myTableView.mj_footer endRefreshing];
         }
         [self.myTableView.mj_header endRefreshing];
     } failure:^(id JSON, NSError *error){
-        [weakSelf.myTableView.mj_header endRefreshing];
-        [weakSelf.myTableView.mj_footer endRefreshing];
+
     }];
 }
 

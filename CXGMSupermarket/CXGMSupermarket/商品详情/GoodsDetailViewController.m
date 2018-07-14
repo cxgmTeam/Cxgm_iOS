@@ -268,13 +268,14 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 
 - (void)updateCart:(GoodsModel *)goods
 {
-    CGFloat amount = self.number*[goods.price floatValue];
+    NSInteger total = [self.goodsDetail.shopCartNum intValue]+self.number;
+    CGFloat amount =  total*[goods.price floatValue];
     
     NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
                           @"amount":[NSString stringWithFormat:@"%.2f",amount],
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
-                          @"goodNum":[NSString stringWithFormat:@"%ld",self.number],
+                          @"goodNum":[NSString stringWithFormat:@"%ld",total],
                           @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
                           @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
                           @"productId":goods.id.length>0?goods.id:@""
@@ -678,7 +679,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
     [webView evaluateJavaScript: @"document.body.scrollHeight" completionHandler:^(NSString *string, NSError * error){
-         self.webViewHeight = [string intValue];
+         self.webViewHeight = [string intValue]+10;
         
         [self.collectionView reloadData];
         

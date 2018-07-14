@@ -184,6 +184,7 @@
 @property(nonatomic,strong)NSString<Optional> * phone;
 @property(nonatomic,strong)NSString<Optional> * realName;
 @property(nonatomic,strong)NSString<Optional> * isDef;//是否为默认地址
+@property(nonatomic,strong)NSString<Optional> * yn;//是否要保留
 @property(nonatomic,strong)NSString<Optional> * inScope;//是否在配送范围
 @end
 

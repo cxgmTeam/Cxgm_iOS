@@ -131,6 +131,8 @@
         if (  [model.data isKindOfClass:[NSDictionary class]]) {
             
             [UserInfoManager sharedInstance].userInfo = [[UserInfo alloc] initWithDictionary:(NSDictionary *)model.data error:nil];
+            
+            NSLog(@"[UserInfoManager sharedInstance].userInfo %@",[UserInfoManager sharedInstance].userInfo);
             [[UserInfoManager sharedInstance] saveUserInfo:(NSDictionary *)model.data];
             
             dispatch_async(dispatch_get_main_queue(), ^{
