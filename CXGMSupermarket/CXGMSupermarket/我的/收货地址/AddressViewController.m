@@ -294,6 +294,11 @@
             MapViewController* vc = [MapViewController new];
             [self.navigationController pushViewController:vc animated:YES];
         }
+        
+        if (self.needNewAddress && indexPath.section == 1 && indexPath.row == 0) {
+            self.needNewAddress = NO;
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }
 
 }
