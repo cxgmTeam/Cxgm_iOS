@@ -57,7 +57,7 @@
     
     
     self.priceLabel.text = [NSString stringWithFormat:@"¥ %.2f",[goods.price floatValue]];
-    if ([goods.price floatValue] != [goods.originalPrice floatValue] && [goods.originalPrice floatValue] > 0)
+    if ([goods.originalPrice floatValue] > 0)
     {
         _oldPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goods.originalPrice floatValue]];
         

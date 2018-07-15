@@ -268,7 +268,7 @@
         make.bottom.mas_equalTo(self.goodPriceLabel);
     }];
     
-    if ([self.goods.price floatValue] != [self.goods.originalPrice floatValue] && [self.goods.originalPrice floatValue]>0) {
+    if ([self.goods.originalPrice floatValue]>0) {
         NSUInteger length = [_oldPriceLabel.text length];
         NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:_oldPriceLabel.text];
         [attri addAttribute:NSStrikethroughStyleAttributeName value:@(NSUnderlinePatternSolid | NSUnderlineStyleSingle) range:NSMakeRange(0, length)];

@@ -44,7 +44,7 @@
     _goodPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goods.price floatValue]];
     _unitLabel.text = [NSString stringWithFormat:@"/%@",goods.unit];
     
-    if ([goods.price floatValue] != [goods.originalPrice floatValue] && [goods.originalPrice floatValue]>0) {
+    if ([goods.originalPrice floatValue]>0) {
         _oldPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goods.originalPrice floatValue]];
         
         NSUInteger length = [_oldPriceLabel.text length];

@@ -32,7 +32,7 @@
     _nameLabel.text = goodsModel.name;
     _priceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goodsModel.price floatValue]];
     
-    if ([goodsModel.price floatValue] != [goodsModel.originalPrice floatValue] && [goodsModel.originalPrice floatValue] > 0)
+    if ([goodsModel.originalPrice floatValue] > 0)
     {
         _oldPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goodsModel.originalPrice floatValue]];
         
