@@ -62,6 +62,7 @@
 		775D358020B3B3D40047F9EE /* MessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D357F20B3B3D40047F9EE /* MessageViewController.m */; };
 		775D358320B3B5740047F9EE /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D358220B3B5740047F9EE /* MessageTableViewCell.m */; };
 		775D358820B444080047F9EE /* PaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D358720B444080047F9EE /* PaymentViewController.m */; };
+		7762AD8D20FAF81600117FAD /* EmptyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7762AD8C20FAF81600117FAD /* EmptyView.m */; };
 		7765066720B9180700B8B0EB /* MidAdGoodsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765066620B9180700B8B0EB /* MidAdGoodsViewCell.m */; };
 		7765066A20B944B100B8B0EB /* SelectTimeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765066920B944B100B8B0EB /* SelectTimeController.m */; };
 		7765067120B948C500B8B0EB /* SelectSpecificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765067020B948C500B8B0EB /* SelectSpecificationController.m */; };
@@ -320,7 +321,6 @@
 		BE9769EA2072505C00783217 /* UIView+MJExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9769D62072505C00783217 /* UIView+MJExtension.m */; };
 		BE9769F1207251FE00783217 /* CustomViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9769F0207251FE00783217 /* CustomViewController.m */; };
 		BE9769F42072521300783217 /* CustomDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BE9769F32072521300783217 /* CustomDetailViewController.m */; };
-		BEC90F7F207F0DC400B5E609 /* ShoppingCartCollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC90F7E207F0DC400B5E609 /* ShoppingCartCollectionCell.m */; };
 		BEC90F94207F809700B5E609 /* LZCartTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BEC90F83207F809600B5E609 /* LZCartTableViewCell.m */; };
 		BEC90F99207F809700B5E609 /* cart_addBtn_nomal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEC90F8E207F809700B5E609 /* cart_addBtn_nomal@2x.png */; };
 		BEC90F9B207F809700B5E609 /* cart_cutBtn_nomal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BEC90F90207F809700B5E609 /* cart_cutBtn_nomal@2x.png */; };
@@ -449,6 +449,8 @@
 		775D358220B3B5740047F9EE /* MessageTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MessageTableViewCell.m; sourceTree = "<group>"; };
 		775D358620B444080047F9EE /* PaymentViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaymentViewController.h; sourceTree = "<group>"; };
 		775D358720B444080047F9EE /* PaymentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaymentViewController.m; sourceTree = "<group>"; };
+		7762AD8B20FAF81600117FAD /* EmptyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmptyView.h; sourceTree = "<group>"; };
+		7762AD8C20FAF81600117FAD /* EmptyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmptyView.m; sourceTree = "<group>"; };
 		7765066520B9180700B8B0EB /* MidAdGoodsViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MidAdGoodsViewCell.h; sourceTree = "<group>"; };
 		7765066620B9180700B8B0EB /* MidAdGoodsViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MidAdGoodsViewCell.m; sourceTree = "<group>"; };
 		7765066820B944B100B8B0EB /* SelectTimeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelectTimeController.h; sourceTree = "<group>"; };
@@ -1013,8 +1015,6 @@
 		BE9769F22072521300783217 /* CustomDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomDetailViewController.h; sourceTree = "<group>"; };
 		BE9769F32072521300783217 /* CustomDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomDetailViewController.m; sourceTree = "<group>"; };
 		BE9769F62072533700783217 /* APIHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIHeader.h; sourceTree = "<group>"; };
-		BEC90F7D207F0DC400B5E609 /* ShoppingCartCollectionCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShoppingCartCollectionCell.h; sourceTree = "<group>"; };
-		BEC90F7E207F0DC400B5E609 /* ShoppingCartCollectionCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShoppingCartCollectionCell.m; sourceTree = "<group>"; };
 		BEC90F82207F809600B5E609 /* LZCartTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZCartTableViewCell.h; sourceTree = "<group>"; };
 		BEC90F83207F809600B5E609 /* LZCartTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LZCartTableViewCell.m; sourceTree = "<group>"; };
 		BEC90F85207F809700B5E609 /* LZConfigFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LZConfigFile.h; sourceTree = "<group>"; };
@@ -2733,8 +2733,8 @@
 		BEC90F73207EEEA600B5E609 /* CustomView */ = {
 			isa = PBXGroup;
 			children = (
-				BEC90F7D207F0DC400B5E609 /* ShoppingCartCollectionCell.h */,
-				BEC90F7E207F0DC400B5E609 /* ShoppingCartCollectionCell.m */,
+				7762AD8B20FAF81600117FAD /* EmptyView.h */,
+				7762AD8C20FAF81600117FAD /* EmptyView.m */,
 			);
 			path = CustomView;
 			sourceTree = "<group>";
@@ -3072,6 +3072,7 @@
 				77F83A992070E8CE004E9717 /* View+MASAdditions.m in Sources */,
 				7703559720995F9F002B3A8D /* BillPageFootView.m in Sources */,
 				774813902071CF17002DDF93 /* CutomNavigationController.m in Sources */,
+				7762AD8D20FAF81600117FAD /* EmptyView.m in Sources */,
 				7737987220A86D750050187D /* AnotherCartViewController.m in Sources */,
 				77B33AF020E267BF00B4611E /* APAuthV2Info.m in Sources */,
 				779C955E209B0A7C0029A591 /* HomeShopsView.m in Sources */,
@@ -3156,7 +3157,6 @@
 				77F83A8B2070E8CE004E9717 /* JSONModelError.m in Sources */,
 				77DD80A5208355A000A1D080 /* DCLIRLButton.m in Sources */,
 				77F83AAF2070E8CE004E9717 /* SDWebImageTransition.m in Sources */,
-				BEC90F7F207F0DC400B5E609 /* ShoppingCartCollectionCell.m in Sources */,
 				774C47E420A99D2A009B129F /* WGS84TOGCJ02.m in Sources */,
 				77F83A8A2070E8CE004E9717 /* JSONModelClassProperty.m in Sources */,
 				7754862820F333E300CFBE52 /* WebViewController.m in Sources */,

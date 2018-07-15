@@ -21,6 +21,7 @@
 #import "IQKeyboardManager.h"
 
 #import "AnotherCartViewController.h"
+#import "EmptyView.h"
 
 @interface SearchViewController ()<UITextFieldDelegate,UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,CartBadgeDelegate>
 @property (strong,nonatomic)UICollectionView *collectionView;
@@ -31,6 +32,8 @@
 @property (nonatomic,assign)BOOL showSearchResult;
 
 @property (strong , nonatomic)CartBadgeView* cartBtn;
+
+@property (strong , nonatomic)EmptyView* emptyView;
 @end
 
 /* cell */
@@ -52,6 +55,17 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
     }];
+    
+    _emptyView = [EmptyView new];
+    _emptyView.imageView.image = [UIImage imageNamed:@"search_empty"];
+    _emptyView.textLabel.text = @"没有查找到您想要的商品~";
+    [self.view addSubview:_emptyView];
+    [_emptyView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.center.equalTo(self.view);
+        make.size.equalTo(CGSizeMake(249, 249));
+    }];
+    _emptyView.hidden = YES;
+    
     
     _cartBtn = [CartBadgeView new];
     _cartBtn.delegate = self;
@@ -117,17 +131,22 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
                           @"goodName":key
                           };
     
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APISearch] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
             self.resultArray = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
             self.showSearchResult = YES;
             [self.collectionView reloadData];
+            
+            self.emptyView.hidden = self.resultArray.count>0?YES:NO;
         }
         
     } failure:^(id JSON, NSError *error){
-        
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
 

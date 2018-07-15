@@ -83,6 +83,12 @@
     }
     self.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
     self.selectedLabel.text = [NSString stringWithFormat:@"已选：%ld份",count];
+    
+    if ([self.goods.shopCartNum integerValue] == 0) {
+        [self addGoodsToCart:self.goods];
+    }else{
+        [self updateCart:self.goods number:([self.goods.shopCartNum integerValue]+1)];
+    }
 }
 
 - (void)cutBtnClick:(UIButton*)button {
@@ -93,15 +99,94 @@
     }
     self.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
     self.selectedLabel.text = [NSString stringWithFormat:@"已选：%ld份",count];
+    
+    [self updateCart:self.goods number:([self.goods.shopCartNum integerValue]-1)];
 }
 
 - (void)onTapConfirmBtn:(UIButton *)button
 {
     NSInteger count = [self.numberLabel.text integerValue];
-    !_selectFinished?:_selectFinished(count);
     
+    if ([self.goods.shopCartNum intValue] == 0) {
+        [self addGoodsToCart:self.goods];
+    }else{
+        
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wundeclared-selector"
+        if (self.delegate && [self.delegate respondsToSelector:@selector(showShopCart)]) {
+            [self.delegate performSelector:@selector(showShopCart)];
+        }
+#pragma clang diagnostic pop
+    }
+    !_selectFinished?:_selectFinished(count);
     [self dismissViewControllerAnimated:YES completion:nil];
 }
+
+#pragma mark-
+- (void)addGoodsToCart:(GoodsModel *)goods
+{
+    NSDictionary* dic = @{
+                          @"id":goods.id.length>0?goods.id:@"",
+                          @"amount":goods.price,
+                          @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
+                          @"goodName":goods.name.length>0?goods.name:@"",
+                          @"goodNum":@"1",
+                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
+                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
+                          @"productId":goods.id.length>0?goods.id:@"",
+                          };
+    
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+        if ([model.code intValue] == 200) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.goods.shopCartNum = @"1";
+                self.goods.shopCartId = [NSString stringWithFormat:@"%@",model.data];
+                
+                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功"];
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
+            });
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+- (void)updateCart:(GoodsModel *)goods number:(NSInteger)number
+{
+    CGFloat amount =  number*[goods.price floatValue];
+    
+    NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
+                          @"amount":[NSString stringWithFormat:@"%.2f",amount],
+                          @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
+                          @"goodName":goods.name.length>0?goods.name:@"",
+                          @"goodNum":[NSString stringWithFormat:@"%ld",number],
+                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
+                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
+                          @"productId":goods.id.length>0?goods.id:@""
+                          };
+    
+    
+    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+        if ([model.code intValue] == 200) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+
+                self.goods.shopCartNum = [NSString stringWithFormat:@"%ld",number];
+                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"更新购物车成功"];
+
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
+            });
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
 
 #pragma mark- init
 -  (void)setupUI
@@ -198,7 +283,7 @@
     if ([self.goods.shopCartNum integerValue] > 0) {
         _selectedLabel.text = [NSString stringWithFormat:@"已选：%@份",self.goods.shopCartNum];
     }else{
-        _selectedLabel.text = [NSString stringWithFormat:@"已选：%ld份",self.number];
+        _selectedLabel.text = @"已选：1份";
     }
     _selectedLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
     _selectedLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
@@ -210,7 +295,6 @@
     
     
     _specificationLabel = [[UILabel alloc] init];
-    _specificationLabel.text = [NSString stringWithFormat:@"规格：%@g/%@",self.goods.weight.length>0?self.goods.weight:@"0.0",self.goods.unit];
     _specificationLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
     _specificationLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [contentView addSubview:_specificationLabel];
@@ -218,6 +302,23 @@
         make.top.mas_equalTo(topBg.bottom).offset(14);
         make.left.mas_equalTo(self.iconView);
     }];
+    
+    if ([self.goods.weight length] > 0 && [self.goods.unit length] > 0) {
+        if (![self.goods.weight isEqualToString:self.goods.unit]) {
+            _specificationLabel.text = [NSString stringWithFormat:@"规格：%@/%@",self.goods.weight.length>0?self.goods.weight:@"0.0",self.goods.unit];
+        }else{
+            _specificationLabel.text = [NSString stringWithFormat:@"规格：%@",self.goods.weight];
+        }
+    }
+    else if ([self.goods.weight length] > 0 ){
+        _specificationLabel.text = [NSString stringWithFormat:@"规格：%@",self.goods.weight];
+    }
+    else if ([self.goods.unit length] > 0 ){
+        _specificationLabel.text = [NSString stringWithFormat:@"规格：%@",self.goods.unit];
+    }
+    else{
+        _specificationLabel.text = @"规格：";
+    }
     
     
     UILabel *label = [[UILabel alloc] init];

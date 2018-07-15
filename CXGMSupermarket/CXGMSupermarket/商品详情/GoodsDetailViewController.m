@@ -233,73 +233,73 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 }
 
 
-- (void)addGoodsToCart:(GoodsModel *)goods
-{
-    CGFloat amount = [goods.price floatValue]*self.number;
-    
-    NSDictionary* dic = @{
-                          @"id":goods.id.length>0?goods.id:@"",
-                          @"amount":[NSString stringWithFormat:@"%.2f",amount],
-                          @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
-                          @"goodName":goods.name.length>0?goods.name:@"",
-                          @"goodNum":[NSString stringWithFormat:@"%ld",(long)self.number],
-                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
-                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
-                          @"productId":goods.id.length>0?goods.id:@"",
-                          };
-
-    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
-        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
-        if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)self.number];
-                self.goodsDetail.shopCartId = [NSString stringWithFormat:@"%@",model.data];
-                
-                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
-            
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
-            });
-        }
-        
-    } failure:^(id JSON, NSError *error){
-        
-    }];
-}
-
-- (void)updateCart:(GoodsModel *)goods
-{
-    NSInteger total = [self.goodsDetail.shopCartNum intValue]+self.number;
-    CGFloat amount =  total*[goods.price floatValue];
-    
-    NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
-                          @"amount":[NSString stringWithFormat:@"%.2f",amount],
-                          @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
-                          @"goodName":goods.name.length>0?goods.name:@"",
-                          @"goodNum":[NSString stringWithFormat:@"%ld",total],
-                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
-                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
-                          @"productId":goods.id.length>0?goods.id:@""
-                          };
-    
-
-    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
-        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
-        if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
-                [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
-                
-                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)self.number];
-                
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
-            });
-        }
-        
-    } failure:^(id JSON, NSError *error){
-        
-    }];
-}
+//- (void)addGoodsToCart:(GoodsModel *)goods
+//{
+//    CGFloat amount = [goods.price floatValue]*self.number;
+//    
+//    NSDictionary* dic = @{
+//                          @"id":goods.id.length>0?goods.id:@"",
+//                          @"amount":[NSString stringWithFormat:@"%.2f",amount],
+//                          @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
+//                          @"goodName":goods.name.length>0?goods.name:@"",
+//                          @"goodNum":[NSString stringWithFormat:@"%ld",(long)self.number],
+//                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
+//                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
+//                          @"productId":goods.id.length>0?goods.id:@"",
+//                          };
+//
+//    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+//        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+//        if ([model.code intValue] == 200) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)self.number];
+//                self.goodsDetail.shopCartId = [NSString stringWithFormat:@"%@",model.data];
+//                
+//                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
+//            
+//                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
+//            });
+//        }
+//        
+//    } failure:^(id JSON, NSError *error){
+//        
+//    }];
+//}
+//
+//- (void)updateCart:(GoodsModel *)goods
+//{
+//    NSInteger total = [self.goodsDetail.shopCartNum intValue]+self.number;
+//    CGFloat amount =  total*[goods.price floatValue];
+//    
+//    NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
+//                          @"amount":[NSString stringWithFormat:@"%.2f",amount],
+//                          @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
+//                          @"goodName":goods.name.length>0?goods.name:@"",
+//                          @"goodNum":[NSString stringWithFormat:@"%ld",total],
+//                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
+//                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
+//                          @"productId":goods.id.length>0?goods.id:@""
+//                          };
+//    
+//
+//    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
+//        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+//        if ([model.code intValue] == 200) {
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+//                [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
+//                
+//                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)self.number];
+//                
+//                
+//                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
+//            });
+//        }
+//        
+//    } failure:^(id JSON, NSError *error){
+//        
+//    }];
+//}
 
 #pragma mark - <UICollectionViewDataSource>
 - (UIColor *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout colorForSectionAtIndex:(NSInteger)section{
@@ -559,26 +559,28 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         return;
     }
     SelectSpecificationController* vc = [SelectSpecificationController new];
+    vc.delegate = self;
     vc.goods = self.goodsDetail;
-    vc.number = self.number;
-    
-    typeof(self) __weak wself = self;
+
     vc.selectFinished = ^(NSInteger number){
-        self.number = number;
-        
-        self.topFootview.leftTitleLable.text = [NSString stringWithFormat:@"已添加   %ld份",(long)self.number];
-        
-        if ([self.goodsDetail.shopCartNum intValue] > 0) {
-            [wself updateCart:self.goodsDetail];
+ 
+        self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];
+        if (number == 0) {
+            self.topFootview.leftTitleLable.text = @"请选择 规格";
         }else{
-            [wself addGoodsToCart:self.goodsDetail];
+            self.topFootview.leftTitleLable.text = [NSString stringWithFormat:@"已添加   %ld份",(long)self.number];
         }
-        
     };
     vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
     
     UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
     [controller presentViewController:vc animated:YES completion:nil];
+}
+
+- (void)showShopCart
+{
+    AnotherCartViewController* vc = [AnotherCartViewController new];
+    [self.navigationController pushViewController:vc animated:YES];
 }
 
 #pragma mark- init
@@ -598,8 +600,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                 [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
                 return ;
             }
-            AnotherCartViewController* vc = [AnotherCartViewController new];
-            [weakSelf.navigationController pushViewController:vc animated:YES];
+//            AnotherCartViewController* vc = [AnotherCartViewController new];
+//            [weakSelf.navigationController pushViewController:vc animated:YES];
         };
         [self.view addSubview:_topToolView];
     }

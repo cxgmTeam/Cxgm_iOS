@@ -17,6 +17,7 @@
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)NSMutableArray *listArray;
 @property (assign , nonatomic)NSInteger pageNum;
+
 @end
 
 static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
@@ -36,11 +37,15 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     }];
     typeof(self) __weak wself = self;
     self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self.collectionView.mj_footer endRefreshing];
+        
         self.pageNum = 1;
         [self.listArray removeAllObjects];
         [wself getOrderList];
     }];
     self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+        [self.collectionView.mj_footer endRefreshing];
+        
         self.pageNum ++;
         [wself getOrderList];
     }];
@@ -79,15 +84,12 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
         }
         if ([model.listModel.isLastPage boolValue]) {
             [self.collectionView.mj_footer endRefreshingWithNoMoreData];
-        }else{
-            [self.collectionView.mj_footer endRefreshing];
         }
         
         [self.collectionView.mj_header endRefreshing];
     } failure:^(id JSON, NSError *error){
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [self.collectionView.mj_header endRefreshing];
-        [self.collectionView.mj_footer endRefreshing];
+        
     }];
 }
 

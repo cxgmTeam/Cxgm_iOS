@@ -398,8 +398,13 @@
             
             
             [self.dataArray removeObjectAtIndex:indexPath.row];
-            //    删除
-            [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            
+            if (self.dataArray.count > 0) {
+                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            }else{
+                [tableView reloadData];
+            }
+            
             
             //判断删除的商品是否已选择
             if ([self.selectedArray containsObject:model]) {

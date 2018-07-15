@@ -75,11 +75,12 @@
     
     
     _goodSubtitleLabel = [[UILabel alloc] init];
+    _goodSubtitleLabel.numberOfLines = 2;
     _goodSubtitleLabel.text = @"果实饱满 富含青花素 香甜可口";
     _goodSubtitleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];
     _goodSubtitleLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
     [self addSubview:_goodSubtitleLabel];
-    _goodSubtitleLabel.backgroundColor = [UIColor redColor];
+
     
     _goodPriceLabel = [[UILabel alloc] init];
     _goodPriceLabel.text = @"￥19.90";
