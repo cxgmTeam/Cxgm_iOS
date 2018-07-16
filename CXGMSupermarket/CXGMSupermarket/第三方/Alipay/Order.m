@@ -100,13 +100,24 @@
     return nil;
 }
 
+//- (NSString*)encodeValue:(NSString*)value
+//{
+//    NSString* encodedValue = value;
+//    if (value.length > 0) {
+//        encodedValue = (__bridge_transfer  NSString*)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (__bridge CFStringRef)value, NULL, (__bridge CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8 );
+//    }
+//    return encodedValue;
+//}
+
 - (NSString*)encodeValue:(NSString*)value
 {
     NSString* encodedValue = value;
     if (value.length > 0) {
-        encodedValue = (__bridge_transfer  NSString*)CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault, (__bridge CFStringRef)value, NULL, (__bridge CFStringRef)@"!*'();:@&=+$,/?%#[]", kCFStringEncodingUTF8 );
+        NSCharacterSet *charset = [[NSCharacterSet characterSetWithCharactersInString:@"!*'();:@&=+$,/?%#[]"]invertedSet];
+        encodedValue = [value stringByAddingPercentEncodingWithAllowedCharacters:charset];
     }
     return encodedValue;
 }
+
 
 @end

@@ -45,18 +45,12 @@
                 self.paySuccess = NO;
                 break;
         }
-//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:strTitle message:strMsg delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-//        [alert show];
         [[NSNotificationCenter defaultCenter] postNotificationName:Show_PayResult object:nil userInfo:@{@"paySuccess":[NSNumber numberWithBool:self.paySuccess]}];
     }else {
         
     }
 }
 
-//- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-//
-//    [[NSNotificationCenter defaultCenter] postNotificationName:Show_PayResult object:nil userInfo:@{@"paySuccess":[NSNumber numberWithBool:self.paySuccess]}];
-//}
 
 - (void)onReq:(BaseReq *)req {
     

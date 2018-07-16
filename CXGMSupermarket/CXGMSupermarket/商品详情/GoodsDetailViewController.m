@@ -540,8 +540,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                 [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
                 return ;
             }
-//            AnotherCartViewController* vc = [AnotherCartViewController new];
-//            [weakSelf.navigationController pushViewController:vc animated:YES];
+            AnotherCartViewController* vc = [AnotherCartViewController new];
+            [weakSelf.navigationController pushViewController:vc animated:YES];
         };
         [self.view addSubview:_topToolView];
     }

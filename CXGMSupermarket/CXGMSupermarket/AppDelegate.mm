@@ -477,8 +477,25 @@ API_AVAILABLE(ios(10.0)){
     if ([url.host isEqualToString:@"safepay"]) {
         
         // 支付跳转支付宝钱包进行支付，处理支付结果
+        __block BOOL paySuccess = NO;
         [[AlipaySDK defaultService] processOrderWithPaymentResult:url standbyCallback:^(NSDictionary *resultDic) {
             NSLog(@"result = %@",resultDic);
+            
+            if ([resultDic[@"resultStatus"] intValue]==9000) {
+                //进入充值列表页面
+                NSLog(@"支付成功");
+                
+                paySuccess = YES;
+                
+            }
+            else{
+                NSString *resultMes = resultDic[@"memo"];
+                resultMes = (resultMes.length<=0?@"支付失败":resultMes);
+                NSLog(@"%@",resultMes);
+                
+                paySuccess = NO;
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:Show_PayResult object:nil userInfo:@{@"paySuccess":[NSNumber numberWithBool:paySuccess]}];
         }];
         return YES;
     }

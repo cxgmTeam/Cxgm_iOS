@@ -15,6 +15,7 @@
 
 #import "PayResultViewController.h"
 
+#import "MXAlipayConfig.h"
 
 @interface PaymentViewController ()
 
@@ -66,6 +67,10 @@
 
 - (void)showPayResult:(NSNotification *)notify
 {
+    
+    NSLog(@"%s",__func__);
+    
+    
     NSDictionary* dic = [notify userInfo];
     
     PayResultViewController* vc = [PayResultViewController new];
@@ -201,20 +206,7 @@
         
         NSString* string = (NSString *)JSON;
         
-        NSArray* array = [string componentsSeparatedByString:@"&"];
-        NSMutableDictionary* dic = [NSMutableDictionary dictionary];
-        
-        for (NSInteger i =0 ; i < array.count ; i++) {
-            NSString * subStr = array[i];
-            NSArray* subArr = [subStr componentsSeparatedByString:@"="];
-            if (subArr.count > 1) {
-                [dic setObject:subArr[1] forKey:subArr[0]];
-            }
-            
-            if (i == array.count-1) {
-                [wself doAlipayPay:dic];
-            }
-        }
+        [wself doAlipayPay:string];
 
     } failure:^(id JSON, NSError *error){
         
@@ -222,9 +214,9 @@
 }
 
 
--(void)doAlipayPay:(NSDictionary *)dict
+-(void)doAlipayPay:(NSString *)string
 {
-    [MXAliPayHandler jumpToAliPay:dict];
+    [MXAliPayHandler jumpToAliPay:string];
 }
 
 

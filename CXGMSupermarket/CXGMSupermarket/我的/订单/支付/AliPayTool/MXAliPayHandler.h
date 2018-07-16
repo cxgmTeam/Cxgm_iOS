@@ -10,6 +10,6 @@
 
 @interface MXAliPayHandler : NSObject
 //调起支付
-+ (void)jumpToAliPay:(NSDictionary *)dict;
++ (void)jumpToAliPay:(NSString *)string;
 
 @end

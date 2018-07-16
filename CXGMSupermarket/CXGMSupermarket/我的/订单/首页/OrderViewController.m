@@ -8,7 +8,7 @@
 
 #import "OrderViewController.h"
 #import "OrderListViewController.h"
-#import "EmptyView.h"
+
 
 @interface OrderViewController ()<UIScrollViewDelegate>
 @property(nonatomic,strong)UIScrollView* menuView;
@@ -18,7 +18,6 @@
 @property(nonatomic,assign)CGFloat redLineWidth;
 @property(nonatomic,strong)UIScrollView* scrollView;
 
-@property(nonatomic,strong)UIView* emptyView;
 
 @end
 
@@ -111,14 +110,6 @@
         [self addChildViewController:vc];
     }
     
-    [self.view addSubview:self.emptyView];
-    [self.emptyView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.edges.equalTo(self.view);
-    }];
-    self.emptyView.hidden = YES;
-    
-    
-    
     //定位页面
     UIButton *button = _menuView.subviews[self.pageIndex];
     [button sendActionsForControlEvents:UIControlEventTouchUpInside];
@@ -126,31 +117,8 @@
     [_redLine mas_updateConstraints:^(MASConstraintMaker *make){
         make.left.equalTo(button.tag*self.btnWidth+(self.btnWidth-self.redLineWidth)/2.f);
     }];
-
-    [self getOrderList];
 }
 
-
-- (void)getOrderList
-{
-    NSDictionary* dic = @{@"status":@"",
-                          @"pageNum":@"0",
-                          @"pageSize":@"10"
-                          };
-    
-    
-    [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIOrderList] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
-        
-        DataModel* model = [DataModel dataModelWith:JSON];
-        if ([model.listModel.list isKindOfClass:[NSArray class]]) {
-            NSArray* array = (NSArray *)model.listModel.list;
-            self.emptyView.hidden = array.count>0? YES:NO;
-        }
-        
-    } failure:^(id JSON, NSError *error){
-
-    }];
-}
 
 - (void)clickButton:(UIButton *)button
 {
@@ -209,22 +177,6 @@
     if (_scrollView.contentOffset.x < -50) {
         [self.navigationController popViewControllerAnimated:YES];
     }
-}
-
-- (UIView *)emptyView{
-    if (!_emptyView) {
-        _emptyView = [UIView new];
-        _emptyView.backgroundColor = [UIColor colorWithHexString:@"f2f3f4"];
-        EmptyView* view = [EmptyView new];
-        view.imageView.image = [UIImage imageNamed:@"order_empty"];
-        view.textLabel.text = @"您还没有订单信息~";
-        [_emptyView addSubview:view];
-        [view mas_makeConstraints:^(MASConstraintMaker *make){
-            make.center.equalTo(self.emptyView);
-            make.size.equalTo(CGSizeMake(214, 220));
-        }];
-    }
-    return _emptyView;
 }
 
 @end
