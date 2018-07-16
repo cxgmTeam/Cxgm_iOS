@@ -145,7 +145,7 @@
                 
                 [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功"];
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goods.sn,@"shopCartNum": self.goods.shopCartNum}];
             });
         }
         
@@ -178,7 +178,7 @@
                 [MBProgressHUD MBProgressHUDWithView:self.view Str:@"更新购物车成功"];
 
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goods.sn,@"shopCartNum": self.goods.shopCartNum}];
             });
         }
         

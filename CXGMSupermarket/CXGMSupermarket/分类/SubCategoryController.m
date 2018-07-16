@@ -35,6 +35,11 @@
 @property(nonatomic,strong)NSArray* goodsList;
 @property(nonatomic,strong)NSMutableDictionary* dictionary;//三级分类作key  对应的Goods数组作value
 
+
+@property(nonatomic,strong)NSURLSessionDataTask * secondCategoryTask;
+@property(nonatomic,strong)NSURLSessionDataTask * thirdCategoryTask;
+@property(nonatomic,strong)NSURLSessionDataTask * findProductTask;
+
 @property(nonatomic,strong)CategoryModel* secondCategory;
 @end
 
@@ -193,7 +198,9 @@ static CGFloat TopBtnWidth = 60;
     }
     
     typeof(self) __weak wself = self;
-    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindSecondCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
+    
+   self.secondCategoryTask =
+   [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindSecondCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
             NSArray* array = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
@@ -227,6 +234,8 @@ static CGFloat TopBtnWidth = 60;
                 @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
     }
     typeof(self) __weak wself = self;
+    
+    self.thirdCategoryTask =
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindThirdCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
@@ -256,7 +265,15 @@ static CGFloat TopBtnWidth = 60;
     }
 
     typeof(self) __weak wself = self;
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    
+    self.findProductTask =
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindProductByCategory]  token:token parameters:dic success:^(id JSON, NSError *error){
+        
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
             NSArray* array = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
@@ -265,7 +282,7 @@ static CGFloat TopBtnWidth = 60;
         }
         
     } failure:^(id JSON, NSError *error){
-        
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
     }];
 }
 
@@ -555,5 +572,13 @@ static CGFloat TopBtnWidth = 60;
     return titleWidth;
 }
 
+
+- (void)dealloc{
+    NSLog(@"%s",__func__);
+    
+    [self.secondCategoryTask cancel];
+    [self.thirdCategoryTask cancel];
+    [self.findProductTask cancel];
+}
 
 @end

@@ -15,7 +15,6 @@
 #import "DetailShufflingHeadView.h"
 #import "DeatilCustomHeadView.h"
 //foot
-#import "DetailImagesFooterView.h"
 #import "BlankCollectionFootView.h"
 #import "DetailTopFootView.h"
 
@@ -27,6 +26,8 @@
 #import "SelectSpecificationController.h"
 
 #import <WebKit/WebKit.h>
+
+#import "DetailImagesCell.h"
 
 @interface GoodsDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,ULBCollectionViewDelegateFlowLayout,WKNavigationDelegate>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -57,11 +58,11 @@
 static NSString *const DetailGoodReferralCellID = @"DetailGoodReferralCell";
 static NSString *const DetailShowTypeCellID = @"DetailShowTypeCell";
 static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
+static NSString *const DetailImagesCellID = @"DetailImagesCell";
 /* head */
 static NSString *const DetailShufflingHeadViewID = @"DetailShufflingHeadView";
 static NSString *const DeatilCustomHeadViewID = @"DeatilCustomHeadView";
 /* foot */
-static NSString *const DetailImagesFooterViewID = @"DetailImagesFooterView";
 static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 
@@ -233,74 +234,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 }
 
 
-//- (void)addGoodsToCart:(GoodsModel *)goods
-//{
-//    CGFloat amount = [goods.price floatValue]*self.number;
-//    
-//    NSDictionary* dic = @{
-//                          @"id":goods.id.length>0?goods.id:@"",
-//                          @"amount":[NSString stringWithFormat:@"%.2f",amount],
-//                          @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
-//                          @"goodName":goods.name.length>0?goods.name:@"",
-//                          @"goodNum":[NSString stringWithFormat:@"%ld",(long)self.number],
-//                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
-//                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
-//                          @"productId":goods.id.length>0?goods.id:@"",
-//                          };
-//
-//    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
-//        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
-//        if ([model.code intValue] == 200) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)self.number];
-//                self.goodsDetail.shopCartId = [NSString stringWithFormat:@"%@",model.data];
-//                
-//                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
-//            
-//                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
-//            });
-//        }
-//        
-//    } failure:^(id JSON, NSError *error){
-//        
-//    }];
-//}
-//
-//- (void)updateCart:(GoodsModel *)goods
-//{
-//    NSInteger total = [self.goodsDetail.shopCartNum intValue]+self.number;
-//    CGFloat amount =  total*[goods.price floatValue];
-//    
-//    NSDictionary* dic = @{@"id":goods.shopCartId.length>0?goods.shopCartId:@"",
-//                          @"amount":[NSString stringWithFormat:@"%.2f",amount],
-//                          @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
-//                          @"goodName":goods.name.length>0?goods.name:@"",
-//                          @"goodNum":[NSString stringWithFormat:@"%ld",total],
-//                          @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
-//                          @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
-//                          @"productId":goods.id.length>0?goods.id:@""
-//                          };
-//    
-//
-//    [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
-//        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
-//        if ([model.code intValue] == 200) {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
-//                [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
-//                
-//                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)self.number];
-//                
-//                
-//                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil];
-//            });
-//        }
-//        
-//    } failure:^(id JSON, NSError *error){
-//        
-//    }];
-//}
-
 #pragma mark - <UICollectionViewDataSource>
 - (UIColor *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout colorForSectionAtIndex:(NSInteger)section{
     if (section == 2) {
@@ -318,7 +251,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         return 1;
     }
     if (section == 1 ) { //详情
-        return 6;
+        return 7;
     }
     if (section == 2) { //猜你喜欢
         return self.pushArray.count;
@@ -334,38 +267,46 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         gridcell = cell;
     }
     else if (indexPath.section == 1) {//详情
-        DetailShowTypeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:DetailShowTypeCellID forIndexPath:indexPath];
-        cell.isHasindicateButton = NO;
-        switch (indexPath.item) {
-            case 0:
-                cell.leftTitleLable.text = @"商品详情";
-                 cell.contentLabel.text = @"";
-                break;
-            case 1:
-                cell.leftTitleLable.text = @"品牌";
-                cell.contentLabel.text = self.goodsDetail.brandName;
-                break;
-            case 2:
-                cell.leftTitleLable.text = @"产地";
-                cell.contentLabel.text = self.goodsDetail.originPlace;
-                break;
-            case 3:
-                cell.leftTitleLable.text = @"生产日期";
-                cell.contentLabel.text = @"详情见包装";
-                break;
-            case 4:
-                cell.leftTitleLable.text = @"保质期";
-                cell.contentLabel.text = self.goodsDetail.warrantyPeriod;
-                break;
-            case 5:
-                cell.leftTitleLable.text = @"存储条件";
-                cell.contentLabel.text = self.goodsDetail.storageCondition;
-                break;
-                
-            default:
-                break;
+        if (indexPath.item < 6) {
+            DetailShowTypeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:DetailShowTypeCellID forIndexPath:indexPath];
+            cell.isHasindicateButton = NO;
+            switch (indexPath.item) {
+                case 0:
+                    cell.leftTitleLable.text = @"商品详情";
+                    cell.contentLabel.text = @"";
+                    break;
+                case 1:
+                    cell.leftTitleLable.text = @"品牌";
+                    cell.contentLabel.text = self.goodsDetail.brandName;
+                    break;
+                case 2:
+                    cell.leftTitleLable.text = @"产地";
+                    cell.contentLabel.text = self.goodsDetail.originPlace;
+                    break;
+                case 3:
+                    cell.leftTitleLable.text = @"生产日期";
+                    cell.contentLabel.text = @"详情见包装";
+                    break;
+                case 4:
+                    cell.leftTitleLable.text = @"保质期";
+                    cell.contentLabel.text = self.goodsDetail.warrantyPeriod;
+                    break;
+                case 5:
+                    cell.leftTitleLable.text = @"存储条件";
+                    cell.contentLabel.text = self.goodsDetail.storageCondition;
+                    break;
+                    
+                default:
+                    break;
+            }
+            gridcell = cell;
         }
-        gridcell = cell;
+        else
+        {
+            DetailImagesCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:DetailImagesCellID forIndexPath:indexPath];
+            cell.htmlString = self.goodsDetail.introduction;
+            gridcell = cell;
+        }
     }
     else if (indexPath.section == 2) {//猜你喜欢
         GoodsListGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsListGridCellID forIndexPath:indexPath];
@@ -404,11 +345,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
             
             self.topFootview = footview;
         }
-        if (indexPath.section == 1) {
-            DetailImagesFooterView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:DetailImagesFooterViewID forIndexPath:indexPath];
-            footview.htmlString = self.goodsDetail.introduction;
-            reusableview = footview;
-        }
     }
     return reusableview;
 }
@@ -419,7 +355,11 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         return CGSizeMake(ScreenW , 125);
     }
     if (indexPath.section == 1 ) {
-        return CGSizeMake(ScreenW, 45);
+        if (indexPath.item < 6) {
+            return CGSizeMake(ScreenW, 45);
+        }else{
+            return CGSizeMake(ScreenW, self.webViewHeight);
+        }
     }
     if (indexPath.section == 2) {//猜你喜欢
         return CGSizeMake((ScreenW - 12*3)/2, (ScreenW - 12*3)/2+72+15);
@@ -444,9 +384,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     if (section == 0 ) {
         return CGSizeMake(ScreenW, 65);
     }
-    if (section == 1) {
-        return CGSizeMake(ScreenW, self.webViewHeight);//详情图片
-    }
+//    if (section == 1) {
+//        return CGSizeMake(ScreenW, self.webViewHeight);//详情图片
+//    }
     return CGSizeZero;
 }
 #pragma mark - <UICollectionViewDelegateFlowLayout>
@@ -564,7 +504,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 
     vc.selectFinished = ^(NSInteger number){
  
-        self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];
+        self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",(long)number];
         if (number == 0) {
             self.topFootview.leftTitleLable.text = @"请选择 规格";
         }else{
@@ -649,11 +589,11 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         [_collectionView registerClass:[DetailGoodReferralCell class] forCellWithReuseIdentifier:DetailGoodReferralCellID];
         [_collectionView registerClass:[DetailShowTypeCell class] forCellWithReuseIdentifier:DetailShowTypeCellID];
         [_collectionView registerClass:[GoodsListGridCell class] forCellWithReuseIdentifier:GoodsListGridCellID];
+        [_collectionView registerClass:[DetailImagesCell class] forCellWithReuseIdentifier:DetailImagesCellID];
         
         [_collectionView registerClass:[DetailShufflingHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:DetailShufflingHeadViewID];
         [_collectionView registerClass:[DeatilCustomHeadView class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:DeatilCustomHeadViewID];
         
-        [_collectionView registerClass:[DetailImagesFooterView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:DetailImagesFooterViewID];
         [_collectionView registerClass:[BlankCollectionFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:BlankCollectionFootViewID];
         [_collectionView registerClass:[DetailTopFootView class] forSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:DetailTopFootViewID];
         

@@ -63,6 +63,7 @@
 		775D358320B3B5740047F9EE /* MessageTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D358220B3B5740047F9EE /* MessageTableViewCell.m */; };
 		775D358820B444080047F9EE /* PaymentViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 775D358720B444080047F9EE /* PaymentViewController.m */; };
 		7762AD8D20FAF81600117FAD /* EmptyView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7762AD8C20FAF81600117FAD /* EmptyView.m */; };
+		7764477520FC3C9D0084600C /* DetailImagesCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7764477420FC3C9D0084600C /* DetailImagesCell.m */; };
 		7765066720B9180700B8B0EB /* MidAdGoodsViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765066620B9180700B8B0EB /* MidAdGoodsViewCell.m */; };
 		7765066A20B944B100B8B0EB /* SelectTimeController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765066920B944B100B8B0EB /* SelectTimeController.m */; };
 		7765067120B948C500B8B0EB /* SelectSpecificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7765067020B948C500B8B0EB /* SelectSpecificationController.m */; };
@@ -342,7 +343,6 @@
 		BECB90242084B4E200170BC6 /* DetailShowTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BECB90232084B4E200170BC6 /* DetailShowTypeCell.m */; };
 		BECB90272084B5B900170BC6 /* DeatilCustomHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = BECB90262084B5B900170BC6 /* DeatilCustomHeadView.m */; };
 		BECB902A2084BA5700170BC6 /* DetailTopToolView.m in Sources */ = {isa = PBXBuildFile; fileRef = BECB90292084BA5700170BC6 /* DetailTopToolView.m */; };
-		BECB902D2084BAFD00170BC6 /* DetailImagesFooterView.m in Sources */ = {isa = PBXBuildFile; fileRef = BECB902C2084BAFD00170BC6 /* DetailImagesFooterView.m */; };
 		BEEB49F420A4704B00508969 /* DetailTopFootView.m in Sources */ = {isa = PBXBuildFile; fileRef = BEEB49F320A4704B00508969 /* DetailTopFootView.m */; };
 /* End PBXBuildFile section */
 
@@ -451,6 +451,8 @@
 		775D358720B444080047F9EE /* PaymentViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaymentViewController.m; sourceTree = "<group>"; };
 		7762AD8B20FAF81600117FAD /* EmptyView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = EmptyView.h; sourceTree = "<group>"; };
 		7762AD8C20FAF81600117FAD /* EmptyView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EmptyView.m; sourceTree = "<group>"; };
+		7764477320FC3C9D0084600C /* DetailImagesCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailImagesCell.h; sourceTree = "<group>"; };
+		7764477420FC3C9D0084600C /* DetailImagesCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailImagesCell.m; sourceTree = "<group>"; };
 		7765066520B9180700B8B0EB /* MidAdGoodsViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MidAdGoodsViewCell.h; sourceTree = "<group>"; };
 		7765066620B9180700B8B0EB /* MidAdGoodsViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MidAdGoodsViewCell.m; sourceTree = "<group>"; };
 		7765066820B944B100B8B0EB /* SelectTimeController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SelectTimeController.h; sourceTree = "<group>"; };
@@ -1055,8 +1057,6 @@
 		BECB90262084B5B900170BC6 /* DeatilCustomHeadView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DeatilCustomHeadView.m; sourceTree = "<group>"; };
 		BECB90282084BA5700170BC6 /* DetailTopToolView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailTopToolView.h; sourceTree = "<group>"; };
 		BECB90292084BA5700170BC6 /* DetailTopToolView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailTopToolView.m; sourceTree = "<group>"; };
-		BECB902B2084BAFD00170BC6 /* DetailImagesFooterView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailImagesFooterView.h; sourceTree = "<group>"; };
-		BECB902C2084BAFD00170BC6 /* DetailImagesFooterView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailImagesFooterView.m; sourceTree = "<group>"; };
 		BEEB49F220A4704B00508969 /* DetailTopFootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DetailTopFootView.h; sourceTree = "<group>"; };
 		BEEB49F320A4704B00508969 /* DetailTopFootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DetailTopFootView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -2823,6 +2823,8 @@
 				77DD80992083546700A1D080 /* DetailGoodReferralCell.m */,
 				BECB90222084B4E200170BC6 /* DetailShowTypeCell.h */,
 				BECB90232084B4E200170BC6 /* DetailShowTypeCell.m */,
+				7764477320FC3C9D0084600C /* DetailImagesCell.h */,
+				7764477420FC3C9D0084600C /* DetailImagesCell.m */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -2841,8 +2843,6 @@
 		BECB901B2084B10F00170BC6 /* foot */ = {
 			isa = PBXGroup;
 			children = (
-				BECB902B2084BAFD00170BC6 /* DetailImagesFooterView.h */,
-				BECB902C2084BAFD00170BC6 /* DetailImagesFooterView.m */,
 				BEEB49F220A4704B00508969 /* DetailTopFootView.h */,
 				BEEB49F320A4704B00508969 /* DetailTopFootView.m */,
 			);
@@ -2981,6 +2981,7 @@
 				BECB8FD720844DD900170BC6 /* NSURL+DCHook.m in Sources */,
 				77DD807020824F7C00A1D080 /* UIView+SDExtension.m in Sources */,
 				77DD80A6208355A000A1D080 /* DCZuoWenRightButton.m in Sources */,
+				7764477520FC3C9D0084600C /* DetailImagesCell.m in Sources */,
 				77DD80A8208355A000A1D080 /* DCCustionButton.m in Sources */,
 				BECB8FDB20844DD900170BC6 /* UIImageView+DCExtension.m in Sources */,
 				77193BC920BC35F50001508E /* InvitationTableHead.m in Sources */,
@@ -3167,7 +3168,6 @@
 				BECB8FDD20844DD900170BC6 /* UIView+DCExtension.m in Sources */,
 				7765066A20B944B100B8B0EB /* SelectTimeController.m in Sources */,
 				7765066720B9180700B8B0EB /* MidAdGoodsViewCell.m in Sources */,
-				BECB902D2084BAFD00170BC6 /* DetailImagesFooterView.m in Sources */,
 				77F83AB82070E8CE004E9717 /* UIView+WebCache.m in Sources */,
 				77F83A8C2070E8CE004E9717 /* JSONAPI.m in Sources */,
 				77F83A8E2070E8CE004E9717 /* JSONModel+networking.m in Sources */,

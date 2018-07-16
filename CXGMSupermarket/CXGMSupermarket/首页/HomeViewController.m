@@ -186,9 +186,9 @@
     
     [self setNoticeLocation];
     
-    if (_goodsView){
-        [_goodsView requestGoodsList];
-    }
+//    if (_goodsView){
+//        [_goodsView requestGoodsList];
+//    }
 }
 
 

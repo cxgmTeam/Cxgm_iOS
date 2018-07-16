@@ -1,19 +1,19 @@
 //
-//  DetailImagesFooterView.m
+//  DetailImagesCell.m
 //  CXGMSupermarket
 //
-//  Created by 天闻 on 2018/4/16.
+//  Created by zhu yingmin on 2018/7/16.
 //  Copyright © 2018年 zhu yingmin. All rights reserved.
 //
 
-#import "DetailImagesFooterView.h"
+#import "DetailImagesCell.h"
 #import <WebKit/WebKit.h>
 
-@interface DetailImagesFooterView ()<WKNavigationDelegate>
+@interface DetailImagesCell ()<WKNavigationDelegate>
 @property(nonatomic,strong)WKWebView* webView;
 @end
 
-@implementation DetailImagesFooterView
+@implementation DetailImagesCell
 
 - (instancetype)initWithFrame:(CGRect)frame {
     
@@ -29,18 +29,18 @@
     
     NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"HTMLTemplate" ofType:@"html"];
     NSMutableString *html = [NSMutableString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-
+    
     NSRange contentRange = [html rangeOfString:@"{content}"];
     if (contentRange.location != NSNotFound) {
         [html replaceCharactersInRange:contentRange withString:htmlString];
     }
-
+    
     [_webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:htmlPath]];
-
+    
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
-
+    
 }
 
 - (void)setUpUI
@@ -59,6 +59,5 @@
         make.edges.equalTo(self);
     }];
 }
-
 
 @end

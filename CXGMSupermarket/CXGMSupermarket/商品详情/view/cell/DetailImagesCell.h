@@ -1,13 +1,13 @@
 //
-//  DetailImagesFooterView.h
+//  DetailImagesCell.h
 //  CXGMSupermarket
 //
-//  Created by 天闻 on 2018/4/16.
+//  Created by zhu yingmin on 2018/7/16.
 //  Copyright © 2018年 zhu yingmin. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 
-@interface DetailImagesFooterView : UICollectionReusableView
+@interface DetailImagesCell : UICollectionViewCell
 @property(nonatomic,strong)NSString* htmlString;
 @end

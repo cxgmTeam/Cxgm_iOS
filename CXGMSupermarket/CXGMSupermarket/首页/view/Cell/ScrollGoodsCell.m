@@ -27,9 +27,24 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     if (self) {
         
         [self setUpUI];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changGoodsNum:) name:AddGoodsSuccess_Notify object:nil];
     }
     return self;
 }
+
+- (void)changGoodsNum:(NSNotification *)notify
+{
+    NSDictionary* dic = [notify userInfo];
+    
+    for (GoodsModel* goods in self.goodsList) {
+        if ([goods.sn isEqualToString:dic[@"sn"]]) {
+            goods.shopCartNum = dic[@"shopCartNum"];
+            break;
+        }
+    }
+}
+
 
 - (void)setUpUI
 {
@@ -90,6 +105,10 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
         _collectionView.contentInset = UIEdgeInsetsMake(0, 10, 0, 10);
     }
     return _collectionView;
+}
+
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end

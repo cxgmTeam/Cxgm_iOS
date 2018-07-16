@@ -28,7 +28,7 @@
 //根据用户ID和地址ID删除用户地址接口
 #define APIDeleteAddress  @"/user/deleteAddress"
 //版本控制接口
-#define APIVisionControl  @"/user/visionControl"
+#define APIVisionControl  @"/version/getVersion"
 //查看所有配送范围接口
 #define APIFindAllPsfw  @"/user/findAllPsfw"
 

@@ -34,6 +34,7 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
     
     typeof(self) __weak wself = self;
     self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self.collectionView.mj_header endRefreshing];
         [wself findFirstCategory];
     }];
     
@@ -59,23 +60,17 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
          dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
     }
     
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    
+
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindFirstCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
-        
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        
+
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
             self.categoryList = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
             [self.collectionView reloadData];
         }
-        [self.collectionView.mj_header endRefreshing];
         
     } failure:^(id JSON, NSError *error){
-        
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [self.collectionView.mj_header endRefreshing];
+
     }];
 }
 

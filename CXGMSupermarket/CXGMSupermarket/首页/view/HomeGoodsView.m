@@ -64,8 +64,14 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if (self = [super initWithFrame:frame]) {
         
         //休闲零食 88  放心蔬菜 102 新鲜水果 113 鲜肉蛋品112 水鲜海产109 粮油副食 105 中外名酒 115 美妆个护106
-        self.categoryNames = @[@[@"新鲜水果",@""],@[@"放心蔬菜",@""],@[@"鲜肉蛋品",@""],@[@"水产海鲜",@""],
-                               @[@"粮油副食",@""],@[@"休闲零食",@""],@[@"中外名酒",@""],@[@"美妆百货",@""]];
+        self.categoryNames = @[@[@"新鲜水果",@"113"],
+                              @[@"放心蔬菜",@"102"],
+                              @[@"鲜肉蛋品",@"112"],
+                              @[@"水产海鲜",@"109"],
+                              @[@"粮油副食",@"105"],
+                              @[@"休闲零食",@"88"],
+                              @[@"中外名酒",@"115"],
+                              @[@"美妆百货",@"106"]];
 
         
         self.collectionView.backgroundColor = [UIColor clearColor];
