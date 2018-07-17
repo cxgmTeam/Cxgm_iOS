@@ -89,7 +89,7 @@
     
     
     _noAddressLbel = [[UILabel alloc] init];
-    _noAddressLbel.text =  @"请新增收获地址";
+    _noAddressLbel.text =  @"请新增收货地址";
     _noAddressLbel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:17];
     _noAddressLbel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [self addSubview:_noAddressLbel];

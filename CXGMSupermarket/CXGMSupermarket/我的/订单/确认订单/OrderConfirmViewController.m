@@ -105,7 +105,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 - (void)addOrder
 {
     if (!self.address) {
-        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请添加收获地址"]; return;
+        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请添加收货地址"]; return;
     }else{
         if (self.pointsArr.count > 0) {
             CLLocationCoordinate2D coords = CLLocationCoordinate2DMake([self.address.dimension doubleValue],[self.address.longitude doubleValue]);

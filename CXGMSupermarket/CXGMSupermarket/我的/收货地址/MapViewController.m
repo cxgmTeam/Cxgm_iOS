@@ -26,7 +26,6 @@
 
 @property(nonatomic,strong) UIView *topView;
 @property(nonatomic,strong) CustomTextField* textField;
-@property(strong,nonatomic) UIButton *mapPin;
 
 @property(nonatomic,strong) UITableView* tableView;
 @property(nonatomic,strong) NSMutableArray *locationDataArr;
@@ -45,7 +44,6 @@
 @property(nonatomic,strong) UIButton *cancelButton;
 
 @property(strong,nonatomic) NSMutableArray *pointArray;
-@property(assign,nonatomic) NSInteger pointNodeNum;
 
 @property(strong,nonatomic) BMKPolygon *ploygon;
 
@@ -68,15 +66,7 @@
     
     _mapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, ScreenW, ScreenW*273/375.f)];
     [self.view addSubview:_mapView];
-    
-    _mapPin = [UIButton new];
-    [_mapPin setImage:[UIImage imageNamed:@"location_pin"] forState:UIControlStateNormal];
-    [_mapView addSubview:_mapPin];
-    [_mapPin mas_makeConstraints:^(MASConstraintMaker *make){
-        make.center.equalTo(self.mapView);
-        make.size.equalTo(CGSizeMake(40, 40));
-    }];
-    
+
     [self initLocationService];
     
     _tableView = [UITableView new];
@@ -120,41 +110,48 @@
 
 - (void)findAllPsfw
 {
-    NSDictionary* dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""};
-
-   [self.pointsArr removeAllObjects];
+//    NSDictionary* dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""};
+    NSDictionary* dic = @{@"shopId":@""};
     
+    [self.pointsArr removeAllObjects];
+
     [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIFindAllPsfw] token:nil parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        
         if ([model.data isKindOfClass:[NSArray class]]) {
-            if ([(NSArray*)model.data count] > 0) {
-                NSDictionary* dic = [(NSArray *)model.data objectAtIndex:0];
+           
+            for (NSDictionary* dic in (NSArray *)model.data)
+            {
                 NSString* psfw = dic[@"psfw"];
                 NSArray* array = [psfw componentsSeparatedByString:@","];
                 
-                self.pointNodeNum = array.count;
-
-                if (!self.ploygon)
+                NSInteger pointNodeNum = array.count;
+                NSMutableArray* mutableArr = [NSMutableArray array];
+                
+                for (NSInteger i = 0;i < pointNodeNum  ;i++)
                 {
-                    for (NSInteger i = 0;i < self.pointNodeNum  ;i++)
-                    {
-                        NSString* string = array[i];
-                        NSArray* arr = [string componentsSeparatedByString:@"_"];
-                        if (arr.count>1) {
-                            
-                            CLLocation *location = [[CLLocation alloc] initWithLatitude:[arr[1] floatValue] longitude:[arr[0] floatValue]];
-                            [self.pointsArr addObject:location];
-                        }
-                    }
-
-                    CLLocationCoordinate2D commuterLotCoords[self.pointNodeNum];
+                    NSString* string = array[i];
+                    NSArray* arr = [string componentsSeparatedByString:@"_"];
                     
-                    for(int i = 0; i < [self.pointsArr count]; i++) {
-                        commuterLotCoords[i] = [[self.pointsArr objectAtIndex:i] coordinate];
+                    if (arr.count>1) {
+                        
+                        CLLocation *location = [[CLLocation alloc] initWithLatitude:[arr[1] floatValue] longitude:[arr[0] floatValue]];
+                        [self.pointsArr addObject:location];
+                        
+                        [mutableArr addObject:location];
                     }
-
-                    self.ploygon = [BMKPolygon polygonWithCoordinates:commuterLotCoords count:self.pointNodeNum];
-                    [self.mapView addOverlay:self.ploygon];
+                    
+                    if (i == pointNodeNum-1)
+                    {
+                        CLLocationCoordinate2D commuterLotCoords[pointNodeNum];
+                        
+                        for(int j = 0; j < [mutableArr count]; j++) {
+                            commuterLotCoords[j] = [[mutableArr objectAtIndex:j] coordinate];
+                        }
+                        
+                        BMKPolygon* ploygon = [BMKPolygon polygonWithCoordinates:commuterLotCoords count:pointNodeNum];
+                        [self.mapView addOverlay:ploygon];
+                    }
                 }
                 
             }
@@ -251,9 +248,6 @@
     _mapView.delegate=self;
     _mapView.showsUserLocation = YES;
 
-    [_mapView bringSubviewToFront:_mapPin];
-    
-
     if (_locService==nil) {
 
         _locService = [[BMKLocationService alloc]init];
@@ -269,34 +263,20 @@
     _mapView.userTrackingMode = BMKUserTrackingModeFollow;//设置定位的状态
     _mapView.showsUserLocation = YES;//显示定位图层
     
+    
+    //初始化地理编码类
+    if (_geoCodeSearch==nil) {
+        _geoCodeSearch = [[BMKGeoCodeSearch alloc]init];
+        _geoCodeSearch.delegate = self;
+        
+    }
+    //初始化反地理编码类
+    if (_reverseGeoCodeOption==nil) {
+        _reverseGeoCodeOption= [[BMKReverseGeoCodeOption alloc] init];
+    }
+    
 }
 
-
--(void)viewWillAppear:(BOOL)animated
-{
-    [_mapView viewWillAppear];
-    _mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
-    _locService.delegate = self;
-    _poiSearch.delegate = self;
-    
-    _topView.hidden = NO;
-    
-    [self.navigationController setNavigationBarHidden:NO animated:YES];
-    self.tabBarController.tabBar.hidden = YES;
-}
-
--(void)viewWillDisappear:(BOOL)animated
-{
-    [_mapView viewWillDisappear];
-    _mapView.delegate = nil; // 不用时，置nil
-    _locService.delegate = nil;
-    _poiSearch.delegate = nil;
-    
-    _topView.hidden = YES;
-    
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
-    self.tabBarController.tabBar.hidden = NO;
-}
 
 /**
  *在地图View将要启动定位时，会调用此函数
@@ -312,6 +292,7 @@
  */
 - (void)didUpdateUserHeading:(BMKUserLocation *)userLocation
 {
+    NSLog(@"%s",__func__);
     [_mapView updateLocationData:userLocation];
     
     
@@ -340,55 +321,81 @@
 #pragma mark BMKLocationServiceDelegate
 - (void)didUpdateBMKUserLocation:(BMKUserLocation *)userLocation
 {
-    
-    NSLog(@"didUpdateBMKUserLocation-------****");
     _mapView.showsUserLocation = YES;//显示定位图层
+    
+    
     //设置地图中心为用户经纬度
     [_mapView updateLocationData:userLocation];
+    
+}
+
+#pragma mark BMKMapViewDelegate
 
 
-    _mapView.centerCoordinate = userLocation.location.coordinate;
+- (void)mapViewDidFinishLoading:(BMKMapView *)mapView{
+
+    //屏幕坐标转地图经纬度
+    CLLocationCoordinate2D MapCoordinate=[_mapView convertPoint:_mapView.center toCoordinateFromView:_mapView];
+
+    //需要逆地理编码的坐标位置
+    _reverseGeoCodeOption.reverseGeoPoint =MapCoordinate;
+    
+    [_geoCodeSearch reverseGeoCode:_reverseGeoCodeOption];
+    
+    
     
     BMKCoordinateRegion region ;//表示范围的结构体
     region.center = _mapView.centerCoordinate;//中心点
     region.span.latitudeDelta = 0.1;//经度范围（设置为0.1表示显示范围为0.2的纬度范围）
     region.span.longitudeDelta = 0.1;//纬度范围
     [_mapView setRegion:region animated:YES];
-    
 }
-
-#pragma mark BMKMapViewDelegate
 
 - (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
     
-    NSLog(@"regionDidChangeAnimated-------!!!!!");
-    //屏幕坐标转地图经纬度
-    CLLocationCoordinate2D MapCoordinate=[_mapView convertPoint:_mapPin.center toCoordinateFromView:_mapView];
+}
 
-    if (_geoCodeSearch==nil) {
-        //初始化地理编码类
-        _geoCodeSearch = [[BMKGeoCodeSearch alloc]init];
-        _geoCodeSearch.delegate = self;
 
-    }
-    if (_reverseGeoCodeOption==nil) {
+- (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate {
+    
+    BMKPointAnnotation *pointAnnotation = [[BMKPointAnnotation alloc]init];
+    
+    pointAnnotation.coordinate = coordinate;
+    [_mapView removeAnnotations:_mapView.annotations];
+    
+    [_mapView addAnnotation:pointAnnotation];
 
-        //初始化反地理编码类
-        _reverseGeoCodeOption= [[BMKReverseGeoCodeOption alloc] init];
-    }
-
+    
     //需要逆地理编码的坐标位置
-    _reverseGeoCodeOption.reverseGeoPoint =MapCoordinate;
+    _reverseGeoCodeOption.reverseGeoPoint =coordinate;
+    
     [_geoCodeSearch reverseGeoCode:_reverseGeoCodeOption];
     
 }
 
+
+- (void)mapview:(BMKMapView *)mapView onLongClick:(CLLocationCoordinate2D)coordinate{
+
+    BMKPointAnnotation *pointAnnotation = [[BMKPointAnnotation alloc]init];
+    
+    pointAnnotation.coordinate = coordinate;
+    [_mapView removeAnnotations:_mapView.annotations];
+    
+    [_mapView addAnnotation:pointAnnotation];
+    
+    
+    //需要逆地理编码的坐标位置
+    _reverseGeoCodeOption.reverseGeoPoint =coordinate;
+    
+    [_geoCodeSearch reverseGeoCode:_reverseGeoCodeOption];
+}
+
+
+
 #pragma mark 根据定位 搜索周边
 -(void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {
-
-    NSLog(@"onGetReverseGeoCodeResult---------1");
     //获取周边用户信息
     if (error==BMK_SEARCH_NO_ERROR) {
         
@@ -430,15 +437,9 @@
 #pragma mark - 输入地址联想搜索
 - (void)onGetPoiResult:(BMKPoiSearch *)searcher result:(BMKPoiResult*)result errorCode:(BMKSearchErrorCode)error
 {
-    NSLog(@"onGetPoiResult----------2");
-    // 清楚屏幕中所有的annotation
-//    NSArray* array = [NSArray arrayWithArray:_mapView.annotations];
-//    [_mapView removeAnnotations:array];
-    
     
     if (error == BMK_SEARCH_NO_ERROR) {
-//        NSMutableArray *annotations = [NSMutableArray array];
-        
+
         [self.poiResultArray removeAllObjects];
         
         for (int i = 0; i < result.poiInfoList.count; i++) {
@@ -452,12 +453,7 @@
             
             CLLocationCoordinate2D coords = CLLocationCoordinate2DMake(model.latitude,model.longitude);
             model.inScope = [Utility mutableBoundConrtolAction:self.pointsArr myCoordinate:coords];
-            
-            
-//            BMKPointAnnotation* item = [[BMKPointAnnotation alloc]init];
-//            item.coordinate = poi.pt;
-//            item.title = poi.name;
-//            [annotations addObject:item];
+
             
             [self.poiResultArray addObject:model];
             
@@ -467,9 +463,7 @@
         }
 
         self.searchTable.hidden = self.poiResultArray.count > 0 ?NO:YES;
-        
-//        [_mapView addAnnotations:annotations];
-//        [_mapView showAnnotations:annotations animated:YES];
+
         
     } else if (error == BMK_SEARCH_AMBIGUOUS_ROURE_ADDR){
         NSLog(@"起始点有歧义");
@@ -485,6 +479,10 @@
          return self.poiResultArray.count;
     }
     return self.locationDataArr.count;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
+    return 75.f;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -599,6 +597,32 @@
 
 
 #pragma mark-
+-(void)viewWillAppear:(BOOL)animated
+{
+    [_mapView viewWillAppear];
+    _mapView.delegate = self; // 此处记得不用的时候需要置nil，否则影响内存的释放
+    _locService.delegate = self;
+    _poiSearch.delegate = self;
+    
+    _topView.hidden = NO;
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+    self.tabBarController.tabBar.hidden = YES;
+}
+
+-(void)viewWillDisappear:(BOOL)animated
+{
+    [_mapView viewWillDisappear];
+    _mapView.delegate = nil; // 不用时，置nil
+    _locService.delegate = nil;
+    _poiSearch.delegate = nil;
+    
+    _topView.hidden = YES;
+    
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    self.tabBarController.tabBar.hidden = NO;
+}
+
 - (void)dealloc {
     if (_poiSearch != nil) {
         _poiSearch = nil;

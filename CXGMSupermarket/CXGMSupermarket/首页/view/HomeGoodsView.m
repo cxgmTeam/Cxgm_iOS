@@ -303,7 +303,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
 #pragma mark - <UICollectionViewDataSource>
 - (UIColor *)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout colorForSectionAtIndex:(NSInteger)section{
-    if (section == 5) {
+    if (section == 0 || section == 5) {
         return [UIColor whiteColor];
     }
     return [UIColor clearColor];

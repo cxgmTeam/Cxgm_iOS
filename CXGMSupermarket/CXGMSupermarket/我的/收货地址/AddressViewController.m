@@ -49,7 +49,7 @@
     
     UIButton* addBtn = [UIButton new];
     addBtn.backgroundColor = Color00A862;
-    [addBtn setTitle:@"新增收获地址" forState:UIControlStateNormal];
+    [addBtn setTitle:@"新增收货地址" forState:UIControlStateNormal];
     [addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     addBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:18];
     [bottomView addSubview:addBtn];
@@ -341,7 +341,7 @@
     if (section == 0) {
         label.text = @"当前定位";
     }else{
-        label.text = @"我的收获地址";
+        label.text = @"我的收货地址";
     }
     label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];
     label.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];

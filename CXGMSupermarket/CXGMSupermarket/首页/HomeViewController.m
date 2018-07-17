@@ -62,7 +62,7 @@
     [_noticeHot removeFromSuperview];
     _noticeHot = nil;
     
-    NSString* address = @"当前位置不在配送范围内，请选择收获地址";
+    NSString* address = @"当前位置不在配送范围内，请选择收货地址";
     self.needNewAddress = YES;
     
     if ([DeviceHelper sharedInstance].defaultAddress) {

@@ -264,16 +264,16 @@
     
     
     //活动
-//    UILabel* activityLabel = [[UILabel alloc]init];
-//    activityLabel.text = @"满100返20";
-//    activityLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-//    activityLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
-//    [bgView addSubview:activityLabel];
-//    [activityLabel mas_makeConstraints:^(MASConstraintMaker *make){
-//        make.left.equalTo(selectBtn);
-//        make.bottom.equalTo(-10);
-//    }];
-//    self.activityLabel = activityLabel;
+    UILabel* activityLabel = [[UILabel alloc]init];
+    activityLabel.text = @"满100返20";
+    activityLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+    activityLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+    [bgView addSubview:activityLabel];
+    [activityLabel mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(selectBtn);
+        make.bottom.equalTo(-10);
+    }];
+    self.activityLabel = activityLabel;
     
     
     //小计
