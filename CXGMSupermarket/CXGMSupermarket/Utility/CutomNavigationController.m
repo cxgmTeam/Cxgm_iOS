@@ -23,15 +23,18 @@
     [self.navigationBar setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:Color333333, NSForegroundColorAttributeName,PFR17Font, NSFontAttributeName,nil, nil ]];
     
     self.navigationBar.barStyle = UIBarStyleBlack;
-     //去除导航栏下方的横线
-//    [self.navigationBar setShadowImage:[UIImage new]];
-//    [self.navigationBar setBackgroundImage:[[UIImage alloc] init] forBarMetrics:UIBarMetricsDefault];
+
     
     self.navigationBar.translucent = NO;
-    
-    
+
     //添加自定义的下划线
-    [self.navigationBar setShadowImage:[self imageWithColor:[UIColor colorWithWhite:0xd3/255.f alpha:1.f] size:CGSizeMake([UIScreen mainScreen].bounds.size.width, 1)]];
+//    [self.navigationBar setShadowImage:[self imageWithColor:[UIColor colorWithWhite:0xd3/255.f alpha:1.f] size:CGSizeMake([UIScreen mainScreen].bounds.size.width, 1)]];
+    
+    
+    UIView* line = [[UIView alloc] initWithFrame:CGRectMake(0, NAVIGATION_BAR_HEIGHT-STATUS_BAR_HEIGHT-1, ScreenW, 1)];
+    line.backgroundColor = [UIColor colorWithWhite:0xd3/255.f alpha:1.f];
+    [self.navigationBar addSubview:line];
+    
     
     self.delegate = self;
     if ([self respondsToSelector:@selector(interactivePopGestureRecognizer)]) {

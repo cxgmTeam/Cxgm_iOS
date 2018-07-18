@@ -529,34 +529,48 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 {
     NSDictionary* dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""};
     
+//    NSDictionary* dic = @{@"shopId":@""};
+    
     [self.pointsArr removeAllObjects];
     
     [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIFindAllPsfw] token:nil parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        
         if ([model.data isKindOfClass:[NSArray class]]) {
-            if ([(NSArray*)model.data count] > 0) {
-                NSDictionary* dic = [(NSArray *)model.data objectAtIndex:0];
+            
+            for (NSDictionary* dic in (NSArray *)model.data)
+            {
                 NSString* psfw = dic[@"psfw"];
                 NSArray* array = [psfw componentsSeparatedByString:@","];
                 
                 NSInteger pointNodeNum = array.count;
+                NSMutableArray* mutableArr = [NSMutableArray array];
                 
                 for (NSInteger i = 0;i < pointNodeNum  ;i++)
                 {
                     NSString* string = array[i];
                     NSArray* arr = [string componentsSeparatedByString:@"_"];
+                    
                     if (arr.count>1) {
                         
                         CLLocation *location = [[CLLocation alloc] initWithLatitude:[arr[1] floatValue] longitude:[arr[0] floatValue]];
-                        [self.pointsArr addObject:location];
+                        [mutableArr addObject:location];
+                    }
+                    
+                    
+                    
+                    if (i == pointNodeNum-1)
+                    {
+                        CLLocationCoordinate2D commuterLotCoords[pointNodeNum];
+                        
+                        for(int j = 0; j < [mutableArr count]; j++) {
+                            commuterLotCoords[j] = [[mutableArr objectAtIndex:j] coordinate];
+                        }
                     }
                 }
+                //保存点数组
+                [self.pointsArr addObject:mutableArr];
                 
-                CLLocationCoordinate2D commuterLotCoords[pointNodeNum];
-                
-                for(int i = 0; i < [self.pointsArr count]; i++) {
-                    commuterLotCoords[i] = [[self.pointsArr objectAtIndex:i] coordinate];
-                }
             }
         }
     } failure:^(id JSON, NSError *error){

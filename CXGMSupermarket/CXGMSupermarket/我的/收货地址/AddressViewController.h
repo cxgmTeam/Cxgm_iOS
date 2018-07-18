@@ -16,4 +16,7 @@
 @property(nonatomic,copy)void(^selectedAddress)(AddressModel* address);
 
 @property(nonatomic,assign)BOOL needNewAddress;//需要添加新地址，寻找店铺
+
+
+
 @end

@@ -127,9 +127,9 @@
 
             
             typeof(self) __weak wself = self;
-            _goodsView.showSubCategoryVC = ^(NSString * categoryId){
+            _goodsView.showSubCategoryVC = ^(NSArray * array){
                 SubCategoryController* vc = [SubCategoryController new];
-                vc.categoryId = categoryId;
+                vc.categoryArr = array;
                 [wself.navigationController pushViewController:vc animated:YES];
             };
             
@@ -185,10 +185,6 @@
     _topView.hidden = NO;
     
     [self setNoticeLocation];
-    
-//    if (_goodsView){
-//        [_goodsView requestGoodsList];
-//    }
 }
 
 
@@ -248,6 +244,11 @@
 {
     AddressViewController* vc = [AddressViewController new];
     vc.needNewAddress = self.needNewAddress;
+    typeof(self) __weak wself = self;
+    vc.selectedAddress = ^(AddressModel * address){
+        [DeviceHelper sharedInstance].defaultAddress = address;
+        [wself setNoticeLocation];
+    };
     [self.navigationController pushViewController:vc animated:YES];
 }
 

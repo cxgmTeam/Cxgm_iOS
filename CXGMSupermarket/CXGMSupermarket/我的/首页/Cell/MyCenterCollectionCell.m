@@ -20,6 +20,16 @@
     _imgView.image = [UIImage imageNamed:imageName];
     _titleLabel.text = title;
     _subTitleLabel.text = subTitle;
+    
+    if ([imageName isEqualToString:@"gift_icon"]) {
+        [_imgView updateConstraints:^(MASConstraintMaker *make){
+            make.left.equalTo(10);
+        }];
+    }else{
+        [_imgView updateConstraints:^(MASConstraintMaker *make){
+            make.left.equalTo(15);
+        }];
+    }
 }
 
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -50,12 +60,12 @@
     [self addSubview:arrow];
     
     [_imgView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.equalTo(13);
+        make.left.equalTo(15);
         make.centerY.equalTo(self);
     }];
     
     [_titleLabel mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.equalTo(self.imgView.right).offset(8);
+        make.left.equalTo(45);
         make.centerY.equalTo(self);
     }];
     

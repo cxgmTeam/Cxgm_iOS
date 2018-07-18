@@ -53,7 +53,7 @@ static CGFloat TopBtnWidth = 60;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.title = self.category.name;
+    
     
     self.dictionary = [NSMutableDictionary dictionary];
 
@@ -84,10 +84,13 @@ static CGFloat TopBtnWidth = 60;
     
     
     if (self.category) {
+        self.title = self.category.name;
         [self findSecondCategory:self.category.id];
     }
-    if (self.categoryId) {
-        [self findSecondCategory:self.categoryId];
+    
+    if (self.categoryArr) {
+        self.title = self.categoryArr[0];
+        [self findSecondCategory:self.categoryArr[1]];
     }
 }
 

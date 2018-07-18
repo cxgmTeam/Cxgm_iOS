@@ -145,7 +145,7 @@
     bgView.backgroundColor = [UIColor whiteColor];
     [self.contentView addSubview:bgView];
     [bgView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.edges.equalTo(self.contentView).insets(UIEdgeInsetsMake(10, 0, 0, 0));
+        make.edges.equalTo(self.contentView).insets(UIEdgeInsetsMake(0, 0, 0, 0));
     }];
     
     //选中按钮

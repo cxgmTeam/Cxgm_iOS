@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface HomeGoodsView : UIView
-@property(nonatomic,copy)void(^showSubCategoryVC)(NSString *categoryId);
+@property(nonatomic,copy)void(^showSubCategoryVC)(NSArray *array);
 @property(nonatomic,copy)void(^showGoodsDetailVC)(GoodsModel* model);
 @property(nonatomic,copy)void(^showBusinessDetailVC)(AdBannarModel* model);
 //主要是刷新 shopCartNum 和 shopCartId

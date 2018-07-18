@@ -39,7 +39,7 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
     }];
     
     
-    UIButton* searchBtn = [UIButton new];
+    UIButton* searchBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     [searchBtn setImage:[UIImage imageNamed:@"top_search"] forState:UIControlStateNormal];
     [searchBtn addTarget:self action:@selector(onTapSearchBtn:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:searchBtn];

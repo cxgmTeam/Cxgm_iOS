@@ -27,3 +27,7 @@
 @property (nonatomic,strong) UILabel * placeHolderLab;
 @end
 
+@interface UIImage (Extension)
+
+- (UIImage *)imageWithColor:(UIColor *)color;
+@end

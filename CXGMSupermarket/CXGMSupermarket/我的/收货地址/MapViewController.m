@@ -56,11 +56,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self findAllPsfw];
-    
-    
     self.locationDataArr = [NSMutableArray array];
     self.pointsArr = [NSMutableArray array];
+    
+    [self findAllPsfw];
+    
     
     [self initTopBar];
     
@@ -136,10 +136,10 @@
                     if (arr.count>1) {
                         
                         CLLocation *location = [[CLLocation alloc] initWithLatitude:[arr[1] floatValue] longitude:[arr[0] floatValue]];
-                        [self.pointsArr addObject:location];
-                        
                         [mutableArr addObject:location];
                     }
+                    
+                    
                     
                     if (i == pointNodeNum-1)
                     {
@@ -153,7 +153,8 @@
                         [self.mapView addOverlay:ploygon];
                     }
                 }
-                
+                //保存点数组
+                [self.pointsArr addObject:mutableArr];
             }
         }
     } failure:^(id JSON, NSError *error){
@@ -198,7 +199,7 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.cancelButton];
     
-    _topView.frame = CGRectMake(20, (44-28)/2, ScreenW-70, 28);
+    _topView.frame = CGRectMake(20, (44-28)/2, ScreenW-80, 28);
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
@@ -210,7 +211,7 @@
 - (void)tapMaskView:(UIGestureRecognizer *)gesture
 {
     [_textField resignFirstResponder];
-    _topView.frame = CGRectMake(50, (44-28)/2, ScreenW-70, 28);
+    _topView.frame = CGRectMake(50, (44-28)/2, ScreenW-100, 28);
     
     _maskView.hidden = YES;
     _searchTable.hidden = YES;
@@ -292,7 +293,6 @@
  */
 - (void)didUpdateUserHeading:(BMKUserLocation *)userLocation
 {
-    NSLog(@"%s",__func__);
     [_mapView updateLocationData:userLocation];
     
     
@@ -536,6 +536,7 @@
     if (!_backButton) {
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
         _backButton.frame = CGRectMake(0, 0, 44, 44);
+        _backButton.imageEdgeInsets = UIEdgeInsetsMake(0, -22, 0, 0);
         [_backButton setImage:[UIImage imageNamed:@"arrow_left"] forState:UIControlStateNormal];
         [_backButton addTarget:self action:@selector(backButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     }
@@ -547,7 +548,8 @@
 
 - (UIButton *)cancelButton{
     if (!_cancelButton) {
-        _cancelButton = [UIButton new];
+        _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+        _cancelButton.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
         [_cancelButton setTitle:@"取消" forState:UIControlStateNormal];
         [_cancelButton setTitleColor:Color333333 forState:UIControlStateNormal];
         _cancelButton.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
@@ -559,7 +561,7 @@
 - (void)onTapCancelButton:(id)sender
 {
     [_textField resignFirstResponder];
-    _topView.frame = CGRectMake(50, (44-28)/2, ScreenW-70, 28);
+    _topView.frame = CGRectMake(50, (44-28)/2, ScreenW-100, 28);
     
     _maskView.hidden = YES;
     _searchTable.hidden = YES;
@@ -573,7 +575,7 @@
 #pragma mark-
 - (void)initTopBar
 {
-    _topView = [[UIView alloc] initWithFrame:CGRectMake(50, (44-28)/2, ScreenW-70, 28)];
+    _topView = [[UIView alloc] initWithFrame:CGRectMake(50, (44-28)/2, ScreenW-100, 28)];
     [self.navigationController.navigationBar addSubview:_topView];
     
     _textField = [CustomTextField new];

@@ -46,7 +46,8 @@
     _emptyView.textLabel.text = @"您还没有任何消息哦~";
     [self.view addSubview:_emptyView];
     [_emptyView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.center.equalTo(self.view);
+        make.top.equalTo(ScreenH/5.f);
+        make.centerX.equalTo(self.view);
         make.size.equalTo(CGSizeMake(250, 250));
     }];
     _emptyView.hidden = self.dataArray.count > 0? YES:NO;

@@ -178,29 +178,39 @@
 #pragma mark-  判断一个点是否在一个不规则的多边形范围内
 //    在范围内返回1，不在返回0
 +(BOOL)mutableBoundConrtolAction:(NSMutableArray *)arrSome myCoordinate:(CLLocationCoordinate2D )myCoordinate{
-    NSInteger n = arrSome.count;
-    float vertx[n];
-    float verty[n];
-    for (int i=0; i<arrSome.count; i++) {
-        //MyPoint类存储的是经度和纬度
-        CLLocation *location = arrSome[i];
-        
-        vertx[i]=location.coordinate.latitude;
-        verty[i]=location.coordinate.longitude;;
-    }
-    if (arrSome.count==0) {
-        
+    
+    if (arrSome.count == 0) {
         return 1;
     }
-    BOOL i= pnpoly((int)arrSome.count, vertx, verty, myCoordinate.latitude, myCoordinate.longitude);
     
-    
-    if (i) {
-        return 1;
-    }else{
-        return 0;
+    for (int k = 0; k < arrSome.count; k++) {
+        
+        NSArray* array = arrSome[k];
+        
+        NSInteger n = array.count;
+        float vertx[n];
+        float verty[n];
+        for (int i=0; i<array.count; i++) {
+            //MyPoint类存储的是经度和纬度
+            CLLocation *location = array[i];
+            
+            vertx[i]=location.coordinate.latitude;
+            verty[i]=location.coordinate.longitude;;
+        }
+        if (array.count==0) {
+            
+            return 1;
+        }
+        BOOL i= pnpoly((int)array.count, vertx, verty, myCoordinate.latitude, myCoordinate.longitude);
+        
+        
+        if (i) {
+            return 1;
+        }
     }
-    return 1;
+    
+    return 0;
+
 }
 //多边形由边界的坐标点所构成的数组组成，参数格式 该数组的count，  多边形边界点x坐标 的组成的数组，多边形边界点y坐标 的组成的数组，需要判断的点的x坐标，需要判断的点的y坐标
 BOOL pnpoly (int nvert, float *vertx, float *verty, float testx, float testy) {

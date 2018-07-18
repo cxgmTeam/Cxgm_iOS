@@ -37,7 +37,10 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     
     [_adImageView sd_setImageWithURL:[NSURL URLWithString:adBannar.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     
-    [self.collectionView reloadData];
+    self.collectionView.hidden = self.adBannar.productList.count > 0?NO:YES;
+    if (self.adBannar.productList.count > 0) {
+        [self.collectionView reloadData];
+    }
 }
 
 - (void)onTapImageView:(UITapGestureRecognizer *)gesture

@@ -276,11 +276,15 @@
 
 
 #pragma mark-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     if (self.dataArray.count == 0) {
         return 1;
     }
     return self.dataArray.count;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -301,7 +305,7 @@
             cell = [[LZCartTableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LZCartReusableCell"];
         }
         
-        GoodsModel *model = self.dataArray[indexPath.row];
+        GoodsModel *model = self.dataArray[indexPath.section];
         
         __block typeof(cell)wsCell = cell;
         typeof(self) __weak wself = self;
@@ -310,7 +314,7 @@
             wsCell.lzNumber = number;
             model.goodNum = [NSString stringWithFormat:@"%ld",(long)number];
             
-            [self.dataArray replaceObjectAtIndex:indexPath.row withObject:model];
+            [self.dataArray replaceObjectAtIndex:indexPath.section withObject:model];
             if ([self.selectedArray containsObject:model]) {
                 [self.selectedArray removeObject:model];
                 [self.selectedArray addObject:model];
@@ -325,7 +329,7 @@
             wsCell.lzNumber = number;
             model.goodNum = [NSString stringWithFormat:@"%ld",(long)number];
             
-            [self.dataArray replaceObjectAtIndex:indexPath.row withObject:model];
+            [self.dataArray replaceObjectAtIndex:indexPath.section withObject:model];
             //判断已选择数组里有无该对象,有就删除  重新添加
             if ([self.selectedArray containsObject:model]) {
                 [self.selectedArray removeObject:model];
@@ -368,7 +372,7 @@
     if (self.dataArray.count == 0) {
         return self.bounds.size.height;
     }
-    return 160;;
+    return 150;;
 }
 
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -391,16 +395,16 @@
         UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"提示" message:@"确定要删除该商品?删除后无法恢复!" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             
-            GoodsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+            GoodsModel *model = [self.dataArray objectAtIndex:indexPath.section];
             
             NSArray* array = [NSArray arrayWithObject:model];
             [wself deleteShopCart:array];
             
             
-            [self.dataArray removeObjectAtIndex:indexPath.row];
+            [self.dataArray removeObjectAtIndex:indexPath.section];
             
             if (self.dataArray.count > 0) {
-                [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                [tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
             }else{
                 [tableView reloadData];
             }
@@ -442,13 +446,27 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (self.dataArray.count > indexPath.row) {
-        GoodsModel *model = [self.dataArray objectAtIndex:indexPath.row];
+    if (self.dataArray.count > indexPath.section) {
+        GoodsModel *model = [self.dataArray objectAtIndex:indexPath.section];
         !_gotoGoodsDetail?:_gotoGoodsDetail(model);
     }
-    
-
 }
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if (self.dataArray.count > 0) {
+        UIView* view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, ScreenW, 10)];
+        return view;
+    }
+    return nil;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if (self.dataArray.count > 0){
+        return 10;
+    }
+    return 0;
+}
+
 #pragma mark-
 - (void)reloadTable {
     [self.myTableView reloadData];

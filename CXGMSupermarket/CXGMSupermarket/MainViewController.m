@@ -38,7 +38,7 @@
     UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 100, 44)];
     label.textAlignment = NSTextAlignmentCenter;
     label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:17];
-    label.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+    label.textColor = [UIColor whiteColor];
     label.text = @"";
     self.navigationItem.titleView = label;
     self.titleLabel = label;

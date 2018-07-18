@@ -56,7 +56,7 @@
             _lastBtn = btn;
         }
     }
-    _menuView.contentSize = CGSizeMake(_btnWidth * array.count, 45);
+    _menuView.contentSize = CGSizeMake(_btnWidth * array.count, _menuView.frame.size.height);
     
     
     
@@ -176,6 +176,14 @@
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView{
     if (_scrollView.contentOffset.x < -50) {
         [self.navigationController popViewControllerAnimated:YES];
+    }
+    
+    if (_menuView.contentOffset.y < 0) {
+        _menuView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0);
+    }
+    
+    if (_menuView.contentOffset.y > 0) {
+        _menuView.contentOffset = CGPointMake(scrollView.contentOffset.x, 0);
     }
 }
 

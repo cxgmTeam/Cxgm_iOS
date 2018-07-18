@@ -168,7 +168,7 @@
     UILabel *label = [[UILabel alloc] init];
     label.text = @"支付失败";
     label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:20];
-    label.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
+    label.textColor = [UIColor colorWithRed:255/255.0 green:79/255.0 blue:79/255.0 alpha:1/1.0];
     [self.view addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(imageView.bottom).offset(20);

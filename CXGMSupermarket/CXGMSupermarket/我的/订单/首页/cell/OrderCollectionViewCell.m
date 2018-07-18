@@ -249,7 +249,7 @@ static NSString *const GoodsOneScreenShotCellID = @"GoodsOneScreenShotCell";
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath{
     if (self.orderItem.productDetails.count == 1) {
-        return CGSizeMake(ScreenW-60,(ScreenW-60)/4.f);
+        return CGSizeMake(ScreenW-30,(ScreenW-60)/4.f);
     }else{
         return CGSizeMake((ScreenW-60)/4.f, (ScreenW-60)/4.f);
     }

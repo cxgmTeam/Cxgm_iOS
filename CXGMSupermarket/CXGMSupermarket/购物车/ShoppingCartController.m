@@ -62,7 +62,7 @@
     
     self.title = @"购物车";
     
-    UIButton* editBtn = [UIButton new];
+    UIButton* editBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     [editBtn setTitle:@"删除" forState:UIControlStateNormal];
     [editBtn setTitleColor:Color333333 forState:UIControlStateNormal];
     editBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];

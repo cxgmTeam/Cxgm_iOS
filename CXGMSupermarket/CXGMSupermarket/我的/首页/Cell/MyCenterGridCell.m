@@ -18,6 +18,16 @@
 - (void)setImage:(NSString *)imageName title:(NSString *)title{
     _imgView.image = [UIImage imageNamed:imageName];
     _titleLabel.text = title;
+    
+    if ([imageName isEqualToString:@"dingdan_item0"]) {
+        [_imgView updateConstraints:^(MASConstraintMaker *make){
+            make.top.equalTo(10);
+        }];
+    }else{
+        [_imgView updateConstraints:^(MASConstraintMaker *make){
+            make.top.equalTo(12);
+        }];
+    }
 }
 
 - (instancetype)initWithFrame:(CGRect)frame{

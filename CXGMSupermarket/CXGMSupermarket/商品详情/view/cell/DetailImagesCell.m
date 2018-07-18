@@ -32,7 +32,7 @@
     
     NSRange contentRange = [html rangeOfString:@"{content}"];
     if (contentRange.location != NSNotFound) {
-        [html replaceCharactersInRange:contentRange withString:htmlString];
+        [html replaceCharactersInRange:contentRange withString:htmlString.length>0?htmlString:@""];
     }
     
     [_webView loadHTMLString:html baseURL:[NSURL fileURLWithPath:htmlPath]];

@@ -188,7 +188,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     
     NSRange contentRange = [htmlString rangeOfString:@"{content}"];
     if (contentRange.location != NSNotFound) {
-        [htmlString replaceCharactersInRange:contentRange withString:string];
+        [htmlString replaceCharactersInRange:contentRange withString:string.length>0?string:@""];
     }
     [self.auxiliaryWebView loadHTMLString:htmlString baseURL:[NSURL fileURLWithPath:htmlPath]];
 }
@@ -257,7 +257,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                 self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];
                 self.goodsDetail.shopCartId = [NSString stringWithFormat:@"%@",model.data];
                 
-                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功"];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsDetail.sn,@"shopCartNum": self.goodsDetail.shopCartNum}];
             });
@@ -288,9 +287,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         if ([model.code intValue] == 200) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];
-                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"更新购物车成功"];
-                
+                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];                
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsDetail.sn,@"shopCartNum": self.goodsDetail.shopCartNum}];
             });

@@ -251,8 +251,6 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 //根据门店ID查询首页运营位置
 - (void)findMotion
 {
-    [self.adBannarList removeAllObjects];
-    
     NSDictionary* dic = @{@"shopId":@""};
     if ([DeviceHelper sharedInstance].shop) {
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
@@ -263,6 +261,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
 
+            [self.adBannarList removeAllObjects];
+            
             for (NSDictionary* dic in (NSArray *)model.data) {
                 AdBannarModel* model = [AdBannarModel AdBannarModelWithJson:dic];
                 [self.adBannarList addObject:model];
@@ -445,7 +445,11 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         return CGSizeMake(ScreenW, 98+(ScreenW-40)/3.f);
     }
     if (indexPath.section ==4) {
-        return CGSizeMake(ScreenW, ScreenW*159/375.f+222);
+        AdBannarModel* model = self.adBannarList[indexPath.item];
+        if (model.productList.count > 0) {
+            return CGSizeMake(ScreenW, ScreenW*159/375.f+222);
+        }
+        return CGSizeMake(ScreenW, ScreenW*159/375.f+10);
     }
     if (indexPath.section == 5) {//热销
         return CGSizeMake((ScreenW - 12*3)/2, (ScreenW - 12*3)/2+72+15);
@@ -494,7 +498,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
     if (indexPath.section == 0) {
-        !_showSubCategoryVC?:_showSubCategoryVC([self.categoryNames[indexPath.item] objectAtIndex:1]);
+        !_showSubCategoryVC?:_showSubCategoryVC(self.categoryNames[indexPath.item]);
     }
     if (indexPath.section == 5) {
         GoodsModel* goods = self.hotGoodsList[indexPath.item];

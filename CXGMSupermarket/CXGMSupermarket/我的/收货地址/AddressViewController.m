@@ -295,8 +295,11 @@
             [self.navigationController pushViewController:vc animated:YES];
         }
         
-        if (self.needNewAddress && indexPath.section == 1 && indexPath.row == 0) {
-            self.needNewAddress = NO;
+        if (indexPath.section == 1) {
+            AddressModel* address = self.addressList[indexPath.row];
+            if (self.selectedAddress) {
+                self.selectedAddress(address);
+            }
             [self.navigationController popViewControllerAnimated:YES];
         }
     }
