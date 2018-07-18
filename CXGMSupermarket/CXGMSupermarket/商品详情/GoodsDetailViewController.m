@@ -258,7 +258,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
                 self.goodsDetail.shopCartId = [NSString stringWithFormat:@"%@",model.data];
                 
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsDetail.sn,@"shopCartNum": self.goodsDetail.shopCartNum}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsDetail.sn,@"shopCartNum": self.goodsDetail.shopCartNum,@"shopCartId": self.goodsDetail.shopCartId}];
             });
         }
         
@@ -287,9 +287,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         if ([model.code intValue] == 200) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];                
+                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsDetail.sn,@"shopCartNum": self.goodsDetail.shopCartNum}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsDetail.sn,@"shopCartNum": self.goodsDetail.shopCartNum,@"shopCartId": self.goodsDetail.shopCartId}];
             });
         }
         

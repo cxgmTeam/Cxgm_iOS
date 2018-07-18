@@ -40,6 +40,7 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     for (GoodsModel* goods in self.goodsList) {
         if ([goods.sn isEqualToString:dic[@"sn"]]) {
             goods.shopCartNum = dic[@"shopCartNum"];
+            goods.shopCartId = dic[@"shopCartId"];
             break;
         }
     }

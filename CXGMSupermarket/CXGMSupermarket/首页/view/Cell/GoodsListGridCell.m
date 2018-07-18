@@ -142,7 +142,7 @@
                     wself.PurchaseCarAnimation(wself.gridImageView);
                 }
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId":self.goodsModel.shopCartId}];
             });
         }
         
@@ -180,7 +180,7 @@
                     wself.PurchaseCarAnimation(wself.gridImageView);
                 }
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId":goods.shopCartId}];
             });
         }
         

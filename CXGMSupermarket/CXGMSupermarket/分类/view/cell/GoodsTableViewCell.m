@@ -123,7 +123,7 @@
                 }
                 
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId": self.goodsModel.shopCartId}];
             });
         }
         
@@ -164,7 +164,7 @@
                     self.cutBtn.hidden = YES;
                 }
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum}];
+                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId": self.goodsModel.shopCartId}];
             });
         }
         
