@@ -300,7 +300,7 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     UIButton* cancelBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     cancelBtn.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
     [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
-    [cancelBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [cancelBtn setTitleColor:Color333333 forState:UIControlStateNormal];
     cancelBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     [cancelBtn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:cancelBtn];

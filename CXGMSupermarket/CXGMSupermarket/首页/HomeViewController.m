@@ -180,6 +180,12 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
+    
+    [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0]];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    
+    
     self.isVisible = YES;
     
     _topView.hidden = NO;
@@ -190,6 +196,11 @@
 
 - (void)viewWillDisappear:(BOOL)animated{
     [super viewWillDisappear:animated];
+    
+    [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
+    
+    
 
     self.isVisible = NO;
     
@@ -197,12 +208,14 @@
     
     [_noticeHot removeFromSuperview];
     _noticeHot = nil;
+    
+
 }
 
 - (void)setupTopBar
 {
     UIButton* locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
-    [locationBtn setImage:[UIImage imageNamed:@"order_address"] forState:UIControlStateNormal];
+    [locationBtn setImage:[UIImage imageNamed:@"order_address_white"] forState:UIControlStateNormal];
     locationBtn.imageEdgeInsets = UIEdgeInsetsMake(0, -5, 0, 0);
     [locationBtn addTarget:self action:@selector(showAddressVC:) forControlEvents:UIControlEventTouchUpInside];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:locationBtn];
