@@ -11,4 +11,6 @@
 @interface SlideshowHeadView : UICollectionReusableView
 /* 轮播图数组 */
 @property (copy , nonatomic)NSArray *imageGroupArray;
+
+@property(nonatomic,copy)void(^showAdvertiseDetail)(NSInteger index);
 @end

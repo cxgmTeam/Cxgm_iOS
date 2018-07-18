@@ -77,7 +77,7 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(self.adImageView.bottom).offset(10);
         make.left.right.equalTo(self);
-        make.bottom.equalTo(self.bottomLineView.top).offset(-10);
+        make.bottom.equalTo(self.bottomLineView.top);
     }];
 }
 
@@ -109,8 +109,9 @@ static NSString *const GoodsListGridCellID = @"GoodsListGridCell";
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc]init];
         layout.minimumLineSpacing = 10;
         layout.minimumInteritemSpacing = 0;
-        layout.itemSize = CGSizeMake(96, 212-30);
+        layout.itemSize = CGSizeMake((ScreenW-40)/3.f, 88+(ScreenW-40)/3.f);
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal; //滚动方向
+        
         
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         [self addSubview:_collectionView];

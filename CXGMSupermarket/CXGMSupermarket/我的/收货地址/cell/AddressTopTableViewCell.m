@@ -82,9 +82,7 @@
     _leftLabel.text = @"";
     
     if (indexPath.item == 0) {
-//        NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
-//        _leftLabel.text = dic[@"Street"];
-        
+
         _anchorBtn.hidden = NO;
         _arrowView.hidden = YES;
         _lineView.hidden = NO;

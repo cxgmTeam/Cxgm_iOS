@@ -24,6 +24,8 @@
 
 @property (nonatomic, strong) NSString *shopCartNum;//购物车中商品数量
 
+@property (nonatomic, assign) BOOL locationInScope ;//定位是否在派送范围内
+
 + (instancetype)sharedInstance;
 
 @end

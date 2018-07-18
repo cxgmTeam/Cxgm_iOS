@@ -7,7 +7,6 @@
 //
 
 #import "GoodsListGridCell.h"
-#import "PurchaseCarAnimationTool.h"
 
 @interface GoodsListGridCell ()
 @property(nonatomic,strong)UIImageView* gridImageView; //图片
@@ -125,8 +124,7 @@
                           @"productId":goods.id.length>0?goods.id:@"",
                           };
     
-    typeof(self) __weak wself = self;
-    
+
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
@@ -138,10 +136,7 @@
                 self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
                 self.goodsModel.shopCartId = [NSString stringWithFormat:@"%@",model.data];
                 
-                if (wself.PurchaseCarAnimation) {
-                    wself.PurchaseCarAnimation(wself.gridImageView);
-                }
-                
+
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId":self.goodsModel.shopCartId}];
             });
         }
@@ -164,8 +159,7 @@
                           @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
                           @"productId":goods.id.length>0?goods.id:@""
                           };
-    
-    typeof(self) __weak wself = self;
+
     
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
@@ -176,9 +170,6 @@
                 
                 self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
                 
-                if (wself.PurchaseCarAnimation) {
-                    wself.PurchaseCarAnimation(wself.gridImageView);
-                }
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId":goods.shopCartId}];
             });

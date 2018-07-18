@@ -18,4 +18,6 @@
 @interface HomeFeatureViewCell : UICollectionViewCell
 
 @property(nonatomic,strong)NSArray* motionArray;
+
+@property(nonatomic,copy)void(^showAdvertiseDetail)(AdvertisementModel * ad);
 @end

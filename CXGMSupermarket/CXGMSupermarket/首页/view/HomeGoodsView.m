@@ -21,7 +21,6 @@
 
 #import "ULBCollectionViewFlowLayout.h"
 
-#import "PurchaseCarAnimationTool.h"
 
 @interface HomeGoodsView ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,ULBCollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -93,6 +92,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:LoginAccount_Success object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshGoodsInfo:) name:DeleteShopCart_Success object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(changGoodsNum:) name:AddGoodsSuccess_Notify object:nil];
         
         self.slideImageList = [NSMutableArray array];
         self.adBannarList = [NSMutableArray array];
@@ -105,6 +105,19 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
 - (void)refreshGoodsInfo:(NSNotification *)notify{
     [self requestGoodsList];
+}
+
+- (void)changGoodsNum:(NSNotification *)notify
+{
+    NSDictionary* dic = [notify userInfo];
+    
+    for (GoodsModel* goods in self.hotGoodsList) {
+        if ([goods.sn isEqualToString:dic[@"sn"]]) {
+            goods.shopCartNum = dic[@"shopCartNum"];
+            goods.shopCartId = dic[@"shopCartId"];
+            break;
+        }
+    }
 }
 
 - (void)requestGoodsList
@@ -328,16 +341,24 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *gridcell = nil;
     
-    if (indexPath.section == 0) {//分类
+    if (indexPath.section == 0)
+    {//分类
         CategoryGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryGridCellID forIndexPath:indexPath];
         [cell setImage:[NSString stringWithFormat:@"homeCategory_%ld",indexPath.item] title:[self.categoryNames[indexPath.item] objectAtIndex:0]];
         gridcell = cell;
-    }else if (indexPath.section == 1) {
+    }
+    else if (indexPath.section == 1)
+    {
         HomeFeatureViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:HomeFeatureViewCellID forIndexPath:indexPath];
         cell.motionArray = self.advertiseList;
+        typeof(self) __weak wself = self;
+        cell.showAdvertiseDetail = ^(AdvertisementModel * ad){
+            !wself.showAdvertiseDetailVC?:wself.showAdvertiseDetailVC(ad);
+        };
         gridcell = cell;
     }
-    else if (indexPath.section == 2 || indexPath.section == 3){
+    else if (indexPath.section == 2 || indexPath.section == 3)
+    {
         ScrollGoodsCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ScrollGoodsCellID forIndexPath:indexPath];
         switch (indexPath.section) {
             case 2:
@@ -355,7 +376,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         };
         gridcell = cell;
     }
-    else if (indexPath.section == 4){
+    else if (indexPath.section == 4)
+    {
         MidAdGoodsViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:MidAdGoodsViewCellID forIndexPath:indexPath];
         cell.adBannar = self.adBannarList[indexPath.item];
         WEAKSELF;
@@ -367,26 +389,11 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         };
         gridcell = cell;
     }
-    else if (indexPath.section == 5) {//热销
+    else if (indexPath.section == 5)
+    {//热销
         GoodsListGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsListGridCellID forIndexPath:indexPath];
         cell.goodsModel = self.hotGoodsList[indexPath.item];
-        
-//        typeof(cell) __weak weakCell = cell;
-//        cell.PurchaseCarAnimation = ^(UIImageView * imageView){
-//            CGRect rect = [self.collectionView convertRect:weakCell.frame toView:self];
-//            CGRect imageViewRect   = imageView.frame;
-//            imageViewRect.origin.y = rect.origin.y + imageViewRect.origin.y;
-//            imageViewRect.origin.x = rect.origin.x;
-//
-//            [[PurchaseCarAnimationTool shareTool] startAnimationandView:imageView
-//                                                                   rect:imageViewRect
-//                                                            finisnPoint:CGPointMake(ScreenWidth / 4 * 2.5, ScreenHeight - TAB_BAR_HEIGHT)
-//                                                            finishBlock:^(BOOL finish) {
-//                                                                UITabBarController* tabBarController = (UITabBarController *)[UIApplication sharedApplication].keyWindow.rootViewController;
-//                                                                UIView *tabbarBtn = tabBarController.tabBar.subviews[3];
-//                                                                [PurchaseCarAnimationTool shakeAnimation:tabbarBtn];
-//                                                            }];
-//        };
+
         gridcell = cell;
         
     }
@@ -398,17 +405,28 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     
     UICollectionReusableView *reusableview = nil;
     
-    if (kind == UICollectionElementKindSectionHeader){
-        if (indexPath.section == 0) {
+    if (kind == UICollectionElementKindSectionHeader)
+    {
+        if (indexPath.section == 0)
+        {
             SlideshowHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:SlideshowHeadViewID forIndexPath:indexPath];
             headerView.imageGroupArray = self.slideImageList;
+            typeof(self) __weak wself = self;
+            headerView.showAdvertiseDetail = ^(NSInteger index){
+                AdvertisementModel* ad = self.slideDataList[index];
+                !wself.showAdvertiseDetailVC?:wself.showAdvertiseDetailVC(ad);
+            };
             reusableview = headerView;
-        }else if (indexPath.section == 2){
+        }
+        else if (indexPath.section == 2)
+        {
             TextTitleHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:TextTitleHeadViewID forIndexPath:indexPath];
             headerView.titleLabel.text = @"精品推荐";
             headerView.subTitleLabel.text = @"精心挑选的超值好货";
             reusableview = headerView;
-        }else if (indexPath.section == 3){
+        }
+        else if (indexPath.section == 3)
+        {
             TextTitleHeadView *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:TextTitleHeadViewID forIndexPath:indexPath];
             headerView.titleLabel.text = @"新品上市";
             headerView.subTitleLabel.text = @"搜索好味道，抢先品尝";
@@ -422,8 +440,10 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         }
         
     }
-    if (kind == UICollectionElementKindSectionFooter) {
-        if (indexPath.section == 0) {
+    if (kind == UICollectionElementKindSectionFooter)
+    {
+        if (indexPath.section == 0)
+        {
             TopLineFootView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:TopLineFootViewID forIndexPath:indexPath];
             footview.roTitles = self.motionNameList;
             reusableview = footview;
@@ -447,7 +467,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if (indexPath.section ==4) {
         AdBannarModel* model = self.adBannarList[indexPath.item];
         if (model.productList.count > 0) {
-            return CGSizeMake(ScreenW, ScreenW*159/375.f+222);
+            return CGSizeMake(ScreenW, 10+(ScreenW*159/375.f)+11+(ScreenW-40)/3.f+98);
         }
         return CGSizeMake(ScreenW, ScreenW*159/375.f+10);
     }
@@ -505,6 +525,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         !_showGoodsDetailVC?:_showGoodsDetailVC(goods);
     }
 }
+
 
 #pragma mark- init
 - (UICollectionView *)collectionView

@@ -12,5 +12,4 @@
 @property(nonatomic,assign)BOOL showOldPrice;
 @property(nonatomic,strong)GoodsModel* goodsModel;
 
-@property(nonatomic,copy)void(^PurchaseCarAnimation)(UIImageView * imageView);
 @end

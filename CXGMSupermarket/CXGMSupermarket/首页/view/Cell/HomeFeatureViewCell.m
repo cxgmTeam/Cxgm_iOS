@@ -78,6 +78,10 @@
 
 @property(nonatomic,strong)FeatureItemView* rightDownItem;
 @property(nonatomic,strong)GradientLabel* rightDownLabel;
+
+@property(nonatomic,strong)UIImageView* leftImgView;
+@property(nonatomic,strong)UIImageView* rightTopImgView;
+@property(nonatomic,strong)UIImageView* rightDownImgView;
 @end
 
 
@@ -89,9 +93,37 @@
         self.backgroundColor = [UIColor whiteColor];
         
         [self setupUI];
+        
+        _leftImgView.userInteractionEnabled = YES;
+        _leftImgView.tag = 0;
+        
+        _rightTopImgView.userInteractionEnabled = YES;
+        _rightTopImgView.tag = 1;
+        
+        _rightDownImgView.userInteractionEnabled = YES;
+        _rightDownImgView.tag = 2;
+        
+        
+        [_leftImgView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapImageView:)]];
+        [_rightTopImgView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapImageView:)]];
+        [_rightDownImgView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapImageView:)]];
+        
     }
     return self;
 }
+
+
+- (void)onTapImageView:(UITapGestureRecognizer *)gesture
+{
+    NSLog(@"gesture gesture gesture  %d",gesture.view.tag);
+    NSInteger tag = gesture.view.tag;
+    
+    if (tag < self.motionArray.count) {
+        AdvertisementModel* model = self.motionArray[tag];
+        !_showAdvertiseDetail?:_showAdvertiseDetail(model);
+    }
+}
+
 
 - (void)setMotionArray:(NSArray *)motionArray{
     _motionArray = motionArray;
@@ -100,22 +132,67 @@
         AdvertisementModel* model = motionArray[i];
         
         if (i == 0) {
-            _leftItem.advertisement = model;
-            _leftLabel.text = model.type;
+//            _leftItem.advertisement = model;
+//            _leftLabel.text = model.type;
+            
+            [_leftImgView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
         }
         else if (i == 1){
-            _rightTopItem.advertisement = model;
-            _rightTopLabel.text = model.type;
+//            _rightTopItem.advertisement = model;
+//            _rightTopLabel.text = model.type;
+            
+            [_rightTopImgView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
         }
         else if (i == 2){
-            _rightDownItem.advertisement = model;
-            _rightDownLabel.text = model.type;
+//            _rightDownItem.advertisement = model;
+//            _rightDownLabel.text = model.type;
+            
+            [_rightDownImgView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
         }
     }
 }
 
 - (void)setupUI
 {
+    
+    _leftImgView = [UIImageView new];
+    _leftImgView.image = [UIImage imageNamed:@"placeholderImage"];
+    [self addSubview:_leftImgView];
+    [_leftImgView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(10);
+        make.top.equalTo(10);
+        make.bottom.equalTo(-20);
+        make.width.equalTo(+(ScreenW-10*2)/2.f);
+    }];
+    
+    
+    _rightTopImgView = [UIImageView new];
+    _rightTopImgView.image = [UIImage imageNamed:@"placeholderImage"];
+    [self addSubview:_rightTopImgView];
+    [_rightTopImgView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.right.equalTo(-10);
+        make.top.equalTo(10);
+        make.height.equalTo((196-10*2-5)/2.f);
+        make.width.equalTo(-5+(ScreenW-10*2)/2.f);
+    }];
+    
+    
+    _rightDownImgView = [UIImageView new];
+    _rightDownImgView.image = [UIImage imageNamed:@"placeholderImage"];
+    [self addSubview:_rightDownImgView];
+    [_rightDownImgView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.right.equalTo(-10);
+        make.bottom.equalTo(-20);
+        make.height.equalTo((196-10*2-5)/2.f);
+        make.width.equalTo(-5+(ScreenW-10*2)/2.f);
+    }];
+    
+    UIView* bottomLineView = [[UIView alloc] init];
+    bottomLineView.backgroundColor = RGB(245,245,245);
+    [self addSubview:bottomLineView];
+    bottomLineView.frame = CGRectMake(0, self.dc_height - 10, ScreenW, 10);
+    
+    /*
     _leftItem = [FeatureItemView new];
     _leftItem.desLabel.text = @"邂逅好物 发现理想生活";
     _leftItem.imageView.image = [UIImage imageNamed:@"temp_wine"];
@@ -174,10 +251,8 @@
         [_rightDownItem addSubview:_rightDownLabel];
         [_rightDownLabel setGradientLabel];
     }
+     */
     
-    UIView* bottomLineView = [[UIView alloc] init];
-    bottomLineView.backgroundColor = RGB(245,245,245);
-    [self addSubview:bottomLineView];
-    bottomLineView.frame = CGRectMake(0, self.dc_height - 12, ScreenW, 12);
+
 }
 @end

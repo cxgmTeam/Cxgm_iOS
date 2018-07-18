@@ -218,10 +218,8 @@
 {
     //当前地址不在配送范围内，未登录请求不到地址列表
     if (![UserInfoManager sharedInstance].isLogin){
-        
-        [DeviceHelper sharedInstance].place = nil;
+
         [self.homeVC setupMainUI:NO];
-    
         return;
     }
     
@@ -254,8 +252,6 @@
                 
                 [wself checkAddress:address.longitude dimension:address.dimension isLocation:NO];
             }else{
-
-                [DeviceHelper sharedInstance].place = nil;
                 [DeviceHelper sharedInstance].defaultAddress = nil;
                 [self.homeVC setupMainUI:NO];
             }
@@ -401,6 +397,8 @@
             NSArray* array = (NSArray *)model.data;
             //在配送范围内
             if (array.count > 0) {
+                [DeviceHelper sharedInstance].locationInScope = YES;
+                
                 [DeviceHelper sharedInstance].shop = [[ShopModel alloc] initWithDictionary:[array firstObject] error:nil];
                 
                 [weakSelf getShopCartNumber];
@@ -412,17 +410,14 @@
                     [weakSelf getAddressList];
                 }else{
                     
-                    [DeviceHelper sharedInstance].place = nil;
                     [DeviceHelper sharedInstance].defaultAddress = nil;
                     [weakSelf.homeVC setupMainUI:NO];
                 }
             }
         }else{
-            [DeviceHelper sharedInstance].place = nil;
             [weakSelf.homeVC setupMainUI:NO];
         }
     } failure:^(id JSON, NSError *error){
-        [DeviceHelper sharedInstance].place = nil;
         [weakSelf.homeVC setupMainUI:NO];
     }];
 }

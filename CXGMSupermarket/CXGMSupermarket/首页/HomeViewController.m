@@ -72,7 +72,7 @@
         self.needNewAddress = NO;
         
     }
-    else if ([DeviceHelper sharedInstance].place && self.inScope)
+    else if ([DeviceHelper sharedInstance].place && [DeviceHelper sharedInstance].locationInScope)
     {
         NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
         if (dic[@"SubLocality"]) {
@@ -150,6 +150,19 @@
                     [wself.navigationController pushViewController:vc animated:YES];
                 }
             };
+            _goodsView.showAdvertiseDetailVC = ^(AdvertisementModel* ad){
+                if ([ad.type isEqualToString:@"1"]) {
+                    WebViewController* vc = [WebViewController new];
+                    vc.urlString = ad.notifyUrl;
+                    [wself.navigationController pushViewController:vc animated:YES];
+                }
+                if ([ad.type isEqualToString:@"2"]) {
+                    GoodsDetailViewController* vc = [GoodsDetailViewController new];
+                    vc.goodsId = ad.productCode;
+                    [wself.navigationController pushViewController:vc animated:YES];
+                }
+            };
+
         }else{
             [_goodsView requestGoodsList];
         }

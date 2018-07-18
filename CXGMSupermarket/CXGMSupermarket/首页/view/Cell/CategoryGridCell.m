@@ -46,6 +46,7 @@
     _gridImageView = [[UIImageView alloc] init];
     _gridImageView.contentMode = UIViewContentModeScaleAspectFill;
     [self addSubview:_gridImageView];
+
     
     _gridLabel = [[UILabel alloc] init];
     _gridLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];

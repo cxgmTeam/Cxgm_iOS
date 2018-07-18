@@ -65,6 +65,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     [self.collectionView reloadData];

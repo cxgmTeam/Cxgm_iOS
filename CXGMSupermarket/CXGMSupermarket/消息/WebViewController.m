@@ -20,7 +20,12 @@
 
     [self setUpUI];
     
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]]];
+    if ([self.urlString containsString:@"http://"] || [self.urlString containsString:@"https://"]) {
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]]];
+    }else{
+        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[@"http://" stringByAppendingString:self.urlString]]]];
+    }
+    
 }
 
 
