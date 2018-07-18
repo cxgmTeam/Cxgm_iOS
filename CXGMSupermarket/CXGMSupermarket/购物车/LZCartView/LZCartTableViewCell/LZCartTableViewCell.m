@@ -234,7 +234,7 @@
     [bgView addSubview:numberLabel];
     [numberLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.right.equalTo(addBtn.left);
-        make.bottom.equalTo(priceLabel);
+        make.bottom.equalTo(priceLabel.bottom).offset(-3);
         make.width.equalTo(30);
         make.height.equalTo(25);
     }];

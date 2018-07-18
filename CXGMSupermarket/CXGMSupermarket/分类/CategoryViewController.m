@@ -88,6 +88,7 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     CatoryGridViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CatoryGridViewCellID forIndexPath:indexPath];
     cell.category = self.categoryList[indexPath.item];
+
     return cell;
 }
 
@@ -105,8 +106,8 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
         layout.itemSize = CGSizeMake(90, 95+10);
-        layout.minimumLineSpacing = (ScreenW - 90*3 - 23*2)/2.f;
-        layout.minimumInteritemSpacing = 0;
+        layout.minimumInteritemSpacing = (ScreenW - 90*3 - 21*2)/2.f;
+        layout.minimumLineSpacing = 5;
         
         _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.delegate = self;
@@ -115,7 +116,7 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
         [_collectionView registerClass:[CatoryGridViewCell class] forCellWithReuseIdentifier:CatoryGridViewCellID];
         [self.view addSubview:_collectionView];
         
-        _collectionView.contentInset = UIEdgeInsetsMake(0, 22, 10, 22);
+        _collectionView.contentInset = UIEdgeInsetsMake(0, 20, 10, 20);
     }
     return _collectionView;
 }

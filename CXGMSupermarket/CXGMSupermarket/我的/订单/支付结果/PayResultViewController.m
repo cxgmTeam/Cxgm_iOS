@@ -35,11 +35,11 @@
                           @"orderId":self.orderId,
                           @"payType":self.payType
                           };
-    
+
     [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APIUpdateStatus] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
-        
+
     } failure:^(id JSON, NSError *error){
-        
+
     }];
 }
 
@@ -145,19 +145,6 @@
     [btn2 addTarget:self action:@selector(gotoRepay:) forControlEvents:UIControlEventTouchUpInside];
     
     
-    UILabel *label1 = [[UILabel alloc] init];
-    label1.numberOfLines = 2;
-    label1.textAlignment = NSTextAlignmentCenter;
-    label1.text = @"支付异常，该订单已为您保留到“待支付”订单中，请尝试重新支付。";
-    label1.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
-    label1.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
-    [self.view addSubview:label1];
-    [label1 mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.equalTo(30);
-        make.width.equalTo(ScreenW-60);
-        make.bottom.equalTo(btn2.top).offset(-30);
-    }];
-    
     UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"pay_failure"]];
     [self.view addSubview:imageView];
     [imageView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -180,6 +167,19 @@
     [imageView1 mas_makeConstraints:^(MASConstraintMaker *make){
         make.right.equalTo(label.left).offset(-5);
         make.centerY.equalTo(label);
+    }];
+    
+    UILabel *label1 = [[UILabel alloc] init];
+    label1.numberOfLines = 2;
+    label1.textAlignment = NSTextAlignmentCenter;
+    label1.text = @"支付异常，该订单已为您保留到“待支付”订单中，请尝试重新支付。";
+    label1.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
+    label1.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
+    [self.view addSubview:label1];
+    [label1 mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(30);
+        make.width.equalTo(ScreenW-60);
+        make.top.equalTo(imageView1.bottom).offset(20);
     }];
 }
 

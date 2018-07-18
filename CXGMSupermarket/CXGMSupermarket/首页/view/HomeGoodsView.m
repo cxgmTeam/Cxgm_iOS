@@ -346,6 +346,12 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         CategoryGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryGridCellID forIndexPath:indexPath];
         [cell setImage:[NSString stringWithFormat:@"homeCategory_%ld",indexPath.item] title:[self.categoryNames[indexPath.item] objectAtIndex:0]];
         gridcell = cell;
+        
+//        if (indexPath.item == 0 || indexPath.item == 5) {
+//            cell.backgroundColor = [UIColor redColor];
+//        }else{
+//            cell.backgroundColor = [UIColor whiteColor];
+//        }
     }
     else if (indexPath.section == 1)
     {
@@ -456,7 +462,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 #pragma mark - item宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {//分类
-        return CGSizeMake(ScreenW/4 , 112);
+        return CGSizeMake(ScreenW/4 , 100);
     }
     if (indexPath.section == 1) {
         return CGSizeMake(ScreenW , 196+12);

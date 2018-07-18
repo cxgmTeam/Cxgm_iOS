@@ -23,6 +23,7 @@
 #import "GoodsDetailViewController.h"
 #import "WebViewController.h"
 
+
 @interface HomeViewController ()
 @property(nonatomic,strong)HomeGoodsView* goodsView;
 @property(nonatomic,strong)HomeShopsView* shopsView;
@@ -282,6 +283,7 @@
 {
     MessageViewController* vc = [MessageViewController new];
     [self.navigationController pushViewController:vc animated:YES];
+
 }
 
 - (void)onTapButton:(id)sender
