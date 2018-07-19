@@ -346,12 +346,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         CategoryGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryGridCellID forIndexPath:indexPath];
         [cell setImage:[NSString stringWithFormat:@"homeCategory_%ld",indexPath.item] title:[self.categoryNames[indexPath.item] objectAtIndex:0]];
         gridcell = cell;
-        
-//        if (indexPath.item == 0 || indexPath.item == 5) {
-//            cell.backgroundColor = [UIColor redColor];
-//        }else{
-//            cell.backgroundColor = [UIColor whiteColor];
-//        }
+    
     }
     else if (indexPath.section == 1)
     {

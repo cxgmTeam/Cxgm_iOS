@@ -61,42 +61,6 @@
     [WXApi registerApp:@"wxd2f7d73babd9de68"];
     
     
-    /*
-    NSUserDefaults* userDefault = [NSUserDefaults standardUserDefaults];
-    
-    NSMutableArray * contentArray = [NSMutableArray array];
-    
-    NSDictionary* userInfo = @{
-                               @"d" : @"umy2sjs153110654223700",
-                               @"p" : @"0",
-                               @"限时抢购" : @[@{@"time":@"2018-07-09 11:22:21",@"type":@"0",@"goodcode":@"114586",@"content":@"小企鹅梅洛红葡萄酒原价120元，现价100元"}],
-                               @"aps" : @{
-                                       @"badge" : @"0",
-                                       @"alert" : @"限时抢购",
-                                       @"sound" : @"default"
-                                       }
-                               };
-    
-    
-    [contentArray addObject:userInfo];
-    
-    
-    NSArray* array = [userDefault objectForKey:RemoteNotification_KEY];
-    if (array.count > 0) {
-        [contentArray addObjectsFromArray:array];
-    }
-
-    NSLog(@"1---  %@",contentArray);
-    
-    [userDefault setObject:contentArray forKey:RemoteNotification_KEY];
-    [userDefault synchronize];
-    
-    
-    array = [userDefault objectForKey:RemoteNotification_KEY];
-    
-    NSLog(@"2---  %@",array);
-    */
-    
     return YES;
 }
 
@@ -356,7 +320,7 @@ API_AVAILABLE(ios(10.0)){
     {
         NSString* alert = [apsDic objectForKey:@"alert"];
         title = [apsDic objectForKey:@"alert"];
-        if (alert)
+        if ([alert length] >0)
         {
             NSString* string  = [userInfo objectForKey:alert];
             if ([string isKindOfClass:[NSString class]]) {
@@ -402,7 +366,7 @@ API_AVAILABLE(ios(10.0)){
     if (apsDic)
     {
         NSString* alert = [apsDic objectForKey:@"alert"];
-        if (alert)
+        if ([alert length] > 0)
         {
             NSString* string  = [userInfo objectForKey:alert];
             if ([string isKindOfClass:[NSString class]]) {
