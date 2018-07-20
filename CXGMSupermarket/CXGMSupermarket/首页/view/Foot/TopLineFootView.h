@@ -10,4 +10,6 @@
 
 @interface TopLineFootView : UICollectionReusableView
 @property(nonatomic,strong)NSArray* roTitles;
+
+@property(nonatomic,copy)void(^showReportDetail)(NSInteger index);
 @end

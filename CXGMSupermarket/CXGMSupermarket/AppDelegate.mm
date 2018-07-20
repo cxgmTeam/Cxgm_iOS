@@ -311,6 +311,9 @@ API_AVAILABLE(ios(10.0)){
 #pragma mark-
 - (void)showNotificationAlert:(NSDictionary *)userInfo
 {
+    if (![userInfo isKindOfClass:[NSDictionary class]]) return;
+        
+    
     NSString* title = @"";
     NSString* message = @"";
     
@@ -362,6 +365,8 @@ API_AVAILABLE(ios(10.0)){
 
 - (void)openRemoteNotifyDetail:(NSDictionary *)userInfo
 {
+    if (![userInfo isKindOfClass:[NSDictionary class]]) return;
+    
     NSDictionary* apsDic = [userInfo objectForKey:@"aps"];
     if (apsDic)
     {

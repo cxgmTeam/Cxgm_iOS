@@ -103,7 +103,9 @@
 {
     self.inScope = inScope;
     
-    if (self.isVisible) {
+    NSLog(@"%s   %d  %d",__func__,self.isVisible,[self isCurrentViewControllerVisible]);
+    
+    if (self.isVisible && [self isCurrentViewControllerVisible]) {
         [self setNoticeLocation];
     }else{
         [_noticeHot removeFromSuperview];
@@ -142,7 +144,7 @@
             _goodsView.showBusinessDetailVC = ^(AdBannarModel* model){
                 if ([model.urlType isEqualToString:@"1"]) {
                     WebViewController* vc = [WebViewController new];
-                    vc.urlString = model.productCode;
+                    vc.urlString = model.notifyUrl;
                     [wself.navigationController pushViewController:vc animated:YES];
                 }
                 if ([model.urlType isEqualToString:@"2"]){
@@ -233,6 +235,11 @@
 
 }
 
+-(BOOL)isCurrentViewControllerVisible
+{
+    return (self.isViewLoaded && self.view.window);
+}
+
 - (void)setupTopBar
 {
     UIButton* locationBtn = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
@@ -280,8 +287,12 @@
     vc.needNewAddress = self.needNewAddress;
     typeof(self) __weak wself = self;
     vc.selectedAddress = ^(AddressModel * address){
+        
         [DeviceHelper sharedInstance].defaultAddress = address;
         [wself setNoticeLocation];
+        
+        //请求店铺
+        [wself checkAddress:address.longitude dimension:address.dimension];
     };
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -318,6 +329,45 @@
         [self.navigationController pushViewController:vc animated:YES];
     }
     
+}
+
+
+
+- (void)checkAddress:(NSString *)longitude dimension:(NSString *)dimension
+{
+    NSDictionary* dic = @{
+                          @"longitude":longitude,
+                          @"dimension":dimension
+                          };
+    typeof(self) __weak wself = self;
+    //data为空代表不在配送范围内
+    [AFNetAPIClient POST:[LoginBaseURL stringByAppendingString:APICheckAddress] token:nil parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSArray class]]) {
+            NSArray* array = (NSArray *)model.data;
+            //更新店铺
+            if (array.count > 0) {
+
+                ShopModel* shop = [[ShopModel alloc] initWithDictionary:[array firstObject] error:nil];
+                
+                //1.切换店铺  2.从店铺列表切换到商品列表
+                if ([DeviceHelper sharedInstance].shop && ![[DeviceHelper sharedInstance].shop.id isEqualToString:shop.id]) {
+                    
+                    [DeviceHelper sharedInstance].shop = shop;
+                    
+                    [wself.goodsView requestGoodsList];
+                }
+                else if ([[DeviceHelper sharedInstance].shop.id length] == 0){
+                    
+                    [DeviceHelper sharedInstance].shop = shop;
+                    
+                    [wself setupMainUI:YES];
+                }
+            }
+        }
+    } failure:^(id JSON, NSError *error){
+
+    }];
 }
 
 #pragma mark-

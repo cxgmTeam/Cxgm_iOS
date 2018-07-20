@@ -71,6 +71,7 @@
                                                         } forState:UIControlStateSelected];
     
     NSMutableArray* array = [NSMutableArray array];
+    
     for (NSInteger i = 0; i < vc.count; i++)
     {
         NSString* string = vc[i];
@@ -187,11 +188,15 @@
 
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIShopCartList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [DataModel dataModelWith:JSON];
+        
         if ([model.code isEqualToString:@"200"]) {
+            
             if ([model.listModel.total intValue]==0) {
                 self.cartItem.badgeValue = nil;
+                
             }else if ([model.listModel.total intValue]>99){
                 self.cartItem.badgeValue = @"99+";
+                
             }else{
                 self.cartItem.badgeValue = [NSString stringWithFormat:@"%@",model.listModel.total];
             }
@@ -218,8 +223,10 @@
 {
     //当前地址不在配送范围内，未登录请求不到地址列表
     if (![UserInfoManager sharedInstance].isLogin){
-
         [self.homeVC setupMainUI:NO];
+        return;
+    }
+    if ([DeviceHelper sharedInstance].shop) {
         return;
     }
     
@@ -231,6 +238,7 @@
 
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
+            
             NSArray* array = [AddressModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
             if (array.count > 0)
             {
@@ -249,7 +257,6 @@
                     
                     self.requestCount = 2;
                 }
-                
                 [wself checkAddress:address.longitude dimension:address.dimension isLocation:NO];
             }else{
                 [DeviceHelper sharedInstance].defaultAddress = nil;
@@ -271,7 +278,7 @@
 
 - (void)startLocationCity:(NSNotification *)notify
 {
-    
+    NSLog(@"%s",__func__);
     if ([DeviceHelper sharedInstance].shop) return;
         
     self.requestCount = 0;
@@ -295,10 +302,14 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations{
+   
+    if (locations.count == 0) return;
+    
     CLLocation *loc = [locations firstObject];
 //维度：loc.coordinate.latitude
 //经度：loc.coordinate.longitude
-    
+    if (loc.coordinate.latitude == [DeviceHelper sharedInstance].location.coordinate.latitude && loc.coordinate.longitude == [DeviceHelper sharedInstance].location.coordinate.longitude) return;
+
     [DeviceHelper sharedInstance].location = loc;
     
     NSLog(@"纬度=%f，经度=%f",loc.coordinate.latitude,loc.coordinate.longitude);
@@ -309,13 +320,15 @@
         //转换后的coord
         CLLocationCoordinate2D coord = [WGS84TOGCJ02 transformFromWGSToGCJ:[loc coordinate]];
         
+         NSLog(@"转换后的 纬度=%f，经度=%f",coord.latitude,coord.longitude);
+        
         [self checkAddress:[NSString stringWithFormat:@"%lf",coord.longitude] dimension:[NSString stringWithFormat:@"%lf",coord.latitude] isLocation:YES];
     }
     else
     {
         [self checkAddress:[NSString stringWithFormat:@"%lf",loc.coordinate.longitude] dimension:[NSString stringWithFormat:@"%lf",loc.coordinate.latitude] isLocation:YES];
     }
-    
+    [self.locationManager stopUpdatingLocation];
     
     // 保存 Device 的现语言
     NSMutableArray *userDefaultLanguages = [[NSUserDefaults standardUserDefaults]
@@ -330,9 +343,7 @@
                        if(!error){
                            for (CLPlacemark *place in placemarks) {
                                NSLog(@"placemark.addressDictionary  %@",place.addressDictionary);
-                               
-                               [self.locationManager stopUpdatingLocation];
-                               
+
                                [DeviceHelper sharedInstance].place = place;
                                
                                [weakSelf.homeVC setNoticeLocation];
@@ -392,12 +403,17 @@
     WEAKSELF;
     //data为空代表不在配送范围内
     [AFNetAPIClient POST:[LoginBaseURL stringByAppendingString:APICheckAddress] token:nil parameters:dic success:^(id JSON, NSError *error){
+        
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        
         if ([model.data isKindOfClass:[NSArray class]]) {
             NSArray* array = (NSArray *)model.data;
             //在配送范围内
-            if (array.count > 0) {
-                [DeviceHelper sharedInstance].locationInScope = YES;
+            if (array.count > 0)
+            {
+                if (location) {
+                    [DeviceHelper sharedInstance].locationInScope = YES;
+                }
                 
                 [DeviceHelper sharedInstance].shop = [[ShopModel alloc] initWithDictionary:[array firstObject] error:nil];
                 
@@ -407,6 +423,7 @@
             }else{
                 //这个地方要出去
                 if (location || self.requestCount == 1) {
+                    
                     [weakSelf getAddressList];
                 }else{
                     

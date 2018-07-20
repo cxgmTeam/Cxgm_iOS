@@ -71,7 +71,7 @@
     }];
     
     
-    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 45, ScreenW, ScreenH-NAVIGATION_BAR_HEIGHT-45-TAB_BAR_HEIGHT)];
+    _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 45, ScreenW, ScreenH-NAVIGATION_BAR_HEIGHT-TAB_BAR_HEIGHT)];
     _scrollView.delegate = self;
     _scrollView.pagingEnabled = YES;
     _scrollView.showsHorizontalScrollIndicator = NO;
@@ -106,7 +106,7 @@
                 break;
         }
         [_scrollView addSubview:vc.view];
-        vc.view.frame = CGRectMake(i*ScreenW, 0, ScreenW, ScreenH-NAVIGATION_BAR_HEIGHT-TAB_BAR_HEIGHT-45);
+        vc.view.frame = CGRectMake(i*ScreenW, 0, ScreenW, _scrollView.frame.size.height);
         [self addChildViewController:vc];
     }
     

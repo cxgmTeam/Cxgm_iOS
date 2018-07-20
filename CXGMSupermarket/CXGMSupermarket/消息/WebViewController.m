@@ -30,6 +30,9 @@
 
 
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation{
+    
+    NSLog(@"%s  %@",__func__,[webView.URL absoluteString]) ;
+    
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
 }
 

@@ -526,6 +526,7 @@
         [self.navigationController popViewControllerAnimated:YES];
     }else{
         AddAddressViewController* vc = [AddAddressViewController new];
+        vc.firstAddress = self.firstAddress;
         vc.selectedLoacation = model;
         [self.navigationController pushViewController:vc animated:YES];
     }

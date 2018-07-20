@@ -180,7 +180,10 @@
     }];
     
     _unitLabel = [UILabel new];
-    _unitLabel.text = [NSString stringWithFormat:@"/%@",self.goods.unit];
+    _unitLabel.text = @"";
+    if ([self.goods.unit length] > 0) {
+        _unitLabel.text = [NSString stringWithFormat:@"/%@",self.goods.unit];
+    }
     _unitLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     _unitLabel.textColor = [UIColor colorWithRed:63/255.0 green:63/255.0 blue:63/255.0 alpha:1/1.0];
     [_contentView addSubview:_unitLabel];

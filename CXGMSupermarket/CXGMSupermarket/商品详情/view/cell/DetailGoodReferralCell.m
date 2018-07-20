@@ -42,7 +42,12 @@
     _goodTitleLabel.text = goods.name;
     _goodSubtitleLabel.text = goods.fullName;
     _goodPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goods.price floatValue]];
-    _unitLabel.text = [NSString stringWithFormat:@"/%@",goods.unit];
+    
+    _unitLabel.text = @"";
+    if ([goods.unit length] > 0) {
+        _unitLabel.text = [NSString stringWithFormat:@"/%@",goods.unit];
+    }
+    
     
     if ([goods.originalPrice floatValue]>0) {
         _oldPriceLabel.text = [NSString stringWithFormat:@"￥%.2f",[goods.originalPrice floatValue]];

@@ -61,8 +61,10 @@
     [super layoutSubviews];
     
     [_gridImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(15);
+        make.top.equalTo(10);
         make.centerX.mas_equalTo(self);
+        make.width.height.equalTo(self.dc_width*2/3.f);
+        
     }];
     
     [_gridLabel mas_makeConstraints:^(MASConstraintMaker *make) {

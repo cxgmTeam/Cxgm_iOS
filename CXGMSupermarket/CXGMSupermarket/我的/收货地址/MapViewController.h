@@ -14,7 +14,5 @@
 //点击新增地址进入
 @property(nonatomic,copy)void(^selectedAddress)(LocationModel *model);
 
-//点击附近地址进入
-@property(nonatomic,copy)void(^toAddAddress)(LocationModel *model);
-
+@property(nonatomic,assign)BOOL firstAddress;//新增第一个地址置成为默认地址
 @end

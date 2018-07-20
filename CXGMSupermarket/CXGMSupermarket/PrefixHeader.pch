@@ -137,11 +137,10 @@ typedef NS_ENUM(NSInteger, OrderStatus) {
 #define Show_PayResult           @"Show_PayResult"
 
 #define AddedNewScope_Notify     @"AddedNewScope_Notify"
-
+#define Show_RemoteNotification    @"Show_RemoteNotification"
 
 #define RemoteNotification_KEY     @"RemoteNotification_KEY"
-
-#define Show_RemoteNotification    @"Show_RemoteNotification"
+#define Empty_AddressList         @"Empty_AddressList"
 
 
 #define PAGECOUNT  @"10"

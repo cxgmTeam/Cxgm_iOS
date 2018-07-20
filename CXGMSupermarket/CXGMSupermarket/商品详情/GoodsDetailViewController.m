@@ -52,6 +52,7 @@
 //辅助
 @property (strong , nonatomic)WKWebView *auxiliaryWebView;
 @property (assign , nonatomic)CGFloat webViewHeight;
+
 @end
 
 /* cell */
@@ -72,7 +73,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
 
     self.auxiliaryWebView.frame = CGRectMake(0, 0, ScreenW, 5);
     self.auxiliaryWebView.hidden = YES;
@@ -153,7 +153,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindProductDetail] token:nil parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        
         if ([model.data isKindOfClass:[NSDictionary class]]) {
+            
             self.goodsDetail = [[GoodsModel alloc] initWithDictionary:(NSDictionary *)model.data error:nil];
             if ([self.goodsDetail.introduction length] == 0) {
                 self.goodsDetail.introduction = @"暂无详情的描述";
@@ -162,7 +164,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
             if ([self.goodsDetail.introduction length] > 0) {
                 [wself updateWebVWithContent:self.goodsDetail.introduction];
             }
-            
+
             if ([self.goodsDetail.productImageList isKindOfClass:[NSArray class]]) {
                 for (NSDictionary* dic in self.goodsDetail.productImageList) {
                     [self.slideImageArray addObject:dic[@"url"]];
@@ -686,10 +688,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
 {
     [webView evaluateJavaScript: @"document.body.scrollHeight" completionHandler:^(NSString *string, NSError * error){
-         self.webViewHeight = [string intValue]+10;
+        self.webViewHeight = [string intValue]+10;
         
         [self.collectionView reloadData];
-        
     }];
 }
 

@@ -143,6 +143,7 @@
 @property (nonatomic,strong)NSString<Optional> * onShelf;
 @property (nonatomic,strong)NSString<Optional> * motionName;
 @property (nonatomic,strong)NSString<Optional> * urlType;//1是网页 2是商品详情
+@property (nonatomic,strong)NSString<Optional> * notifyUrl;
 @property (nonatomic,strong)NSString<Optional> * productCode;
 @property (nonatomic,strong)NSArray<Optional> * productList;
 

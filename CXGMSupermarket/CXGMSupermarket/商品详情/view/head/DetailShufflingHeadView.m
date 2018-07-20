@@ -34,6 +34,7 @@
     _cycleScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, ScreenW, self.dc_height) delegate:self placeholderImage:nil];
     _cycleScrollView.autoScroll = YES;
     _cycleScrollView.showPageControl = NO;
+    _cycleScrollView.placeholderImage = [UIImage imageNamed:@"placeholderImage"];
     [self addSubview:_cycleScrollView];
 
 }

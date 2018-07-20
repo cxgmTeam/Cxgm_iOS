@@ -128,6 +128,10 @@
 - (void)setMotionArray:(NSArray *)motionArray{
     _motionArray = motionArray;
     
+    _leftImgView.image = [UIImage imageNamed:@"placeholderImage"];
+    _rightTopImgView.image = [UIImage imageNamed:@"placeholderImage"];
+    _rightDownImgView.image = [UIImage imageNamed:@"placeholderImage"];
+    
     for (NSInteger i = 0 ; i < motionArray.count ; i ++) {
         AdvertisementModel* model = motionArray[i];
         

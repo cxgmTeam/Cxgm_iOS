@@ -40,7 +40,7 @@
 {
     _imageGroupArray = imageGroupArray;
     _cycleScrollView.placeholderImage = [UIImage imageNamed:@"placeholderImage"];
-    if (imageGroupArray.count == 0) return;
+//    if (imageGroupArray.count == 0) return;
     _cycleScrollView.imageURLStringsGroup = _imageGroupArray;
     
 }

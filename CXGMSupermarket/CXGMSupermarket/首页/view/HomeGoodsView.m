@@ -79,7 +79,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         }];
         WEAKSELF
         self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-
+            [weakSelf.collectionView.mj_header endRefreshing];
+            
             [weakSelf findTopProduct];
             [weakSelf findNewProduct];
             [weakSelf findHotProduct];
@@ -195,6 +196,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         token = [UserInfoManager sharedInstance].userInfo.token;
     }
     
+    self.hotGoodsList = nil;
+    
     WEAKSELF;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindHotProduct]  token:token parameters:dic success:^(id JSON, NSError *error){
 
@@ -203,12 +206,10 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
            weakSelf.hotGoodsList  = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
            
             [weakSelf.collectionView reloadData];
-            
         }
-        [weakSelf.collectionView.mj_header endRefreshing];
         
     } failure:^(id JSON, NSError *error){
-        [weakSelf.collectionView.mj_header endRefreshing];
+
     }];
 }
 
@@ -221,7 +222,11 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if ([DeviceHelper sharedInstance].shop) {
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
     }
-
+    
+    self.slideDataList = nil;
+    self.advertiseList = nil;
+    [self.slideImageList removeAllObjects];
+    
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindAdvertisement]  token:nil parameters:dic success:^(id JSON, NSError *error){
         
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
@@ -295,6 +300,10 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if ([DeviceHelper sharedInstance].shop) {
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
     }
+    
+    self.reportList = nil;
+    [self.motionNameList removeAllObjects];
+    
     WEAKSELF;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindReport]  token:nil parameters:dic success:^(id JSON, NSError *error){
         
@@ -380,21 +389,32 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     else if (indexPath.section == 4)
     {
         MidAdGoodsViewCell* cell = [collectionView dequeueReusableCellWithReuseIdentifier:MidAdGoodsViewCellID forIndexPath:indexPath];
-        cell.adBannar = self.adBannarList[indexPath.item];
+        
+        if (indexPath.item < self.adBannarList.count) {
+            cell.adBannar = self.adBannarList[indexPath.item];
+        }
+        
         WEAKSELF;
         cell.showGoodsDetail = ^(GoodsModel *model){
             !weakSelf.showGoodsDetailVC?:weakSelf.showGoodsDetailVC(model);
         };
         cell.tapAdImageHandler = ^{
-            !weakSelf.showBusinessDetailVC?:weakSelf.showBusinessDetailVC(self.adBannarList[indexPath.item]);
+            
+            if (indexPath.item < self.adBannarList.count){
+                !weakSelf.showBusinessDetailVC?:weakSelf.showBusinessDetailVC(self.adBannarList[indexPath.item]);
+            }
+            
         };
         gridcell = cell;
     }
     else if (indexPath.section == 5)
     {//热销
         GoodsListGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsListGridCellID forIndexPath:indexPath];
-        cell.goodsModel = self.hotGoodsList[indexPath.item];
-
+        
+        if (indexPath.item < self.hotGoodsList.count) {
+            cell.goodsModel = self.hotGoodsList[indexPath.item];
+        }
+        
         gridcell = cell;
         
     }
@@ -414,8 +434,11 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             headerView.imageGroupArray = self.slideImageList;
             typeof(self) __weak wself = self;
             headerView.showAdvertiseDetail = ^(NSInteger index){
-                AdvertisementModel* ad = self.slideDataList[index];
-                !wself.showAdvertiseDetailVC?:wself.showAdvertiseDetailVC(ad);
+                
+                if (index < self.slideDataList.count) {
+                    AdvertisementModel* ad = self.slideDataList[index];
+                    !wself.showAdvertiseDetailVC?:wself.showAdvertiseDetailVC(ad);
+                }
             };
             reusableview = headerView;
         }
@@ -447,6 +470,14 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         {
             TopLineFootView *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:TopLineFootViewID forIndexPath:indexPath];
             footview.roTitles = self.motionNameList;
+            typeof(self) __weak wself = self;
+            footview.showReportDetail = ^(NSInteger index){
+                
+                if (index < self.reportList.count) {
+                    !wself.showBusinessDetailVC?:wself.showBusinessDetailVC(self.reportList[index]);
+                }
+                
+            };
             reusableview = footview;
         }
     }
@@ -457,7 +488,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 #pragma mark - item宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {//分类
-        return CGSizeMake(ScreenW/4 , 100);
+        return CGSizeMake(ScreenW/4 , 10+6+20+ScreenW/6);
     }
     if (indexPath.section == 1) {
         return CGSizeMake(ScreenW , 196+12);
@@ -509,6 +540,9 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
+    if (section == 0) {
+        return UIEdgeInsetsMake(0, 0, 5, 0);
+    }
     if (section == 5) {
         return UIEdgeInsetsMake(0, 10, 10, 10);
     }
@@ -518,10 +552,10 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.section == 0) {
+    if (indexPath.section == 0 && indexPath.item < self.categoryNames.count) {
         !_showSubCategoryVC?:_showSubCategoryVC(self.categoryNames[indexPath.item]);
     }
-    if (indexPath.section == 5) {
+    if (indexPath.section == 5 && indexPath.item < self.hotGoodsList.count) {
         GoodsModel* goods = self.hotGoodsList[indexPath.item];
         !_showGoodsDetailVC?:_showGoodsDetailVC(goods);
     }

@@ -12,4 +12,6 @@
 @property(nonatomic,strong)AddressModel* address;
 
 @property(nonatomic,strong)LocationModel* selectedLoacation;
+
+@property(nonatomic,assign)BOOL firstAddress;//新增第一个地址置成为默认地址
 @end

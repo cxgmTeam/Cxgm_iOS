@@ -53,7 +53,7 @@
     [addBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     addBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:18];
     [bottomView addSubview:addBtn];
-    [addBtn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
+    [addBtn addTarget:self action:@selector(onAddAddressButton:) forControlEvents:UIControlEventTouchUpInside];
     [addBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.right.top.equalTo(bottomView);
         make.height.equalTo(49);
@@ -69,6 +69,7 @@
     typeof(self) __weak wself = self;
     
     self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self.tableView.mj_header endRefreshing];
         [wself getAddressList];
     }];
     
@@ -85,8 +86,6 @@
 {
     if (![UserInfoManager sharedInstance].isLogin) return;
     
-    //点击设为默认 刷新列表会崩溃
-//    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     
@@ -113,21 +112,22 @@
             [self.tableView reloadData];
         }
         
-        [self.tableView.mj_header endRefreshing];
+        
     } failure:^(id JSON, NSError *error){
         [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [self.tableView.mj_header endRefreshing];
+
     }];
 }
 
-
-- (void)onTapButton:(id)sender{
+//新增地址
+- (void)onAddAddressButton:(id)sender{
     if (![UserInfoManager sharedInstance].isLogin){
         [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
         return;
     }
     
     AddAddressViewController* vc = [AddAddressViewController new];
+    vc.firstAddress = self.addressList.count>0?NO:YES;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -292,6 +292,7 @@
     {
         if (indexPath.section == 0 && indexPath.row == 1) {
             MapViewController* vc = [MapViewController new];
+            vc.firstAddress = self.addressList.count>0?NO:YES;
             [self.navigationController pushViewController:vc animated:YES];
         }
         

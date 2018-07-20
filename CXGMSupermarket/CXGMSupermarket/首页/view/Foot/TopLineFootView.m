@@ -38,14 +38,13 @@
 
 - (void)setUpRollingTitle
 {
-    
     if (_numericalScrollView) {
         [_numericalScrollView removeFromSuperview];
         _numericalScrollView = nil;
     }
     
     //初始化
-    _numericalScrollView = [[DCTitleRolling alloc] initWithFrame:CGRectMake(94, 0, self.dc_width-100, 70) WithTitleData:^(CDDRollingGroupStyle *rollingGroupStyle, NSString *__autoreleasing *leftImage, NSArray *__autoreleasing *rolTitles, NSArray *__autoreleasing *rolTags, NSArray *__autoreleasing *rightImages, NSString *__autoreleasing *rightbuttonTitle, NSInteger *interval, float *rollingTime, NSInteger *titleFont, UIColor *__autoreleasing *titleColor, BOOL *isShowTagBorder) {
+    _numericalScrollView = [[DCTitleRolling alloc] initWithFrame:CGRectMake(94, 1, self.dc_width-100, 70) WithTitleData:^(CDDRollingGroupStyle *rollingGroupStyle, NSString *__autoreleasing *leftImage, NSArray *__autoreleasing *rolTitles, NSArray *__autoreleasing *rolTags, NSArray *__autoreleasing *rightImages, NSString *__autoreleasing *rightbuttonTitle, NSInteger *interval, float *rollingTime, NSInteger *titleFont, UIColor *__autoreleasing *titleColor, BOOL *isShowTagBorder) {
         
         *rollingTime = 0.25;
 //        *rolTags = @[@"冬季健康日",@"新手上路",@"年终内购会",@"GitHub星星走一波"];
@@ -58,7 +57,7 @@
         *isShowTagBorder = NO;
         *titleColor =  [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
     }];
-    
+    _numericalScrollView.delegate = self;
     _numericalScrollView.moreClickBlock = ^{
         NSLog(@"mall----more");
     };
@@ -100,6 +99,7 @@
         make.top.left.right.equalTo(self);
         make.height.equalTo(1);
     }];
+
     
     UIView* bottomLineView = [[UIView alloc] init];
     bottomLineView.backgroundColor = RGB(245, 245, 245);
@@ -114,6 +114,7 @@
 - (void)dc_RollingViewSelectWithActionAtIndex:(NSInteger)index
 {
     NSLog(@"点击了第%zd头条滚动条",index);
+    !_showReportDetail?:_showReportDetail(index);
 }
 
 @end
