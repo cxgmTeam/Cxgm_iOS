@@ -49,6 +49,8 @@
 
 @property (strong , nonatomic)NSMutableArray *slideImageArray;
 
+@property (strong , nonatomic)NSMutableArray *introductImgs;
+@property (strong , nonatomic)NSMutableArray *imgHeights;
 //辅助
 @property (strong , nonatomic)WKWebView *auxiliaryWebView;
 @property (assign , nonatomic)CGFloat webViewHeight;
@@ -74,9 +76,11 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    self.introductImgs = [NSMutableArray array];
+    self.imgHeights = [NSMutableArray array];
+    
     self.auxiliaryWebView.frame = CGRectMake(0, 0, ScreenW, 5);
     self.auxiliaryWebView.hidden = YES;
-    
     
     
     [self.view addSubview:self.addGoodsBtn];
@@ -137,6 +141,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 {
     
     [self.slideImageArray removeAllObjects];
+    [self.introductImgs removeAllObjects];
+    [self.imgHeights removeAllObjects];
     
     NSDictionary* dic;
     if (self.shopId) {
@@ -162,7 +168,25 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
             }
             
             if ([self.goodsDetail.introduction length] > 0) {
-                [wself updateWebVWithContent:self.goodsDetail.introduction];
+//                [wself updateWebVWithContent:self.goodsDetail.introduction];
+                
+                NSArray* array = [self.goodsDetail.introduction componentsSeparatedByString:@"</p>"];
+                
+                for (NSInteger i = 0; i < array.count; i++)
+                {
+                    NSString* string = array[i];
+                    
+                    NSRange range1 = [string rangeOfString:@"<p><img src="];
+                    NSRange range2 = [string rangeOfString:@"/>"];
+                    
+                    if (range1.location != NSNotFound && range2.location != NSNotFound) {
+                        
+                        NSString* imgUrl = [string substringWithRange:NSMakeRange(range1.length+1, string.length-range1.length-2-range2.length)];
+                        [self.introductImgs addObject:imgUrl];
+                        
+                        [wself.imgHeights addObject:[wself calcuteImagesHeight:imgUrl]];
+                    }
+                }
             }
 
             if ([self.goodsDetail.productImageList isKindOfClass:[NSArray class]]) {
@@ -182,6 +206,18 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     }];
 }
 
+
+- (NSNumber *)calcuteImagesHeight:(NSString *)imageUrl{
+    
+    CGFloat height = 0;
+    
+    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+    
+    UIImage *image = [UIImage imageWithData:data];
+    
+    height = image.size.height*ScreenW/image.size.width;
+    return [NSNumber numberWithFloat:height];
+}
 
 -(void)updateWebVWithContent:(NSString*)string
 {
@@ -319,7 +355,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         return 1;
     }
     if (section == 1 ) { //详情
-        return 7;
+        return 6+self.introductImgs.count;
     }
     if (section == 2) { //猜你喜欢
         return self.pushArray.count;
@@ -372,7 +408,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         else
         {
             DetailImagesCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:DetailImagesCellID forIndexPath:indexPath];
-            cell.htmlString = self.goodsDetail.introduction;
+            if (indexPath.item-6 < self.introductImgs.count) {
+                cell.imageUrl = self.introductImgs[indexPath.item-6];
+            }
             gridcell = cell;
         }
     }
@@ -421,7 +459,12 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         if (indexPath.item < 6) {
             return CGSizeMake(ScreenW, 45);
         }else{
-            return CGSizeMake(ScreenW, self.webViewHeight);
+            CGFloat height = 45;
+            if (indexPath.item-6 < self.imgHeights.count){
+//                height = [DetailImagesCell collectionViewHeight:self.introductImgs[indexPath.item-6]];
+                height = [self.imgHeights[indexPath.item-6] floatValue];
+            }
+            return CGSizeMake(ScreenW, height);
         }
     }
     if (indexPath.section == 2) {//猜你喜欢
@@ -447,9 +490,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     if (section == 0 ) {
         return CGSizeMake(ScreenW, 65);
     }
-//    if (section == 1) {
-//        return CGSizeMake(ScreenW, self.webViewHeight);//详情图片
-//    }
     return CGSizeZero;
 }
 #pragma mark - <UICollectionViewDelegateFlowLayout>
