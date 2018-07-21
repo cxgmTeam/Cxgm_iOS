@@ -49,7 +49,7 @@
 
 @property (strong , nonatomic)NSMutableArray *slideImageArray;
 
-@property (strong , nonatomic)NSMutableArray *introductImgs;
+@property (strong , nonatomic)NSArray *introductImgs;
 @property (strong , nonatomic)NSMutableArray *imgHeights;
 //辅助
 @property (strong , nonatomic)WKWebView *auxiliaryWebView;
@@ -76,7 +76,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    self.introductImgs = [NSMutableArray array];
+//    self.introductImgs = [NSMutableArray array];
     self.imgHeights = [NSMutableArray array];
     
     self.auxiliaryWebView.frame = CGRectMake(0, 0, ScreenW, 5);
@@ -141,7 +141,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 {
     
     [self.slideImageArray removeAllObjects];
-    [self.introductImgs removeAllObjects];
+//    [self.introductImgs removeAllObjects];
+    self.introductImgs = nil;
     [self.imgHeights removeAllObjects];
     
     NSDictionary* dic;
@@ -168,24 +169,11 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
             }
             
             if ([self.goodsDetail.introduction length] > 0) {
-//                [wself updateWebVWithContent:self.goodsDetail.introduction];
                 
-                NSArray* array = [self.goodsDetail.introduction componentsSeparatedByString:@"</p>"];
+                self.introductImgs = [self getURLFromStr:self.goodsDetail.introduction];
                 
-                for (NSInteger i = 0; i < array.count; i++)
-                {
-                    NSString* string = array[i];
-                    
-                    NSRange range1 = [string rangeOfString:@"<p><img src="];
-                    NSRange range2 = [string rangeOfString:@"/>"];
-                    
-                    if (range1.location != NSNotFound && range2.location != NSNotFound) {
-                        
-                        NSString* imgUrl = [string substringWithRange:NSMakeRange(range1.length+1, string.length-range1.length-2-range2.length)];
-                        [self.introductImgs addObject:imgUrl];
-                        
-                        [wself.imgHeights addObject:[wself calcuteImagesHeight:imgUrl]];
-                    }
+                for (NSString * urlString in self.introductImgs) {
+                    [wself.imgHeights addObject:[wself calcuteImagesHeight:urlString]];
                 }
             }
 
@@ -204,6 +192,30 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     } failure:^(id JSON, NSError *error){
         
     }];
+}
+
+- (NSArray*)getURLFromStr:(NSString *)string {
+    NSError *error;
+    //可以识别url的正则表达式
+    NSString *regulaStr = @"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regulaStr
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    
+    NSArray *arrayOfAllMatches = [regex matchesInString:string
+                                                options:0
+                                                  range:NSMakeRange(0, [string length])];
+    
+    //NSString *subStr;
+    NSMutableArray *arr=[[NSMutableArray alloc] init];
+    
+    for (NSTextCheckingResult *match in arrayOfAllMatches){
+        NSString* substringForMatch;
+        substringForMatch = [string substringWithRange:match.range];
+        [arr addObject:substringForMatch];
+    }
+    return arr;
 }
 
 
@@ -455,14 +467,17 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     if (indexPath.section == 0) {//基本信息
         return CGSizeMake(ScreenW , 125);
     }
-    if (indexPath.section == 1 ) {
+    if (indexPath.section == 1 )
+    {
         if (indexPath.item < 6) {
             return CGSizeMake(ScreenW, 45);
         }else{
             CGFloat height = 45;
             if (indexPath.item-6 < self.imgHeights.count){
-//                height = [DetailImagesCell collectionViewHeight:self.introductImgs[indexPath.item-6]];
                 height = [self.imgHeights[indexPath.item-6] floatValue];
+                if (height < 0) {
+                    height = 300;
+                }
             }
             return CGSizeMake(ScreenW, height);
         }
@@ -615,7 +630,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
             [wself addGoodsToCart:self.goodsDetail number:self.number];
         }
         
-        self.topFootview.leftTitleLable.text = [NSString stringWithFormat:@"已添加   %ld份",(long)self.number];
+        self.topFootview.leftTitleLable.text = [NSString stringWithFormat:@"已添加   %ld",(long)self.number];
 
     };
     vc.modalPresentationStyle = UIModalPresentationOverCurrentContext;
@@ -629,6 +644,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     AnotherCartViewController* vc = [AnotherCartViewController new];
     [self.navigationController pushViewController:vc animated:YES];
 }
+
 
 #pragma mark- init
 - (DetailTopToolView *)topToolView

@@ -85,7 +85,7 @@
         return;
     }
     self.numberLabel.text = [NSString stringWithFormat:@"%ld",count];
-    self.selectedLabel.text = [NSString stringWithFormat:@"已选：%ld份",count];
+    self.selectedLabel.text = [NSString stringWithFormat:@"已选：%ld",count];
 
 }
 
@@ -214,7 +214,7 @@
 
 
     _selectedLabel = [[UILabel alloc] init];
-    _selectedLabel.text = @"已选：1份";
+    _selectedLabel.text = @"已选：1";
     _selectedLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:15];
     _selectedLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [_contentView addSubview:_selectedLabel];
@@ -233,9 +233,17 @@
         make.left.mas_equalTo(self.iconView);
     }];
     
-    if ([self.goods.weight length] > 0 && [self.goods.unit length] > 0) {
-        if (![self.goods.weight isEqualToString:self.goods.unit]) {
-            _specificationLabel.text = [NSString stringWithFormat:@"规格：%@/%@",self.goods.weight.length>0?self.goods.weight:@"0.0",self.goods.unit];
+    if ([self.goods.weight length] > 0 && [self.goods.unit length] > 0)
+    {
+        if (![self.goods.weight isEqualToString:self.goods.unit])
+        {
+            if ([self.goods.unit isEqualToString:@"kg"] || [self.goods.unit isEqualToString:@"Kg"] || [self.goods.unit isEqualToString:@"KG"]) {
+                
+                _specificationLabel.text = [NSString stringWithFormat:@"规格：%@%@",self.goods.weight.length>0?self.goods.weight:@"0.0",self.goods.unit];
+            }else{
+                _specificationLabel.text = [NSString stringWithFormat:@"规格：%@/%@",self.goods.weight.length>0?self.goods.weight:@"0.0",self.goods.unit];
+            }
+            
         }else{
             _specificationLabel.text = [NSString stringWithFormat:@"规格：%@",self.goods.weight];
         }

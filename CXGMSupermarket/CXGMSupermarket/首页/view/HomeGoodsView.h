@@ -13,6 +13,7 @@
 @property(nonatomic,copy)void(^showGoodsDetailVC)(GoodsModel* model);
 @property(nonatomic,copy)void(^showBusinessDetailVC)(AdBannarModel* model);
 @property(nonatomic,copy)void(^showAdvertiseDetailVC)(AdvertisementModel* model);
+@property(nonatomic,copy)void(^showHYNoticeView)(BOOL show);
 
 //主要是刷新 shopCartNum 和 shopCartId
 - (void)requestGoodsList;

@@ -208,7 +208,18 @@
             cell.indexPath = indexPath;
             
             if (indexPath.row == 0) {
-                cell.leftLabel.text = [self.currentPlace.addressDictionary objectForKey:@"Street"];
+                NSDictionary* dic = self.currentPlace.addressDictionary;
+                NSString* string = @"";
+                if ([dic objectForKey:@"City"]) {
+                    string = [string stringByAppendingString:[dic objectForKey:@"City"]];
+                }
+                if ([dic objectForKey:@"SubLocality"]) {
+                    string = [string stringByAppendingString:[dic objectForKey:@"SubLocality"]];
+                }
+                if ([dic objectForKey:@"Street"]) {
+                    string = [string stringByAppendingString:[dic objectForKey:@"Street"]];
+                }
+                cell.leftLabel.text = string;
             }
             
             typeof(self) __weak wself = self;

@@ -40,6 +40,8 @@
 
 @property(nonatomic,strong)NSArray* reportList;//滚动简报
 @property(nonatomic,strong)NSMutableArray* motionNameList;//滚动简报title
+
+@property(assign,nonatomic)BOOL flagValue;
 @end
 
 
@@ -61,6 +63,8 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
 
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
+        
+        self.flagValue = YES;
         
         //休闲零食 88  放心蔬菜 102 新鲜水果 113 鲜肉蛋品112 水鲜海产109 粮油副食 105 中外名酒 115 美妆个护106
         self.categoryNames = @[@[@"新鲜水果",@"113"],
@@ -561,6 +565,21 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     }
 }
 
+#pragma mark-
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    
+    BOOL flag;
+    if (scrollView.contentOffset.y > 10) {
+        flag = NO;
+    }else{
+        flag = YES;
+    }
+    
+    if (flag != self.flagValue) {
+        self.flagValue = flag;
+        !_showHYNoticeView?:_showHYNoticeView(self.flagValue);
+    }
+}
 
 #pragma mark- init
 - (UICollectionView *)collectionView

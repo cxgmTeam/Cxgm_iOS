@@ -133,6 +133,8 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
     
     !_selectShopHandler?:_selectShopHandler();
 }
+
+
 #pragma mark- init
 - (UICollectionView *)collectionView
 {

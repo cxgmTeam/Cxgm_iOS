@@ -432,6 +432,7 @@ static CGFloat TopBtnWidth = 60;
         self.secondCategory = item;
         
         [_leftTableView reloadData];
+        _rightTableView.contentOffset = CGPointZero;
         
         [self findThirdCategory:item.id];
         

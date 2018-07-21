@@ -37,6 +37,8 @@
 @property(nonatomic,assign)BOOL isVisible;
 
 @property(nonatomic,assign)BOOL needNewAddress;//需要添加新地址，寻找店铺
+
+@property(nonatomic,strong)UIView* navLine;
 @end
 
 
@@ -165,6 +167,10 @@
                     [wself.navigationController pushViewController:vc animated:YES];
                 }
             };
+            _goodsView.showHYNoticeView = ^(BOOL show){
+                wself.noticeHot.hidden = !show;
+            };
+            
 
         }else{
             [_goodsView requestGoodsList];
@@ -200,7 +206,7 @@
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0]];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
-    
+    self.navLine.hidden = NO;
     
     self.isVisible = YES;
     
@@ -214,6 +220,8 @@
     
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0]];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    self.navLine.hidden = NO;
 }
 
 
@@ -223,7 +231,7 @@
     [self.navigationController.navigationBar setBarTintColor:[UIColor whiteColor]];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
-    
+    self.navLine.hidden = YES;
 
     self.isVisible = NO;
     
@@ -279,6 +287,11 @@
         make.edges.equalTo(self.topView);
     }];
     [btn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIView* line = [[UIView alloc] initWithFrame:CGRectMake(0, NAVIGATION_BAR_HEIGHT-STATUS_BAR_HEIGHT-1, ScreenW, 1)];
+    line.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
+    [self.navigationController.navigationBar addSubview:line];
+    self.navLine = line;
 }
 
 - (void)showAddressVC:(id)sender
@@ -371,6 +384,8 @@
 }
 
 #pragma mark-
+
+
 - (CGFloat)sizeLabelWidth:(NSString *)text
 {
     CGFloat titleWidth = SCREENW*0.6;
