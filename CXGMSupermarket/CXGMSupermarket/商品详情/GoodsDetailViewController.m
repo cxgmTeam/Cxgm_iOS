@@ -51,10 +51,8 @@
 
 @property (strong , nonatomic)NSArray *introductImgs;
 @property (strong , nonatomic)NSMutableArray *imgHeights;
-//辅助
-@property (strong , nonatomic)WKWebView *auxiliaryWebView;
-@property (assign , nonatomic)CGFloat webViewHeight;
 
+@property (strong , nonatomic)NSMutableArray *detailInfoArr;
 @end
 
 /* cell */
@@ -76,11 +74,8 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-//    self.introductImgs = [NSMutableArray array];
     self.imgHeights = [NSMutableArray array];
-    
-    self.auxiliaryWebView.frame = CGRectMake(0, 0, ScreenW, 5);
-    self.auxiliaryWebView.hidden = YES;
+    self.detailInfoArr = [NSMutableArray array];
     
     
     [self.view addSubview:self.addGoodsBtn];
@@ -164,8 +159,29 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         if ([model.data isKindOfClass:[NSDictionary class]]) {
             
             self.goodsDetail = [[GoodsModel alloc] initWithDictionary:(NSDictionary *)model.data error:nil];
+
             if ([self.goodsDetail.introduction length] == 0) {
                 self.goodsDetail.introduction = @"暂无详情的描述";
+            }
+            
+            [self.detailInfoArr addObject:@[@"商品详情",@" "]];
+
+            if ([self.goodsDetail.brandName length] > 0) {
+                [self.detailInfoArr addObject:@[@"品牌",self.goodsDetail.brandName]];
+            }
+            
+            if ([self.goodsDetail.originPlace length] > 0) {
+                [self.detailInfoArr addObject:@[@"产地",self.goodsDetail.originPlace]];
+            }
+            
+            [self.detailInfoArr addObject:@[@"生产日期",@"详情见包装"]];
+            
+            if ([self.goodsDetail.warrantyPeriod length] > 0 && ![self.goodsDetail.warrantyPeriod isEqualToString:@"null"] && ![self.goodsDetail.warrantyPeriod isEqualToString:@"null天"] && ![self.goodsDetail.warrantyPeriod isEqualToString:@"0天"]) {
+                [self.detailInfoArr addObject:@[@"保质期",self.goodsDetail.warrantyPeriod]];
+            }
+            
+            if ([self.goodsDetail.storageCondition length] > 0) {
+                [self.detailInfoArr addObject:@[@"存储条件",self.goodsDetail.storageCondition]];
             }
             
             if ([self.goodsDetail.introduction length] > 0) {
@@ -192,55 +208,6 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     } failure:^(id JSON, NSError *error){
         
     }];
-}
-
-- (NSArray*)getURLFromStr:(NSString *)string {
-    NSError *error;
-    //可以识别url的正则表达式
-    NSString *regulaStr = @"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
-    
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regulaStr
-                                                                           options:NSRegularExpressionCaseInsensitive
-                                                                             error:&error];
-    
-    NSArray *arrayOfAllMatches = [regex matchesInString:string
-                                                options:0
-                                                  range:NSMakeRange(0, [string length])];
-    
-    //NSString *subStr;
-    NSMutableArray *arr=[[NSMutableArray alloc] init];
-    
-    for (NSTextCheckingResult *match in arrayOfAllMatches){
-        NSString* substringForMatch;
-        substringForMatch = [string substringWithRange:match.range];
-        [arr addObject:substringForMatch];
-    }
-    return arr;
-}
-
-
-- (NSNumber *)calcuteImagesHeight:(NSString *)imageUrl{
-    
-    CGFloat height = 0;
-    
-    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
-    
-    UIImage *image = [UIImage imageWithData:data];
-    
-    height = image.size.height*ScreenW/image.size.width;
-    return [NSNumber numberWithFloat:height];
-}
-
--(void)updateWebVWithContent:(NSString*)string
-{
-    NSString *htmlPath = [[NSBundle mainBundle] pathForResource:@"HTMLTemplate" ofType:@"html"];
-    NSMutableString *htmlString = [NSMutableString stringWithContentsOfFile:htmlPath encoding:NSUTF8StringEncoding error:nil];
-    
-    NSRange contentRange = [htmlString rangeOfString:@"{content}"];
-    if (contentRange.location != NSNotFound) {
-        [htmlString replaceCharactersInRange:contentRange withString:string.length>0?string:@""];
-    }
-    [self.auxiliaryWebView loadHTMLString:htmlString baseURL:[NSURL fileURLWithPath:htmlPath]];
 }
 
 
@@ -367,7 +334,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         return 1;
     }
     if (section == 1 ) { //详情
-        return 6+self.introductImgs.count;
+        return self.detailInfoArr.count+self.introductImgs.count;
     }
     if (section == 2) { //猜你喜欢
         return self.pushArray.count;
@@ -383,45 +350,54 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         gridcell = cell;
     }
     else if (indexPath.section == 1) {//详情
-        if (indexPath.item < 6) {
+        if (indexPath.item < self.detailInfoArr.count) {
             DetailShowTypeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:DetailShowTypeCellID forIndexPath:indexPath];
             cell.isHasindicateButton = NO;
-            switch (indexPath.item) {
-                case 0:
-                    cell.leftTitleLable.text = @"商品详情";
-                    cell.contentLabel.text = @"";
-                    break;
-                case 1:
-                    cell.leftTitleLable.text = @"品牌";
-                    cell.contentLabel.text = self.goodsDetail.brandName;
-                    break;
-                case 2:
-                    cell.leftTitleLable.text = @"产地";
-                    cell.contentLabel.text = self.goodsDetail.originPlace;
-                    break;
-                case 3:
-                    cell.leftTitleLable.text = @"生产日期";
-                    cell.contentLabel.text = @"详情见包装";
-                    break;
-                case 4:
-                    cell.leftTitleLable.text = @"保质期";
-                    cell.contentLabel.text = self.goodsDetail.warrantyPeriod;
-                    break;
-                case 5:
-                    cell.leftTitleLable.text = @"存储条件";
-                    cell.contentLabel.text = self.goodsDetail.storageCondition;
-                    break;
-                    
-                default:
-                    break;
+            
+            NSArray* array = self.detailInfoArr[indexPath.item];
+            if (array.count > 0) {
+                cell.leftTitleLable.text = array[0];
             }
+            if (array.count > 1) {
+                cell.contentLabel.text = array[1];
+            }
+            
+//            switch (indexPath.item) {
+//                case 0:
+//                    cell.leftTitleLable.text = @"商品详情";
+//                    cell.contentLabel.text = @"";
+//                    break;
+//                case 1:
+//                    cell.leftTitleLable.text = @"品牌";
+//                    cell.contentLabel.text = self.goodsDetail.brandName;
+//                    break;
+//                case 2:
+//                    cell.leftTitleLable.text = @"产地";
+//                    cell.contentLabel.text = self.goodsDetail.originPlace;
+//                    break;
+//                case 3:
+//                    cell.leftTitleLable.text = @"生产日期";
+//                    cell.contentLabel.text = @"详情见包装";
+//                    break;
+//                case 4:
+//                    cell.leftTitleLable.text = @"保质期";
+//                    cell.contentLabel.text = self.goodsDetail.warrantyPeriod;
+//                    break;
+//                case 5:
+//                    cell.leftTitleLable.text = @"存储条件";
+//                    cell.contentLabel.text = self.goodsDetail.storageCondition;
+//                    break;
+//
+//                default:
+//                    break;
+//            }
             gridcell = cell;
         }
         else
         {
             DetailImagesCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:DetailImagesCellID forIndexPath:indexPath];
-            if (indexPath.item-6 < self.introductImgs.count) {
-                cell.imageUrl = self.introductImgs[indexPath.item-6];
+            if (indexPath.item - self.detailInfoArr.count < self.introductImgs.count) {
+                cell.imageUrl = self.introductImgs[indexPath.item - self.detailInfoArr.count];
             }
             gridcell = cell;
         }
@@ -469,12 +445,12 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     }
     if (indexPath.section == 1 )
     {
-        if (indexPath.item < 6) {
+        if (indexPath.item < self.detailInfoArr.count) {
             return CGSizeMake(ScreenW, 45);
         }else{
             CGFloat height = 45;
-            if (indexPath.item-6 < self.imgHeights.count){
-                height = [self.imgHeights[indexPath.item-6] floatValue];
+            if (indexPath.item - self.detailInfoArr.count < self.imgHeights.count){
+                height = [self.imgHeights[indexPath.item - self.detailInfoArr.count] floatValue];
                 if (height < 0) {
                     height = 300;
                 }
@@ -725,29 +701,40 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     return _collectionView;
 }
 
-#pragma mark-
-- (WKWebView *)auxiliaryWebView{
-    if (!_auxiliaryWebView) {
-
-        _auxiliaryWebView = [WKWebView new];
-        [_auxiliaryWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
-        _auxiliaryWebView.navigationDelegate = self;
-        [_auxiliaryWebView setMultipleTouchEnabled:YES];
-        [_auxiliaryWebView setAutoresizesSubviews:YES];
-        [_auxiliaryWebView.scrollView setAlwaysBounceVertical:YES];
-        _auxiliaryWebView.scrollView.bounces = NO;
-        [self.view addSubview:_auxiliaryWebView];
+- (NSArray*)getURLFromStr:(NSString *)string {
+    NSError *error;
+    //可以识别url的正则表达式
+    NSString *regulaStr = @"((http[s]{0,1}|ftp)://[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)|(www.[a-zA-Z0-9\\.\\-]+\\.([a-zA-Z]{2,4})(:\\d+)?(/[a-zA-Z0-9\\.\\-~!@#$%^&*+?:_/=<>]*)?)";
+    
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:regulaStr
+                                                                           options:NSRegularExpressionCaseInsensitive
+                                                                             error:&error];
+    
+    NSArray *arrayOfAllMatches = [regex matchesInString:string
+                                                options:0
+                                                  range:NSMakeRange(0, [string length])];
+    
+    //NSString *subStr;
+    NSMutableArray *arr=[[NSMutableArray alloc] init];
+    
+    for (NSTextCheckingResult *match in arrayOfAllMatches){
+        NSString* substringForMatch;
+        substringForMatch = [string substringWithRange:match.range];
+        [arr addObject:substringForMatch];
     }
-    return _auxiliaryWebView;
+    return arr;
 }
 
-- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation
-{
-    [webView evaluateJavaScript: @"document.body.scrollHeight" completionHandler:^(NSString *string, NSError * error){
-        self.webViewHeight = [string intValue]+10;
-        
-        [self.collectionView reloadData];
-    }];
-}
 
+- (NSNumber *)calcuteImagesHeight:(NSString *)imageUrl{
+    
+    CGFloat height = 0;
+    
+    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+    
+    UIImage *image = [UIImage imageWithData:data];
+    
+    height = image.size.height*ScreenW/image.size.width;
+    return [NSNumber numberWithFloat:height];
+}
 @end

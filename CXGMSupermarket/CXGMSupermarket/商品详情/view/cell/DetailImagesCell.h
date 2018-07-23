@@ -9,9 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface DetailImagesCell : UICollectionViewCell
-@property(nonatomic,strong)NSString* htmlString;
 
 @property(nonatomic,strong)NSString* imageUrl;
 
-+ (CGFloat)collectionViewHeight:(NSString *)imageUrl;
 @end
