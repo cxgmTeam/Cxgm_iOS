@@ -574,10 +574,10 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     }else{
         flag = YES;
     }
+    !_showHYNoticeView?:_showHYNoticeView(flag);
     
     if (flag != self.flagValue) {
         self.flagValue = flag;
-        !_showHYNoticeView?:_showHYNoticeView(self.flagValue);
     }
 }
 

@@ -37,7 +37,7 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
     }];
     typeof(self) __weak wself = self;
     self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [self.collectionView.mj_footer endRefreshing];
+        [self.collectionView.mj_header endRefreshing];
         
         self.pageNum = 1;
         [self.listArray removeAllObjects];

@@ -392,7 +392,6 @@
 }
 
 
-
 #pragma mark 根据定位 搜索周边
 -(void)onGetReverseGeoCodeResult:(BMKGeoCodeSearch *)searcher result:(BMKReverseGeoCodeResult *)result errorCode:(BMKSearchErrorCode)error
 {
