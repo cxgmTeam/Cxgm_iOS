@@ -49,6 +49,8 @@
 
 @property(strong,nonatomic) NSMutableArray * pointsArr;//查询到的范围点集
 
+@property(strong,nonatomic) UIButton *mapPin;
+
 @end
 
 @implementation MapViewController
@@ -66,6 +68,16 @@
     
     _mapView = [[BMKMapView alloc]initWithFrame:CGRectMake(0, 0, ScreenW, ScreenW*273/375.f)];
     [self.view addSubview:_mapView];
+    
+    
+    _mapPin = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 40, 40)];
+    _mapPin.center = self.mapView.center;
+    [_mapPin setImage:[UIImage imageNamed:@"pin_green"] forState:UIControlStateNormal];
+    [_mapView addSubview:_mapPin];
+//    [_mapPin mas_makeConstraints:^(MASConstraintMaker *make){
+//        make.center.equalTo(self.mapView);
+//        make.size.equalTo(CGSizeMake(40, 40));
+//    }];
 
     [self initLocationService];
     
@@ -104,7 +116,7 @@
     _maskView.hidden = YES;
     _searchTable.hidden = YES;
     
-    
+    [_mapView bringSubviewToFront:_mapPin];
 }
 
 
@@ -353,42 +365,57 @@
 
 - (void)mapView:(BMKMapView *)mapView regionDidChangeAnimated:(BOOL)animated
 {
+    [UIView animateWithDuration:0.5 animations:^{
+        
+        CGPoint point = self.mapPin.center;
+        point.y =  point.y - 10;
+        self.mapPin.center = point;
+        
+    } completion:^(BOOL finished){
+        self.mapPin.center = self.mapView.center;
+    }];
     
+    CLLocationCoordinate2D MapCoordinate=[_mapView convertPoint:_mapPin.center toCoordinateFromView:_mapView];
+    
+    //需要逆地理编码的坐标位置
+    _reverseGeoCodeOption.reverseGeoPoint =MapCoordinate;
+    
+    [_geoCodeSearch reverseGeoCode:_reverseGeoCodeOption];
 }
 
 
 - (void)mapView:(BMKMapView *)mapView onClickedMapBlank:(CLLocationCoordinate2D)coordinate {
     
-    BMKPointAnnotation *pointAnnotation = [[BMKPointAnnotation alloc]init];
-    
-    pointAnnotation.coordinate = coordinate;
-    [_mapView removeAnnotations:_mapView.annotations];
-    
-    [_mapView addAnnotation:pointAnnotation];
-
-    
-    //需要逆地理编码的坐标位置
-    _reverseGeoCodeOption.reverseGeoPoint =coordinate;
-    
-    [_geoCodeSearch reverseGeoCode:_reverseGeoCodeOption];
+//    BMKPointAnnotation *pointAnnotation = [[BMKPointAnnotation alloc]init];
+//
+//    pointAnnotation.coordinate = coordinate;
+//    [_mapView removeAnnotations:_mapView.annotations];
+//
+//    [_mapView addAnnotation:pointAnnotation];
+//
+//
+//    //需要逆地理编码的坐标位置
+//    _reverseGeoCodeOption.reverseGeoPoint =coordinate;
+//
+//    [_geoCodeSearch reverseGeoCode:_reverseGeoCodeOption];
     
 }
 
 
 - (void)mapview:(BMKMapView *)mapView onLongClick:(CLLocationCoordinate2D)coordinate{
 
-    BMKPointAnnotation *pointAnnotation = [[BMKPointAnnotation alloc]init];
-    
-    pointAnnotation.coordinate = coordinate;
-    [_mapView removeAnnotations:_mapView.annotations];
-    
-    [_mapView addAnnotation:pointAnnotation];
-    
-    
-    //需要逆地理编码的坐标位置
-    _reverseGeoCodeOption.reverseGeoPoint =coordinate;
-    
-    [_geoCodeSearch reverseGeoCode:_reverseGeoCodeOption];
+//    BMKPointAnnotation *pointAnnotation = [[BMKPointAnnotation alloc]init];
+//
+//    pointAnnotation.coordinate = coordinate;
+//    [_mapView removeAnnotations:_mapView.annotations];
+//
+//    [_mapView addAnnotation:pointAnnotation];
+//
+//
+//    //需要逆地理编码的坐标位置
+//    _reverseGeoCodeOption.reverseGeoPoint =coordinate;
+//
+//    [_geoCodeSearch reverseGeoCode:_reverseGeoCodeOption];
 }
 
 

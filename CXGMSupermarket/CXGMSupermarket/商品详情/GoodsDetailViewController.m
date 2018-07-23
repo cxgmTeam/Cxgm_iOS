@@ -447,7 +447,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     {
         if (indexPath.item < self.detailInfoArr.count) {
             return CGSizeMake(ScreenW, 45);
-        }else{
+        }
+        else
+        {
             CGFloat height = 45;
             if (indexPath.item - self.detailInfoArr.count < self.imgHeights.count){
                 height = [self.imgHeights[indexPath.item - self.detailInfoArr.count] floatValue];
@@ -486,11 +488,21 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 #pragma mark - <UICollectionViewDelegateFlowLayout>
 #pragma mark - X间距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumInteritemSpacingForSectionAtIndex:(NSInteger)section {
-    return (section == 2) ? 11 : 0;
+    if (section == 2) {
+        return 11;
+    }
+    return 0;
 }
 #pragma mark - Y间距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    return (section == 2) ? 15 : 0;
+    if (section == 2) {
+        return 15;
+    }
+    //消除有些图片直接的白色
+    if (section == 1) {
+        return -0.5;
+    }
+    return 0;
 }
 
 - (UIEdgeInsets)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout insetForSectionAtIndex:(NSInteger)section{
