@@ -307,7 +307,7 @@
             [self.navigationController pushViewController:vc animated:YES];
         }
         
-        if (indexPath.section == 1) {
+        if (indexPath.section == 1 && indexPath.row < self.addressList.count) {
             AddressModel* address = self.addressList[indexPath.row];
             if (self.selectedAddress) {
                 self.selectedAddress(address);
@@ -480,7 +480,7 @@
         case kCLErrorDenied:
         {
             errorString = @"Access to Location Services denied by user";
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"定位失败" message:@"前往设置打开定位功能" delegate:self cancelButtonTitle:@"好" otherButtonTitles:nil, nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"定位失败" message:@"前往设置打开定位功能" delegate:self cancelButtonTitle:@"取消" otherButtonTitles:@"前往", nil];
             [alert show];
         }
             break;
@@ -499,7 +499,9 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    if (buttonIndex == 1) {
+       [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
+    }
 }
 
 

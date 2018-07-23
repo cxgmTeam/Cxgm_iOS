@@ -62,8 +62,14 @@
 
 - (void)setNoticeLocation
 {
-    [_noticeHot removeFromSuperview];
+    if (_noticeHot && _noticeHot.superview) {
+        [_noticeHot removeFromSuperview];
+    }
     _noticeHot = nil;
+    
+    NSLog(@"%s   %d  ",__func__,self.isVisible);
+
+    if (!self.isVisible) return;
     
     NSString* address = @"当前位置不在配送范围内，请选择收货地址";
     self.needNewAddress = YES;
@@ -105,14 +111,7 @@
 {
     self.inScope = inScope;
     
-    NSLog(@"%s   %d  %d",__func__,self.isVisible,[self isCurrentViewControllerVisible]);
-    
-    if (self.isVisible && [self isCurrentViewControllerVisible]) {
-        [self setNoticeLocation];
-    }else{
-        [_noticeHot removeFromSuperview];
-        _noticeHot = nil;
-    }
+    [self setNoticeLocation];
     
     
     if (inScope)
@@ -202,6 +201,7 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
+    NSLog(@"%s",__func__);
     
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0]];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -211,6 +211,7 @@
     self.isVisible = YES;
     
     _topView.hidden = NO;
+    
     
     [self setNoticeLocation];
 }
@@ -237,15 +238,12 @@
     
     _topView.hidden = YES;
     
-    [_noticeHot removeFromSuperview];
-    _noticeHot = nil;
     
+    if (_noticeHot && _noticeHot.superview) {
+        [_noticeHot removeFromSuperview];
+    }
+    _noticeHot = nil;
 
-}
-
--(BOOL)isCurrentViewControllerVisible
-{
-    return (self.isViewLoaded && self.view.window);
 }
 
 - (void)setupTopBar
