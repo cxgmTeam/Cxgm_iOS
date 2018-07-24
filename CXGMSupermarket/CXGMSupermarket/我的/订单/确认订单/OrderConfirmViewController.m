@@ -51,6 +51,8 @@
 @property(strong,nonatomic) NSMutableArray * pointsArr;//查询到的范围点集
 
 @property(strong , nonatomic)UITextField *textField;
+
+@property(strong , nonatomic)UIView* bottomView;
 @end
 
 /* cell */
@@ -80,10 +82,11 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     [self setupBottom];
     
+
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker* make){
         make.left.top.right.equalTo(self.view);
-        make.bottom.equalTo(-50);
+        make.bottom.equalTo(self.bottomView.top);
     }];
     
     
@@ -115,7 +118,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             }
         }
     }
-    
     //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
     //    orderAmount = totalAmount - preferential + 10
     
@@ -277,7 +279,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
                 [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]]];
             });
         }
-
+        
     } failure:^(id JSON, NSError *error){
 
     }];
@@ -286,7 +288,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 - (void)onTapButton:(id)sender
 {
     [self addOrder];
-    
 }
 
 #pragma mark-
@@ -481,10 +482,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
 - (void)setupBottom
 {
-    UIView* bottomView = [UIView new];
-    bottomView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:bottomView];
-    [bottomView mas_makeConstraints:^(MASConstraintMaker *make){
+    _bottomView = [UIView new];
+    _bottomView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:_bottomView];
+    [_bottomView mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.right.bottom.equalTo(self.view);
         make.height.equalTo(TAB_BAR_HEIGHT);
     }];
@@ -493,7 +494,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         label.text = @"实付款：";
         label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
         label.textColor = [UIColor colorWithRed:33/255.0 green:33/255.0 blue:33/255.0 alpha:1/1.0];
-        [bottomView addSubview:label];
+        [_bottomView addSubview:label];
         [label mas_makeConstraints:^(MASConstraintMaker *make){
             make.left.equalTo(17);
             make.top.equalTo(16);
@@ -503,7 +504,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         _moneyLabel.text = @"¥800.80";
         _moneyLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:20];
         _moneyLabel.textColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
-        [bottomView addSubview:_moneyLabel];
+        [_bottomView addSubview:_moneyLabel];
         [_moneyLabel mas_makeConstraints:^(MASConstraintMaker *make){
             make.left.equalTo(label.right).offset(5);
             make.centerY.equalTo(label);
@@ -514,10 +515,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         [btn setTitle:@"提交订单" forState:UIControlStateNormal];
         btn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
         [btn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [bottomView addSubview:btn];
+        [_bottomView addSubview:btn];
         [btn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
         [btn mas_makeConstraints:^(MASConstraintMaker *make){
-            make.top.right.equalTo(bottomView);
+            make.top.right.equalTo(self.bottomView);
             make.height.equalTo(49);
             make.width.equalTo(118);
         }];
