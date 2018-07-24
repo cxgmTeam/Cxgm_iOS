@@ -20,9 +20,10 @@
 @property (nonatomic, strong) CLPlacemark *place;//用户定位含有店铺的地址 
 
 @property (nonatomic, strong) AddressModel *defaultAddress;//用户的默认地址 也可能是地址列表中的第一个
+
 @property (nonatomic, strong) ShopModel *shop;//所选店铺的
 
-@property (nonatomic, strong) NSString *shopCartNum;//购物车中商品数量
+@property (nonatomic, strong) NSString * homeAddress;//首页显示是的送货地址
 
 @property (nonatomic, assign) BOOL locationInScope ;//定位是否在派送范围内
 

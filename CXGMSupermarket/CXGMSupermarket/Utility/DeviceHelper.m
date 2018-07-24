@@ -28,8 +28,8 @@
 
 - (id)init{
     if (self = [super init]) {
-
-        self.shopCartNum = @"0";        
+        
+        self.homeAddress = @"当前位置不在配送范围内，请选择收货地址";
     }
     return self;
 }

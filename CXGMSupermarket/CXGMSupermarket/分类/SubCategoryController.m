@@ -41,6 +41,8 @@
 @property(nonatomic,strong)NSURLSessionDataTask * findProductTask;
 
 @property(nonatomic,strong)CategoryModel* secondCategory;
+
+@property(nonatomic,strong)NSString* productCategoryId; //一级分类
 @end
 
 
@@ -194,6 +196,8 @@ static CGFloat TopBtnWidth = 60;
 //二级分类
 - (void)findSecondCategory:(NSString *)productCategoryId
 {
+    self.productCategoryId = productCategoryId;
+    
     NSDictionary* dic = @{@"shopId":@"",@"productCategoryId":productCategoryId.length > 0? productCategoryId:@""};
     if ([DeviceHelper sharedInstance].shop) {
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
@@ -221,6 +225,16 @@ static CGFloat TopBtnWidth = 60;
                 
                 [wself findProductByCategory:category.id];
             }
+            else
+            {
+                [wself findProductByCategory:@""];
+                
+                self.topScrollView.frame = CGRectMake(93, 0, self.topScrollWidth, 0);
+                
+                [self.rightTableView mas_updateConstraints:^(MASConstraintMaker *make){
+                    make.top.equalTo(self.topScrollView.bottom);
+                }];
+            }
         }
         
     } failure:^(id JSON, NSError *error){
@@ -231,10 +245,13 @@ static CGFloat TopBtnWidth = 60;
 //三级分类
 - (void)findThirdCategory:(NSString *)productCategoryTwoId
 {
-    NSDictionary* dic = @{@"shopId":@"",@"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
+    NSDictionary* dic = @{@"shopId":@"",
+                          @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""
+                          };
     if ([DeviceHelper sharedInstance].shop) {
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
-                @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
+                @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""
+                };
     }
     typeof(self) __weak wself = self;
     
@@ -256,10 +273,15 @@ static CGFloat TopBtnWidth = 60;
 
 - (void)findProductByCategory:(NSString *)productCategoryTwoId
 {
-    NSDictionary* dic = @{@"shopId":@"",@"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
+    NSDictionary* dic = @{@"shopId":@"",
+                          @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@"",
+                          @"productCategoryId":self.self.productCategoryId
+                          };
     if ([DeviceHelper sharedInstance].shop) {
         dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id,
-                @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@""};
+                @"productCategoryTwoId":productCategoryTwoId.length > 0? productCategoryTwoId:@"",
+                @"productCategoryId":self.self.productCategoryId
+                };
     }
     
     NSString* token = @"";

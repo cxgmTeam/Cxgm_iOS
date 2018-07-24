@@ -39,6 +39,7 @@
 @property(nonatomic,assign)BOOL needNewAddress;//需要添加新地址，寻找店铺
 
 @property(nonatomic,strong)UIView* navLine;
+
 @end
 
 
@@ -57,7 +58,10 @@
     [self checkAppUpdate];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRemoteNotification:) name:Show_RemoteNotification object:nil];
-
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(exchangeShop:) name:Exchange_Shop object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHomePage:) name:AddedNewScope_Notify object:nil];
 }
 
 - (void)setNoticeLocation
@@ -71,37 +75,40 @@
 
     if (!self.isVisible) return;
     
-    NSString* address = @"当前位置不在配送范围内，请选择收货地址";
+    
+    NSString* locationString = [DeviceHelper sharedInstance].homeAddress;
+    
     self.needNewAddress = YES;
     
     if ([DeviceHelper sharedInstance].defaultAddress) {
-        AddressModel* defAddress = [DeviceHelper sharedInstance].defaultAddress;
-        address = [@"送货至：" stringByAppendingString:defAddress.area] ;
+//        AddressModel* defAddress = [DeviceHelper sharedInstance].defaultAddress;
+//        locationString = [@"送货至：" stringByAppendingString:defAddress.area] ;
         
         self.needNewAddress = NO;
         
     }
     else if ([DeviceHelper sharedInstance].place && [DeviceHelper sharedInstance].locationInScope)
     {
-        NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
-        if (dic[@"SubLocality"]) {
-            address = [@"送货至：" stringByAppendingString:dic[@"SubLocality"]];
-        }
-         if (dic[@"Street"]) {
-             address = [address stringByAppendingString:dic[@"Street"]] ;
-         }
+//        NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
+//        if (dic[@"SubLocality"]) {
+//             locationString = [@"送货至：" stringByAppendingString:dic[@"SubLocality"]];
+//        }
+//         if (dic[@"Street"]) {
+//              locationString = [locationString stringByAppendingString:dic[@"Street"]] ;
+//         }
         
         self.needNewAddress = NO;
     
     }
     
-    CGFloat width = [self sizeLabelWidth:address];
+    CGFloat width = [self sizeLabelWidth:locationString];
+    
     CGRect frame = CGRectMake(10, NAVIGATION_BAR_HEIGHT-25, width, 30);
     if (iPhoneX) {
         frame = CGRectMake(10, NAVIGATION_BAR_HEIGHT-50, width, 30);
     }
     
-    _noticeHot = [[HYNoticeView alloc] initWithFrame:frame text:address position:HYNoticeViewPositionTopLeft];
+    _noticeHot = [[HYNoticeView alloc] initWithFrame:frame text:locationString position:HYNoticeViewPositionTopLeft];
     [_noticeHot showType:HYNoticeTypeTestHot inView:self.navigationController.navigationBar];
 }
 
@@ -177,6 +184,8 @@
     }
     else
     {
+        [DeviceHelper sharedInstance].homeAddress = @"当前位置不在配送范围内，请选择收货地址";
+        
         if (_goodsView.superview) {
             [_goodsView removeFromSuperview];
             _goodsView = nil;
@@ -205,6 +214,8 @@
     
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0]];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    
+    self.tabBarController.tabBar.hidden = NO;
     
     self.navLine.hidden = NO;
     
@@ -300,6 +311,8 @@
     vc.selectedAddress = ^(AddressModel * address){
         
         [DeviceHelper sharedInstance].defaultAddress = address;
+        
+        [DeviceHelper sharedInstance].homeAddress = [@"送货至：" stringByAppendingString:address.area] ;
         [wself setNoticeLocation];
         
         //请求店铺
@@ -342,7 +355,23 @@
     
 }
 
+- (void)exchangeShop:(NSNotification *)notify
+{
+    LocationModel* location = (LocationModel *)[notify object];
+    if (location) {
+        
+        
+        
+        [self checkAddress:[[NSNumber numberWithDouble:location.longitude] stringValue] dimension:[[NSNumber numberWithDouble:location.latitude] stringValue]];
+    }
+}
 
+- (void)refreshHomePage:(NSNotification *)notify
+{
+    AddressModel* address = [DeviceHelper sharedInstance].defaultAddress;
+    
+    [self checkAddress:address.longitude dimension:address.dimension];
+}
 
 - (void)checkAddress:(NSString *)longitude dimension:(NSString *)dimension
 {

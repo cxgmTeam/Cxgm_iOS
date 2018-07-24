@@ -142,6 +142,8 @@ typedef NS_ENUM(NSInteger, OrderStatus) {
 #define RemoteNotification_KEY     @"RemoteNotification_KEY"
 #define Empty_AddressList         @"Empty_AddressList"
 
+#define Exchange_Shop             @"Exchange_Shop"
+
 
 #define PAGECOUNT  @"10"
 

@@ -36,6 +36,8 @@
 
 - (void)setGoods:(GoodsModel *)goods
 {
+    _goods = goods;
+    
     if (goods.imageUrl.length >0) {
         [self.imageView sd_setImageWithURL:[NSURL URLWithString:goods.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
     }else if (goods.productUrl.length > 0){
@@ -48,9 +50,34 @@
         self.nameLabel.text = goods.productName;
     }
     
+    NSLog(@"%s   %@",__func__,goods.weight);
     
-    if ([goods.specifications length] == 0) {
-        self.sizeLabel.text = [NSString stringWithFormat:@"规格：%@g/%@",goods.weight,goods.unit];
+    if ([goods.specifications length] == 0)
+    {
+        if ([goods.weight length] > 0 && [goods.unit length] > 0)
+        {
+            if (![goods.weight isEqualToString:goods.unit])
+            {
+                if ([goods.unit isEqualToString:@"kg"] || [goods.unit isEqualToString:@"Kg"] || [goods.unit isEqualToString:@"KG"]) {
+                    
+                    self.sizeLabel.text = [NSString stringWithFormat:@"规格：%@%@",goods.weight.length>0?goods.weight:@"0.0",goods.unit];
+                }else{
+                    self.sizeLabel.text = [NSString stringWithFormat:@"规格：%@/%@",goods.weight.length>0?goods.weight:@"0.0",goods.unit];
+                }
+                
+            }else{
+                self.sizeLabel.text = [NSString stringWithFormat:@"规格：%@",goods.weight];
+            }
+        }
+        else if ([self.goods.weight length] > 0 ){
+            self.sizeLabel.text = [NSString stringWithFormat:@"规格：%@",goods.weight];
+        }
+        else if ([self.goods.unit length] > 0 ){
+            self.sizeLabel.text = [NSString stringWithFormat:@"规格：%@",goods.unit];
+        }
+        else{
+            self.sizeLabel.text = @" ";
+        }
     }else{
         self.sizeLabel.text = [NSString stringWithFormat:@"规格：%@",goods.specifications];
     }

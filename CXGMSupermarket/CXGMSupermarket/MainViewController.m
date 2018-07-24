@@ -151,7 +151,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:LoginAccount_Success object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(getShopCartNumber) name:LogoutAccount_Success object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshHomePage:) name:AddedNewScope_Notify object:nil];
+    
 }
 
 
@@ -200,21 +200,14 @@
             }else{
                 self.cartItem.badgeValue = [NSString stringWithFormat:@"%@",model.listModel.total];
             }
-            
-            [DeviceHelper sharedInstance].shopCartNum = model.listModel.total;
+
         }
     } failure:^(id JSON, NSError *error){
 
     }];
 }
 
-- (void)refreshHomePage:(NSNotification *)notify
-{
-    NSLog(@"%s",__func__);
-    AddressModel* address = [DeviceHelper sharedInstance].defaultAddress;
-    
-    [self checkAddress:address.longitude dimension:address.dimension isLocation:NO];
-}
+
 
 #pragma mark- 定位
 
@@ -248,13 +241,13 @@
                     address = [array firstObject];
                     
                     [DeviceHelper sharedInstance].defaultAddress = address;
-                    
+                    [DeviceHelper sharedInstance].homeAddress = [@"送货至：" stringByAppendingString:address.area] ;
                     self.requestCount = 1;
                 }else{
                     address = [array lastObject];
                     
                     [DeviceHelper sharedInstance].defaultAddress = address;
-                    
+                    [DeviceHelper sharedInstance].homeAddress = [@"送货至：" stringByAppendingString:address.area] ;
                     self.requestCount = 2;
                 }
                 [wself checkAddress:address.longitude dimension:address.dimension isLocation:NO];
@@ -417,6 +410,15 @@
             {
                 if (location) {
                     [DeviceHelper sharedInstance].locationInScope = YES;
+                    
+                    NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
+                    if (dic[@"SubLocality"]) {
+                        [DeviceHelper sharedInstance].homeAddress = [@"送货至：" stringByAppendingString:dic[@"SubLocality"]];
+                    }
+                    if (dic[@"Street"]) {
+                        [DeviceHelper sharedInstance].homeAddress = [[DeviceHelper sharedInstance].homeAddress stringByAppendingString:dic[@"Street"]] ;
+                    }
+
                 }
                 
                 [DeviceHelper sharedInstance].shop = [[ShopModel alloc] initWithDictionary:[array firstObject] error:nil];

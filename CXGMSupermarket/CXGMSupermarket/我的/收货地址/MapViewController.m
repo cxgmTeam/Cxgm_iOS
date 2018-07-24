@@ -74,10 +74,7 @@
     _mapPin.center = self.mapView.center;
     [_mapPin setImage:[UIImage imageNamed:@"pin_green"] forState:UIControlStateNormal];
     [_mapView addSubview:_mapPin];
-//    [_mapPin mas_makeConstraints:^(MASConstraintMaker *make){
-//        make.center.equalTo(self.mapView);
-//        make.size.equalTo(CGSizeMake(40, 40));
-//    }];
+
 
     [self initLocationService];
     
@@ -197,6 +194,7 @@
 
 - (void)delayToSearch
 {
+    NSLog(@"%s",__func__);
     if (_textField.text.length == 0) return;
     
     [self initPoiSearch];
@@ -234,6 +232,9 @@
 #pragma mark -- 搜索
 -(void)initPoiSearch
 {
+    
+    NSLog(@"%s",__func__);
+    
     self.currentPage = 0;
     
     BMKCitySearchOption *citySearchOption = [[BMKCitySearchOption alloc]init];
@@ -551,10 +552,16 @@
         self.selectedAddress(model);
         [self.navigationController popViewControllerAnimated:YES];
     }else{
-        AddAddressViewController* vc = [AddAddressViewController new];
-        vc.firstAddress = self.firstAddress;
-        vc.selectedLoacation = model;
-        [self.navigationController pushViewController:vc animated:YES];
+//        AddAddressViewController* vc = [AddAddressViewController new];
+//        vc.firstAddress = self.firstAddress;
+//        vc.selectedLoacation = model;
+//        [self.navigationController pushViewController:vc animated:YES];
+        
+        [DeviceHelper sharedInstance].homeAddress = [NSString stringWithFormat:@"送货至: %@",model.address];
+        
+        [[NSNotificationCenter defaultCenter] postNotificationName:Exchange_Shop object:model];
+        
+        [self.navigationController popToRootViewControllerAnimated:YES];
     }
 }
 
@@ -616,6 +623,7 @@
     _textField.leftView = imgView;
     _textField.placeholder = @"搜索小区/大厦";
     _textField.returnKeyType = UIReturnKeySearch;
+    _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [_topView addSubview:_textField];
     [_textField mas_makeConstraints:^(MASConstraintMaker* make){
         make.edges.equalTo(self.topView);
