@@ -134,9 +134,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 
 - (void)findProductDetail
 {
-    
     [self.slideImageArray removeAllObjects];
-//    [self.introductImgs removeAllObjects];
+    [self.detailInfoArr  removeAllObjects];
+    
     self.introductImgs = nil;
     [self.imgHeights removeAllObjects];
     
