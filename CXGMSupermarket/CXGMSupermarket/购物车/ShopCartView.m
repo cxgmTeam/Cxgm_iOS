@@ -372,7 +372,7 @@
     if (self.dataArray.count == 0) {
         return self.bounds.size.height;
     }
-    return 150;;
+    return 150;
 }
 
 -(UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath

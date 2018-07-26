@@ -168,9 +168,8 @@
     [bgView addSubview:imageView];
     [imageView mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.equalTo(selectBtn.right).offset(10);
-        make.top.equalTo(23);
-        make.width.equalTo(84);
-        make.height.equalTo(60);
+        make.top.equalTo(20);
+        make.width.height.equalTo(84);
     }];
     self.lzImageView = imageView;
     

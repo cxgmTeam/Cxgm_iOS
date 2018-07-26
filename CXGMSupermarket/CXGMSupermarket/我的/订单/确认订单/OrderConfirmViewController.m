@@ -192,10 +192,15 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             if (array.count > 0) {
                 self.address = [array firstObject];
                 [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
+                
+//                [self.collectionView reloadData];
             }else{
                 self.address = nil;
                 [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
+                
+//                [self.collectionView reloadData];
             }
+            
         }
     } failure:^(id JSON, NSError *error){
         
@@ -580,4 +585,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
 }
 
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
+}
 @end

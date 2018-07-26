@@ -8,7 +8,7 @@
 
 #import "MyCenterSubViewController.h"
 //应该是从购物车过来的
-@interface OrderConfirmViewController : MyCenterSubViewController
+@interface OrderConfirmViewController : CustomDetailViewController
 
 @property(nonatomic,strong)NSArray* goodsArray;
 @property(nonatomic,strong)NSDictionary* moneyDic;
