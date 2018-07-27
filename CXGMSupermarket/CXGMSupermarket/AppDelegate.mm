@@ -294,9 +294,9 @@ API_AVAILABLE(ios(10.0)){
 }
 ///// 用户同意接收通知后，会调用此程序
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken{
-    NSLog(@"deviceToken >>>>  %@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
-                  stringByReplacingOccurrencesOfString: @">" withString: @""]
-                 stringByReplacingOccurrencesOfString: @" " withString: @""]);
+//    NSLog(@"deviceToken >>>>  %@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
+//                  stringByReplacingOccurrencesOfString: @">" withString: @""]
+//                 stringByReplacingOccurrencesOfString: @" " withString: @""]);
 }
 
 //成功注册registerUserNotificationSettings:后，回调的方法

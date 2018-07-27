@@ -145,7 +145,10 @@
 //把手机号第4-7位变成星号
 +(NSString*)phoneNumToAsterisk:(NSString*)phoneNum
 {
-    return[phoneNum stringByReplacingCharactersInRange:NSMakeRange(3,4)withString:@"****"];
+    if (phoneNum.length < 11) {
+        return phoneNum;
+    }
+    return[phoneNum stringByReplacingCharactersInRange:NSMakeRange(3,4) withString:@"****"];
 }
 
 +(NSString *)formateDate:(long)ms
