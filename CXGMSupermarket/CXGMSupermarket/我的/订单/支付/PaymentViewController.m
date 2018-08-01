@@ -36,6 +36,17 @@
 
 @implementation PaymentViewController
 
+- (void)backButtonClicked:(UIButton *)button{
+    NSArray* array = self.navigationController.childViewControllers;
+    
+    for (UIViewController* vc in array) {
+        if ([vc isKindOfClass:NSClassFromString(@"ShoppingCartController")] || [vc isKindOfClass:NSClassFromString(@"AnotherCartViewController")] || [vc isKindOfClass:NSClassFromString(@"OrderViewController")]) {
+            [self.navigationController popToViewController:vc animated:YES];
+            break;
+        }
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -65,12 +76,14 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showPayResult:) name:Show_PayResult object:nil];
 }
 
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    self.payButon.enabled = YES;
+}
+
 - (void)showPayResult:(NSNotification *)notify
 {
-    
-    NSLog(@"%s",__func__);
-    
-    
     NSDictionary* dic = [notify userInfo];
     
     PayResultViewController* vc = [PayResultViewController new];
@@ -132,6 +145,8 @@
 
 - (void)payOrder:(UIButton*)button
 {
+    self.payButon.enabled = NO;//这个地方还要考虑重新支付
+    
     if (self.surplusTime == 0) {
         [MBProgressHUD MBProgressHUDWithView:self.view Str:@"订单已超时"];
         return;

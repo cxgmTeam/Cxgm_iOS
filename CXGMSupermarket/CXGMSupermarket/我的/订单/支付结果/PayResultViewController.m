@@ -15,6 +15,17 @@
 
 @implementation PayResultViewController
 
+- (void)backButtonClicked:(UIButton *)button{
+    NSArray* array = self.navigationController.childViewControllers;
+    
+    for (UIViewController* vc in array) {
+        if ([vc isKindOfClass:NSClassFromString(@"ShoppingCartController")] || [vc isKindOfClass:NSClassFromString(@"AnotherCartViewController")] || [vc isKindOfClass:NSClassFromString(@"OrderViewController")]) {
+            [self.navigationController popToViewController:vc animated:YES];
+            break;
+        }
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor whiteColor];
@@ -31,6 +42,9 @@
 
 - (void)updateOrderStatus
 {
+    if ([self.orderId length]==0 || [self.payType length] == 0) return;
+        
+    
     NSDictionary* dic = @{
                           @"orderId":self.orderId,
                           @"payType":self.payType
@@ -186,8 +200,13 @@
 - (void)gotoHomePage:(id)sender
 {
     NSArray* vcs = self.navigationController.childViewControllers;
-    if (vcs.count > 1) {
-        [self.navigationController popToViewController:vcs[1] animated:YES];
+    
+    NSLog(@"vcs  %@",vcs);
+    for (UIViewController* vc in vcs) {
+        if ([vc isKindOfClass:NSClassFromString(@"ShoppingCartController")] || [vc isKindOfClass:NSClassFromString(@"AnotherCartViewController")] || [vc isKindOfClass:NSClassFromString(@"OrderViewController")]) {
+            [self.navigationController popToViewController:vc animated:YES];
+            break;
+        }
     }
     
 }

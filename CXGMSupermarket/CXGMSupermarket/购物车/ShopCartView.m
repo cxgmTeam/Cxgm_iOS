@@ -99,7 +99,7 @@
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     NSDictionary* dic = @{
                           @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
-                          @"pageSize":@"10",
+                          @"pageSize":@"200",
                           @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
                           };
     WEAKSELF;

@@ -284,12 +284,7 @@
     //数量显示
     UILabel* numberLabel = [[UILabel alloc]init];
     numberLabel.textAlignment = NSTextAlignmentCenter;
-    
-    if ([self.goods.shopCartNum integerValue] > 0) {
-        numberLabel.text = self.goods.shopCartNum;
-    }else{
-        numberLabel.text = @"1";
-    }
+    numberLabel.text = @"1";
     numberLabel.font = [UIFont systemFontOfSize:15];
     [_contentView addSubview:numberLabel];
     [numberLabel mas_makeConstraints:^(MASConstraintMaker *make){

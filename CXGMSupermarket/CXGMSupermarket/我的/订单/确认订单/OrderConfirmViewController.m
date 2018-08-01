@@ -26,8 +26,6 @@
 #import "GoodsCouponController.h"
 
 
-#import "OrderBillViewController.h"
-
 #import "PaymentViewController.h"
 #import "SelectTimeController.h"
 
@@ -53,6 +51,8 @@
 @property(strong , nonatomic)UITextField *textField;
 
 @property(strong , nonatomic)UIView* bottomView;
+
+@property(strong , nonatomic)UIButton* submitBtn;
 @end
 
 /* cell */
@@ -69,7 +69,6 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
 @implementation OrderConfirmViewController
-
 
 
 - (void)viewDidLoad {
@@ -192,13 +191,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             if (array.count > 0) {
                 self.address = [array firstObject];
                 [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
-                
-//                [self.collectionView reloadData];
             }else{
                 self.address = nil;
                 [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:0]]];
-                
-//                [self.collectionView reloadData];
             }
             
         }
@@ -292,12 +287,13 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
 - (void)onTapButton:(id)sender
 {
+    self.submitBtn.enabled = NO;
     [self addOrder];
 }
 
 #pragma mark-
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 5;
+    return 4;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -322,11 +318,11 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         cell.coupons = self.coupons;
         gridcell = cell;
     }
+//    else if (indexPath.section == 3) {
+//        OrderBillViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderBillViewCellID forIndexPath:indexPath];
+//        gridcell = cell;
+//    }
     else if (indexPath.section == 3) {
-        OrderBillViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderBillViewCellID forIndexPath:indexPath];
-        gridcell = cell;
-    }
-    else if (indexPath.section == 4) {
         NoteInfoViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NoteInfoViewCellID forIndexPath:indexPath];
         cell.textField.delegate = self;
         self.textField = cell.textField;
@@ -353,22 +349,22 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         GoodsCouponController* vc = [GoodsCouponController new];
         [self.navigationController pushViewController:vc animated:YES];
     }
-    if (indexPath.section == 3 && indexPath.item == 0) {
-        OrderBillViewController* vc = [OrderBillViewController new];
-        vc.writeReceiptFinish = ^(ReceiptItem * receipt){
-            
-            self.receiptDic = @{
-                                @"companyName": receipt.companyName.length>0?receipt.companyName:@"不知道",
-                                @"content": @"不知道是啥",
-                                @"createTime": receipt.createTime,
-                                @"dutyParagraph": receipt.dutyParagraph.length>0?receipt.dutyParagraph:@"111122222",
-                                @"phone": receipt.phone,
-                                @"type": receipt.type,
-                                @"userId": receipt.userId
-                                };
-        };
-        [self.navigationController pushViewController:vc animated:YES];
-    }
+//    if (indexPath.section == 3 && indexPath.item == 0) {
+//        OrderBillViewController* vc = [OrderBillViewController new];
+//        vc.writeReceiptFinish = ^(ReceiptItem * receipt){
+//
+//            self.receiptDic = @{
+//                                @"companyName": receipt.companyName.length>0?receipt.companyName:@"不知道",
+//                                @"content": @"不知道是啥",
+//                                @"createTime": receipt.createTime,
+//                                @"dutyParagraph": receipt.dutyParagraph.length>0?receipt.dutyParagraph:@"111122222",
+//                                @"phone": receipt.phone,
+//                                @"type": receipt.type,
+//                                @"userId": receipt.userId
+//                                };
+//        };
+//        [self.navigationController pushViewController:vc animated:YES];
+//    }
 }
 
 - (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
@@ -413,7 +409,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (indexPath.section == 1 ) {
         return CGSizeMake(ScreenW, 128);
     }
-    if (indexPath.section == 2 || indexPath.section == 3 || indexPath.section == 4) {
+//    if (indexPath.section == 2 || indexPath.section == 3 || indexPath.section == 4) {
+//        return CGSizeMake(ScreenW, 45);
+//    }
+    if (indexPath.section == 2 || indexPath.section == 3) {
         return CGSizeMake(ScreenW, 45);
     }
 
@@ -434,7 +433,11 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (section == 0) {
         return CGSizeMake(ScreenW, 55);
     }
-    else if (section == 1 || section == 2 || section == 3 || section == 4 )
+//    else if (section == 1 || section == 2 || section == 3 || section == 4 )
+//    {
+//        return CGSizeMake(ScreenW, 10);
+//    }
+    else if (section == 1 || section == 2 || section == 3)
     {
         return CGSizeMake(ScreenW, 10);
     }
@@ -527,6 +530,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             make.height.equalTo(49);
             make.width.equalTo(118);
         }];
+        self.submitBtn = btn;
     }
 }
 

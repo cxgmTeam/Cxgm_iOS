@@ -639,20 +639,25 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
 {
     if (!_topToolView) {
         _topToolView = [DetailTopToolView new];
-        WEAKSELF;
+        typeof(self) __weak wself = self;
         _topToolView.backBtnClickBlock = ^{
-            [weakSelf.navigationController popViewControllerAnimated:YES];
+            [wself.navigationController popViewControllerAnimated:YES];
         };
         _topToolView.scrollCollectionView = ^(NSInteger section){
-            [weakSelf selectSectionAtIndex:section];
+            [wself selectSectionAtIndex:section];
         };
         _topToolView.gotoCartBlock = ^{
             if (![UserInfoManager sharedInstance].isLogin) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:ShowLoginVC_Notify object:nil];
                 return ;
             }
-            AnotherCartViewController* vc = [AnotherCartViewController new];
-            [weakSelf.navigationController pushViewController:vc animated:YES];
+            
+            if (wself.fromShopCart) {
+                [wself.navigationController popViewControllerAnimated:YES];
+            }else{
+                AnotherCartViewController* vc = [AnotherCartViewController new];
+                [wself.navigationController pushViewController:vc animated:YES];
+            }
         };
         [self.view addSubview:_topToolView];
     }

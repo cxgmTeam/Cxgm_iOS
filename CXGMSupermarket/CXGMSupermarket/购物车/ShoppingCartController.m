@@ -53,6 +53,7 @@
     };
     _cartView.gotoGoodsDetail = ^(GoodsModel *model){
         GoodsDetailViewController* vc = [GoodsDetailViewController new];
+        vc.fromShopCart = YES;
         vc.goodsId = model.productId;
         [wself.navigationController pushViewController:vc animated:YES];
     };
@@ -68,6 +69,8 @@
     [super viewWillAppear:animated];
 
     [self.navigationController setNavigationBarHidden:NO animated:NO];
+    
+    self.tabBarController.tabBar.hidden = NO;
     
     [self.cartView retsetSelectedStatus];
 

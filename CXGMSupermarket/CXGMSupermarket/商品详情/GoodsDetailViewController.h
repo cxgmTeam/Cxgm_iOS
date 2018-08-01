@@ -11,4 +11,6 @@
 @interface GoodsDetailViewController : CustomDetailViewController
 @property(nonatomic,strong)NSString* goodsId;
 @property(nonatomic,strong)NSString* shopId;
+
+@property(nonatomic,assign)BOOL fromShopCart;//是否点击的购物车
 @end

@@ -25,6 +25,8 @@
 
 #import "GoodsDetailViewController.h"
 
+#import "OrderConfirmViewController.h"
+
 @interface OrderDetailViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout,UITextFieldDelegate>
 @property (strong , nonatomic)UICollectionView *collectionView;
 @property (strong , nonatomic)OrderModel *orderDetail;
@@ -35,6 +37,11 @@
 @property(nonatomic,strong)NSTimer * timer;
 
 @property(nonatomic,strong)UIView* bottomView;
+
+@property(nonatomic,strong)UIButton* cancelBtn;
+@property(nonatomic,strong)UIButton* payBtn;
+
+@property(nonatomic,strong)UIButton* onceBuyBtn;
 @end
 
 
@@ -63,7 +70,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
     [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make){
         make.bottom.left.right.equalTo(self.view);
-        make.height.equalTo(50);
+        make.height.equalTo(TAB_BAR_HEIGHT);
     }];
     
     self.collectionView.backgroundColor = [UIColor clearColor];
@@ -97,9 +104,23 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSDictionary class]]) {
             self.orderDetail = [OrderModel OrderModelWithJson:(NSDictionary *)model.data];
-            if ([self.orderDetail.status intValue] == STATUS_TO_BE_PAID) {
+            if ([self.orderDetail.status intValue] == STATUS_TO_BE_PAID)
+            {
                 [wself getSurplusTime];
-            }else{
+                
+                self.cancelBtn.hidden = NO;
+                self.payBtn.hidden = NO;
+                self.onceBuyBtn.hidden = YES;
+            }
+            else if ([self.orderDetail.status intValue] == STATUS_COMPLETE)
+            {
+                self.bottomView.hidden = NO;
+                self.cancelBtn.hidden = YES;
+                self.payBtn.hidden = YES;
+                self.onceBuyBtn.hidden = NO;
+            }
+            else
+            {
                 self.bottomView.hidden = YES;
                 [self.collectionView remakeConstraints:^(MASConstraintMaker *make){
                     make.edges.equalTo(self.view);
@@ -196,6 +217,25 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 {
     PaymentViewController* vc = [PaymentViewController new];
     vc.order = self.orderDetail;
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)buyOnceAgain:(UIButton *)button
+{
+    for (GoodsModel* goods in self.orderDetail.productDetails) {
+        goods.goodCode = goods.productCode;
+    }
+    
+    //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
+    NSDictionary* dic = @{
+                          @"totalAmount":self.orderDetail.totalAmount,
+                          @"preferential":self.orderDetail.preferential,
+                          @"orderAmount":self.orderDetail.orderAmount
+                          };
+    
+    OrderConfirmViewController* vc = [OrderConfirmViewController new];
+    vc.goodsArray = self.orderDetail.productDetails;
+    vc.moneyDic = dic;
     [self.navigationController pushViewController:vc animated:YES];
 }
 
@@ -308,7 +348,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         return CGSizeMake(ScreenW, 109);
     }
     if (indexPath.section == 2 ) {
-        return CGSizeMake(ScreenW, 154);
+        return CGSizeMake(ScreenW, 154-45);
     }
     if (indexPath.section == 3 ) {
         return CGSizeMake(ScreenW, 45);
@@ -394,31 +434,47 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     if (!_bottomView) {
         
         _bottomView = [UIView new];
+        _bottomView.backgroundColor = [UIColor whiteColor];
         [self.view addSubview:_bottomView];
         {
-            UIButton* cancelBtn = [UIButton new];
-            cancelBtn.backgroundColor = [UIColor whiteColor];
-            [cancelBtn setTitle:@"取消订单" forState:UIControlStateNormal];
-            [cancelBtn setTitleColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0] forState:UIControlStateNormal];
-            cancelBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
-            [_bottomView addSubview:cancelBtn];
-            [cancelBtn addTarget:self action:@selector(cancelOrder:) forControlEvents:UIControlEventTouchUpInside];
-            [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make){
-                make.left.top.bottom.equalTo(self.bottomView);
+            _cancelBtn = [UIButton new];
+            _cancelBtn.backgroundColor = [UIColor whiteColor];
+            [_cancelBtn setTitle:@"取消订单" forState:UIControlStateNormal];
+            [_cancelBtn setTitleColor:[UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0] forState:UIControlStateNormal];
+            _cancelBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
+            [_bottomView addSubview:_cancelBtn];
+            [_cancelBtn addTarget:self action:@selector(cancelOrder:) forControlEvents:UIControlEventTouchUpInside];
+            [_cancelBtn mas_makeConstraints:^(MASConstraintMaker *make){
+                make.left.top.equalTo(self.bottomView);
+                make.height.equalTo(49);
                 make.width.equalTo(ScreenW/2.f);
             }];
             
-            UIButton* payBtn = [UIButton new];
-            payBtn.backgroundColor = Color00A862;
-            [payBtn setTitle:@"立即支付" forState:UIControlStateNormal];
-            [payBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-            payBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
-            [self.bottomView addSubview:payBtn];
-            [payBtn addTarget:self action:@selector(payOrder:) forControlEvents:UIControlEventTouchUpInside];
-            [payBtn mas_makeConstraints:^(MASConstraintMaker *make){
-                make.right.top.bottom.equalTo(self.bottomView);
+            _payBtn = [UIButton new];
+            _payBtn.backgroundColor = Color00A862;
+            [_payBtn setTitle:@"立即支付" forState:UIControlStateNormal];
+            [_payBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            _payBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
+            [self.bottomView addSubview:_payBtn];
+            [_payBtn addTarget:self action:@selector(payOrder:) forControlEvents:UIControlEventTouchUpInside];
+            [_payBtn mas_makeConstraints:^(MASConstraintMaker *make){
+                make.right.top.equalTo(self.bottomView);
+                make.height.equalTo(49);
                 make.width.equalTo(ScreenW/2.f);
             }];
+            
+            _onceBuyBtn = [UIButton new];
+            _onceBuyBtn.backgroundColor = Color00A862;
+            [_onceBuyBtn setTitle:@"再次购买" forState:UIControlStateNormal];
+            [_onceBuyBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            _onceBuyBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
+            [self.bottomView addSubview:_onceBuyBtn];
+            [_onceBuyBtn addTarget:self action:@selector(buyOnceAgain:) forControlEvents:UIControlEventTouchUpInside];
+            [_onceBuyBtn mas_makeConstraints:^(MASConstraintMaker *make){
+                make.right.top.left.equalTo(self.bottomView);
+                make.height.equalTo(49);
+            }];
+            
         }
     }
     return _bottomView;

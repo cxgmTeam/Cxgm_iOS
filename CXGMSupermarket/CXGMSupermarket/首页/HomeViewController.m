@@ -40,6 +40,7 @@
 
 @property(nonatomic,strong)UIView* navLine;
 
+@property(nonatomic,strong)UIView* navBottomView;
 @end
 
 
@@ -133,7 +134,8 @@
             _goodsView = [HomeGoodsView new];
             [self.view addSubview:_goodsView];
             [_goodsView mas_makeConstraints:^(MASConstraintMaker *make){
-                make.edges.equalTo(self.view);
+                make.top.equalTo(self.navBottomView.bottom);
+                make.left.right.bottom.equalTo(self.view);
             }];
 
             
@@ -196,7 +198,8 @@
             _shopsView = [HomeShopsView new];
             [self.view addSubview:_shopsView];
             [_shopsView mas_makeConstraints:^(MASConstraintMaker *make){
-                make.edges.equalTo(self.view);
+                make.top.equalTo(self.navBottomView.bottom);
+                make.left.right.bottom.equalTo(self.view);
             }];
             typeof(self) __weak wself = self;
             _shopsView.selectShopHandler = ^{
@@ -209,8 +212,6 @@
 - (void)viewWillAppear:(BOOL)animated{
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:NO animated:YES];
-    
-    NSLog(@"%s",__func__);
     
     [self.navigationController.navigationBar setBarTintColor:[UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0]];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -297,10 +298,97 @@
     }];
     [btn addTarget:self action:@selector(onTapButton:) forControlEvents:UIControlEventTouchUpInside];
     
-    UIView* line = [[UIView alloc] initWithFrame:CGRectMake(0, NAVIGATION_BAR_HEIGHT-STATUS_BAR_HEIGHT-1, ScreenW, 1)];
+    UIView* line = [[UIView alloc] initWithFrame:CGRectMake(0, NAVIGATION_BAR_HEIGHT-STATUS_BAR_HEIGHT-1, ScreenW, 2)];
     line.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
     [self.navigationController.navigationBar addSubview:line];
     self.navLine = line;
+    
+    _navBottomView = [UIView new];
+    _navBottomView.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
+    [self.view addSubview:_navBottomView];
+    [_navBottomView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.top.left.right.equalTo(self.view);
+        make.height.equalTo(30);
+    }];
+    {
+        UIImageView* logo = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_logo"]];
+        [_navBottomView addSubview:logo];
+        [logo mas_makeConstraints:^(MASConstraintMaker *make){
+            make.centerY.equalTo(self.navBottomView);
+            if (ScreenW < 375) {
+                make.right.equalTo(-10);
+            }else{
+               make.right.equalTo(-20);
+            }
+        }];
+        
+        UIImageView* icon1 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_check"]];
+        [_navBottomView addSubview:icon1];
+        [icon1 mas_makeConstraints:^(MASConstraintMaker *make){
+            make.centerY.equalTo(self.navBottomView);
+            if (ScreenW < 375) {
+                make.left.equalTo(10);
+            }else{
+                make.left.equalTo(20);
+            }
+            
+        }];
+        
+        UILabel* label1 = [UILabel new];
+        label1.text = @"全球食材";
+        label1.textColor = [UIColor whiteColor];
+        label1.font = [UIFont systemFontOfSize:12];
+        if (ScreenW < 375) {
+            label1.font = [UIFont systemFontOfSize:10];
+        }
+        [_navBottomView addSubview:label1];
+        [label1 mas_makeConstraints:^(MASConstraintMaker *make){
+            make.centerY.equalTo(self.navBottomView);
+            make.left.equalTo(icon1.right).offset(5);
+        }];
+        
+        UIImageView* icon2 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_check"]];
+        [_navBottomView addSubview:icon2];
+        [icon2 mas_makeConstraints:^(MASConstraintMaker *make){
+            make.centerY.equalTo(self.navBottomView);
+            make.left.equalTo(label1.right).offset(10);
+        }];
+        
+        UILabel* label2 = [UILabel new];
+        label2.text = @"优质放心";
+        label2.textColor = [UIColor whiteColor];
+        label2.font = [UIFont systemFontOfSize:12];
+        if (ScreenW < 375) {
+            label2.font = [UIFont systemFontOfSize:10];
+        }
+        [_navBottomView addSubview:label2];
+        [label2 mas_makeConstraints:^(MASConstraintMaker *make){
+            make.centerY.equalTo(self.navBottomView);
+            make.left.equalTo(icon2.right).offset(5);
+        }];
+        
+        
+        UIImageView* icon3 = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"home_check"]];
+        [_navBottomView addSubview:icon3];
+        [icon3 mas_makeConstraints:^(MASConstraintMaker *make){
+            make.centerY.equalTo(self.navBottomView);
+            make.left.equalTo(label2.right).offset(10);
+        }];
+        
+        UILabel* label3 = [UILabel new];
+        label3.text = @"1小时送达";
+        label3.textColor = [UIColor whiteColor];
+        label3.font = [UIFont systemFontOfSize:12];
+        if (ScreenW < 375) {
+            label3.font = [UIFont systemFontOfSize:10];
+        }
+        [_navBottomView addSubview:label3];
+        [label3 mas_makeConstraints:^(MASConstraintMaker *make){
+            make.centerY.equalTo(self.navBottomView);
+            make.left.equalTo(icon3.right).offset(5);
+        }];
+        
+    }
 }
 
 - (void)showAddressVC:(id)sender

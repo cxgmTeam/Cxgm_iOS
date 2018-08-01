@@ -156,18 +156,19 @@
     [selectBtn addTarget:self action:@selector(selectBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:selectBtn];
     [selectBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.equalTo(13);
-        make.top.equalTo(47);
-        make.width.height.equalTo(30);
+        make.left.top.equalTo(self);
+        make.bottom.equalTo(-40);
+        make.width.equalTo(60);
     }];
     self.selectBtn = selectBtn;
+    
 
     //显示照片
     UIImageView* imageView = [[UIImageView alloc]init];
     imageView.image = [UIImage imageNamed:@"placeholderImage"];
     [bgView addSubview:imageView];
     [imageView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.equalTo(selectBtn.right).offset(10);
+        make.left.equalTo(selectBtn.right);
         make.top.equalTo(20);
         make.width.height.equalTo(84);
     }];
