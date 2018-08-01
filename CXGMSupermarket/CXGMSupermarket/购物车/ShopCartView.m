@@ -62,24 +62,24 @@
         make.bottom.equalTo(self.bottomView.top);
     }];
     
-    WEAKSELF
-    self.myTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [self.myTableView.mj_header endRefreshing];
-        
-        weakSelf.pageNum = 1;
-        [weakSelf.dataArray removeAllObjects];
-        
-        [weakSelf getShopCartList];
-        
-        [weakSelf retsetSelectedStatus];
-    }];
-    
-    self.myTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
-        [self.myTableView.mj_footer endRefreshing];
-        
-        weakSelf.pageNum ++;
-        [weakSelf getShopCartList];
-    }];
+//    WEAKSELF
+//    self.myTableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+//        [self.myTableView.mj_header endRefreshing];
+//        
+//        weakSelf.pageNum = 1;
+//        [weakSelf.dataArray removeAllObjects];
+//        
+//        [weakSelf getShopCartList];
+//        
+//        [weakSelf retsetSelectedStatus];
+//    }];
+//    
+//    self.myTableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+//        [self.myTableView.mj_footer endRefreshing];
+//        
+//        weakSelf.pageNum ++;
+//        [weakSelf getShopCartList];
+//    }];
 }
 
 - (void)refreshShopCart:(NSNotification *)notiy
@@ -98,8 +98,8 @@
     
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     NSDictionary* dic = @{
-                          @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
-                          @"pageSize":@"200",
+//                          @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
+//                          @"pageSize":@"200",
                           @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
                           };
     WEAKSELF;
@@ -111,12 +111,7 @@
             [weakSelf.myTableView reloadData];
             
             [weakSelf changeView];
-            
-            if (array.count == 0) {
-                [weakSelf.myTableView.mj_footer endRefreshingWithNoMoreData];
-            }
         }
-        [self.myTableView.mj_header endRefreshing];
     } failure:^(id JSON, NSError *error){
 
     }];

@@ -107,8 +107,8 @@
     
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     NSDictionary* dic = @{
-                          @"pageNum":@"1",
-                          @"pageSize":@"0",
+//                          @"pageNum":@"1",
+//                          @"pageSize":@"0",
                           @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
                           };
     
