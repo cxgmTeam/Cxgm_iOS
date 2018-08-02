@@ -17,6 +17,8 @@
 
 - (void)retsetSelectedStatus;
 
+- (void)getShopCartList;
+
 @property(nonatomic,copy)void(^gotoConfirmOrder)(NSArray* array,NSDictionary* dic) ;
 
 @property(nonatomic,copy)void(^gotoGoodsDetail)(GoodsModel* model) ;

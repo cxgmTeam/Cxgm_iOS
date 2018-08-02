@@ -83,18 +83,15 @@
 }
 
 - (void)refreshShopCart:(NSNotification *)notiy
-{
-    self.pageNum = 1;
-    [self.dataArray removeAllObjects];
-    
+{    
     [self getShopCartList];
-    
-    [self retsetSelectedStatus];
 }
 
 - (void)getShopCartList
 {
     if (![UserInfoManager sharedInstance].isLogin) return;
+    
+    [self.dataArray removeAllObjects];
     
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     NSDictionary* dic = @{
@@ -102,18 +99,24 @@
 //                          @"pageSize":@"200",
                           @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
                           };
-    WEAKSELF;
+    
+    [MBProgressHUD showHUDAddedTo:self animated:YES];
+    
+    typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIShopCartList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        [MBProgressHUD hideHUDForView:self animated:YES];
+        
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
             NSArray* array = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
-            [weakSelf.dataArray addObjectsFromArray:array];
-            [weakSelf.myTableView reloadData];
+            [wself.dataArray addObjectsFromArray:array];
+            [wself.myTableView reloadData];
             
-            [weakSelf changeView];
+            [wself changeView];
+            [wself retsetSelectedStatus];
         }
     } failure:^(id JSON, NSError *error){
-
+        [MBProgressHUD hideHUDForView:self animated:YES];
     }];
 }
 

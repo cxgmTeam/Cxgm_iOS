@@ -15,6 +15,7 @@
 
 @interface LeftTableCell : UITableViewCell
 
+@property(nonatomic,strong)UILabel* dayLabel;
 @end
 
 @interface RightTabelCell : UITableViewCell
@@ -22,6 +23,9 @@
 @end
 
 @interface SelectTimeController : UIViewController
+
+@property (assign , nonatomic)BOOL isToday;
+@property (strong , nonatomic)NSArray * dataArray;
 
 @property(nonatomic,copy)void(^selectedTimeFinish)(NSString *time);
 @end

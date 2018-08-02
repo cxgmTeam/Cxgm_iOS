@@ -13,6 +13,8 @@
 #import "ShopCartView.h"
 #import "GoodsDetailViewController.h"
 
+#import "MainViewController.h"
+
 @interface ShoppingCartController ()
 
 @property (strong,nonatomic)ShopCartView * cartView;;
@@ -72,8 +74,10 @@
     
     self.tabBarController.tabBar.hidden = NO;
     
-    [self.cartView retsetSelectedStatus];
-
+    [self.cartView getShopCartList];
+    
+    MainViewController* tabVC = (MainViewController *)self.tabBarController;
+    [tabVC getShopCartNumber];
 }
 
 

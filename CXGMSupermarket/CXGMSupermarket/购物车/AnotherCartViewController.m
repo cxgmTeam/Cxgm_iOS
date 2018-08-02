@@ -62,7 +62,7 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [self.cartView retsetSelectedStatus];
+    [self.cartView getShopCartList];
 }
 
 @end

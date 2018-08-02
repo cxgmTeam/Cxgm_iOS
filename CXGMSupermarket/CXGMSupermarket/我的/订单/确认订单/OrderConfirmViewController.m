@@ -46,13 +46,17 @@
 
 @property (assign , nonatomic)NSInteger orderNum;
 
-@property(strong,nonatomic) NSMutableArray * pointsArr;//查询到的范围点集
+@property(strong, nonatomic) NSMutableArray * pointsArr;//查询到的范围点集
 
 @property(strong , nonatomic)UITextField *textField;
 
 @property(strong , nonatomic)UIView* bottomView;
 
 @property(strong , nonatomic)UIButton* submitBtn;
+
+@property (strong,  nonatomic)NSMutableArray * timeArray;
+@property (strong , nonatomic)NSString* dateString;
+@property (assign , nonatomic)BOOL isToday;
 @end
 
 /* cell */
@@ -87,6 +91,11 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         make.left.top.right.equalTo(self.view);
         make.bottom.equalTo(self.bottomView.top);
     }];
+    
+    
+
+    [self calculateDeliveryTime];
+    
     
     
     [self findAllPsfw];
@@ -129,7 +138,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     
     [self.orderParam setObject:self.address.id forKey:@"addressId"];
-    [self.orderParam setObject:self.timeFootview.timeLabel.text forKey:@"receiveTime"];
+    
+    NSString* deliveryTime = [NSString stringWithFormat:@"%@ %@",self.dateString,self.timeFootview.timeLabel.text];
+    [self.orderParam setObject:deliveryTime forKey:@"receiveTime"];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
@@ -389,6 +400,9 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (kind == UICollectionElementKindSectionFooter) {
         if (indexPath.section == 0) {
             GoodsArrivedTimeFoot *footview = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionFooter withReuseIdentifier:GoodsArrivedTimeFootID forIndexPath:indexPath];
+            if (self.timeArray.count > 0) {
+                footview.timeLabel.text = [self.timeArray firstObject];
+            }
             [footview addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectTime:)]];
             reusableview = footview;
             _timeFootview = footview;
@@ -445,9 +459,82 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 }
 
 #pragma mark-
+
+- (void)calculateDeliveryTime
+{
+    self.timeArray = [NSMutableArray array];
+    
+    
+    NSDate *currentDate = [NSDate date];
+    NSCalendar *currentCalendar=[[NSCalendar alloc]initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+    NSDateComponents *currentComps = [[NSDateComponents alloc] init];
+    NSInteger unitFlags = NSCalendarUnitYear | NSCalendarUnitMonth | NSCalendarUnitDay | NSCalendarUnitWeekday | NSCalendarUnitHour | NSCalendarUnitMinute | NSCalendarUnitSecond;
+    currentComps = [currentCalendar components:unitFlags fromDate:currentDate];
+    
+    
+    NSInteger hour = [currentComps hour];
+    
+    if (0 <= hour && hour < 9 ) {//今天
+        
+        self.isToday = YES;
+        self.dateString = [NSString stringWithFormat:@"%zd年%zd月%zd日",[currentComps year],[currentComps month],[currentComps day]];
+        
+        NSInteger duration = 21-9;
+        
+        for (NSInteger i = 1; i < duration; i ++) {
+            
+            NSString *string = [NSString stringWithFormat:@"%zd:00-%zd:00",8+i,8+i+1];
+            [self.timeArray addObject:string];
+        }
+    }
+    
+    if (9 <= hour  && hour < 21) {//今天
+        self.isToday = YES;
+        self.dateString = [NSString stringWithFormat:@"%zd年%zd月%zd日",[currentComps year],[currentComps month],[currentComps day]];
+        
+        NSInteger duration = 21-hour;
+        
+        for (NSInteger i = 1; i < duration; i ++) {
+            
+            NSString *string = [NSString stringWithFormat:@"%zd:00-%zd:00",hour+i,hour+i+1];
+            [self.timeArray addObject:string];
+        }
+    }
+    
+    if (21 <= hour  && hour < 24) {//明天
+        
+        NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+        NSDateComponents *comps = nil;
+        comps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:[NSDate date]];
+        NSDateComponents *adcomps = [[NSDateComponents alloc] init];
+        
+        [adcomps setDay:1];
+        
+        NSDate *newdate = [calendar dateByAddingComponents:adcomps toDate:[NSDate date] options:0];
+        currentComps = [calendar components:unitFlags fromDate:newdate];
+        
+        self.isToday = NO;
+        self.dateString = [NSString stringWithFormat:@"%zd年%zd月%zd日",[currentComps year],[currentComps month],[currentComps day]];
+        
+        
+        NSInteger duration = 21-9;
+        
+        for (NSInteger i = 1; i < duration; i ++) {
+            
+            NSString *string = [NSString stringWithFormat:@"%zd:00-%zd:00",8+i,8+i+1];
+            [self.timeArray addObject:string];
+        }
+    }
+}
+
+
 - (void)selectTime:(UITapGestureRecognizer *)gesture
 {
     SelectTimeController* vc = [SelectTimeController new];
+    
+    vc.isToday = self.isToday;
+    vc.dataArray = self.timeArray;
+    
     vc.selectedTimeFinish = ^(NSString * time){
         self.timeFootview.timeLabel.text = time;
     };

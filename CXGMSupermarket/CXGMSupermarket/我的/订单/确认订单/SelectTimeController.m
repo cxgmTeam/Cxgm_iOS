@@ -27,6 +27,7 @@
         [label mas_makeConstraints:^(MASConstraintMaker *make){
             make.center.equalTo(self);
         }];
+        self.dayLabel = label;
     }
     return self;
 }
@@ -118,33 +119,42 @@
     }];
     [maskView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onTapMaskView:)]];
     
+    UIView* bottomView = [UIView new];
+    bottomView.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:bottomView];
+    [bottomView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.right.bottom.equalTo(self.view);
+        make.height.equalTo(TAB_BAR_HEIGHT);
+    }];
 
     UIButton* button = [UIButton new];
     button.backgroundColor = Color00A862;
     [button setTitle:@"确定" forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:18];
     [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [self.view addSubview:button];
+    [bottomView addSubview:button];
     [button mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.right.bottom.equalTo(self.view);
-        make.height.equalTo(50);
+        make.left.right.top.equalTo(bottomView);
+        make.height.equalTo(49);
     }];
     [button addTarget:self action:@selector(onTapConfirmBtn:) forControlEvents:UIControlEventTouchUpInside];
     
     self.rightArray = [NSMutableArray array];
     
-    TimeItem* item = [TimeItem new];
-    item.title = @"09:00-18:00";
-    item.selected = YES;
-    [self.rightArray addObject:item];
     
-    self.selectItem = item;
-    
-    item = [TimeItem new];
-    item.title = @"18:00-22:00";
-    item.selected = NO;
-    [self.rightArray addObject:item];
-    
+    for (NSInteger i = 0; i < self.dataArray.count ; i ++) {
+        NSString * timeStr = self.dataArray[i];
+        
+        TimeItem* item = [TimeItem new];
+        item.title = timeStr;
+        if (i == 0) {
+            item.selected = YES;
+        }else{
+            item.selected = NO;
+        }
+        [self.rightArray addObject:item];
+    }
+
     
     [self setupUI];
     
@@ -172,7 +182,7 @@
     if (tableView == _leftTable) {
         return 1;
     }
-    return 2;
+    return self.rightArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -182,6 +192,7 @@
         if (!cell) {
             cell = [[LeftTableCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"LeftTableCell"];
         }
+        cell.dayLabel.text = self.isToday == YES?@"今天":@"明天";
         tableCell = cell;
     }else{
         RightTabelCell* cell = [tableView dequeueReusableCellWithIdentifier:@"RightTabelCell"];
@@ -224,7 +235,7 @@
     [self.view addSubview:contentView];
     [contentView mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.right.equalTo(self.view);
-        make.bottom.equalTo(-50);
+        make.bottom.equalTo(-TAB_BAR_HEIGHT);
         make.height.equalTo(221);
     }];
     
