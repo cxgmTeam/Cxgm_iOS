@@ -19,6 +19,9 @@
 
 @property(nonatomic,strong)UIView* exchangeView;
 @property(nonatomic,strong)CustomTextField* textField;
+
+@property(nonatomic,strong)UIButton* leftBtn;
+@property(nonatomic,strong)UIButton* rightBtn;
 @end
 
 @implementation CouponViewController
@@ -44,6 +47,7 @@
     for (NSInteger i = 0; i < 2; i++) {
         CouponListViewController* vc = [CouponListViewController new];
         vc.isExpire = i==1?YES:NO;
+        vc.delegate = self;
         [_scrollView addSubview:vc.view];
         vc.view.frame = CGRectMake(i*ScreenW, 0, ScreenW, _scrollView.bounds.size.height);
         [self addChildViewController:vc];
@@ -115,6 +119,17 @@
     
 }
 
+- (void)restButtonTitle:(NSDictionary *)value
+{
+    NSNumber * number = value[@"number"];
+    
+    if ([value[@"status"] boolValue]) {
+        [self.leftBtn setTitle:[NSString stringWithFormat:@"可用（%zd）",[number integerValue]] forState:UIControlStateNormal];
+    }else{
+        [self.rightBtn setTitle:[NSString stringWithFormat:@"不可用（%zd）",[number integerValue]] forState:UIControlStateNormal];
+    }
+}
+
 #pragma mark- init
 - (void)setupMenuView
 {
@@ -160,6 +175,10 @@
         if (i == 0) {
             _lastBtn = btn;
             _lastBtn.selected = YES;
+            
+            self.leftBtn = btn;
+        }else{
+            self.rightBtn = btn;
         }
     }
     

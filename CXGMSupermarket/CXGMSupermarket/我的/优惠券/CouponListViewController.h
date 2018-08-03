@@ -10,4 +10,6 @@
 
 @interface CouponListViewController : UIViewController
 @property(nonatomic,assign)BOOL isExpire;//过期
+
+@property(nonatomic,weak)id delegate;
 @end

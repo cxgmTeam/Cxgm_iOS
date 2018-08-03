@@ -18,7 +18,7 @@
 @property(nonatomic,strong)UIButton* openBtn;       //展开按钮
 
 @property(nonatomic,strong)UIView* bottomView;      //下部
-@property(nonatomic,strong)UILabel* explainLabel;   //说明
+@property(nonatomic,strong)UILabel* introductionLabel;   //详细规则
 @end
 
 @implementation CouponCollectionViewCell
@@ -31,12 +31,18 @@
     }
     _bottomView.hidden = ![coupons.isOpen boolValue];
     
-    if (coupons.isExpire) {
+    if ([coupons.status boolValue]) {
         _stateImageView.image = [UIImage imageNamed:@"coupon_useless"];
     }else{
         _stateImageView.image = [UIImage imageNamed:@"coupon_bg"];
     }
-    _useBtton.hidden = [coupons.isExpire boolValue];
+    
+    _valueLabel.text = coupons.priceExpression;
+    _scopeLabel.text = coupons.name;
+    _conditionLabel.text = [NSString stringWithFormat: @"满%@元可用",[coupons.maximumPrice length] > 0? coupons.maximumPrice:@"0"];
+    
+    _timeLabel.text = [NSString stringWithFormat:@"%@-%@",coupons.beginDate,coupons.endDate];
+    self.introductionLabel.text = [coupons.introduction length]>0?coupons.introduction:@"";
 }
 
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -112,6 +118,7 @@
     }];
     
     _timeLabel = [[UILabel alloc] init];
+    _timeLabel.numberOfLines = 2;
     _timeLabel.text = @"2017.05.04-2017.02.88";
     _timeLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:11];
     _timeLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
@@ -145,6 +152,7 @@
         make.top.equalTo(46);
         make.size.equalTo(CGSizeMake(62, 22));
     }];
+    _useBtton.hidden = YES;
     
     [self drawDottedLine];
     
@@ -185,6 +193,7 @@
             make.left.equalTo(10);
             make.centerY.equalTo(self.bottomView);
         }];
+        self.introductionLabel = label;
     }
     _bottomView.hidden = YES;
 }

@@ -170,6 +170,8 @@
 @property (nonatomic,strong)NSString<Optional> * name;
 @property (nonatomic,strong)NSString<Optional> * productId;
 @property (nonatomic,strong)NSString<Optional> * status;
+@property (nonatomic,strong)NSString<Optional> * maximumPrice;
+@property (nonatomic,strong)NSString<Optional> * priceExpression;
 
 @property(nonatomic,strong)NSString<Optional> * isOpen;//用做UI的展开折叠
 @property(nonatomic,strong)NSString<Optional> * isExpire;

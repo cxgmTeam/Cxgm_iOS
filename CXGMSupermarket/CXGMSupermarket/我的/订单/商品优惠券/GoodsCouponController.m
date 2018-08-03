@@ -8,7 +8,6 @@
 
 #import "GoodsCouponController.h"
 #import "CouponCollectionViewCell.h"
-#import "CouponItem.h"
 
 
 @interface GoodsCouponController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
@@ -56,8 +55,8 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
-    CouponItem* item = self.listArray[indexPath.item];
-    if (item.isOpen) {
+    CouponsModel* item = self.listArray[indexPath.item];
+    if ([item.isOpen boolValue]) {
         return CGSizeMake(ScreenW-20, 140);
     }else{
         return CGSizeMake(ScreenW-20, 100);

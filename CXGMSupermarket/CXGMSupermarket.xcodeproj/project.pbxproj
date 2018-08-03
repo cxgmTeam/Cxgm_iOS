@@ -244,7 +244,6 @@
 		77FDD574209BF56C00805709 /* libstdc++.6.0.9.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 77FDD573209BF56B00805709 /* libstdc++.6.0.9.tbd */; };
 		77FDD576209BF70300805709 /* mapapi.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 77FDD575209BF70300805709 /* mapapi.bundle */; };
 		77FDD579209C644300805709 /* APIParameterHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 77FDD578209C644300805709 /* APIParameterHelper.m */; };
-		BE17FDE42090AD3300778D2C /* CouponItem.m in Sources */ = {isa = PBXBuildFile; fileRef = BE17FDE32090AD3300778D2C /* CouponItem.m */; };
 		BE23B596208DFE8D00367E0E /* BlankCollectionFootView.m in Sources */ = {isa = PBXBuildFile; fileRef = BE23B595208DFE8D00367E0E /* BlankCollectionFootView.m */; };
 		BE24E00C20A3096A0024A64D /* HomeFeatureViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24E00B20A3096A0024A64D /* HomeFeatureViewCell.m */; };
 		BE24E01020A30E460024A64D /* GradientLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = BE24E00F20A30E460024A64D /* GradientLabel.m */; };
@@ -874,8 +873,6 @@
 		77FDD575209BF70300805709 /* mapapi.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; name = mapapi.bundle; path = BaiduMapAPI_Map.framework/Resources/mapapi.bundle; sourceTree = "<group>"; };
 		77FDD577209C644300805709 /* APIParameterHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = APIParameterHelper.h; sourceTree = "<group>"; };
 		77FDD578209C644300805709 /* APIParameterHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = APIParameterHelper.m; sourceTree = "<group>"; };
-		BE17FDE22090AD3300778D2C /* CouponItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CouponItem.h; sourceTree = "<group>"; };
-		BE17FDE32090AD3300778D2C /* CouponItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CouponItem.m; sourceTree = "<group>"; };
 		BE23B594208DFE8D00367E0E /* BlankCollectionFootView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BlankCollectionFootView.h; sourceTree = "<group>"; };
 		BE23B595208DFE8D00367E0E /* BlankCollectionFootView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = BlankCollectionFootView.m; sourceTree = "<group>"; };
 		BE24E00A20A3096A0024A64D /* HomeFeatureViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeFeatureViewCell.h; sourceTree = "<group>"; };
@@ -1129,15 +1126,6 @@
 				BE40AFCE208F697800D4B690 /* CouponCollectionViewCell.m */,
 			);
 			path = cell;
-			sourceTree = "<group>";
-		};
-		77035579209953BB002B3A8D /* object */ = {
-			isa = PBXGroup;
-			children = (
-				BE17FDE22090AD3300778D2C /* CouponItem.h */,
-				BE17FDE32090AD3300778D2C /* CouponItem.m */,
-			);
-			path = object;
 			sourceTree = "<group>";
 		};
 		7703557A209953D3002B3A8D /* 发票 */ = {
@@ -2337,7 +2325,6 @@
 		BE40AFA3208F5C3100D4B690 /* 优惠券 */ = {
 			isa = PBXGroup;
 			children = (
-				77035579209953BB002B3A8D /* object */,
 				77035578209953AD002B3A8D /* cell */,
 				BE40AFA4208F5C7000D4B690 /* CouponViewController.h */,
 				BE40AFA5208F5C7000D4B690 /* CouponViewController.m */,
@@ -3125,7 +3112,6 @@
 				77F83A802070E8CE004E9717 /* IQKeyboardManager.m in Sources */,
 				77A2DC1F20F9C6EF000F47FB /* NSDataEx.m in Sources */,
 				BE6CFAF9207A3D8A00DFD3CA /* Utility.m in Sources */,
-				BE17FDE42090AD3300778D2C /* CouponItem.m in Sources */,
 				BE44A07F2091A709001FE5A6 /* OrderCollectionViewCell.m in Sources */,
 				77F83A922070E8CE004E9717 /* MASConstraint.m in Sources */,
 				77A2DC1C20F9C6EF000F47FB /* MD5DataSigner.m in Sources */,
@@ -3374,6 +3360,7 @@
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CXGMSupermarket/PrefixHeader.pch";
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/CXGMSupermarket/第三方/Alipay";
 				INFOPLIST_FILE = CXGMSupermarket/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -3425,6 +3412,7 @@
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(SRCROOT)/CXGMSupermarket/PrefixHeader.pch";
+				GCC_WARN_UNDECLARED_SELECTOR = NO;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/CXGMSupermarket/第三方/Alipay";
 				INFOPLIST_FILE = CXGMSupermarket/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
