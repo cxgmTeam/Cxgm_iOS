@@ -17,7 +17,7 @@
 - (void)setCoupons:(CouponsModel *)coupons{
     
     if (coupons) {
-        _valueLabel.text = @"-￥50.00";
+        _valueLabel.text = [NSString stringWithFormat:@"-￥%@",coupons.priceExpression];
     }else{
         _valueLabel.text = @"无优惠券可用";
     }

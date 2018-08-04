@@ -80,7 +80,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     self.title = @"确认订单";
     
     self.pointsArr = [NSMutableArray array];
-    
     self.orderParam = [NSMutableDictionary dictionary];
     
     [self setupBottom];
@@ -93,10 +92,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     }];
     
     
-
     [self calculateDeliveryTime];
-    
-    
     
     [self findAllPsfw];
     
@@ -108,8 +104,12 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     [self getAddressList];
     
     
-    _moneyLabel.text = [NSString stringWithFormat:@"¥%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10];
+    NSString* orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10];
     
+    if (self.coupons) {
+        orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10-[self.coupons.priceExpression floatValue]];
+    }
+    _moneyLabel.text = [NSString stringWithFormat:@"¥%@",orderAmount];
 }
 
 //下单接口
@@ -126,11 +126,16 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             }
         }
     }
-    //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
-    //    orderAmount = totalAmount - preferential + 10
+    //    orderAmount 实付金额   totalAmount 订单总金额  priceExpression 订单优惠
+    //    orderAmount = totalAmount - priceExpression + 10
     
     //这个地方还要减去优惠券的
+    
     NSString* orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10];
+    
+    if (self.coupons) {
+        orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10-[self.coupons.priceExpression floatValue]];
+    }
     
     [self.orderParam setObject:self.moneyDic[@"totalAmount"] forKey:@"totalAmount"];
     [self.orderParam setObject:self.moneyDic[@"preferential"]forKey:@"preferential"];
@@ -279,14 +284,24 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameter:param success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
-        if ([model.data isKindOfClass:[NSArray class]]) {
+
+        if ([model.data isKindOfClass:[NSArray class]])
+        {
             self.couponArray = [CouponsModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
-            if (self.couponArray.count > 0) {
+            
+            if (self.couponArray.count > 0)
+            {
                 self.coupons = [self.couponArray firstObject];
             }else{
                 self.coupons = nil;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
+                
+                if (self.coupons) {
+                    NSString*  orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10-[self.coupons.priceExpression floatValue]];
+                    self.moneyLabel.text = [NSString stringWithFormat:@"¥%@",orderAmount];
+                }
+                
                 [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]]];
             });
         }
@@ -358,6 +373,16 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     if (indexPath.section == 2 && indexPath.item == 0 && self.couponArray.count > 0) {
         GoodsCouponController* vc = [GoodsCouponController new];
+        vc.listArray = self.couponArray;
+        typeof(self) __weak wself = self;
+        vc.selectCoupon = ^(CouponsModel * model){
+            self.coupons = model;
+
+            NSString*  orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10-[self.coupons.priceExpression floatValue]];
+            wself.moneyLabel.text = [NSString stringWithFormat:@"¥%@",orderAmount];
+            
+            [wself.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]]];
+        };
         [self.navigationController pushViewController:vc animated:YES];
     }
 //    if (indexPath.section == 3 && indexPath.item == 0) {
@@ -653,9 +678,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
                         CLLocation *location = [[CLLocation alloc] initWithLatitude:[arr[1] floatValue] longitude:[arr[0] floatValue]];
                         [mutableArr addObject:location];
                     }
-                    
-                    
-                    
+
                     if (i == pointNodeNum-1)
                     {
                         CLLocationCoordinate2D commuterLotCoords[pointNodeNum];

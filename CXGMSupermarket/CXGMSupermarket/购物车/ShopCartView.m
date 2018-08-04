@@ -90,9 +90,7 @@
 - (void)getShopCartList
 {
     if (![UserInfoManager sharedInstance].isLogin) return;
-    
-    [self.dataArray removeAllObjects];
-    
+
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     NSDictionary* dic = @{
 //                          @"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
@@ -105,6 +103,8 @@
     typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIShopCartList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){
         [MBProgressHUD hideHUDForView:self animated:YES];
+        
+        [self.dataArray removeAllObjects];
         
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {

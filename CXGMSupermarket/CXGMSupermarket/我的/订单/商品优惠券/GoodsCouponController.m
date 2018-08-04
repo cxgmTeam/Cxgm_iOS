@@ -13,7 +13,7 @@
 @interface GoodsCouponController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 
 @property (strong , nonatomic)UICollectionView *collectionView;
-@property (strong , nonatomic)NSMutableArray *listArray;
+
 @end
 
 static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
@@ -22,20 +22,14 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.listArray = [NSMutableArray arrayWithCapacity:0];
+    self.title = @"优惠券";
     
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
     }];
-    typeof(self) __weak wself = self;
-    self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
-        [wself.listArray removeAllObjects];
-    }];
-}
 
-//- (void)
+}
 
 #pragma mark-
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -61,6 +55,14 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
     }else{
         return CGSizeMake(ScreenW-20, 100);
     }
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES];
+    
+    CouponsModel* item = self.listArray[indexPath.item];
+    !_selectCoupon?:_selectCoupon(item);
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark- init

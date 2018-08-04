@@ -15,6 +15,9 @@
 @property (strong , nonatomic)UIView *emptyView;
 @property (strong , nonatomic)NSMutableArray *listArray;
 
+@property(nonatomic,strong)UIView* exchangeView;
+@property(nonatomic,strong)CustomTextField* textField;
+
 @property (assign , nonatomic)NSInteger pageNum;
 
 @end
@@ -30,12 +33,16 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
     NSDictionary* dic = @{@"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
                           @"pageSize":@"10"};
     
-typeof(self) __weak wself = self;
+    typeof(self) __weak wself = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindCoupons] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
         
         [MBProgressHUD hideHUDForView:wself.view animated:YES];
+        
+        if (self.pageNum == 1) {
+            [self.listArray removeAllObjects];
+        }
         
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
@@ -66,23 +73,47 @@ typeof(self) __weak wself = self;
     }];
 }
 
+- (void)exchangeCoupons:(id)sender
+{
+    if (_textField.text.length == 0) {
+        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请输入正确的兑换码"]; return;
+    }
+    
+    NSDictionary* dic = @{@"couponCode":_textField.text};
+    
+    typeof(self) __weak wself = self;
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIExchangeCoupons] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        wself.pageNum = 1;
+        [wself findCoupons];
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+    
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    [self setupCouponEmptyView];
-    
+    if (!self.isExpire) {
+        [self setupExchangeView];
+    }
+
     self.listArray = [NSMutableArray arrayWithCapacity:0];
     
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.edges.equalTo(self.view);
+        if (!self.isExpire) {
+            make.top.equalTo(self.exchangeView.bottom);
+        }else{
+            make.top.equalTo(0);
+        }
+        make.left.right.bottom.equalTo(self.view);
     }];
     WEAKSELF
     self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
        [weakSelf.collectionView.mj_header endRefreshing];
         
         weakSelf.pageNum = 1;
-        [weakSelf.listArray removeAllObjects];
         [weakSelf findCoupons];
     }];
     self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
@@ -92,8 +123,50 @@ typeof(self) __weak wself = self;
         [weakSelf findCoupons];
     }];
     
+    [self setupCouponEmptyView];
+    
     self.pageNum = 1;
     [self findCoupons];
+}
+
+- (void)setupExchangeView
+{
+    _exchangeView = [UIView new];
+    [self.view addSubview:_exchangeView];
+    [_exchangeView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.height.equalTo(44);
+        make.top.left.right.equalTo(self.view);
+    }];
+    
+    UIButton* button = [UIButton new];
+    button.backgroundColor = Color00A862;
+    button.layer.cornerRadius = 4;
+    [button setTitle:@"兑换" forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    button.titleLabel.font =  [UIFont fontWithName:@"PingFangSC-Medium" size:16];
+    [_exchangeView addSubview:button];
+    [button mas_makeConstraints:^(MASConstraintMaker *make){
+        make.size.equalTo(CGSizeMake(70, 34));
+        make.centerY.equalTo(self.exchangeView).offset(10);
+        make.right.equalTo(-15);
+    }];
+    [button addTarget:self action:@selector(exchangeCoupons:) forControlEvents:UIControlEventTouchUpInside];
+    
+    _textField = [CustomTextField new];
+    _textField.layer.borderColor = [UIColor colorWithHexString:@"D8D8D8"].CGColor;
+    _textField.layer.borderWidth = 1;
+    _textField.layer.cornerRadius = 4;
+    _textField.placeholder = @"请输入优惠券兑换码";
+    _textField.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+    _textField.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
+    [_exchangeView addSubview:_textField];
+    [_textField mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(15);
+        make.bottom.equalTo(self.exchangeView);
+        make.height.equalTo(34);
+        make.right.equalTo(button.left).offset(-10);
+    }];
+    
 }
 
 - (void)setupCouponEmptyView{
@@ -101,7 +174,7 @@ typeof(self) __weak wself = self;
         _emptyView = [UIView new];
         [self.view addSubview:_emptyView];
         [_emptyView mas_makeConstraints:^(MASConstraintMaker *make){
-            make.edges.equalTo(self.view);
+            make.edges.equalTo(self.collectionView);
         }];
         
         UIImageView* imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"coupon_empty"]];
@@ -148,9 +221,9 @@ typeof(self) __weak wself = self;
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CouponsModel* item = self.listArray[indexPath.item];
     if ([item.isOpen boolValue]) {
-        return CGSizeMake(ScreenW-20, 140);
+        return CGSizeMake(ScreenW-20, 140+10);
     }else{
-        return CGSizeMake(ScreenW-20, 100);
+        return CGSizeMake(ScreenW-20, 100+10);
     }
 }
 
@@ -159,7 +232,7 @@ typeof(self) __weak wself = self;
 {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        layout.minimumLineSpacing = 10;
+        layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 0;
         
         _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];

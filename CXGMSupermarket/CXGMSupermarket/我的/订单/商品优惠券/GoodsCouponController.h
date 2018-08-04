@@ -10,4 +10,7 @@
 
 @interface GoodsCouponController : MyCenterSubViewController
 
+@property (strong , nonatomic)NSArray *listArray;
+
+@property (copy , nonatomic)void(^selectCoupon)(CouponsModel * model);
 @end

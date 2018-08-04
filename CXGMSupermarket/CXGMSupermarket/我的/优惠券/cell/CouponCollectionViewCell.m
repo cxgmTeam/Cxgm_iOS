@@ -9,6 +9,9 @@
 #import "CouponCollectionViewCell.h"
 
 @interface CouponCollectionViewCell ()
+
+@property(nonatomic,strong)UIView* whiteView;
+
 @property(nonatomic,strong)UIImageView* stateImageView;
 @property(nonatomic,strong)UILabel* valueLabel;     //面额
 @property(nonatomic,strong)UILabel* conditionLabel; //使用条件
@@ -48,7 +51,14 @@
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = [UIColor clearColor];
+        
+        _whiteView = [UIView new];
+        _whiteView.backgroundColor = [UIColor whiteColor];
+        [self addSubview:_whiteView];
+        [_whiteView mas_makeConstraints:^(MASConstraintMaker *make){
+            make.edges.equalTo(self).insets(UIEdgeInsetsMake(10, 0, 0, 0));
+        }];
         
         [self setupUI];
     }
@@ -60,17 +70,17 @@
     _stateImageView = [UIImageView new];
     _stateImageView.contentMode = UIViewContentModeScaleAspectFit;
     _stateImageView.image = [UIImage imageNamed:@"coupon_bg"];
-    [self addSubview:_stateImageView];
+    [_whiteView addSubview:_stateImageView];
     [_stateImageView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.top.equalTo(self);
+        make.left.top.equalTo(self.whiteView);
         make.size.equalTo(CGSizeMake(119, 100));
     }];
     
     UIView* whiteView = [UIView new];
     whiteView.backgroundColor = [UIColor whiteColor];
-    [self addSubview:whiteView];
+    [_whiteView addSubview:whiteView];
     [whiteView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.right.top.equalTo(self);
+        make.right.top.equalTo(self.whiteView);
         make.height.equalTo(100);
         make.left.equalTo(self.stateImageView.right);
     }];
@@ -80,7 +90,7 @@
     label.text = @"¥";
     label.font = [UIFont fontWithName:@"PingFangSC-Medium" size:20];
     label.textColor = [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1/1.0];
-    [self addSubview:label];
+    [_whiteView addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.equalTo(21);
         make.top.equalTo(34);
@@ -90,7 +100,7 @@
     _valueLabel.text = @"100";
     _valueLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:38];
     _valueLabel.textColor = [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1/1.0];
-    [self addSubview:_valueLabel];
+    [_whiteView addSubview:_valueLabel];
     [_valueLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.equalTo(label.right);
         make.bottom.equalTo(label).offset(5);
@@ -101,7 +111,7 @@
     _conditionLabel.text = @"满500元可用";
     _conditionLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];
     _conditionLabel.textColor = [UIColor colorWithRed:255/255.0 green:255/255.0 blue:255/255.0 alpha:1/1.0];
-    [self addSubview:_conditionLabel];
+    [_whiteView addSubview:_conditionLabel];
     [_conditionLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.centerX.equalTo(self.stateImageView);
         make.bottom.equalTo(self.stateImageView.bottom).offset(-13);
@@ -111,7 +121,7 @@
     _scopeLabel.text = @"仅限某某店铺某类商品使用";
     _scopeLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];
     _scopeLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
-    [self addSubview:_scopeLabel];
+    [_whiteView addSubview:_scopeLabel];
     [_scopeLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(13);
         make.left.equalTo(self.stateImageView.right).offset(10);
@@ -122,7 +132,7 @@
     _timeLabel.text = @"2017.05.04-2017.02.88";
     _timeLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:11];
     _timeLabel.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
-    [self addSubview:_timeLabel];
+    [_whiteView addSubview:_timeLabel];
     [_timeLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(self.scopeLabel.bottom).offset(18);
         make.left.equalTo(self.scopeLabel);
@@ -132,7 +142,7 @@
     label.text = @"详细规则";
     label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:12];
     label.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
-    [self addSubview:label];
+    [_whiteView addSubview:label];
     [label mas_makeConstraints:^(MASConstraintMaker *make){
         make.bottom.equalTo(whiteView.bottom).offset(-5);
         make.left.equalTo(self.scopeLabel);
@@ -146,7 +156,7 @@
     [_useBtton setTitle:@"立即使用" forState:UIControlStateNormal];
     _useBtton.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:12];
     [_useBtton setTitleColor:Color00A862 forState:UIControlStateNormal];
-    [self addSubview:_useBtton];
+    [_whiteView addSubview:_useBtton];
     [_useBtton mas_makeConstraints:^(MASConstraintMaker *make){
         make.right.equalTo(-10);
         make.top.equalTo(46);
@@ -158,20 +168,20 @@
     
     _openBtn = [UIButton new];
     [_openBtn setImage:[UIImage imageNamed:@"order_fold"] forState:UIControlStateNormal];
-    [self addSubview:_openBtn];
+    [_whiteView addSubview:_openBtn];
     [_openBtn addTarget:self action:@selector(onTapOpenBtn) forControlEvents:UIControlEventTouchUpInside];
     [_openBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        make.right.equalTo(self);
+        make.right.equalTo(self.whiteView);
         make.bottom.equalTo(self.stateImageView);
         make.size.equalTo(CGSizeMake(40, 30));
     }];
     
     _bottomView = [UIView new];
     _bottomView.backgroundColor = [UIColor whiteColor];
-    [self addSubview:_bottomView];
+    [_whiteView addSubview:_bottomView];
     [_bottomView mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(100);
-        make.left.right.equalTo(self);
+        make.left.right.equalTo(self.whiteView);
         make.height.equalTo(40);
     }];
     {
@@ -203,7 +213,7 @@
     UIView *lineView = [[UIView alloc]init];
     lineView.backgroundColor = [UIColor whiteColor];
     lineView.frame = CGRectMake(119+10, 70, ScreenW-156, 1);
-    [self addSubview:lineView];
+    [_whiteView addSubview:lineView];
     
     CAShapeLayer *shapeLayer = [CAShapeLayer layer];
     [shapeLayer setBounds:lineView.bounds];
