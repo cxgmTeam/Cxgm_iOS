@@ -98,7 +98,7 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return 45.f;
+    return 50.f;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -108,7 +108,6 @@
         EmployeesViewController* vc = [EmployeesViewController new];
         [self.navigationController pushViewController:vc animated:YES];
     }
-    
 }
 
 
