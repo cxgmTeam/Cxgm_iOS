@@ -45,7 +45,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     self.sectionArr0 = @[@"全部订单",@"待付款",@"待配送",@"待收货",@"轻松退"];
     self.sectionArr1 = @[@"邀请有礼"];
     self.sectionArr2 = @[@"优惠券",@"收货地址",@"帮助中心",@"联系客服",@"设置"];
-    
+
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
@@ -98,6 +98,8 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     if (section == 2) {
         return self.sectionArr2.count;
     }
+
+
     return 0;
 }
 
@@ -123,6 +125,9 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
         gridcell = cell;
     }
+
+
+    
     return gridcell;
 }
 
@@ -159,8 +164,9 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         return CGSizeMake(ScreenW/5 , 70);
     }
     if (indexPath.section == 1 || indexPath.section == 2) {
-        return CGSizeMake(ScreenW, 45);
+        return CGSizeMake(ScreenW, 50);
     }
+
     return CGSizeZero;
 }
 
@@ -230,6 +236,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
             }
         }
             break;
+
 
 
         default:

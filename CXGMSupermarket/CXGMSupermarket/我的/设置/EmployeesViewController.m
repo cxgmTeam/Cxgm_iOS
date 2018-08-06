@@ -21,6 +21,7 @@
     self.title = @"员工入口";
     
     self.webView = [WKWebView new];
+
     [self.webView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     self.webView.navigationDelegate = self;
     [self.webView setMultipleTouchEnabled:YES];
@@ -38,7 +39,13 @@
 
 
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(null_unspecified WKNavigation *)navigation{
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    NSURL *url = webView.URL;
+    NSString *scheme = [url scheme];
+    
+     if (![scheme isEqualToString:@"tel"]) {
+         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+     }
 }
 
 
@@ -50,7 +57,25 @@
     [MBProgressHUD hideHUDForView:self.view animated:YES];
 }
 
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(nonnull WKNavigationAction *)navigationAction decisionHandler:(nonnull void (^)(WKNavigationActionPolicy))decisionHandler{
+    
+    NSURL *url = navigationAction.request.URL;
+    NSString *scheme = [url scheme];
+    UIApplication *app = [UIApplication sharedApplication];
+    WKNavigationActionPolicy actionPolicy = WKNavigationActionPolicyAllow;
 
 
+    if ([scheme isEqualToString:@"tel"]) {
+        if ([app canOpenURL:url]) {
+            if (@available(iOS 10.0, *)) {
+                [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+            } else {
+                [[UIApplication sharedApplication] openURL:url];
+            }
+        }
+    }
+    /* 这句话一定要实现 不然会异常 */
+    decisionHandler(actionPolicy);
+}
 
 @end
