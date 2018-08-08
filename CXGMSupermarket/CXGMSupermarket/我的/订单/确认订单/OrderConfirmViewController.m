@@ -104,10 +104,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     [self getAddressList];
     
     
-    NSString* orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10];
+    NSString* orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+[Freight_Charges floatValue]];
     
     if (self.coupons) {
-        orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10-[self.coupons.priceExpression floatValue]];
+        orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+[Freight_Charges floatValue]-[self.coupons.priceExpression floatValue]];
     }
     _moneyLabel.text = [NSString stringWithFormat:@"¥%@",orderAmount];
 }
@@ -127,14 +127,14 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         }
     }
     //    orderAmount 实付金额   totalAmount 订单总金额  priceExpression 订单优惠
-    //    orderAmount = totalAmount - priceExpression + 10
+    //    orderAmount = totalAmount - priceExpression + 运费
     
     //这个地方还要减去优惠券的
     
-    NSString* orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10];
+    NSString* orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+[Freight_Charges floatValue]];
     
     if (self.coupons) {
-        orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10-[self.coupons.priceExpression floatValue]];
+        orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+[Freight_Charges floatValue]-[self.coupons.priceExpression floatValue]];
     }
     
     [self.orderParam setObject:self.moneyDic[@"totalAmount"] forKey:@"totalAmount"];
@@ -298,7 +298,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 if (self.coupons) {
-                    NSString*  orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10-[self.coupons.priceExpression floatValue]];
+                    NSString*  orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+[Freight_Charges floatValue]-[self.coupons.priceExpression floatValue]];
                     self.moneyLabel.text = [NSString stringWithFormat:@"¥%@",orderAmount];
                 }
                 
