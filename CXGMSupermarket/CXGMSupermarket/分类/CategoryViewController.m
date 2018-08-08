@@ -15,6 +15,8 @@
 @property (strong , nonatomic)UICollectionView *collectionView;
 
 @property(nonatomic,strong)NSArray* categoryList;
+
+@property(nonatomic,strong)UIButton* selectShopBtn;
 @end
 
 static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
@@ -45,14 +47,40 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:searchBtn];
     
     
-    [self findFirstCategory];
-
+    _selectShopBtn = [UIButton new];
+    _selectShopBtn.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
+    [_selectShopBtn setTitle:@"请先选择店铺" forState:UIControlStateNormal];
+    _selectShopBtn.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
+    [_selectShopBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [self.view addSubview:_selectShopBtn];
+    [_selectShopBtn addTarget:self action:@selector(gotoWindowShopping:) forControlEvents:UIControlEventTouchUpInside];
+    [_selectShopBtn mas_makeConstraints:^(MASConstraintMaker *make){
+        make.size.equalTo(CGSizeMake(120, 42));
+        make.center.equalTo(self.view);
+    }];
+    _selectShopBtn.hidden = YES;
+    
 }
 
+- (void)gotoWindowShopping:(id)sender{
+    [[NSNotificationCenter defaultCenter] postNotificationName:WindowHomePage_Notify object:nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated{
+    [super viewWillAppear:animated];
+    
+    [self findFirstCategory];
+}
 
 //一级分类
 - (void)findFirstCategory
 {
+    _selectShopBtn.hidden = YES;
+    if ([[DeviceHelper sharedInstance].shop.id length] == 0) {
+        _selectShopBtn.hidden = NO;
+        return;
+    }
+    
     NSDictionary* dic = @{@"shopId":@""};
     if ([DeviceHelper sharedInstance].shop) {
          dic = @{@"shopId":[DeviceHelper sharedInstance].shop.id};
