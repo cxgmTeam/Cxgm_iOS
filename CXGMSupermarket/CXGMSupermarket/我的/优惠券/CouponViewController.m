@@ -17,8 +17,6 @@
 @property(nonatomic,assign)CGFloat redLineWidth;
 @property(nonatomic,strong)UIScrollView* scrollView;
 
-//@property(nonatomic,strong)UIView* exchangeView;
-//@property(nonatomic,strong)CustomTextField* textField;
 
 @property(nonatomic,strong)UIButton* leftBtn;
 @property(nonatomic,strong)UIButton* rightBtn;
@@ -32,9 +30,6 @@
     
     [self setupMenuView];
     
-//    [self setupExchangeView];
-    
-
     _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 45, ScreenW, ScreenH-NAVIGATION_BAR_HEIGHT-45)];
     _scrollView.delegate = self;
     _scrollView.pagingEnabled = YES;
@@ -107,7 +102,7 @@
 {
     NSNumber * number = value[@"number"];
     
-    if ([value[@"status"] boolValue]) {
+    if (![value[@"status"] boolValue]) {
         [self.leftBtn setTitle:[NSString stringWithFormat:@"可用（%zd）",[number integerValue]] forState:UIControlStateNormal];
     }else{
         [self.rightBtn setTitle:[NSString stringWithFormat:@"不可用（%zd）",[number integerValue]] forState:UIControlStateNormal];
@@ -178,44 +173,5 @@
     }];
 }
 
-//- (void)setupExchangeView
-//{
-//    _exchangeView = [UIView new];
-//    [self.view addSubview:_exchangeView];
-//    [_exchangeView mas_makeConstraints:^(MASConstraintMaker *make){
-//        make.height.equalTo(54);
-//        make.left.right.equalTo(self.view);
-//        make.top.equalTo(self.menuView.bottom);
-//    }];
-//
-//    UIButton* button = [UIButton new];
-//    button.backgroundColor = Color00A862;
-//    button.layer.cornerRadius = 4;
-//    [button setTitle:@"兑换" forState:UIControlStateNormal];
-//    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    button.titleLabel.font =  [UIFont fontWithName:@"PingFangSC-Medium" size:16];
-//    [_exchangeView addSubview:button];
-//    [button mas_makeConstraints:^(MASConstraintMaker *make){
-//        make.size.equalTo(CGSizeMake(70, 34));
-//        make.centerY.equalTo(self.exchangeView);
-//        make.right.equalTo(-15);
-//    }];
-//    [button addTarget:self action:@selector(exchangeCoupons:) forControlEvents:UIControlEventTouchUpInside];
-//
-//    _textField = [CustomTextField new];
-//    _textField.layer.borderColor = [UIColor colorWithHexString:@"D8D8D8"].CGColor;
-//    _textField.layer.borderWidth = 1;
-//    _textField.layer.cornerRadius = 4;
-//    _textField.placeholder = @"请输入优惠券兑换码";
-//    _textField.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-//    _textField.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
-//    [_exchangeView addSubview:_textField];
-//    [_textField mas_makeConstraints:^(MASConstraintMaker *make){
-//        make.left.equalTo(15);
-//        make.centerY.equalTo(self.exchangeView);
-//        make.height.equalTo(34);
-//        make.right.equalTo(button.left).offset(-10);
-//    }];
-//
-//}
+
 @end

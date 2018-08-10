@@ -24,6 +24,7 @@
     [super viewWillAppear:animated];
     [self.navigationController setNavigationBarHidden:YES animated:animated];
     
+    self.tabBarController.tabBar.hidden = YES;
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -40,20 +41,20 @@
     
     [self setUpTopView];
     
-    [self setUpBottomView];
+//    [self setUpBottomView];
 }
 
 #pragma mark - initialize
 - (void)setUpBase
 {
     self.scanDelegate = self;
-    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
+    [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
 
 #pragma mark - 导航栏处理
 - (void)setUpTopView
 {
-    _cameraTopView = [[CameraTopView alloc] initWithFrame:CGRectMake(0, 0, ScreenW, 64)];
+    _cameraTopView = [[CameraTopView alloc] init];
     WEAKSELF
     _cameraTopView.leftItemClickBlock = ^{
         [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -68,6 +69,10 @@
     };
     
     [self.view addSubview:_cameraTopView];
+    [_cameraTopView mas_makeConstraints:^(MASConstraintMaker *make){
+        make.top.left.right.equalTo(self.view);
+        make.height.equalTo(NAVIGATION_BAR_HEIGHT);
+    }];
 }
 - (void)setUpBottomView
 {
@@ -107,6 +112,9 @@
 - (void)DCScanningSucessBackWithInfor:(NSString *)message
 {
     NSLog(@"代理回调扫描识别结果%@",message);
+    !_feedbackScanningResult?:_feedbackScanningResult(message);
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 @end

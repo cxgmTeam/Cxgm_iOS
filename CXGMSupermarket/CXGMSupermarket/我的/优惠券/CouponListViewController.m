@@ -9,6 +9,7 @@
 #import "CouponListViewController.h"
 #import "CouponCollectionViewCell.h"
 
+#import "ScanningViewController.h"
 
 @interface CouponListViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -73,6 +74,17 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
     }];
 }
 
+- (void)showScanningView:(UIButton *)button
+{
+    ScanningViewController* vc = [ScanningViewController new];
+    typeof(self) __weak wself = self;
+    vc.feedbackScanningResult = ^(NSString *message){
+        wself.textField.text = message;
+        [wself exchangeCoupons:nil];
+    };
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void)exchangeCoupons:(id)sender
 {
     if (_textField.text.length == 0) {
@@ -131,10 +143,10 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
 
 - (void)setupExchangeView
 {
-    _exchangeView = [UIView new];
+    _exchangeView = [UIView new];    
     [self.view addSubview:_exchangeView];
     [_exchangeView mas_makeConstraints:^(MASConstraintMaker *make){
-        make.height.equalTo(44);
+        make.height.equalTo(50);
         make.top.left.right.equalTo(self.view);
     }];
     
@@ -146,30 +158,49 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
     button.titleLabel.font =  [UIFont fontWithName:@"PingFangSC-Medium" size:16];
     [_exchangeView addSubview:button];
     [button mas_makeConstraints:^(MASConstraintMaker *make){
-        make.size.equalTo(CGSizeMake(70, 34));
-        make.centerY.equalTo(self.exchangeView).offset(10);
-        make.right.equalTo(-15);
+        make.size.equalTo(CGSizeMake(70, 40));
+        make.centerY.equalTo(self.exchangeView);
+        make.right.equalTo(-10);
     }];
     [button addTarget:self action:@selector(exchangeCoupons:) forControlEvents:UIControlEventTouchUpInside];
     
+    UIView * view = [UIView new];
+    view.layer.borderColor = [UIColor colorWithHexString:@"D8D8D8"].CGColor;
+    view.layer.borderWidth = 1;
+    view.layer.cornerRadius = 4;
+    [_exchangeView addSubview:view];
+    [view mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(10);
+        make.centerY.equalTo(button);
+        make.height.equalTo(40);
+        make.right.equalTo(button.left).offset(-10);
+    }];
+    
+    button = [UIButton new];
+    [button setImage:[UIImage imageNamed:@"scan_icon"] forState:UIControlStateNormal];
+    button.alpha = 0.3;
+    [view addSubview:button];
+    [button mas_makeConstraints:^(MASConstraintMaker *make){
+        make.size.equalTo(CGSizeMake(40, 40));
+        make.centerY.equalTo(self.exchangeView);
+        make.left.equalTo(0);
+    }];
+    [button addTarget:self action:@selector(showScanningView:) forControlEvents:UIControlEventTouchUpInside];
+    
     _textField = [CustomTextField new];
-    _textField.layer.borderColor = [UIColor colorWithHexString:@"D8D8D8"].CGColor;
-    _textField.layer.borderWidth = 1;
-    _textField.layer.cornerRadius = 4;
     _textField.placeholder = @"请输入优惠券兑换码";
     _textField.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     _textField.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
-    [_exchangeView addSubview:_textField];
+    [view addSubview:_textField];
     [_textField mas_makeConstraints:^(MASConstraintMaker *make){
-        make.left.equalTo(15);
-        make.bottom.equalTo(self.exchangeView);
-        make.height.equalTo(34);
-        make.right.equalTo(button.left).offset(-10);
+        make.left.equalTo(40);
+        make.top.bottom.right.equalTo(view);
     }];
     
 }
 
-- (void)setupCouponEmptyView{
+- (void)setupCouponEmptyView
+{
     if (!_emptyView) {
         _emptyView = [UIView new];
         [self.view addSubview:_emptyView];

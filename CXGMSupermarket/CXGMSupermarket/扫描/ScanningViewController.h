@@ -10,4 +10,5 @@
 
 @interface ScanningViewController : DCScanningViewController
 
+@property(nonatomic,copy)void(^feedbackScanningResult)(NSString *message);
 @end

@@ -86,6 +86,8 @@
 		7789516020BD7E0A002C23C3 /* CourierViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7789515F20BD7E0A002C23C3 /* CourierViewCell.m */; };
 		7789516320BD7F34002C23C3 /* logisticsProcessCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7789516220BD7F34002C23C3 /* logisticsProcessCell.m */; };
 		7789516620BD8098002C23C3 /* LogisticsItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 7789516520BD8098002C23C3 /* LogisticsItem.m */; };
+		778C63DA211C0F770093C593 /* CameraTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 778C63D6211C0F770093C593 /* CameraTopView.m */; };
+		778C63DB211C0F770093C593 /* ScanningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 778C63D7211C0F770093C593 /* ScanningViewController.m */; };
 		7798DD5D20CF7BAD00FE708D /* BMKLocationkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7798DD5C20CF7BAD00FE708D /* BMKLocationkit.framework */; };
 		779C9558209AE0EE0029A591 /* PayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C9557209AE0EE0029A591 /* PayResultViewController.m */; };
 		779C955B209B082C0029A591 /* HomeGoodsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C955A209B082C0029A591 /* HomeGoodsView.m */; };
@@ -495,6 +497,10 @@
 		7789516220BD7F34002C23C3 /* logisticsProcessCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = logisticsProcessCell.m; sourceTree = "<group>"; };
 		7789516420BD8098002C23C3 /* LogisticsItem.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LogisticsItem.h; sourceTree = "<group>"; };
 		7789516520BD8098002C23C3 /* LogisticsItem.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LogisticsItem.m; sourceTree = "<group>"; };
+		778C63D6211C0F770093C593 /* CameraTopView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraTopView.m; sourceTree = "<group>"; };
+		778C63D7211C0F770093C593 /* ScanningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ScanningViewController.m; sourceTree = "<group>"; };
+		778C63D8211C0F770093C593 /* CameraTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraTopView.h; sourceTree = "<group>"; };
+		778C63D9211C0F770093C593 /* ScanningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanningViewController.h; sourceTree = "<group>"; };
 		7798DD5C20CF7BAD00FE708D /* BMKLocationkit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BMKLocationkit.framework; sourceTree = "<group>"; };
 		779C9556209AE0EE0029A591 /* PayResultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PayResultViewController.h; sourceTree = "<group>"; };
 		779C9557209AE0EE0029A591 /* PayResultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PayResultViewController.m; sourceTree = "<group>"; };
@@ -1511,6 +1517,17 @@
 			path = cell;
 			sourceTree = "<group>";
 		};
+		778C63D5211C0F770093C593 /* 扫描 */ = {
+			isa = PBXGroup;
+			children = (
+				778C63D8211C0F770093C593 /* CameraTopView.h */,
+				778C63D6211C0F770093C593 /* CameraTopView.m */,
+				778C63D9211C0F770093C593 /* ScanningViewController.h */,
+				778C63D7211C0F770093C593 /* ScanningViewController.m */,
+			);
+			path = "扫描";
+			sourceTree = "<group>";
+		};
 		779C9555209AE0D10029A591 /* 支付结果 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1899,6 +1916,7 @@
 				77DD809B2083557000A1D080 /* Extension(扩展) */,
 				BEC90F73207EEEA600B5E609 /* CustomView */,
 				77F83ABF20710CA8004E9717 /* 数据 */,
+				778C63D5211C0F770093C593 /* 扫描 */,
 				77DD802220823A2100A1D080 /* 商品详情 */,
 				BE9769F52072523000783217 /* 搜索 */,
 				BE9769EE2072511800783217 /* 我的 */,
@@ -3086,6 +3104,7 @@
 				776A4A6920C0244500A6F0DF /* CartBadgeView.m in Sources */,
 				7789515C20BD7C4F002C23C3 /* LogisticsInfoController.m in Sources */,
 				77DD80932083287000A1D080 /* GoodsListGridCell.m in Sources */,
+				778C63DA211C0F770093C593 /* CameraTopView.m in Sources */,
 				77193BC620BC34470001508E /* InvitationTableCell.m in Sources */,
 				BE40AFCC208F684B00D4B690 /* OrderListViewController.m in Sources */,
 				77DD807E2082F76C00A1D080 /* CategoryGridCell.m in Sources */,
@@ -3187,6 +3206,7 @@
 				BE9769DB2072505C00783217 /* MJRefreshHeader.m in Sources */,
 				77DD8084208316B100A1D080 /* TopLineFootView.m in Sources */,
 				7783F2062097064700338459 /* GoodsCashViewCell.m in Sources */,
+				778C63DB211C0F770093C593 /* ScanningViewController.m in Sources */,
 				77F83A9E2070E8CE004E9717 /* NSButton+WebCache.m in Sources */,
 				77F83AA72070E8CE004E9717 /* SDWebImageCompat.m in Sources */,
 				BECB8FD920844DD900170BC6 /* UIColor+DCColorChange.m in Sources */,

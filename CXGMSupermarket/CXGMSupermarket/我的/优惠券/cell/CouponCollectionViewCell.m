@@ -44,7 +44,24 @@
     _scopeLabel.text = coupons.name;
     _conditionLabel.text = [NSString stringWithFormat: @"满%@元可用",[coupons.maximumPrice length] > 0? coupons.maximumPrice:@"0"];
     
-    _timeLabel.text = [NSString stringWithFormat:@"%@-%@",coupons.beginDate,coupons.endDate];
+    
+    NSString* beginStr = coupons.beginDate;
+    if ([coupons.beginDate length] > 0) {
+        NSArray* array = [coupons.beginDate componentsSeparatedByString:@" "];
+        if (array.count > 0) {
+            beginStr = array[0];
+        }
+    }
+    NSString* endStr = coupons.endDate;
+    if ([coupons.endDate length] > 0) {
+        NSArray* array = [coupons.endDate componentsSeparatedByString:@" "];
+        if (array.count > 0) {
+            endStr = array[0];
+        }
+    }
+    _timeLabel.text = [NSString stringWithFormat:@"%@--%@",beginStr,endStr];
+    
+    
     self.introductionLabel.text = [coupons.introduction length]>0?coupons.introduction:@"";
 }
 

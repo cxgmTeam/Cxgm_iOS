@@ -34,26 +34,26 @@
     
     _leftItemButton = ({
         UIButton * button = [UIButton new];
-        [button setImage:[UIImage imageNamed:@"starsq_sandbox-btn_back"] forState:UIControlStateNormal];
+        [button setImage:[[UIImage imageNamed:@"arrow_left"] imageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
         [button addTarget:self action:@selector(leftButtonItemClick) forControlEvents:UIControlEventTouchUpInside];
         button;
     });
     
-    _rightItemButton = ({
-        UIButton * button = [UIButton new];
-        [button setImage:[UIImage imageNamed:@"starsq_sandbox-btn_camera_light"] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(rightButtonItemClick) forControlEvents:UIControlEventTouchUpInside];
-        button;
-    });
-    
-    _rightRItemButton = ({
-        UIButton * button = [UIButton new];
-        [button setImage:[UIImage imageNamed:@"scan_photo_album"] forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(rightRButtonItemClick) forControlEvents:UIControlEventTouchUpInside];
-        button;
-    });
-    [self addSubview:_rightItemButton];
-    [self addSubview:_rightRItemButton];
+//    _rightItemButton = ({
+//        UIButton * button = [UIButton new];
+//        [button setImage:[UIImage imageNamed:@"starsq_sandbox-btn_camera_light"] forState:UIControlStateNormal];
+//        [button addTarget:self action:@selector(rightButtonItemClick) forControlEvents:UIControlEventTouchUpInside];
+//        button;
+//    });
+//
+//    _rightRItemButton = ({
+//        UIButton * button = [UIButton new];
+//        [button setImage:[UIImage imageNamed:@"scan_photo_album"] forState:UIControlStateNormal];
+//        [button addTarget:self action:@selector(rightRButtonItemClick) forControlEvents:UIControlEventTouchUpInside];
+//        button;
+//    });
+//    [self addSubview:_rightItemButton];
+//    [self addSubview:_rightRItemButton];
     [self addSubview:_leftItemButton];
 }
 
@@ -62,26 +62,27 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [_leftItemButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.mas_top).offset(20);
-        make.left.equalTo(self.mas_left).offset(10);
-        make.height.equalTo(35);
-        make.width.equalTo(35);
-    }];
+//    [_leftItemButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(self.mas_top).offset(20);
+//        make.left.equalTo(self.mas_left).offset(10);
+//        make.height.equalTo(35);
+//        make.width.equalTo(35);
+//    }];
+    _leftItemButton.frame = CGRectMake(0, STATUS_BAR_HEIGHT, 44, 44);
     
-    [_rightItemButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.leftItemButton.mas_centerY);
-        make.right.equalTo(self.mas_right).offset(-10);
-        make.height.equalTo(35);
-        make.width.equalTo(35);
-    }];
-    
-    [_rightRItemButton mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.leftItemButton.mas_centerY);
-        make.right.equalTo(self.rightItemButton.mas_left).offset(-10);
-        make.height.equalTo(35);
-        make.width.equalTo(35);
-    }];
+//    [_rightItemButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(self.leftItemButton.mas_centerY);
+//        make.right.equalTo(self.mas_right).offset(-10);
+//        make.height.equalTo(35);
+//        make.width.equalTo(35);
+//    }];
+//
+//    [_rightRItemButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.centerY.equalTo(self.leftItemButton.mas_centerY);
+//        make.right.equalTo(self.rightItemButton.mas_left).offset(-10);
+//        make.height.equalTo(35);
+//        make.width.equalTo(35);
+//    }];
     
 }
 

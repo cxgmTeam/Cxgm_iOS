@@ -145,14 +145,14 @@
                 if (array.count > 0) {
                     NSDictionary* dictionary = [array firstObject];
                     
-                    if ([dictionary[@"type"] intValue] == 0)
+                    if ([dictionary[@"urlType"] intValue] == 2)
                     {
                         GoodsDetailViewController* vc = [GoodsDetailViewController new];
                         vc.goodsId = dictionary[@"goodcode"];
                         vc.shopId = dictionary[@"shopId"];
                         [self.navigationController pushViewController:vc animated:YES];
                     }
-                    else if ([dictionary[@"type"] intValue] == 1)
+                    else if ([dictionary[@"urlType"] intValue] == 1)
                     {
                         WebViewController* vc = [WebViewController new];
                         vc.urlString = dictionary[@"goodcode"];

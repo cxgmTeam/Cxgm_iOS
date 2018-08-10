@@ -59,7 +59,7 @@
 #pragma mark - LifeCyle
 - (void)viewDidLoad {
     [super viewDidLoad];
- 
+
     [self setUpBase];
     
     [self setupCamera];
@@ -197,7 +197,6 @@
 #pragma mark - 全系背景View
 - (void)setUpFullFigureView
 {
-
     _ffView = [AVCaptureVideoPreviewLayer layerWithSession:self.session];
     _ffView.videoGravity = AVLayerVideoGravityResizeAspectFill;
     _ffView.frame = CGRectMake(0,0,DCScreenW,self.view.frame.size.height);
@@ -269,12 +268,12 @@
                 [self stopDeviceScanning]; //停止扫描
                 
                 [self.scanDelegate DCScanningSucessBackWithInfor:metadataObject.stringValue];
-                __weak typeof(self)weakSelf = self;
-                [DCScanTool setUpAlterViewWith:self WithReadContent:[NSString stringWithFormat:@"扫描结果为：%@",metadataObject.stringValue] WithLeftMsg:@"好的" LeftBlock:^{
-                    
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
-                    
-                } RightMsg:nil RightBliock:nil];
+//                __weak typeof(self)weakSelf = self;
+//                [DCScanTool setUpAlterViewWith:self WithReadContent:[NSString stringWithFormat:@"扫描结果为：%@",metadataObject.stringValue] WithLeftMsg:@"好的" LeftBlock:^{
+//                    
+//                    [weakSelf.navigationController popViewControllerAnimated:YES];
+//                    
+//                } RightMsg:nil RightBliock:nil];
             }
             
 
