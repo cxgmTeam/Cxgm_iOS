@@ -96,7 +96,7 @@
     }];
     
     _freightLabel = [[UILabel alloc] init];
-    _freightLabel.text = @"¥10.00";
+    _freightLabel.text = [NSString stringWithFormat:@"¥%.2f",Freight_Charges];
     _freightLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
     _freightLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [self addSubview:_freightLabel];

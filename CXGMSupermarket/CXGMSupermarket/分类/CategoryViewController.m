@@ -30,7 +30,7 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
     
 
     self.collectionView.backgroundColor = [UIColor clearColor];
-    [_collectionView mas_makeConstraints:^(MASConstraintMaker *make){
+    [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);
     }];
     

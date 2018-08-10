@@ -79,7 +79,7 @@
     }];
     
     _valueLabel3 = [[UILabel alloc] init];
-    _valueLabel3.text = [NSString stringWithFormat:@"¥%@",Freight_Charges];
+    _valueLabel3.text = [NSString stringWithFormat:@"¥%.2f",Freight_Charges];
     _valueLabel3.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
     _valueLabel3.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [self addSubview:_valueLabel3];

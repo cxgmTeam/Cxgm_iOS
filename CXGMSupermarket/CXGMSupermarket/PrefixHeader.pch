@@ -145,7 +145,7 @@ typedef NS_ENUM(NSInteger, OrderStatus) {
 #define Exchange_Shop             @"Exchange_Shop"
 
 //运费
-#define Freight_Charges  @"7.00"
+#define Freight_Charges  7.00
 
 
 #define PAGECOUNT  @"10"
