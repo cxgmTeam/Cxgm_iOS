@@ -27,6 +27,8 @@
 
 @property (nonatomic, assign) BOOL locationInScope ;//定位是否在派送范围内
 
+@property (nonatomic, assign) BOOL showWineCategory ;//去掉列表中的"中外名酒"分类  NO是不显示 YES是显示
+
 + (instancetype)sharedInstance;
 
 @end

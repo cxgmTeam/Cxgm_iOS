@@ -52,11 +52,16 @@
         make.centerX.equalTo(self.view);
     }];
     
-    self.dataArray = @[@"菜鲜果美会员服务协议",
-                       @"菜鲜果美隐私权政策",
-                       @"菜鲜果美商家信息",
-                       @"菜鲜果美内部专用入口"];
+    if ([DeviceHelper sharedInstance].showWineCategory) {
+        self.dataArray = @[@"菜鲜果美会员服务协议",
+                           @"菜鲜果美隐私权政策",
+                           @"菜鲜果美商家信息",
+                           @"菜鲜果美内部专用入口"];
+    }else{
+        self.dataArray = @[];
+    }
     
+
     _tableView = [UITableView new];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.backgroundColor = [UIColor clearColor];

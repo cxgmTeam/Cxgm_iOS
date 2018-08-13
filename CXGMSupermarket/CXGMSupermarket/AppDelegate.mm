@@ -41,6 +41,8 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     [UIApplication sharedApplication].statusBarHidden = NO;
     
+    [self getVersionControl];
+    
     [self initThirdKeyboard];
     
     [self configBaiduMap];
@@ -294,9 +296,9 @@ API_AVAILABLE(ios(10.0)){
 }
 ///// 用户同意接收通知后，会调用此程序
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(nonnull NSData *)deviceToken{
-//    NSLog(@"deviceToken >>>>  %@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
-//                  stringByReplacingOccurrencesOfString: @">" withString: @""]
-//                 stringByReplacingOccurrencesOfString: @" " withString: @""]);
+    NSLog(@"deviceToken >>>>  %@",[[[[deviceToken description] stringByReplacingOccurrencesOfString: @"<" withString: @""]
+                  stringByReplacingOccurrencesOfString: @">" withString: @""]
+                 stringByReplacingOccurrencesOfString: @" " withString: @""]);
 }
 
 //成功注册registerUserNotificationSettings:后，回调的方法
@@ -481,6 +483,22 @@ API_AVAILABLE(ios(10.0)){
     return result;
 }
 
-
+- (void)getVersionControl
+{
+    [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIVisionControl] token:nil parameters:nil success:^(id JSON, NSError *error){
+        
+        DataModel* model = [DataModel dataModelWith:JSON];
+        if ([model.data isKindOfClass:[NSDictionary class]]) {
+            NSDictionary* dic = (NSDictionary *)model.data;
+            
+            if ([dic[@"iOSVersionNum"] isEqualToString:VersionNum]) {
+                [DeviceHelper sharedInstance].showWineCategory = [dic[@"sign"] boolValue];
+            }
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
 
 @end

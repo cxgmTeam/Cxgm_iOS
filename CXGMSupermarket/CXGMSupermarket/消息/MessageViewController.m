@@ -152,7 +152,7 @@
                         vc.shopId = dictionary[@"shopId"];
                         [self.navigationController pushViewController:vc animated:YES];
                     }
-                    else if ([dictionary[@"urlType"] intValue] == 1)
+                    else if ([dictionary[@"urlType"] intValue] == 1 && [dictionary[@"goodcode"] length] > 0)
                     {
                         WebViewController* vc = [WebViewController new];
                         vc.urlString = dictionary[@"goodcode"];

@@ -42,12 +42,16 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
         }];
         typeof(self) __weak wself = self;
         self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+            [self.collectionView.mj_header endRefreshing];
+            
             wself.pageNum = 1;
             [wself.shopList removeAllObjects];
             [wself getShopList];
 
         }];
         self.collectionView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+            [self.collectionView.mj_footer endRefreshing];
+            
             wself.pageNum ++;
             [wself getShopList];
         }];
@@ -77,14 +81,11 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
         }
         if ([model.listModel.isLastPage boolValue]) {
             [self.collectionView.mj_footer endRefreshingWithNoMoreData];
-        }else{
-            [self.collectionView.mj_footer endRefreshing];
         }
-        [self.collectionView.mj_header endRefreshing];
+
         
     } failure:^(id JSON, NSError *error){
-        [self.collectionView.mj_header endRefreshing];
-        [self.collectionView.mj_footer endRefreshing];
+
     }];
 }
 

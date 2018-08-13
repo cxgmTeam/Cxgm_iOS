@@ -152,7 +152,7 @@
                 [wself.navigationController pushViewController:vc animated:YES];
             };
             _goodsView.showBusinessDetailVC = ^(AdBannarModel* model){
-                if ([model.urlType isEqualToString:@"1"]) {
+                if ([model.urlType isEqualToString:@"1"] && [model.notifyUrl length] > 0) {
                     WebViewController* vc = [WebViewController new];
                     vc.urlString = model.notifyUrl;
                     [wself.navigationController pushViewController:vc animated:YES];
@@ -164,7 +164,7 @@
                 }
             };
             _goodsView.showAdvertiseDetailVC = ^(AdvertisementModel* ad){
-                if ([ad.type isEqualToString:@"1"]) {
+                if ([ad.type isEqualToString:@"1"] && [ad.notifyUrl length] > 0) {
                     WebViewController* vc = [WebViewController new];
                     vc.urlString = ad.notifyUrl;
                     [wself.navigationController pushViewController:vc animated:YES];
@@ -434,7 +434,7 @@
         vc.shopId = dic[@"shopId"];
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([dic[@"type"] intValue] == 1)
+    else if ([dic[@"type"] intValue] == 1 && [dic[@"goodcode"] length] > 0)
     {
         WebViewController* vc = [WebViewController new];
         vc.urlString = dic[@"goodcode"];

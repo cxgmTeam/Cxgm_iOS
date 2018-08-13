@@ -30,6 +30,8 @@
     if (self = [super init]) {
         
         self.homeAddress = @"当前位置不在配送范围内，请选择收货地址";
+        
+        self.showWineCategory = YES;
     }
     return self;
 }

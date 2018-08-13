@@ -95,8 +95,13 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
     
     typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIExchangeCoupons] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
-        wself.pageNum = 1;
-        [wself findCoupons];
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if (!model.data) {
+            [MBProgressHUD MBProgressHUDWithView:self.view Str:@"二维码已失效"];
+        }else{
+            wself.pageNum = 1;
+            [wself findCoupons];
+        }
     } failure:^(id JSON, NSError *error){
         
     }];

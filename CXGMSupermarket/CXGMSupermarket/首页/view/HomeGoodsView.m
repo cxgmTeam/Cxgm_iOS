@@ -27,9 +27,9 @@
 
 @property(nonatomic,strong)NSArray* categoryNames;//banner下面的分类
 
-@property(nonatomic,strong)NSArray* topGoodsList;//精品推荐
+@property(nonatomic,strong)NSMutableArray* topGoodsList;//精品推荐
 @property(nonatomic,strong)NSArray* xinGoodsList;//新品上市
-@property(nonatomic,strong)NSArray* hotGoodsList;//热销推荐
+@property(nonatomic,strong)NSMutableArray* hotGoodsList;//热销推荐
 @property(assign,nonatomic)NSInteger pageNum;
 
 @property(nonatomic,strong)NSArray* slideDataList;//轮播图数据
@@ -67,14 +67,25 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         self.flagValue = YES;
         
         //休闲零食 88  放心蔬菜 102 新鲜水果 113 鲜肉蛋品112 水鲜海产109 粮油副食 105 中外名酒 115 美妆个护106
-        self.categoryNames = @[@[@"新鲜水果",@"113"],
-                              @[@"放心蔬菜",@"102"],
-                              @[@"鲜肉蛋品",@"112"],
-                              @[@"水产海鲜",@"109"],
-                              @[@"粮油副食",@"105"],
-                              @[@"休闲零食",@"88"],
-                              @[@"中外名酒",@"115"],
-                              @[@"美妆百货",@"106"]];
+        if ([DeviceHelper sharedInstance].showWineCategory)
+        {
+            self.categoryNames = @[@[@"新鲜水果",@"113",@"homeCategory_0"],
+                                   @[@"放心蔬菜",@"102",@"homeCategory_1"],
+                                   @[@"鲜肉蛋品",@"112",@"homeCategory_2"],
+                                   @[@"水产海鲜",@"109",@"homeCategory_3"],
+                                   @[@"粮油副食",@"105",@"homeCategory_4"],
+                                   @[@"休闲零食",@"88",@"homeCategory_5"],
+                                   @[@"中外名酒",@"115",@"homeCategory_6"],
+                                   @[@"美妆百货",@"106",@"homeCategory_7"]];
+        }else{
+            self.categoryNames = @[@[@"新鲜水果",@"113",@"homeCategory_0"],
+                                   @[@"放心蔬菜",@"102",@"homeCategory_1"],
+                                   @[@"鲜肉蛋品",@"112",@"homeCategory_2"],
+                                   @[@"水产海鲜",@"109",@"homeCategory_3"],
+                                   @[@"粮油副食",@"105",@"homeCategory_4"],
+                                   @[@"休闲零食",@"88",@"homeCategory_5"],
+                                   @[@"美妆百货",@"106",@"homeCategory_7"]];
+        }
 
         
         self.collectionView.backgroundColor = [UIColor clearColor];
@@ -104,6 +115,9 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         self.slideImageList = [NSMutableArray array];
         self.adBannarList = [NSMutableArray array];
         self.motionNameList = [NSMutableArray array];
+        
+        self.topGoodsList = [NSMutableArray array];
+        self.hotGoodsList = [NSMutableArray array];
         
         [self requestGoodsList];
     }
@@ -154,9 +168,18 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     }
     
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindTopProduct]  token:token parameters:dic success:^(id JSON, NSError *error){
+        
+        [self.topGoodsList removeAllObjects];
+        
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
-            self.topGoodsList = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            NSArray * array = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            
+            for (GoodsModel * model in array) {
+                if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
+                    [self.topGoodsList addObject:model];
+                }
+            }
             [self.collectionView reloadData];
         }
     } failure:^(id JSON, NSError *error){
@@ -201,16 +224,21 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if ([UserInfoManager sharedInstance].isLogin) {
         token = [UserInfoManager sharedInstance].userInfo.token;
     }
-    
-    self.hotGoodsList = nil;
+
     
     WEAKSELF;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindHotProduct]  token:token parameters:dic success:^(id JSON, NSError *error){
 
+        [self.hotGoodsList removeAllObjects];
+        
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
-           weakSelf.hotGoodsList  = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
-           
+           NSArray * array  = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            for (GoodsModel * model in array) {
+                if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
+                    [self.hotGoodsList addObject:model];
+                }
+            }
             [weakSelf.collectionView reloadData];
         }
         
@@ -359,7 +387,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
     if (indexPath.section == 0)
     {//分类
         CategoryGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:CategoryGridCellID forIndexPath:indexPath];
-        [cell setImage:[NSString stringWithFormat:@"homeCategory_%ld",indexPath.item] title:[self.categoryNames[indexPath.item] objectAtIndex:0]];
+        [cell setImage:[self.categoryNames[indexPath.item] objectAtIndex:2] title:[self.categoryNames[indexPath.item] objectAtIndex:0]];
         gridcell = cell;
     
     }

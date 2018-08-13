@@ -14,7 +14,7 @@
 @interface CategoryViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
 
-@property(nonatomic,strong)NSArray* categoryList;
+@property(nonatomic,strong)NSMutableArray* categoryList;
 
 @property(nonatomic,strong)UIButton* selectShopBtn;
 @end
@@ -28,6 +28,7 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
     self.title = @"分类";
     self.view.backgroundColor = [UIColor whiteColor];
     
+    self.categoryList = [NSMutableArray array];
 
     self.collectionView.backgroundColor = [UIColor clearColor];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -89,9 +90,16 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
 
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindFirstCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
 
+        [self.categoryList removeAllObjects];
+        
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
-            self.categoryList = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            NSArray * array = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
+            for (CategoryModel * model in array) {
+                if (![model.name isEqualToString:@"中外名酒"]) {
+                    [self.categoryList addObject:model];
+                }
+            }
             [self.collectionView reloadData];
         }
         

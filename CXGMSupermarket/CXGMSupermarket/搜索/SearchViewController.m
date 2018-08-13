@@ -27,8 +27,8 @@
 @property (strong,nonatomic)UICollectionView *collectionView;
 @property (nonatomic,strong)UIView* topView;
 @property (nonatomic,strong)CustomTextField* textField;
-@property (nonatomic,strong)NSArray* hotKeyArray;
-@property (nonatomic,strong)NSArray* resultArray;
+@property (nonatomic,strong)NSMutableArray* hotKeyArray;
+@property (nonatomic,strong)NSMutableArray* resultArray;
 @property (nonatomic,assign)BOOL showSearchResult;
 
 @property (strong , nonatomic)CartBadgeView* cartBtn;
@@ -82,6 +82,9 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     [_cartBtn.carButton setImage:[UIImage imageNamed:@"cart_search"] forState:UIControlStateNormal];
 
     
+    self.hotKeyArray = [NSMutableArray array];
+    self.resultArray = [NSMutableArray array];
+    
     [self findHotProduct];
 }
 
@@ -114,9 +117,16 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     WEAKSELF;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindHotProduct]  token:token parameters:dic success:^(id JSON, NSError *error){
         
+        [self.hotKeyArray removeAllObjects];
+        
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
-            self.hotKeyArray  = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            NSArray* array  = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            for (GoodsModel * model in array) {
+                if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
+                    [self.hotKeyArray addObject:model];
+                }
+            }
             self.showSearchResult = NO;
             [weakSelf.collectionView reloadData];
         }
@@ -136,9 +146,16 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APISearch] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         
+        [self.resultArray removeAllObjects];
+        
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
-            self.resultArray = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            NSArray* array = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
+            for (GoodsModel * model in array) {
+                if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
+                    [self.resultArray addObject:model];
+                }
+            }
             self.showSearchResult = YES;
             [self.collectionView reloadData];
             

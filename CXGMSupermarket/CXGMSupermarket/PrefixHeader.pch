@@ -148,6 +148,8 @@ typedef NS_ENUM(NSInteger, OrderStatus) {
 #define Freight_Charges  7.00
 
 
+#define VersionNum  @"1.0"
+
 #define PAGECOUNT  @"10"
 
 #define BackupUserInfo @"BackupUserInfo"   //注册或登录成功后保存到NSUserDefaults中
