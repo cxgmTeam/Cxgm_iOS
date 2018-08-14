@@ -174,12 +174,18 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
             NSArray * array = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
-            
-            for (GoodsModel * model in array) {
-                if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
-                    [self.topGoodsList addObject:model];
+            if ([DeviceHelper sharedInstance].showWineCategory) {
+                [self.topGoodsList addObjectsFromArray:array];
+            }
+            else
+            {
+                for (GoodsModel * model in array) {
+                    if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
+                        [self.topGoodsList addObject:model];
+                    }
                 }
             }
+
             [self.collectionView reloadData];
         }
     } failure:^(id JSON, NSError *error){
@@ -234,11 +240,16 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
            NSArray * array  = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
-            for (GoodsModel * model in array) {
-                if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
-                    [self.hotGoodsList addObject:model];
+            if ([DeviceHelper sharedInstance].showWineCategory) {
+                 [self.hotGoodsList addObjectsFromArray:array];
+            }else{
+                for (GoodsModel * model in array) {
+                    if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
+                        [self.hotGoodsList addObject:model];
+                    }
                 }
             }
+
             [weakSelf.collectionView reloadData];
         }
         

@@ -122,11 +122,18 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
             NSArray* array  = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
-            for (GoodsModel * model in array) {
-                if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
-                    [self.hotKeyArray addObject:model];
+            if ([DeviceHelper sharedInstance].showWineCategory) {
+                [self.hotKeyArray addObjectsFromArray:array];
+            }
+            else
+            {
+                for (GoodsModel * model in array) {
+                    if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
+                        [self.hotKeyArray addObject:model];
+                    }
                 }
             }
+
             self.showSearchResult = NO;
             [weakSelf.collectionView reloadData];
         }
@@ -151,9 +158,15 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
         DataModel* model = [DataModel dataModelWith:JSON];
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
             NSArray* array = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
-            for (GoodsModel * model in array) {
-                if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
-                    [self.resultArray addObject:model];
+            if ([DeviceHelper sharedInstance].showWineCategory) {
+                [self.resultArray addObjectsFromArray:array];
+            }
+            else
+            {
+                for (GoodsModel * model in array) {
+                    if (![model.productCategoryName isEqualToString:@"中外名酒"]) {
+                        [self.resultArray addObject:model];
+                    }
                 }
             }
             self.showSearchResult = YES;

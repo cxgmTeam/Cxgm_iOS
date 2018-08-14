@@ -483,6 +483,7 @@ API_AVAILABLE(ios(10.0)){
     return result;
 }
 
+#pragma mark-
 - (void)getVersionControl
 {
     [AFNetAPIClient GET:[LoginBaseURL stringByAppendingString:APIVisionControl] token:nil parameters:nil success:^(id JSON, NSError *error){
@@ -492,7 +493,7 @@ API_AVAILABLE(ios(10.0)){
             NSDictionary* dic = (NSDictionary *)model.data;
             
             if ([dic[@"iOSVersionNum"] isEqualToString:VersionNum]) {
-                [DeviceHelper sharedInstance].showWineCategory = [dic[@"sign"] boolValue];
+//                [DeviceHelper sharedInstance].showWineCategory = [dic[@"sign"] boolValue];
             }
         }
         

@@ -95,11 +95,19 @@ static NSString* const CatoryGridViewCellID = @"CatoryGridViewCell";
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
             NSArray * array = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
-            for (CategoryModel * model in array) {
-                if (![model.name isEqualToString:@"中外名酒"]) {
-                    [self.categoryList addObject:model];
+            
+            if ([DeviceHelper sharedInstance].showWineCategory) {
+                [self.categoryList addObjectsFromArray:array];
+            }
+            else
+            {
+                for (CategoryModel * model in array) {
+                    if (![model.name isEqualToString:@"中外名酒"]) {
+                        [self.categoryList addObject:model];
+                    }
                 }
             }
+
             [self.collectionView reloadData];
         }
         
