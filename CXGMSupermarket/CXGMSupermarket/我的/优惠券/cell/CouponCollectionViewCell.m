@@ -65,6 +65,23 @@
     self.introductionLabel.text = [coupons.introduction length]>0?coupons.introduction:@"";
 }
 
++ (CGFloat)heightForCell:(CouponsModel *)coupons
+{
+    CGFloat height = 100+10;
+    
+    if ([coupons.introduction length] > 0) {
+        NSMutableAttributedString *attributtedStr = [[NSMutableAttributedString alloc] initWithString:coupons.introduction];
+        
+        [attributtedStr addAttribute:NSFontAttributeName value:[UIFont fontWithName:@"PingFangSC-Regular" size:13] range:NSMakeRange(0, attributtedStr.length)];
+        CGRect rect = [attributtedStr boundingRectWithSize:CGSizeMake(ScreenW - 50, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin context:nil];
+        height += rect.size.height+5;
+    }else{
+        height = 140+10;
+    }
+
+    return height;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         
@@ -199,7 +216,7 @@
     [_bottomView mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(100);
         make.left.right.equalTo(self.whiteView);
-        make.height.equalTo(40);
+        make.bottom.equalTo(self);
     }];
     {
         
@@ -212,12 +229,14 @@
         }];
         
         UILabel *label = [[UILabel alloc] init];
+        label.numberOfLines = 0;
         label.text = @"限品类：金科购买某某店的某类商品";
         label.font = [UIFont fontWithName:@"PingFangSC-Regular" size:13];
         label.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
         [_bottomView addSubview:label];
         [label mas_makeConstraints:^(MASConstraintMaker *make){
             make.left.equalTo(10);
+            make.right.equalTo(-10);
             make.centerY.equalTo(self.bottomView);
         }];
         self.introductionLabel = label;

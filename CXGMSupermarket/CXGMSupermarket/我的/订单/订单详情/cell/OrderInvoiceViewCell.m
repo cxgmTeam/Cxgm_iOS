@@ -31,6 +31,7 @@
     _numberLabel.text = order.orderNum;
     _timeLabel.text = order.orderTime;
     
+    _paywayLabel.text = @"";
     if ([order.payType isEqualToString:@"wx"]) {
         _paywayLabel.text = @"微信支付";
     }else if ([order.payType isEqualToString:@"zfb"]){

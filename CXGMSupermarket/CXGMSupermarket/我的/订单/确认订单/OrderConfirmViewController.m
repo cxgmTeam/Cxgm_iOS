@@ -96,7 +96,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     [self findAllPsfw];
     
-    
     if (self.goodsArray.count > 0) {
         [self checkCoupon];
     }
@@ -161,6 +160,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     if (self.coupons) {
        [self.orderParam setObject:self.coupons.codeId forKey:@"couponCodeId"];
+        NSString* string = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"preferential"] floatValue]+[self.coupons.priceExpression floatValue]] ;
+       [self.orderParam setObject:string forKey:@"preferential"];
     }
     
     if ([self.textField.text length] == 0) {
@@ -250,7 +251,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         {
             if ([model.categoryId isEqualToString:category])
             {
-                amount = amount + [model.price floatValue];
+                amount = amount + [model.amount floatValue];
             }
         }
         
@@ -275,7 +276,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     }
     
     NSDictionary* param = @{@"categoryAndAmountList":array1,
-                            @"productList":array2};
+                            @"productList":array2,
+                            @"orderAmount":[NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+Freight_Charges],
+                            @"storeId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
+                            };
     
     //为提交订单做准备
     [self.orderParam setObject:array1 forKey:@"categoryAndAmountList"];
@@ -283,6 +287,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameter:param success:^(id JSON, NSError *error){
+        
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
 
         if ([model.data isKindOfClass:[NSArray class]])
@@ -378,7 +383,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         vc.selectCoupon = ^(CouponsModel * model){
             self.coupons = model;
 
-            NSString*  orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+10-[self.coupons.priceExpression floatValue]];
+            NSString*  orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+Freight_Charges-[self.coupons.priceExpression floatValue]];
             wself.moneyLabel.text = [NSString stringWithFormat:@"¥%@",orderAmount];
             
             [wself.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]]];

@@ -273,6 +273,7 @@
     _timeLabel = label;
     
     label = [[UILabel alloc] init];
+    label.textAlignment = NSTextAlignmentCenter;
     label.numberOfLines = 0;
     label.frame = CGRectMake(25, 123, 326, 18);
     label.text = @"请在规定的时间内完成支付，否则订单将会被自动取消！";

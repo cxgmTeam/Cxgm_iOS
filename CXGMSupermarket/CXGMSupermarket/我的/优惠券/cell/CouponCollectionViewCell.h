@@ -12,4 +12,6 @@
 @interface CouponCollectionViewCell : UICollectionViewCell
 @property (nonatomic, strong) CouponsModel *coupons;
 @property (nonatomic, copy) dispatch_block_t expandClick;
+
++ (CGFloat)heightForCell:(CouponsModel *)coupons;
 @end

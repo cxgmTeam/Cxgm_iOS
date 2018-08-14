@@ -91,6 +91,8 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
         [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请输入正确的兑换码"]; return;
     }
     
+    [_textField resignFirstResponder];
+    
     NSDictionary* dic = @{@"couponCode":_textField.text};
     
     typeof(self) __weak wself = self;
@@ -196,6 +198,7 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
     _textField.placeholder = @"请输入优惠券兑换码";
     _textField.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
     _textField.textColor = [UIColor colorWithRed:153/255.0 green:153/255.0 blue:153/255.0 alpha:1/1.0];
+    _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
     [view addSubview:_textField];
     [_textField mas_makeConstraints:^(MASConstraintMaker *make){
         make.left.equalTo(40);
@@ -257,7 +260,8 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CouponsModel* item = self.listArray[indexPath.item];
     if ([item.isOpen boolValue]) {
-        return CGSizeMake(ScreenW-20, 140+10);
+        CGFloat height = [CouponCollectionViewCell heightForCell:self.listArray[indexPath.item]];
+        return CGSizeMake(ScreenW-20, height);
     }else{
         return CGSizeMake(ScreenW-20, 100+10);
     }

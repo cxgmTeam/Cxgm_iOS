@@ -51,9 +51,10 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     CouponsModel* item = self.listArray[indexPath.item];
     if ([item.isOpen boolValue]) {
-        return CGSizeMake(ScreenW-20, 140);
+        CGFloat height = [CouponCollectionViewCell heightForCell:self.listArray[indexPath.item]];
+        return CGSizeMake(ScreenW-20, height);
     }else{
-        return CGSizeMake(ScreenW-20, 100);
+        return CGSizeMake(ScreenW-20, 100+10);
     }
 }
 
@@ -70,7 +71,7 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
 {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [UICollectionViewFlowLayout new];
-        layout.minimumLineSpacing = 10;
+        layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 0;
         
         _collectionView = [[UICollectionView alloc]initWithFrame:CGRectZero collectionViewLayout:layout];
