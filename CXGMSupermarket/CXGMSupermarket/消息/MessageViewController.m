@@ -70,7 +70,7 @@
     if (apsDic)
     {
         NSString* alert = [apsDic objectForKey:@"alert"];
-        if (alert)
+        if (alert && [alert isKindOfClass:[NSString class]])
         {
             if ([alert isEqualToString:@"限时抢购"]) {
                 cell.iconView.image = [UIImage imageNamed:@"message_0"];

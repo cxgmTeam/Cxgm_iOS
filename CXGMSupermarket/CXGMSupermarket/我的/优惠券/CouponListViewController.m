@@ -32,7 +32,9 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
 
 - (void)findCoupons{
     NSDictionary* dic = @{@"pageNum":[NSString stringWithFormat:@"%ld",(long)self.pageNum],
-                          @"pageSize":@"10"};
+                          @"pageSize":@"10",
+                          @"status":self.isExpire==YES?@"1":@"0",
+                          };
     
     typeof(self) __weak wself = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -49,11 +51,12 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
             
             NSArray* array = [CouponsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
-            for (CouponsModel * model in array) {
-                if ([model.status boolValue] == self.isExpire) {
-                    [wself.listArray addObject:model];
-                }
-            }
+//            for (CouponsModel * model in array) {
+//                if ([model.status boolValue] == self.isExpire) {
+//                    [wself.listArray addObject:model];
+//                }
+//            }
+            [wself.listArray addObjectsFromArray:array];
             [wself.collectionView reloadData];
             
             wself.emptyView.hidden = wself.listArray.count>0? YES:NO;

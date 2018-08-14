@@ -50,14 +50,14 @@ static NSString *const GoodsOneScreenShotCellID = @"GoodsOneScreenShotCell";
         case 3://分拣完成或待配送
         {
             _orderState.text = @"待配送";
-            _bottomView.hidden = NO;
-            [_buyButton setTitle:@"申请退货" forState:UIControlStateNormal];
+            _bottomView.hidden = YES;
+//            [_buyButton setTitle:@"申请退货" forState:UIControlStateNormal];
         }
             break;
         case 4:{//配送中
             _orderState.text = @"配送中";
-            _bottomView.hidden = NO;
-            [_buyButton setTitle:@"申请退货" forState:UIControlStateNormal];
+            _bottomView.hidden = YES;
+//            [_buyButton setTitle:@"申请退货" forState:UIControlStateNormal];
         }
             break;
         case 5:{//已完成

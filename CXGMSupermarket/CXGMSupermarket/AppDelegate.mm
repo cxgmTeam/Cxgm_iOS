@@ -325,7 +325,7 @@ API_AVAILABLE(ios(10.0)){
     {
         NSString* alert = [apsDic objectForKey:@"alert"];
         title = [apsDic objectForKey:@"alert"];
-        if ([alert length] >0)
+        if ([alert isKindOfClass:[NSString class]] && [alert length] >0)
         {
             NSString* string  = [userInfo objectForKey:alert];
             if ([string isKindOfClass:[NSString class]]) {
