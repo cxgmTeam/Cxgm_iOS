@@ -219,8 +219,9 @@
 @property(nonatomic,strong)NSString<Optional> * totalAmount;//订单总金额   提交订单时增加这两个参数
 @property(nonatomic,strong)NSString<Optional> * preferential;//订单优惠
 
-
 @property(nonatomic,strong)AddressModel<Optional> * addressObj;
+
+@property(nonatomic,strong)NSString<Optional> * psPhone;//配送员电话
 
 +(OrderModel *)OrderModelWithJson:(NSDictionary *)json;
 @end

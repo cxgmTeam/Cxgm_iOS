@@ -14,6 +14,9 @@
 @property(nonatomic,strong)UILabel* stateLabel;
 @property(nonatomic,strong)UILabel* descLabel;
 
+@property(nonatomic,strong)UIButton* phoneBtn;
+
+
 @end
 
 //0待支付，1待配送（已支付），4配送中，5已完成，6待退款，7退货
@@ -21,6 +24,8 @@
 
 - (void)setOrderItem:(OrderModel *)orderItem{
     _orderItem = orderItem;
+    
+    _phoneBtn.hidden = YES;
     
     switch ([orderItem.status intValue]) {
         case 0:{//待支付
@@ -50,6 +55,9 @@
             _stateLabel.text = @"配送中";
             _descLabel.text = @"订单已经确认，配送小哥正在飞奔配送，请注意查收～";
             _remainTimeLabel.text = @"";
+            
+            [_phoneBtn setTitle:orderItem.psPhone forState:UIControlStateNormal];
+            _phoneBtn.hidden = NO;
         }
             
             break;
@@ -106,8 +114,19 @@
     }
 }
 
+- (void)callCarrier:(UIButton *)button
+{
+    NSURL *url = [NSURL URLWithString:[NSString stringWithFormat:@"tel://%@",self.orderItem.psPhone]];
+    UIApplication *app = [UIApplication sharedApplication];
 
-
+    if ([app canOpenURL:url]) {
+        if (@available(iOS 10.0, *)) {
+            [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
+        } else {
+            [[UIApplication sharedApplication] openURL:url];
+        }
+    }
+}
 
 
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -145,6 +164,21 @@
         make.centerY.equalTo(self.stateimgView);
         make.left.equalTo(self.stateimgView.right).offset(4);
     }];
+    
+    _phoneBtn = [UIButton new];
+    [_phoneBtn setImage:[UIImage imageNamed:@"courier_phone"] forState:UIControlStateNormal];
+    [_phoneBtn setTitle:@"15101164085" forState:UIControlStateNormal];
+    [_phoneBtn setTitleEdgeInsets:UIEdgeInsetsMake(0, -50, 0, 0)];
+    [_phoneBtn setImageEdgeInsets:UIEdgeInsetsMake(0, 115, 0, 0)];
+    [_phoneBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    _phoneBtn.titleLabel.font = [UIFont systemFontOfSize:16];
+    [self addSubview:_phoneBtn];
+    [_phoneBtn mas_makeConstraints:^(MASConstraintMaker *make){
+        make.right.top.equalTo(self);
+        make.height.equalTo(40);
+        make.width.equalTo(150);
+    }];
+    [_phoneBtn addTarget:self action:@selector(callCarrier:) forControlEvents:UIControlEventTouchUpInside];
     
     _remainTimeLabel = [[UILabel alloc] init];
     _remainTimeLabel.text = @"剩余 01:59";
