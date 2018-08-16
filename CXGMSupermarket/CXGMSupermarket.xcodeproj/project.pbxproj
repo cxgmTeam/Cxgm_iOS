@@ -50,6 +50,8 @@
 		773A4B0C20AD9D4200F0A5FA /* AddressTopTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 773A4B0B20AD9D4200F0A5FA /* AddressTopTableViewCell.m */; };
 		77401A0E20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 77401A0D20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.m */; };
 		77401A1420BED810001CCEA5 /* GoodsOneScreenShotCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77401A1320BED810001CCEA5 /* GoodsOneScreenShotCell.m */; };
+		7741731D212505F700FA8E53 /* help.html in Resources */ = {isa = PBXBuildFile; fileRef = 7741731C212505F700FA8E53 /* help.html */; };
+		774173202125060600FA8E53 /* HelpViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7741731F2125060600FA8E53 /* HelpViewController.m */; };
 		774813902071CF17002DDF93 /* CutomNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7748138F2071CF17002DDF93 /* CutomNavigationController.m */; };
 		774C47E420A99D2A009B129F /* WGS84TOGCJ02.m in Sources */ = {isa = PBXBuildFile; fileRef = 774C47E320A99D2A009B129F /* WGS84TOGCJ02.m */; };
 		77529E0320AC5BDC0015F7A6 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77529E0220AC5BDB0015F7A6 /* MessageUI.framework */; };
@@ -430,6 +432,9 @@
 		77401A0D20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseCarAnimationTool.m; sourceTree = "<group>"; };
 		77401A1220BED810001CCEA5 /* GoodsOneScreenShotCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsOneScreenShotCell.h; sourceTree = "<group>"; };
 		77401A1320BED810001CCEA5 /* GoodsOneScreenShotCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsOneScreenShotCell.m; sourceTree = "<group>"; };
+		7741731C212505F700FA8E53 /* help.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = help.html; sourceTree = "<group>"; };
+		7741731E2125060600FA8E53 /* HelpViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HelpViewController.h; sourceTree = "<group>"; };
+		7741731F2125060600FA8E53 /* HelpViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HelpViewController.m; sourceTree = "<group>"; };
 		7748138E2071CF17002DDF93 /* CutomNavigationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CutomNavigationController.h; sourceTree = "<group>"; };
 		7748138F2071CF17002DDF93 /* CutomNavigationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CutomNavigationController.m; sourceTree = "<group>"; };
 		774C47E220A99D2A009B129F /* WGS84TOGCJ02.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WGS84TOGCJ02.h; sourceTree = "<group>"; };
@@ -1375,6 +1380,16 @@
 				77401A0D20BEC0FA001CCEA5 /* PurchaseCarAnimationTool.m */,
 			);
 			path = CarAnimationTool;
+			sourceTree = "<group>";
+		};
+		7741731B212505C100FA8E53 /* 帮助中心 */ = {
+			isa = PBXGroup;
+			children = (
+				7741731C212505F700FA8E53 /* help.html */,
+				7741731E2125060600FA8E53 /* HelpViewController.h */,
+				7741731F2125060600FA8E53 /* HelpViewController.m */,
+			);
+			path = "帮助中心";
 			sourceTree = "<group>";
 		};
 		77559BE120DCD71B00798AD0 /* umcommonlog_ios_1.0.0 */ = {
@@ -2711,6 +2726,7 @@
 		BE9769EE2072511800783217 /* 我的 */ = {
 			isa = PBXGroup;
 			children = (
+				7741731B212505C100FA8E53 /* 帮助中心 */,
 				776B535320A7327D00594B32 /* 设置 */,
 				770355AE2099E063002B3A8D /* 登录 */,
 				7703559C2099C270002B3A8D /* 邀请有礼 */,
@@ -2921,6 +2937,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				77F839A92070E375004E9717 /* LaunchScreen.storyboard in Resources */,
+				7741731D212505F700FA8E53 /* help.html in Resources */,
 				77193B3F20BBDF250001508E /* WeiboSDK.bundle in Resources */,
 				77FDD576209BF70300805709 /* mapapi.bundle in Resources */,
 				776A4A4820BFF33600A6F0DF /* HTMLTemplate.html in Resources */,
@@ -2978,6 +2995,7 @@
 				BE9769E22072505C00783217 /* MJRefreshGifHeader.m in Sources */,
 				77F83A9F2070E8CE004E9717 /* NSData+ImageContentType.m in Sources */,
 				773A4B0620AD68EC00F0A5FA /* HYNoticeView.m in Sources */,
+				774173202125060600FA8E53 /* HelpViewController.m in Sources */,
 				77F83A7C2070E8CE004E9717 /* IQUIScrollView+Additions.m in Sources */,
 				77F83AA52070E8CE004E9717 /* SDWebImageCoderHelper.m in Sources */,
 				77F83A782070E8CE004E9717 /* UIProgressView+AFNetworking.m in Sources */,

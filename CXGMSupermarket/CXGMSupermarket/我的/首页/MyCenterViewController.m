@@ -20,6 +20,7 @@
 #import "AddressViewController.h"
 #import "SettingViewController.h"
 #import "InvitationViewController.h"
+#import "HelpViewController.h"
 
 @interface MyCenterViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout>
 @property (strong , nonatomic)UICollectionView *collectionView;
@@ -53,6 +54,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     }else{
         self.sectionArr2 = @[@[@"优惠券",@"myCenter_item0"],
                              @[@"收货地址",@"myCenter_item1"],
+                             @[@"帮助中心",@"myCenter_item2"],
                              @[@"设置",@"myCenter_item4"]];
     }
     
@@ -270,6 +272,11 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
                     [self.navigationController pushViewController:vc animated:YES];
                     return;
                 }
+                if (indexPath.item == 2) {//帮助中心
+                    HelpViewController * vc = [HelpViewController new];
+                    [self.navigationController pushViewController:vc animated:YES];
+                    return;
+                }
                 
                 if ([self needJumpToLogin]) return;
                 
@@ -281,6 +288,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
                     AddressViewController * vc = [AddressViewController new];
                     [self.navigationController pushViewController:vc animated:YES];
                 }
+
             }
                 break;
                 
@@ -301,8 +309,14 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
                 break;
             case 1:{
                 
-                if (indexPath.item == 2) {//设置
+                if (indexPath.item == 3) {//设置
                     SettingViewController * vc = [SettingViewController new];
+                    [self.navigationController pushViewController:vc animated:YES];
+                    return;
+                }
+                
+                if (indexPath.item == 2) {//帮助中心
+                    HelpViewController * vc = [HelpViewController new];
                     [self.navigationController pushViewController:vc animated:YES];
                     return;
                 }
