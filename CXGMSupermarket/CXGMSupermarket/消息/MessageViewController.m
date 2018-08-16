@@ -35,6 +35,8 @@
         [self.dataArray addObjectsFromArray:array];
     }
     
+    NSLog(@"%@",self.dataArray);
+    
     self.tableView.backgroundColor = [UIColor clearColor];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make){
         make.edges.equalTo(self.view);

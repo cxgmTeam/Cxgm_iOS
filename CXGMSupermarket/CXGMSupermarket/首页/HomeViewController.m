@@ -426,15 +426,15 @@
 {
     NSDictionary* dic = [notify userInfo];
     
-    //type为0时跳转商品详情，type为1时直接打开H5连接
-    if ([dic[@"type"] intValue] == 0)
+    //urlType为2时跳转商品详情，urlType为1时直接打开H5连接
+    if ([dic[@"urlType"] intValue] == 2)
     {
         GoodsDetailViewController* vc = [GoodsDetailViewController new];
         vc.goodsId = dic[@"goodcode"];
         vc.shopId = dic[@"shopId"];
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([dic[@"type"] intValue] == 1 && [dic[@"goodcode"] length] > 0)
+    else if ([dic[@"urlType"] intValue] == 1 && [dic[@"goodcode"] length] > 0)
     {
         WebViewController* vc = [WebViewController new];
         vc.urlString = dic[@"goodcode"];
@@ -447,8 +447,6 @@
 {
     LocationModel* location = (LocationModel *)[notify object];
     if (location) {
-        
-        
         
         [self checkAddress:[[NSNumber numberWithDouble:location.longitude] stringValue] dimension:[[NSNumber numberWithDouble:location.latitude] stringValue]];
     }
