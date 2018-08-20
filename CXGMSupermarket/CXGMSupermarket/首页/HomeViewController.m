@@ -434,10 +434,10 @@
         vc.shopId = dic[@"shopId"];
         [self.navigationController pushViewController:vc animated:YES];
     }
-    else if ([dic[@"urlType"] intValue] == 1 && [dic[@"goodcode"] length] > 0)
+    else if ([dic[@"urlType"] intValue] == 1 )
     {
         WebViewController* vc = [WebViewController new];
-        vc.urlString = dic[@"goodcode"];
+        vc.urlString = dic[@"notifyUrl"];
         [self.navigationController pushViewController:vc animated:YES];
     }
     

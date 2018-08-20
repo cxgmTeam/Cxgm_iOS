@@ -67,40 +67,81 @@
         cell = [[MessageTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"MessageTableViewCell"];
     }
     NSDictionary* dic = self.dataArray[indexPath.row];
-    NSDictionary* apsDic = [dic objectForKey:@"aps"];
     
-    if (apsDic)
+    NSArray* arr = @[@"限时抢购",@"客服助手",@"通知消息",@"最新资讯"];
+    
+    for (NSString * key in arr)
     {
-        NSString* alert = [apsDic objectForKey:@"alert"];
-        if (alert && [alert isKindOfClass:[NSString class]])
+        NSString * string = [dic objectForKey:key];
+        
+        if (string.length > 0 && [string isKindOfClass:[NSString class]])
         {
-            if ([alert isEqualToString:@"限时抢购"]) {
+            
+            if ([key isEqualToString:@"限时抢购"]) {
                 cell.iconView.image = [UIImage imageNamed:@"message_0"];
             }
-            if ([alert isEqualToString:@"客服助手"]) {
+            if ([key isEqualToString:@"客服助手"]) {
                 cell.iconView.image = [UIImage imageNamed:@"message_1"];
             }
-            if ([alert isEqualToString:@"通知消息"]) {
+            if ([key isEqualToString:@"通知消息"]) {
                 cell.iconView.image = [UIImage imageNamed:@"message_2"];
             }
-            if ([alert isEqualToString:@"最新资讯"]) {
+            if ([key isEqualToString:@"最新资讯"]) {
                 cell.iconView.image = [UIImage imageNamed:@"message_3"];
             }
+            cell.titleLabel.text = key;
             
-            cell.titleLabel.text = alert;
-            NSString * string = [dic objectForKey:alert];
+
+            NSArray * array = [Utility toArrayOrNSDictionary:string];
             
-            if ([string isKindOfClass:[NSString class]]) {
-                NSArray * array = [Utility toArrayOrNSDictionary:string];
-                
-                if (array.count > 0) {
-                    NSDictionary* dictionary = [array firstObject];
-                    cell.descLabel.text = [dictionary objectForKey:@"content"];
-                    cell.timeLabel.text = [dictionary objectForKey:@"time"];
-                }
+            if ([array isKindOfClass:[NSArray class]] && array.count > 0) {
+                NSDictionary* dictionary = [array firstObject];
+                cell.descLabel.text = [dictionary objectForKey:@"content"];
+                cell.timeLabel.text = [dictionary objectForKey:@"time"];
             }
+            
+            break;
         }
+
     }
+    
+    
+    
+    
+//    NSDictionary* apsDic = [dic objectForKey:@"aps"];
+//
+//    if (apsDic)
+//    {
+//        NSString* alert = [apsDic objectForKey:@"alert"];
+//        if (alert && [alert isKindOfClass:[NSString class]])
+//        {
+//            if ([alert isEqualToString:@"限时抢购"]) {
+//                cell.iconView.image = [UIImage imageNamed:@"message_0"];
+//            }
+//            if ([alert isEqualToString:@"客服助手"]) {
+//                cell.iconView.image = [UIImage imageNamed:@"message_1"];
+//            }
+//            if ([alert isEqualToString:@"通知消息"]) {
+//                cell.iconView.image = [UIImage imageNamed:@"message_2"];
+//            }
+//            if ([alert isEqualToString:@"最新资讯"]) {
+//                cell.iconView.image = [UIImage imageNamed:@"message_3"];
+//            }
+//
+//            cell.titleLabel.text = alert;
+//            NSString * string = [dic objectForKey:alert];
+//
+//            if ([string isKindOfClass:[NSString class]]) {
+//                NSArray * array = [Utility toArrayOrNSDictionary:string];
+//
+//                if (array.count > 0) {
+//                    NSDictionary* dictionary = [array firstObject];
+//                    cell.descLabel.text = [dictionary objectForKey:@"content"];
+//                    cell.timeLabel.text = [dictionary objectForKey:@"time"];
+//                }
+//            }
+//        }
+//    }
     return cell;
 }
 
@@ -132,38 +173,75 @@
     
     
     NSDictionary* dic = self.dataArray[indexPath.row];
-    NSDictionary* apsDic = [dic objectForKey:@"aps"];
+
+    NSArray* arr = @[@"限时抢购",@"客服助手",@"通知消息",@"最新资讯"];
     
-    if (apsDic)
+    for (NSString * key in arr)
     {
-        NSString* alert = [apsDic objectForKey:@"alert"];
-        if (alert)
+        NSString * string = [dic objectForKey:key];
+        
+        if (string.length > 0 && [string isKindOfClass:[NSString class]])
         {
-            NSString * string = [dic objectForKey:alert];
+            NSArray * array = [Utility toArrayOrNSDictionary:string];
             
-            if ([string isKindOfClass:[NSString class]]) {
-                NSArray * array = [Utility toArrayOrNSDictionary:string];
+            if ([array isKindOfClass:[NSArray class]] && array.count > 0)
+            {
+                NSDictionary* dictionary = [array firstObject];
                 
-                if (array.count > 0) {
-                    NSDictionary* dictionary = [array firstObject];
-                    
-                    if ([dictionary[@"urlType"] intValue] == 2)
-                    {
-                        GoodsDetailViewController* vc = [GoodsDetailViewController new];
-                        vc.goodsId = dictionary[@"goodcode"];
-                        vc.shopId = dictionary[@"shopId"];
-                        [self.navigationController pushViewController:vc animated:YES];
-                    }
-                    else if ([dictionary[@"urlType"] intValue] == 1 && [dictionary[@"goodcode"] length] > 0)
-                    {
-                        WebViewController* vc = [WebViewController new];
-                        vc.urlString = dictionary[@"goodcode"];
-                        [self.navigationController pushViewController:vc animated:YES];
-                    }
+                if ([dictionary[@"urlType"] intValue] == 2)
+                {
+                    GoodsDetailViewController* vc = [GoodsDetailViewController new];
+                    vc.goodsId = dictionary[@"goodcode"];
+                    vc.shopId = dictionary[@"shopId"];
+                    [self.navigationController pushViewController:vc animated:YES];
+                }
+                else if ([dictionary[@"urlType"] intValue] == 1)
+                {
+                    WebViewController* vc = [WebViewController new];
+                    vc.urlString = dictionary[@"notifyUrl"];
+                    [self.navigationController pushViewController:vc animated:YES];
                 }
             }
+            break;
         }
+        
     }
+    
+    
+    
+    
+//    NSDictionary* apsDic = [dic objectForKey:@"aps"];
+//    
+//    if (apsDic)
+//    {
+//        NSString* alert = [apsDic objectForKey:@"alert"];
+//        if (alert)
+//        {
+//            NSString * string = [dic objectForKey:alert];
+//            
+//            if ([string isKindOfClass:[NSString class]]) {
+//                NSArray * array = [Utility toArrayOrNSDictionary:string];
+//                
+//                if (array.count > 0) {
+//                    NSDictionary* dictionary = [array firstObject];
+//                    
+//                    if ([dictionary[@"urlType"] intValue] == 2)
+//                    {
+//                        GoodsDetailViewController* vc = [GoodsDetailViewController new];
+//                        vc.goodsId = dictionary[@"goodcode"];
+//                        vc.shopId = dictionary[@"shopId"];
+//                        [self.navigationController pushViewController:vc animated:YES];
+//                    }
+//                    else if ([dictionary[@"urlType"] intValue] == 1 && [dictionary[@"goodcode"] length] > 0)
+//                    {
+//                        WebViewController* vc = [WebViewController new];
+//                        vc.urlString = dictionary[@"goodcode"];
+//                        [self.navigationController pushViewController:vc animated:YES];
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
 
 #pragma mark- init

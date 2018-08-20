@@ -316,38 +316,67 @@ API_AVAILABLE(ios(10.0)){
     if (![userInfo isKindOfClass:[NSDictionary class]]) return;
         
     
-    NSString* title = @"";
+//    NSString* title = @"";
     NSString* message = @"";
     
-    NSDictionary* apsDic = [userInfo objectForKey:@"aps"];
+    NSArray* arr = @[@"限时抢购",@"客服助手",@"通知消息",@"最新资讯"];
+
+     for (NSString * key in arr)
+     {
+         NSString * string = [userInfo objectForKey:key];
+         if (string.length > 0 && [string isKindOfClass:[NSString class]]) {
+             NSArray* array = [Utility toArrayOrNSDictionary:string];
+             
+             if ([array isKindOfClass:[NSArray class]] && array.count > 0) {
+                 
+                 NSDictionary* dictionary = [array firstObject];
+                 message = [dictionary objectForKey:@"content"];
+                 
+                 self.userInfo = dictionary;
+                 
+                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:key
+                                                                     message:message
+                                                                    delegate:self
+                                                           cancelButtonTitle:@"取消"
+                                                           otherButtonTitles:@"查看",nil];
+                 [alertView show];
+             }
+             
+             break;
+         }
+     }
     
-    if (apsDic)
-    {
-        NSString* alert = [apsDic objectForKey:@"alert"];
-        title = [apsDic objectForKey:@"alert"];
-        if ([alert isKindOfClass:[NSString class]] && [alert length] >0)
-        {
-            NSString* string  = [userInfo objectForKey:alert];
-            if ([string isKindOfClass:[NSString class]]) {
-                NSArray* array = [Utility toArrayOrNSDictionary:string];
-                
-                if ([array isKindOfClass:[NSArray class]] && array.count > 0) {
-                    
-                    NSDictionary* dictionary = [array firstObject];
-                    message = [dictionary objectForKey:@"content"];
-                    
-                    self.userInfo = dictionary;
-                    
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
-                                                                        message:message
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"取消"
-                                                              otherButtonTitles:@"查看",nil];
-                    [alertView show];
-                }
-            }
-        }
-    }
+    
+    
+    
+//    NSDictionary* apsDic = [userInfo objectForKey:@"aps"];
+//    if (apsDic)
+//    {
+//        NSString* alert = [apsDic objectForKey:@"alert"];
+//        title = [apsDic objectForKey:@"alert"];
+//        if ([alert isKindOfClass:[NSString class]] && [alert length] >0)
+//        {
+//            NSString* string  = [userInfo objectForKey:alert];
+//            if ([string isKindOfClass:[NSString class]]) {
+//                NSArray* array = [Utility toArrayOrNSDictionary:string];
+//
+//                if ([array isKindOfClass:[NSArray class]] && array.count > 0) {
+//
+//                    NSDictionary* dictionary = [array firstObject];
+//                    message = [dictionary objectForKey:@"content"];
+//
+//                    self.userInfo = dictionary;
+//
+//                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:title
+//                                                                        message:message
+//                                                                       delegate:self
+//                                                              cancelButtonTitle:@"取消"
+//                                                              otherButtonTitles:@"查看",nil];
+//                    [alertView show];
+//                }
+//            }
+//        }
+//    }
 }
 
 - (void)saveRemoteNotification:(NSDictionary *)userInfo
@@ -369,27 +398,49 @@ API_AVAILABLE(ios(10.0)){
 {
     if (![userInfo isKindOfClass:[NSDictionary class]]) return;
     
-    NSDictionary* apsDic = [userInfo objectForKey:@"aps"];
-    if (apsDic)
+    
+    NSArray* arr = @[@"限时抢购",@"客服助手",@"通知消息",@"最新资讯"];
+    
+    for (NSString * key in arr)
     {
-        NSString* alert = [apsDic objectForKey:@"alert"];
-        if ([alert length] > 0)
-        {
-            NSString* string  = [userInfo objectForKey:alert];
-            if ([string isKindOfClass:[NSString class]]) {
-                NSArray* array = [Utility toArrayOrNSDictionary:string];
+        NSString* string  = [userInfo objectForKey:key];
+        if (string.length>0 && [string isKindOfClass:[NSString class]]) {
+            NSArray* array = [Utility toArrayOrNSDictionary:string];
+            
+            if ([array isKindOfClass:[NSArray class]] && array.count > 0) {
                 
-                if ([array isKindOfClass:[NSArray class]] && array.count > 0) {
-                    
-                    NSDictionary* dictionary = [array firstObject];
-                    self.userInfo = dictionary;
-                    
-                    [[NSNotificationCenter defaultCenter] postNotificationName:Show_RemoteNotification object:nil userInfo:self.userInfo];
-                    
-                }
+                NSDictionary* dictionary = [array firstObject];
+                self.userInfo = dictionary;
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:Show_RemoteNotification object:nil userInfo:self.userInfo];
+                
             }
         }
     }
+    
+    
+    
+//    NSDictionary* apsDic = [userInfo objectForKey:@"aps"];
+//    if (apsDic)
+//    {
+//        NSString* alert = [apsDic objectForKey:@"alert"];
+//        if ([alert length] > 0)
+//        {
+//            NSString* string  = [userInfo objectForKey:alert];
+//            if ([string isKindOfClass:[NSString class]]) {
+//                NSArray* array = [Utility toArrayOrNSDictionary:string];
+//                
+//                if ([array isKindOfClass:[NSArray class]] && array.count > 0) {
+//                    
+//                    NSDictionary* dictionary = [array firstObject];
+//                    self.userInfo = dictionary;
+//                    
+//                    [[NSNotificationCenter defaultCenter] postNotificationName:Show_RemoteNotification object:nil userInfo:self.userInfo];
+//                    
+//                }
+//            }
+//        }
+//    }
 }
 
 

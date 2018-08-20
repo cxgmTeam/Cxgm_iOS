@@ -142,21 +142,51 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
             case STATUS_USER_CANCEL:
             {
                 
-                for (GoodsModel* goods in item.productDetails) {
+                double totlePrice = 0.0;
+                
+                double originalTotal = 0.0;
+                
+                double preferential = 0.0;
+            
+                for (NSInteger i = 0; i < item.productDetails.count; i++ )
+                {
+                    GoodsModel* goods = item.productDetails[i];
+                    
                     goods.goodCode = goods.productCode;
+                    
+                    double price = [goods.price doubleValue];
+                    
+                    totlePrice += price*[goods.productNum intValue];
+                    
+                    double original = [goods.originalPrice doubleValue];
+                    
+                    if (original > 0 && original > price) {
+                        
+                        originalTotal += original*[goods.productNum intValue];
+                        
+                        preferential += originalTotal - totlePrice;
+                    }else{
+                        
+                        originalTotal += price*[goods.productNum intValue];
+                    }
+                    
+                    if (i == item.productDetails.count-1)
+                    {
+                        //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
+                        NSDictionary* dic = @{
+                                              @"totalAmount":[NSString stringWithFormat:@"%.2f",originalTotal],
+                                              @"preferential":[NSString stringWithFormat:@"%.2f",originalTotal-totlePrice],
+                                              @"orderAmount":[NSString stringWithFormat:@"%.2f",totlePrice]
+                                              };
+                        
+                        OrderConfirmViewController* vc = [OrderConfirmViewController new];
+                        vc.moneyDic = dic;
+                        vc.goodsArray = item.productDetails;
+                        
+                        [wself.navigationController pushViewController:vc animated:YES];
+                    }
                 }
-                
-                //    orderAmount 实付金额   totalAmount 订单总金额  preferential 订单优惠
-                NSDictionary* dic = @{
-                                      @"totalAmount":item.totalAmount,
-                                      @"preferential":item.preferential,
-                                      @"orderAmount":item.orderAmount
-                                      };
-                
-                OrderConfirmViewController* vc = [OrderConfirmViewController new];
-                vc.goodsArray = item.productDetails;
-                vc.moneyDic = dic;
-                [wself.navigationController pushViewController:vc animated:YES];
+            
             }
                 break;
             default:

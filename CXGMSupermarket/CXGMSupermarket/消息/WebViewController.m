@@ -20,12 +20,14 @@
 
     [self setUpUI];
     
-    if ([self.urlString containsString:@"http://"] || [self.urlString containsString:@"https://"]) {
-        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]]];
-    }else{
-        [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[@"http://" stringByAppendingString:self.urlString]]]];
+    if ([self.urlString length] > 0)
+    {
+        if ([self.urlString containsString:@"http://"] || [self.urlString containsString:@"https://"]) {
+            [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:self.urlString]]];
+        }else{
+            [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[@"http://" stringByAppendingString:self.urlString]]]];
+        }
     }
-    
 }
 
 

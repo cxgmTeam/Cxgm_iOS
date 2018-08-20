@@ -102,7 +102,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
     [self getAddressList];
     
-    
+    //根据price计算出来的金额  + 运费
     NSString* orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+Freight_Charges];
     
     if (self.coupons) {
