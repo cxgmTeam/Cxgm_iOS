@@ -10,10 +10,12 @@
 #import "SettingTableViewCell.h"
 
 #import "EmployeesViewController.h"
+#import "HTMLViewController.h"
 
 @interface AboutViewController ()<UITableViewDelegate,UITableViewDataSource>
 @property(nonatomic,strong)UITableView* tableView;
 @property(nonatomic,strong)NSArray* dataArray;
+@property(nonatomic,strong)NSArray* tempArray;
 @end
 
 @implementation AboutViewController
@@ -58,8 +60,14 @@
                            @"菜鲜果美商家信息",
                            @"菜鲜果美内部专用入口"];
     }else{
-        self.dataArray = @[];
+        self.dataArray = @[@"菜鲜果美会员服务协议",
+                           @"菜鲜果美隐私权政策",
+                           @"菜鲜果美商家信息"];
     }
+    
+    self.tempArray = @[@[@"service_agreement.html",@"服务协议"],
+                       @[@"private.html",@"隐私权限"],
+                       @[@"business_info.html",@"商家信息"]];
     
 
     _tableView = [UITableView new];
@@ -111,6 +119,13 @@
     
     if (indexPath.row == 3) {
         EmployeesViewController* vc = [EmployeesViewController new];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    else
+    {
+        HTMLViewController* vc = [HTMLViewController new];
+        vc.fileName = self.tempArray[indexPath.row][0];
+        vc.title = self.tempArray[indexPath.row][1];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }

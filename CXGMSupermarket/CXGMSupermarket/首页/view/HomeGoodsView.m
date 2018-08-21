@@ -76,7 +76,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
                                    @[@"粮油副食",@"105",@"homeCategory_4"],
                                    @[@"休闲零食",@"88",@"homeCategory_5"],
                                    @[@"中外名酒",@"115",@"homeCategory_6"],
-                                   @[@"美妆百货",@"106",@"homeCategory_7"]];
+                                   @[@"美妆个护",@"106",@"homeCategory_7"]];
         }else{
             self.categoryNames = @[@[@"新鲜水果",@"113",@"homeCategory_0"],
                                    @[@"放心蔬菜",@"102",@"homeCategory_1"],
@@ -84,7 +84,7 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
                                    @[@"水产海鲜",@"109",@"homeCategory_3"],
                                    @[@"粮油副食",@"105",@"homeCategory_4"],
                                    @[@"休闲零食",@"88",@"homeCategory_5"],
-                                   @[@"美妆百货",@"106",@"homeCategory_7"]];
+                                   @[@"美妆个护",@"106",@"homeCategory_7"]];
         }
 
         

@@ -91,6 +91,11 @@
 		778C63DA211C0F770093C593 /* CameraTopView.m in Sources */ = {isa = PBXBuildFile; fileRef = 778C63D6211C0F770093C593 /* CameraTopView.m */; };
 		778C63DB211C0F770093C593 /* ScanningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 778C63D7211C0F770093C593 /* ScanningViewController.m */; };
 		7798DD5D20CF7BAD00FE708D /* BMKLocationkit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7798DD5C20CF7BAD00FE708D /* BMKLocationkit.framework */; };
+		779BA04B212BF09D009854BE /* HTMLViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779BA04A212BF09D009854BE /* HTMLViewController.m */; };
+		779BA051212BF143009854BE /* business_info.html in Resources */ = {isa = PBXBuildFile; fileRef = 779BA04D212BF143009854BE /* business_info.html */; };
+		779BA052212BF143009854BE /* private.html in Resources */ = {isa = PBXBuildFile; fileRef = 779BA04E212BF143009854BE /* private.html */; };
+		779BA053212BF143009854BE /* service_agreement.html in Resources */ = {isa = PBXBuildFile; fileRef = 779BA04F212BF143009854BE /* service_agreement.html */; };
+		779BA054212BF143009854BE /* business_info.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 779BA050212BF143009854BE /* business_info.jpg */; };
 		779C9558209AE0EE0029A591 /* PayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C9557209AE0EE0029A591 /* PayResultViewController.m */; };
 		779C955B209B082C0029A591 /* HomeGoodsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C955A209B082C0029A591 /* HomeGoodsView.m */; };
 		779C955E209B0A7C0029A591 /* HomeShopsView.m in Sources */ = {isa = PBXBuildFile; fileRef = 779C955D209B0A7C0029A591 /* HomeShopsView.m */; };
@@ -507,6 +512,12 @@
 		778C63D8211C0F770093C593 /* CameraTopView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraTopView.h; sourceTree = "<group>"; };
 		778C63D9211C0F770093C593 /* ScanningViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScanningViewController.h; sourceTree = "<group>"; };
 		7798DD5C20CF7BAD00FE708D /* BMKLocationkit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = BMKLocationkit.framework; sourceTree = "<group>"; };
+		779BA049212BF09D009854BE /* HTMLViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HTMLViewController.h; sourceTree = "<group>"; };
+		779BA04A212BF09D009854BE /* HTMLViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HTMLViewController.m; sourceTree = "<group>"; };
+		779BA04D212BF143009854BE /* business_info.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = business_info.html; sourceTree = "<group>"; };
+		779BA04E212BF143009854BE /* private.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = private.html; sourceTree = "<group>"; };
+		779BA04F212BF143009854BE /* service_agreement.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = service_agreement.html; sourceTree = "<group>"; };
+		779BA050212BF143009854BE /* business_info.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = business_info.jpg; sourceTree = "<group>"; };
 		779C9556209AE0EE0029A591 /* PayResultViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PayResultViewController.h; sourceTree = "<group>"; };
 		779C9557209AE0EE0029A591 /* PayResultViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PayResultViewController.m; sourceTree = "<group>"; };
 		779C9559209B082C0029A591 /* HomeGoodsView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HomeGoodsView.h; sourceTree = "<group>"; };
@@ -1455,6 +1466,7 @@
 		776B535320A7327D00594B32 /* 设置 */ = {
 			isa = PBXGroup;
 			children = (
+				779BA04C212BF12E009854BE /* html */,
 				776B535820A7344100594B32 /* cell */,
 				776B535520A732B100594B32 /* SettingViewController.h */,
 				776B535620A732B100594B32 /* SettingViewController.m */,
@@ -1462,6 +1474,8 @@
 				77535E3020E90ECF008EA366 /* AboutViewController.m */,
 				77535E3220E9175C008EA366 /* EmployeesViewController.h */,
 				77535E3320E9175C008EA366 /* EmployeesViewController.m */,
+				779BA049212BF09D009854BE /* HTMLViewController.h */,
+				779BA04A212BF09D009854BE /* HTMLViewController.m */,
 			);
 			path = "设置";
 			sourceTree = "<group>";
@@ -1541,6 +1555,17 @@
 				778C63D7211C0F770093C593 /* ScanningViewController.m */,
 			);
 			path = "扫描";
+			sourceTree = "<group>";
+		};
+		779BA04C212BF12E009854BE /* html */ = {
+			isa = PBXGroup;
+			children = (
+				779BA04D212BF143009854BE /* business_info.html */,
+				779BA050212BF143009854BE /* business_info.jpg */,
+				779BA04E212BF143009854BE /* private.html */,
+				779BA04F212BF143009854BE /* service_agreement.html */,
+			);
+			path = html;
 			sourceTree = "<group>";
 		};
 		779C9555209AE0D10029A591 /* 支付结果 */ = {
@@ -2941,13 +2966,16 @@
 				77193B3F20BBDF250001508E /* WeiboSDK.bundle in Resources */,
 				77FDD576209BF70300805709 /* mapapi.bundle in Resources */,
 				776A4A4820BFF33600A6F0DF /* HTMLTemplate.html in Resources */,
+				779BA054212BF143009854BE /* business_info.jpg in Resources */,
 				BEC90F99207F809700B5E609 /* cart_addBtn_nomal@2x.png in Resources */,
 				BE677BE1208763320085CBA9 /* PingFang Regular.ttf in Resources */,
 				77559BE520DCD71B00798AD0 /* UMCommonLog.bundle in Resources */,
 				77F839A62070E375004E9717 /* Assets.xcassets in Resources */,
 				77DD80342082409F00A1D080 /* flsah_normal@2x.png in Resources */,
+				779BA052212BF143009854BE /* private.html in Resources */,
 				BE9769E52072505C00783217 /* MJRefresh.bundle in Resources */,
 				77193B4220BBDF250001508E /* TencentOpenApi_IOS_Bundle.bundle in Resources */,
+				779BA051212BF143009854BE /* business_info.html in Resources */,
 				77DD803A2082409F00A1D080 /* sqr_line@2x.png in Resources */,
 				77F83A882070E8CE004E9717 /* IQKeyboardManager.bundle in Resources */,
 				77B33AE620E267BE00B4611E /* AlipaySDK.bundle in Resources */,
@@ -2956,6 +2984,7 @@
 				77DD80352082409F00A1D080 /* navigationbarScanBg.png in Resources */,
 				77F83ABB2070E9AE004E9717 /* Default-568h@2x.png in Resources */,
 				77F839A42070E375004E9717 /* Main.storyboard in Resources */,
+				779BA053212BF143009854BE /* service_agreement.html in Resources */,
 				BEC90F9B207F809700B5E609 /* cart_cutBtn_nomal@2x.png in Resources */,
 				77193B3420BBDF250001508E /* UMSocialSDKResources.bundle in Resources */,
 			);
@@ -3073,6 +3102,7 @@
 				77F83AB02070E8CE004E9717 /* SDWebImageWebPCoder.m in Sources */,
 				BE677BE620876ACC0085CBA9 /* MyCenterViewController.m in Sources */,
 				7783F20C209707F900338459 /* OrderBillViewCell.m in Sources */,
+				779BA04B212BF09D009854BE /* HTMLViewController.m in Sources */,
 				7783F2032095D2C100338459 /* OrderGoodsInfoHead.m in Sources */,
 				77F83A9B2070E8CE004E9717 /* MBProgressHUD.m in Sources */,
 				77058A7620AFD24300EF576A /* ShopCartView.m in Sources */,
