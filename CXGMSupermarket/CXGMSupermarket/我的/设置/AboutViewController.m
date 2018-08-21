@@ -65,8 +65,8 @@
                            @"菜鲜果美商家信息"];
     }
     
-    self.tempArray = @[@[@"service_agreement.html",@"服务协议"],
-                       @[@"private.html",@"隐私权限"],
+    self.tempArray = @[@[@"service_agreement.html",@"会员服务协议"],
+                       @[@"private.html",@"隐私权政策"],
                        @[@"business_info.html",@"商家信息"]];
     
 
