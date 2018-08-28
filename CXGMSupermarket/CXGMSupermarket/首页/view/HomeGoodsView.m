@@ -90,7 +90,12 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
         
         self.collectionView.backgroundColor = [UIColor clearColor];
         [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
-            make.edges.equalTo(self);
+            make.top.left.right.equalTo(self);
+            if (ScreenW < 375) {
+                make.bottom.equalTo(-TAB_BAR_HEIGHT);
+            }else{
+                make.bottom.equalTo(self);
+            }
         }];
         WEAKSELF
         self.collectionView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{

@@ -65,6 +65,8 @@ static CGFloat TopBtnWidth = 60;
         make.top.left.bottom.equalTo(self.view);
         make.width.equalTo(93);
     }];
+    
+
 
     self.topScrollWidth = ScreenW-93;
     self.topScrollView.frame = CGRectMake(93, 0, self.topScrollWidth, 40);
@@ -77,7 +79,10 @@ static CGFloat TopBtnWidth = 60;
         make.height.equalTo(1);
         make.top.equalTo(39);
     }];
-    
+
+    if ([[[UIDevice currentDevice] systemVersion] floatValue] < 11) {
+        self.rightTableView.contentInset = UIEdgeInsetsMake(-40, 0, 0, 0);
+    }
     [self.rightTableView mas_makeConstraints:^(MASConstraintMaker *make){
         make.bottom.right.equalTo(self.view);
         make.left.equalTo(self.leftTableView.right);

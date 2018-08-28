@@ -84,6 +84,8 @@ static NSString *const OrderCollectionViewCellID = @"OrderCollectionViewCell";
         }
         if ([model.listModel.isLastPage boolValue]) {
             [self.collectionView.mj_footer endRefreshingWithNoMoreData];
+        }else{
+            [self.collectionView.mj_footer endRefreshing];
         }
         
         [self.collectionView.mj_header endRefreshing];

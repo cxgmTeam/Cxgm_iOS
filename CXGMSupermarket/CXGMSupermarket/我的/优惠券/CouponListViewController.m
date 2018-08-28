@@ -68,6 +68,8 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
             
             if (array.count == 0) {
                 [wself.collectionView.mj_footer endRefreshingWithNoMoreData];
+            }else{
+                [wself.collectionView.mj_footer endRefreshing];
             }
         }
        
