@@ -39,7 +39,7 @@ static NSString *const SlideshowHeadViewID = @"SlideshowHeadView";
         self.collectionView.backgroundColor = [UIColor clearColor];
         [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make){
             make.top.left.right.equalTo(self);
-            if (ScreenW < 375) {
+            if ([[[UIDevice currentDevice] systemVersion] floatValue] < 11) {
                 make.bottom.equalTo(-TAB_BAR_HEIGHT);
             }else{
                 make.bottom.equalTo(self);
