@@ -238,9 +238,9 @@
     self.currentPage = 0;
     
     BMKCitySearchOption *citySearchOption = [[BMKCitySearchOption alloc]init];
-    citySearchOption.pageIndex = self.currentPage;
-    citySearchOption.pageCapacity = 10;
-    citySearchOption.city = @"";
+//    citySearchOption.pageIndex = self.currentPage;
+//    citySearchOption.pageCapacity = 10;
+    citySearchOption.city = @"北京";
     citySearchOption.keyword = _textField.text;
     BOOL flag = [_poiSearch poiSearchInCity:citySearchOption];
     if(flag)
@@ -464,7 +464,6 @@
 #pragma mark - 输入地址联想搜索
 - (void)onGetPoiResult:(BMKPoiSearch *)searcher result:(BMKPoiResult*)result errorCode:(BMKSearchErrorCode)error
 {
-    
     if (error == BMK_SEARCH_NO_ERROR) {
 
         [self.poiResultArray removeAllObjects];
@@ -495,7 +494,7 @@
     } else if (error == BMK_SEARCH_AMBIGUOUS_ROURE_ADDR){
         NSLog(@"起始点有歧义");
     } else {
-        // 各种情况的判断。。。
+        NSLog(@"各种情况的判断。。。");
     }
 }
 
