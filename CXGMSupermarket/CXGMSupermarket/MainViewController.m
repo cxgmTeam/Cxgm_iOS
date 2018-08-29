@@ -179,11 +179,11 @@
         return;
     }
     
+    if ([[DeviceHelper sharedInstance].shop.id length] == 0) return;
+    
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
     NSDictionary* dic = @{
-//                          @"pageNum":@"1",
-//                          @"pageSize":@"0",
-                          @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
+                          @"shopId":[DeviceHelper sharedInstance].shop.id
                           };
 
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIShopCartList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){

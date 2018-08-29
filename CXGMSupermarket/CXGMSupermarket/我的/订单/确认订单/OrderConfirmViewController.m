@@ -184,11 +184,14 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
                 vc.orderAmount = orderAmount;
                 vc.orderId = [NSString stringWithFormat:@"%ld",[(NSNumber *)model.data longValue]];
                 [wself.navigationController pushViewController:vc animated:YES];
-
             });
+        }else{
+            self.submitBtn.enabled = YES;
+            [MBProgressHUD MBProgressHUDWithView:self.view Str:@"提交订单失败"];
         }
     } failure:^(id JSON, NSError *error){
-        
+        self.submitBtn.enabled = YES;
+        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"提交订单失败"];
     }];
 }
 
