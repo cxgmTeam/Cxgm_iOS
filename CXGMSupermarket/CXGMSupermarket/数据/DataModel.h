@@ -235,8 +235,8 @@
 @property(nonatomic,copy)NSString *address;
 @property(nonatomic,copy)NSString *street;
 
-@property(nonatomic,assign)double latitude;
-@property(nonatomic,assign)double longitude;
+@property(nonatomic,assign)double latitude;//维度
+@property(nonatomic,assign)double longitude;//经度
 
 @property(nonatomic,assign)BOOL inScope;//是否在配送范围
 

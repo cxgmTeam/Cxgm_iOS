@@ -241,6 +241,10 @@ static NSString *const AddAddressFootViewID = @"AddAddressFootView";
     MapViewController* vc = [MapViewController new];
     vc.selectedAddress = ^(LocationModel *model){
         self.location = model;
+        if (self.address) {
+            self.address.dimension = [NSString stringWithFormat:@"%f",model.latitude];
+            self.address.longitude = [NSString stringWithFormat:@"%f",model.longitude];
+        }
         self.biotopeField.text = [model.address stringByAppendingString:model.name];
     };
     [self.navigationController pushViewController:vc animated:YES];
