@@ -98,9 +98,9 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
 #pragma mark - <UICollectionViewDataSource>
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    if ([DeviceHelper sharedInstance].showWineCategory){
-       return 3;
-    }
+//    if ([DeviceHelper sharedInstance].showWineCategory){
+//       return 3;
+//    }
     return 2;
 }
 
@@ -109,18 +109,8 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         return self.sectionArr0.count;
     }
     
-    if ([DeviceHelper sharedInstance].showWineCategory)
-    {
-        if (section == 1) {
-            return self.sectionArr1.count;
-        }
-        if (section == 2) {
-            return self.sectionArr2.count;
-        }
-    }else{
-        if (section == 1) {
-            return self.sectionArr2.count;
-        }
+    if (section == 1) {
+        return self.sectionArr2.count;
     }
 
     return 0;
@@ -129,45 +119,25 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewCell *gridcell = nil;
     
-    if ([DeviceHelper sharedInstance].showWineCategory)
+    if (indexPath.section == 0)
     {
-        if (indexPath.section == 0)
-        {
-            MyCenterGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterGridCellID forIndexPath:indexPath];
-            [cell setImage:[NSString stringWithFormat:@"dingdan_item%ld",(long)indexPath.item] title:self.sectionArr0[indexPath.item]];
-            gridcell = cell;
-            
-        }
-        else if (indexPath.section == 1)
-        {
-            MyCenterCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterCollectionCellID forIndexPath:indexPath];
-            [cell setImage:@"gift_icon" title:self.sectionArr1[indexPath.item] subTitle:@"新鲜生鲜水果邀请好友共享！"];
-            gridcell = cell;
-        }
-        else if (indexPath.section == 2)
-        {
-            MyCenterCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterCollectionCellID forIndexPath:indexPath];
-            [cell setImage:[self.sectionArr2[indexPath.item] objectAtIndex:1] title:[self.sectionArr2[indexPath.item] objectAtIndex:0] subTitle:indexPath.item ==0? @"兑换吃、查看优惠券":@""];
-            
-            gridcell = cell;
-        }
+        MyCenterGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterGridCellID forIndexPath:indexPath];
+        [cell setImage:[NSString stringWithFormat:@"dingdan_item%ld",(long)indexPath.item] title:self.sectionArr0[indexPath.item]];
+        gridcell = cell;
+        
     }
-    else
+//    else if (indexPath.section == 1)
+//    {
+//        MyCenterCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterCollectionCellID forIndexPath:indexPath];
+//        [cell setImage:@"gift_icon" title:self.sectionArr1[indexPath.item] subTitle:@"新鲜生鲜水果邀请好友共享！"];
+//        gridcell = cell;
+//    }
+    else if (indexPath.section == 1)
     {
-        if (indexPath.section == 0)
-        {
-            MyCenterGridCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterGridCellID forIndexPath:indexPath];
-            [cell setImage:[NSString stringWithFormat:@"dingdan_item%ld",(long)indexPath.item] title:self.sectionArr0[indexPath.item]];
-            gridcell = cell;
-            
-        }
-        else if (indexPath.section == 1)
-        {
-            MyCenterCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterCollectionCellID forIndexPath:indexPath];
-            [cell setImage:[self.sectionArr2[indexPath.item] objectAtIndex:1] title:[self.sectionArr2[indexPath.item] objectAtIndex:0] subTitle:indexPath.item ==0? @"兑换吃、查看优惠券":@""];
-            
-            gridcell = cell;
-        }
+        MyCenterCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:MyCenterCollectionCellID forIndexPath:indexPath];
+        [cell setImage:[self.sectionArr2[indexPath.item] objectAtIndex:1] title:[self.sectionArr2[indexPath.item] objectAtIndex:0] subTitle:indexPath.item ==0? @"兑换吃、查看优惠券":@""];
+        
+        gridcell = cell;
     }
 
 
@@ -207,7 +177,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     if (indexPath.section == 0) {
         return CGSizeMake(ScreenW/5 , 70);
     }
-    if (indexPath.section == 1 || indexPath.section == 2) {
+    if (indexPath.section == 1 ) {
         return CGSizeMake(ScreenW, 50);
     }
 
@@ -239,106 +209,57 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 }
 #pragma mark - Y间距
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section {
-    if ([DeviceHelper sharedInstance].showWineCategory) {
-        return (section == 2) ? 1 : 0;
-    }
     return (section == 1) ? 1 : 0;
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath{
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     
-    if ([DeviceHelper sharedInstance].showWineCategory)
-    {
-        switch (indexPath.section) {
-            case 0:{
-                if ([self needJumpToLogin]) return;
-                
-                OrderViewController* vc = [OrderViewController new];
-                vc.pageIndex = indexPath.item;
+    switch (indexPath.section) {
+        case 0:{
+            if ([self needJumpToLogin]) return;
+            
+            OrderViewController* vc = [OrderViewController new];
+            vc.pageIndex = indexPath.item;
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+            break;
+//            case 1:{
+//                InvitationViewController* vc = [InvitationViewController new];
+//                [self.navigationController pushViewController:vc animated:YES];
+//            }
+//
+//                break;
+        case 1:{
+            
+            if (indexPath.item == 4) {//设置
+                SettingViewController * vc = [SettingViewController new];
+                [self.navigationController pushViewController:vc animated:YES];
+                return;
+            }
+            if (indexPath.item == 2) {//帮助中心
+                HelpViewController * vc = [HelpViewController new];
+                [self.navigationController pushViewController:vc animated:YES];
+                return;
+            }
+            
+            if ([self needJumpToLogin]) return;
+            
+            if (indexPath.item == 0) {//优惠券
+                CouponViewController * vc = [CouponViewController new];
                 [self.navigationController pushViewController:vc animated:YES];
             }
-                break;
-            case 1:{
-                InvitationViewController* vc = [InvitationViewController new];
+            if (indexPath.item == 1) {//收货地址
+                AddressViewController * vc = [AddressViewController new];
                 [self.navigationController pushViewController:vc animated:YES];
             }
-                
-                break;
-            case 2:{
-                
-                if (indexPath.item == 4) {//设置
-                    SettingViewController * vc = [SettingViewController new];
-                    [self.navigationController pushViewController:vc animated:YES];
-                    return;
-                }
-                if (indexPath.item == 2) {//帮助中心
-                    HelpViewController * vc = [HelpViewController new];
-                    [self.navigationController pushViewController:vc animated:YES];
-                    return;
-                }
-                
-                if ([self needJumpToLogin]) return;
-                
-                if (indexPath.item == 0) {//优惠券
-                    CouponViewController * vc = [CouponViewController new];
-                    [self.navigationController pushViewController:vc animated:YES];
-                }
-                if (indexPath.item == 1) {//收货地址
-                    AddressViewController * vc = [AddressViewController new];
-                    [self.navigationController pushViewController:vc animated:YES];
-                }
 
-            }
-                break;
-                
-            default:
-                break;
         }
+            break;
+            
+        default:
+            break;
     }
-    else
-    {
-        switch (indexPath.section) {
-            case 0:{
-                if ([self needJumpToLogin]) return;
-                
-                OrderViewController* vc = [OrderViewController new];
-                vc.pageIndex = indexPath.item;
-                [self.navigationController pushViewController:vc animated:YES];
-            }
-                break;
-            case 1:{
-                
-                if (indexPath.item == 3) {//设置
-                    SettingViewController * vc = [SettingViewController new];
-                    [self.navigationController pushViewController:vc animated:YES];
-                    return;
-                }
-                
-                if (indexPath.item == 2) {//帮助中心
-                    HelpViewController * vc = [HelpViewController new];
-                    [self.navigationController pushViewController:vc animated:YES];
-                    return;
-                }
-                
-                if ([self needJumpToLogin]) return;
-                
-                if (indexPath.item == 0) {//优惠券
-                    CouponViewController * vc = [CouponViewController new];
-                    [self.navigationController pushViewController:vc animated:YES];
-                }
-                if (indexPath.item == 1) {//收货地址
-                    AddressViewController * vc = [AddressViewController new];
-                    [self.navigationController pushViewController:vc animated:YES];
-                }
-            }
-                break;
-                
-            default:
-                break;
-        }
-    }
-    
 }
 
 
