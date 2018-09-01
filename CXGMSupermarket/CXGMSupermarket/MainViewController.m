@@ -219,9 +219,6 @@
         [self.homeVC setupMainUI:NO];
         return;
     }
-    if ([DeviceHelper sharedInstance].shop) {
-        return;
-    }
     
 
     UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;

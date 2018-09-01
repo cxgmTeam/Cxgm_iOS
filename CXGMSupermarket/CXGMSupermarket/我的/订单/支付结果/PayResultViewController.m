@@ -55,12 +55,12 @@
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         
         if ((![model.msg isEqualToString:@"ok"] || ![model.msg isEqualToString:@"OK"])
-            && wself.requestCount < 2) {
+            && wself.requestCount < 3) {
             wself.requestCount++;
             [wself updateOrderStatus];
         }
     } failure:^(id JSON, NSError *error){
-        if (wself.requestCount < 2) {
+        if (wself.requestCount < 3) {
             wself.requestCount++;
             [wself updateOrderStatus];
         }
