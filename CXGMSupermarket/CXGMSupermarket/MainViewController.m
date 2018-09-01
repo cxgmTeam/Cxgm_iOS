@@ -136,7 +136,6 @@
 #pragma mark-
 - (void)addNotification
 {
-    //这个地方不能总是去刷新
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startLocationCity:) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onWindowHomeNotify:) name:WindowHomePage_Notify object:nil];
