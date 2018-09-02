@@ -38,7 +38,6 @@
     _menuView.alpha = alpha;
     _goodNameLabel.alpha = alpha;
     
-//    _cartBtn.hidden = alpha==1?YES:NO;
 }
 
 - (void)selectButton:(NSInteger)index

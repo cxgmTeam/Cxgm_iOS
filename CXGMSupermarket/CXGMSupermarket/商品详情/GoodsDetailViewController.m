@@ -96,7 +96,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
         make.top.left.right.equalTo(self.view);
         make.height.equalTo(NAVIGATION_BAR_HEIGHT+45);
     }];
-    [self.topToolView setAlphaOfView:self.alpha];
+    [self.topToolView setAlphaOfView:0];
 
     
     
