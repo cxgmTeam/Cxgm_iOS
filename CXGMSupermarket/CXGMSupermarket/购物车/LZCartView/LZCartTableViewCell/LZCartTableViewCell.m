@@ -220,7 +220,7 @@
     [addBtn addTarget:self action:@selector(addBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:addBtn];
     [addBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        make.right.equalTo(-5);
+        make.right.equalTo(self);
         make.bottom.equalTo(priceLabel).offset(5);
         make.width.height.equalTo(40);
     }];
@@ -233,7 +233,7 @@
     numberLabel.font = [UIFont systemFontOfSize:15];
     [bgView addSubview:numberLabel];
     [numberLabel mas_makeConstraints:^(MASConstraintMaker *make){
-        make.right.equalTo(addBtn.left);
+        make.right.equalTo(addBtn.left).offset(5);
         make.bottom.equalTo(priceLabel.bottom).offset(-3);
         make.width.equalTo(30);
         make.height.equalTo(25);
@@ -247,7 +247,7 @@
     [cutBtn addTarget:self action:@selector(cutBtnClick:) forControlEvents:UIControlEventTouchUpInside];
     [bgView addSubview:cutBtn];
     [cutBtn mas_makeConstraints:^(MASConstraintMaker *make){
-        make.right.equalTo(numberLabel.left);
+        make.right.equalTo(numberLabel.left).offset(5);
         make.bottom.equalTo(addBtn);
         make.width.height.equalTo(40);
     }];
@@ -283,7 +283,7 @@
     subtotalLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
     [bgView addSubview:subtotalLabel];
     [subtotalLabel mas_makeConstraints:^(MASConstraintMaker *make){
-        make.right.equalTo(addBtn);
+        make.right.equalTo(-10);
         make.bottom.equalTo(-10);
     }];
     self.subtotalLabel = subtotalLabel;

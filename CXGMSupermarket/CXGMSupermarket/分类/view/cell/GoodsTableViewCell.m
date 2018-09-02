@@ -140,7 +140,7 @@
                           @"amount":[NSString stringWithFormat:@"%.2f",amount],
                           @"goodCode":goods.goodCode.length>0?goods.goodCode:@"",
                           @"goodName":goods.name.length>0?goods.name:@"",
-                          @"goodNum":[NSString stringWithFormat:@"%ld",number],
+                          @"goodNum":[NSString stringWithFormat:@"%ld",(long)number],
                           @"categoryId":goods.productCategoryId.length>0?goods.productCategoryId:@"",
                           @"shopId":goods.shopId.length>0?goods.shopId:[DeviceHelper sharedInstance].shop.id,
                           @"productId":goods.id.length>0?goods.id:@""
@@ -152,7 +152,7 @@
                 UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
                 [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"更新成功！"];
                 
-                self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%ld",number];
+                self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%ld",(long)number];
                 
                 self.numberLabel.text = self.goodsModel.shopCartNum;
                 
@@ -256,7 +256,7 @@
         
         [_numberLabel mas_makeConstraints:^(MASConstraintMaker *make){
             make.bottom.equalTo(-10);
-            make.right.equalTo(-35);
+            make.right.equalTo(-30);
             make.width.equalTo(30);
         }];
         
@@ -269,7 +269,7 @@
         
         [_cutBtn mas_makeConstraints:^(MASConstraintMaker *make){
             make.size.equalTo(CGSizeMake(40, 40));
-            make.right.equalTo(-55);
+            make.right.equalTo(-45);
             make.bottom.equalTo(self);
         }];
         

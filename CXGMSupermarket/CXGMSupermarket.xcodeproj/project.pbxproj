@@ -124,7 +124,6 @@
 		77B33AF620E2688100B4611E /* MXAliPayHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B33AF320E2688100B4611E /* MXAliPayHandler.m */; };
 		77B484EF209EC70300D74DD5 /* SearchGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B484EE209EC70300D74DD5 /* SearchGridCell.m */; };
 		77B484F2209EC72300D74DD5 /* SearchHeadView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77B484F1209EC72300D74DD5 /* SearchHeadView.m */; };
-		77D258D520B2A04100BA83FE /* ThirdCategoryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D258D420B2A04100BA83FE /* ThirdCategoryView.m */; };
 		77D258E220B2F31D00BA83FE /* GoodsCouponController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77D258E120B2F31D00BA83FE /* GoodsCouponController.m */; };
 		77DD80332082409F00A1D080 /* DCScanningViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD80272082409F00A1D080 /* DCScanningViewController.m */; };
 		77DD80342082409F00A1D080 /* flsah_normal@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 77DD80292082409F00A1D080 /* flsah_normal@2x.png */; };
@@ -646,8 +645,6 @@
 		77B484EE209EC70300D74DD5 /* SearchGridCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchGridCell.m; sourceTree = "<group>"; };
 		77B484F0209EC72300D74DD5 /* SearchHeadView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SearchHeadView.h; sourceTree = "<group>"; };
 		77B484F1209EC72300D74DD5 /* SearchHeadView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SearchHeadView.m; sourceTree = "<group>"; };
-		77D258D320B2A04100BA83FE /* ThirdCategoryView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThirdCategoryView.h; sourceTree = "<group>"; };
-		77D258D420B2A04100BA83FE /* ThirdCategoryView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ThirdCategoryView.m; sourceTree = "<group>"; };
 		77D258E020B2F31D00BA83FE /* GoodsCouponController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GoodsCouponController.h; sourceTree = "<group>"; };
 		77D258E120B2F31D00BA83FE /* GoodsCouponController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoodsCouponController.m; sourceTree = "<group>"; };
 		77DD80272082409F00A1D080 /* DCScanningViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCScanningViewController.m; sourceTree = "<group>"; };
@@ -2584,8 +2581,6 @@
 			children = (
 				BE8FE0D920862DD400A089C4 /* head */,
 				BE8FE0D2208629EB00A089C4 /* cell */,
-				77D258D320B2A04100BA83FE /* ThirdCategoryView.h */,
-				77D258D420B2A04100BA83FE /* ThirdCategoryView.m */,
 			);
 			path = view;
 			sourceTree = "<group>";
@@ -3049,7 +3044,6 @@
 				77F83A712070E8CE004E9717 /* AFURLSessionManager.m in Sources */,
 				77DD807120824F7C00A1D080 /* SDCollectionViewCell.m in Sources */,
 				BE44A0902091F348001FE5A6 /* GoodsListingViewController.m in Sources */,
-				77D258D520B2A04100BA83FE /* ThirdCategoryView.m in Sources */,
 				77F83AA62070E8CE004E9717 /* SDWebImageCodersManager.m in Sources */,
 				BECB90132084B03C00170BC6 /* DCKeepNewUserData.m in Sources */,
 				77DD80392082409F00A1D080 /* DCScanIdentifyAreaView.m in Sources */,
