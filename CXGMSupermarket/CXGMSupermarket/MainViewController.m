@@ -302,30 +302,16 @@
     [DeviceHelper sharedInstance].location = loc;
     
     NSLog(@"纬度=%f，经度=%f",loc.coordinate.latitude,loc.coordinate.longitude);
-    NSLog(@"locations.count  %ld",locations.count);
+    NSLog(@"locations.count  %ld",(long)locations.count);
     
-    //判断是不是属于国内范围
-    if (![WGS84TOGCJ02 isLocationOutOfChina:[loc coordinate]]) {
-        //转换后的coord
-        CLLocationCoordinate2D coord = [WGS84TOGCJ02 transformFromWGSToGCJ:[loc coordinate]];
-        
-         NSLog(@"转换后的 纬度=%f，经度=%f",coord.latitude,coord.longitude);
-        
-        [self checkAddress:[NSString stringWithFormat:@"%lf",coord.longitude] dimension:[NSString stringWithFormat:@"%lf",coord.latitude] isLocation:YES];
-    }
-    else
-    {
-        [self checkAddress:[NSString stringWithFormat:@"%lf",loc.coordinate.longitude] dimension:[NSString stringWithFormat:@"%lf",loc.coordinate.latitude] isLocation:YES];
-    }
     [self.locationManager stopUpdatingLocation];
-    
     // 保存 Device 的现语言
     NSMutableArray *userDefaultLanguages = [[NSUserDefaults standardUserDefaults]
                                             objectForKey:@"AppleLanguages"];
     // 强制 成 简体中文
     [[NSUserDefaults standardUserDefaults] setObject:[NSArray arrayWithObjects:@"zh-hans",nil]
                                               forKey:@"AppleLanguages"];
-    WEAKSELF;
+    typeof(self) __weak wself = self;;
     CLGeocoder *geocoder = [[CLGeocoder alloc] init];
     [geocoder reverseGeocodeLocation:loc
                    completionHandler:^(NSArray *placemarks, NSError *error){
@@ -334,15 +320,30 @@
                                NSLog(@"placemark.addressDictionary  %@",place.addressDictionary);
 
                                [DeviceHelper sharedInstance].place = place;
-                               
-                               [weakSelf.homeVC setNoticeLocation];
-                               
-                               NSString *city = place.locality;
-                               NSString *administrativeArea = place.administrativeArea;
-                               if ([city isEqualToString:administrativeArea]) {
 
-                               }
+//                               [wself.homeVC setNoticeLocation];
+                               
+//                               NSString *city = place.locality;
+//                               NSString *administrativeArea = place.administrativeArea;
+//                               if ([city isEqualToString:administrativeArea]) {
+//
+//                               }
                            }
+                           
+                           //判断是不是属于国内范围
+                           if (![WGS84TOGCJ02 isLocationOutOfChina:[loc coordinate]]) {
+                               //转换后的coord
+                               CLLocationCoordinate2D coord = [WGS84TOGCJ02 transformFromWGSToGCJ:[loc coordinate]];
+                               
+                               NSLog(@"转换后的 纬度=%f，经度=%f",coord.latitude,coord.longitude);
+                               
+                               [wself checkAddress:[NSString stringWithFormat:@"%lf",coord.longitude] dimension:[NSString stringWithFormat:@"%lf",coord.latitude] isLocation:YES];
+                           }
+                           else
+                           {
+                               [wself checkAddress:[NSString stringWithFormat:@"%lf",loc.coordinate.longitude] dimension:[NSString stringWithFormat:@"%lf",loc.coordinate.latitude] isLocation:YES];
+                           }
+                           
                        }
                        // 还原Device 的语言
                        [[NSUserDefaults standardUserDefaults] setObject:userDefaultLanguages forKey:@"AppleLanguages"];
@@ -379,7 +380,7 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    NSLog(@"buttonIndex  %ld",buttonIndex);
+
     if (buttonIndex == 1) {
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:UIApplicationOpenSettingsURLString]];
     }

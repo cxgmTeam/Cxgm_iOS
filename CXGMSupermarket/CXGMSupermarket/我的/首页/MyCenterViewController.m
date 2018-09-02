@@ -44,20 +44,8 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     [super viewDidLoad];
     
     self.sectionArr0 = @[@"全部订单",@"待付款",@"待配送",@"待收货",@"轻松退"];
-//    if ([DeviceHelper sharedInstance].showWineCategory) {
-//        self.sectionArr1 = @[@"邀请有礼"];
-//        self.sectionArr2 = @[@[@"优惠券",@"myCenter_item0"],
-//                             @[@"收货地址",@"myCenter_item1"],
-//                             @[@"帮助中心",@"myCenter_item2"],
-//                             @[@"联系客服",@"myCenter_item3"],
-//                             @[@"设置",@"myCenter_item4"]];
-//    }else{
-//        self.sectionArr2 = @[@[@"优惠券",@"myCenter_item0"],
-//                             @[@"收货地址",@"myCenter_item1"],
-//                             @[@"帮助中心",@"myCenter_item2"],
-//                             @[@"设置",@"myCenter_item4"]];
-//    }
-    
+
+//    self.sectionArr1 = @[@"邀请有礼"];
     self.sectionArr2 = @[@[@"优惠券",@"myCenter_item0"],
                          @[@"收货地址",@"myCenter_item1"],
                          @[@"帮助中心",@"myCenter_item2"],
@@ -104,9 +92,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 
 #pragma mark - <UICollectionViewDataSource>
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-//    if ([DeviceHelper sharedInstance].showWineCategory){
-//       return 3;
-//    }
+
     return 2;
 }
 
@@ -238,14 +224,6 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
 //                break;
         case 1:{
             
-            if (([DeviceHelper sharedInstance].showWineCategory && indexPath.item == 4)
-                ||(![DeviceHelper sharedInstance].showWineCategory && indexPath.item == 3 ))//设置
-            {
-               SettingViewController * vc = [SettingViewController new];
-               [self.navigationController pushViewController:vc animated:YES];
-               return;
-            }
-            
             if (indexPath.item == 2) {//帮助中心
                 HelpViewController * vc = [HelpViewController new];
                 [self.navigationController pushViewController:vc animated:YES];
@@ -260,6 +238,14 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
                 } else {
                     [[UIApplication sharedApplication] openURL:url];
                 }
+                return;
+            }
+            
+            if (indexPath.item == 4)//设置
+            {
+                SettingViewController * vc = [SettingViewController new];
+                [self.navigationController pushViewController:vc animated:YES];
+                return;
             }
             
             if ([self needJumpToLogin]) return;

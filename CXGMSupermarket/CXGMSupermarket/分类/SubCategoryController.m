@@ -56,9 +56,7 @@ static CGFloat TopBtnWidth = 60;
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     self.dictionary = [NSMutableDictionary dictionary];
-
     
     self.leftTableView.backgroundColor = RGB(0xf7, 0xf8, 0xf7);
     [self.leftTableView mas_makeConstraints:^(MASConstraintMaker *make){
@@ -109,17 +107,21 @@ static CGFloat TopBtnWidth = 60;
     
     if (self.thirdCategorys.count == 0)
     {
-         self.topScrollView.frame = CGRectMake(93, 0, self.topScrollWidth, 0);
-        
-        [self.rightTableView mas_updateConstraints:^(MASConstraintMaker *make){
+        self.topScrollView.frame = CGRectMake(93, 0, self.topScrollWidth, 0);
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] < 11) {
+            self.rightTableView.contentInset = UIEdgeInsetsMake(-40, 0, 0, 0);
+        }
+        [self.rightTableView updateConstraints:^(MASConstraintMaker *make){
             make.top.equalTo(self.topScrollView.bottom);
         }];
     }
     else
     {
         self.topScrollView.frame = CGRectMake(93, 0, self.topScrollWidth, 40);
-        
-        [self.rightTableView mas_updateConstraints:^(MASConstraintMaker *make){
+        if ([[[UIDevice currentDevice] systemVersion] floatValue] < 11) {
+            self.rightTableView.contentInset = UIEdgeInsetsMake(-40, 0, 0, 0);
+        }
+        [self.rightTableView updateConstraints:^(MASConstraintMaker *make){
             make.top.equalTo(self.topScrollView.bottom);
         }];
         
@@ -179,7 +181,8 @@ static CGFloat TopBtnWidth = 60;
                 if ([goods.productCategoryThirdName isEqualToString:category.name]) {
                     [array addObject:goods];
                 }
-                if (j == list.count-1) {
+                //3级分类下面没有商品，则不显示
+                if (j == list.count-1 && array.count > 0) {
                     [self.dictionary setObject:array forKey:category.name];
                 }
                 
@@ -190,6 +193,17 @@ static CGFloat TopBtnWidth = 60;
             
             if (i == self.thirdCategorys.count-1) {
                 [array addObjectsFromArray:tempArray];
+                
+                //移除掉不含有商品的3级分类
+                NSArray* arr = [self.dictionary allKeys];
+                NSMutableArray* mutArr = [NSMutableArray array];
+                for (CategoryModel* model in self.thirdCategorys) {
+                    if ([arr containsObject:model.name]) {
+                        [mutArr addObject:model];
+                    }
+                }
+                self.thirdCategorys = mutArr;
+                [self setupThirdCategory];
                 
                 [self.rightTableView reloadData];
             }
@@ -264,10 +278,12 @@ static CGFloat TopBtnWidth = 60;
     [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIFindThirdCategory]  token:nil parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         if ([model.data isKindOfClass:[NSArray class]]) {
+            
             self.thirdCategorys = [CategoryModel arrayOfModelsFromDictionaries:(NSArray *)model.data error:nil];
             
-           [wself setupThirdCategory];
-            
+            if (self.thirdCategorys.count == 0) {
+                [wself setupThirdCategory];
+            }
         }
         
     } failure:^(id JSON, NSError *error){

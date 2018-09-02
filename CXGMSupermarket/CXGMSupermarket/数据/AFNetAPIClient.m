@@ -58,7 +58,7 @@
             aString = [aString stringByReplacingOccurrencesOfString:@"amp;" withString:@""];
             aString=[aString stringByReplacingOccurrencesOfString:@"&#183;" withString:@"."];
             
-            NSLog(@"\n\n%@ \n\n%@\n\n",[NSString stringWithFormat:@"%@",task.response.URL],aString);
+//            NSLog(@"\n\n%@ \n\n%@\n\n",[NSString stringWithFormat:@"%@",task.response.URL],aString);
             
             DataModel * model = [[DataModel alloc] initWithString:aString error:nil];
             
@@ -105,7 +105,7 @@
             aString = [aString stringByReplacingOccurrencesOfString:@"&ldquo;" withString:@"\""];
             aString = [aString stringByReplacingOccurrencesOfString:@"&rdquo;" withString:@"\""];
             
-//            NSLog(@"\n\n%@ \n%@\n\n%@\n\n",[NSString stringWithFormat:@"%@",task.response.URL],parameters,aString);
+            NSLog(@"\n\n%@ \n%@\n\n%@\n\n",[NSString stringWithFormat:@"%@",task.response.URL],parameters,aString);
             
             DataModel * model = [[DataModel alloc] initWithString:aString error:nil];
             if ([model.code  integerValue] == 403){
