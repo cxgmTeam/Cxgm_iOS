@@ -512,16 +512,16 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         self.isToday = YES;
         self.dateString = [NSString stringWithFormat:@"%zd年%zd月%zd日",[currentComps year],[currentComps month],[currentComps day]];
         
-        NSInteger duration = 21-9;
+        NSInteger duration = 21-8;
         
         for (NSInteger i = 1; i < duration; i ++) {
             
-            NSString *string = [NSString stringWithFormat:@"%zd:00-%zd:00",8+i,8+i+1];
+            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",8+i,8+i+1];
             [self.timeArray addObject:string];
         }
     }
     
-    if (9 <= hour  && hour < 21) {//今天
+    if (9 <= hour  && hour < 20) {//今天
         self.isToday = YES;
         self.dateString = [NSString stringWithFormat:@"%zd年%zd月%zd日",[currentComps year],[currentComps month],[currentComps day]];
         
@@ -529,12 +529,12 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         
         for (NSInteger i = 1; i < duration; i ++) {
             
-            NSString *string = [NSString stringWithFormat:@"%zd:00-%zd:00",hour+i,hour+i+1];
+            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",hour+i,hour+i+1];
             [self.timeArray addObject:string];
         }
     }
     
-    if (21 <= hour  && hour < 24) {//明天
+    if (20 <= hour  && hour < 24) {//明天
         
         NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
         NSDateComponents *comps = nil;
@@ -550,11 +550,11 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         self.dateString = [NSString stringWithFormat:@"%zd年%zd月%zd日",[currentComps year],[currentComps month],[currentComps day]];
         
         
-        NSInteger duration = 21-9;
+        NSInteger duration = 21-8;
         
         for (NSInteger i = 1; i < duration; i ++) {
             
-            NSString *string = [NSString stringWithFormat:@"%zd:00-%zd:00",8+i,8+i+1];
+            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",8+i,8+i+1];
             [self.timeArray addObject:string];
         }
     }

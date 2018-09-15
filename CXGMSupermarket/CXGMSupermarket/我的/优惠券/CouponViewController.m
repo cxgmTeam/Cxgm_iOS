@@ -20,6 +20,9 @@
 
 @property(nonatomic,strong)UIButton* leftBtn;
 @property(nonatomic,strong)UIButton* rightBtn;
+
+@property(nonatomic,strong)CouponListViewController* leftVC;
+@property(nonatomic,strong)CouponListViewController* rightVC;
 @end
 
 @implementation CouponViewController
@@ -46,12 +49,39 @@
         [_scrollView addSubview:vc.view];
         vc.view.frame = CGRectMake(i*ScreenW, 0, ScreenW, _scrollView.bounds.size.height);
         [self addChildViewController:vc];
+        if (i == 0) {
+            self.leftVC = vc;
+        }else{
+            self.rightVC = vc;
+        }
     }
-    
-    
+}
 
+- (void)exchangeCoupons:(NSString *)code
+{
+    if (code.length == 0) return;
+    
+    NSDictionary* dic = @{@"couponCode":code};
+    
+    typeof(self) __weak wself = self;
+    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIExchangeCoupons] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+
+        if ([model.code isEqualToString:@"200"]) {
+            if (!model.data) {
+                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"二维码已失效"];
+            }else{
+                [wself.leftVC refreshList];
+                [wself.rightVC refreshList];
+            }
+        }
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
     
 }
+
 
 - (void)clickButton:(UIButton *)button
 {

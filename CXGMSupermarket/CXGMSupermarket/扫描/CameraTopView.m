@@ -46,14 +46,14 @@
 //        button;
 //    });
 //
-//    _rightRItemButton = ({
-//        UIButton * button = [UIButton new];
-//        [button setImage:[UIImage imageNamed:@"scan_photo_album"] forState:UIControlStateNormal];
-//        [button addTarget:self action:@selector(rightRButtonItemClick) forControlEvents:UIControlEventTouchUpInside];
-//        button;
-//    });
+    _rightRItemButton = ({
+        UIButton * button = [UIButton new];
+        [button setImage:[UIImage imageNamed:@"scan_photo_album"] forState:UIControlStateNormal];
+        [button addTarget:self action:@selector(rightRButtonItemClick) forControlEvents:UIControlEventTouchUpInside];
+        button;
+    });
 //    [self addSubview:_rightItemButton];
-//    [self addSubview:_rightRItemButton];
+    [self addSubview:_rightRItemButton];
     [self addSubview:_leftItemButton];
 }
 
@@ -77,12 +77,12 @@
 //        make.width.equalTo(35);
 //    }];
 //
-//    [_rightRItemButton mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerY.equalTo(self.leftItemButton.mas_centerY);
-//        make.right.equalTo(self.rightItemButton.mas_left).offset(-10);
-//        make.height.equalTo(35);
-//        make.width.equalTo(35);
-//    }];
+    [_rightRItemButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.leftItemButton.centerY);
+        make.right.equalTo(-10);
+        make.height.equalTo(44);
+        make.width.equalTo(44);
+    }];
     
 }
 

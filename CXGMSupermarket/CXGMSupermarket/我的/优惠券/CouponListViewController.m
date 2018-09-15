@@ -51,11 +51,7 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
         if ([model.listModel.list isKindOfClass:[NSArray class]]) {
             
             NSArray* array = [CouponsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
-//            for (CouponsModel * model in array) {
-//                if ([model.status boolValue] == self.isExpire) {
-//                    [wself.listArray addObject:model];
-//                }
-//            }
+
             [wself.listArray addObjectsFromArray:array];
             [wself.collectionView reloadData];
             
@@ -98,22 +94,17 @@ static NSString *const CouponCollectionViewCellID = @"CouponCollectionViewCell";
     
     [_textField resignFirstResponder];
     
-    NSDictionary* dic = @{@"couponCode":_textField.text};
-    
-    typeof(self) __weak wself = self;
-    [AFNetAPIClient GET:[HomeBaseURL stringByAppendingString:APIExchangeCoupons] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
-        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
-        if (!model.data) {
-            [MBProgressHUD MBProgressHUDWithView:self.view Str:@"二维码已失效"];
-        }else{
-            wself.pageNum = 1;
-            [wself findCoupons];
-        }
-    } failure:^(id JSON, NSError *error){
-        
-    }];
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(exchangeCoupons:)]) {
+        [self.delegate performSelector:@selector(exchangeCoupons:) withObject:_textField.text];
+    }
 }
+
+- (void)refreshList
+{
+    self.pageNum = 1;
+    [self findCoupons];
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];

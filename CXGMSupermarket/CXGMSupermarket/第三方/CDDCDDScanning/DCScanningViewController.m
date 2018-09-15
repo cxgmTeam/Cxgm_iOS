@@ -305,18 +305,18 @@
                 
                 [weakSelf dismissViewControllerAnimated:YES completion:nil];
                 
-                [DCScanTool setUpAlterViewWith:self WithReadContent:[NSString stringWithFormat:@"扫描结果为：%@",arrayM.copy] WithLeftMsg:@"好的" LeftBlock:^{
-                    
+//                [DCScanTool setUpAlterViewWith:self WithReadContent:[NSString stringWithFormat:@"扫描结果为：%@",arrayM.copy] WithLeftMsg:@"好的" LeftBlock:^{
+                
                     if (self.scanDelegate && [self.scanDelegate respondsToSelector:@selector(DCScanningSucessBackWithInfor:)]) {
 
-                        [weakSelf.scanDelegate DCScanningSucessBackWithInfor:arrayM.copy];
-                        
                         [weakSelf stopDeviceScanning]; //停止扫描
                         
-                        [weakSelf.navigationController popViewControllerAnimated:YES];
+                        [weakSelf.scanDelegate DCScanningSucessBackWithInfor:arrayM[0]];
+                        
+//                        [weakSelf.navigationController popViewControllerAnimated:YES];
                     }
                     
-                } RightMsg:nil RightBliock:nil];
+//                } RightMsg:nil RightBliock:nil];
                 
             }else{
                 

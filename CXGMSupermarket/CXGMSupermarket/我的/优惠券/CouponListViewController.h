@@ -12,4 +12,6 @@
 @property(nonatomic,assign)BOOL isExpire;//过期
 
 @property(nonatomic,weak)id delegate;
+
+- (void)refreshList;
 @end

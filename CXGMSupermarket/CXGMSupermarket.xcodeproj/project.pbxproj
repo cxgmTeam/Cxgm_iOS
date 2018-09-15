@@ -152,6 +152,7 @@
 		77DD80A6208355A000A1D080 /* DCZuoWenRightButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD80A1208355A000A1D080 /* DCZuoWenRightButton.m */; };
 		77DD80A7208355A000A1D080 /* DCUpDownButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD80A2208355A000A1D080 /* DCUpDownButton.m */; };
 		77DD80A8208355A000A1D080 /* DCCustionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 77DD80A3208355A000A1D080 /* DCCustionButton.m */; };
+		77E3893D214D54C0007B0784 /* scan_photo_album.png in Resources */ = {isa = PBXBuildFile; fileRef = 77E3893C214D54C0007B0784 /* scan_photo_album.png */; };
 		77F839A12070E375004E9717 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F839A02070E375004E9717 /* ViewController.m */; };
 		77F839A42070E375004E9717 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 77F839A22070E375004E9717 /* Main.storyboard */; };
 		77F839A62070E375004E9717 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77F839A52070E375004E9717 /* Assets.xcassets */; };
@@ -697,6 +698,7 @@
 		77DD80A2208355A000A1D080 /* DCUpDownButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCUpDownButton.m; sourceTree = "<group>"; };
 		77DD80A3208355A000A1D080 /* DCCustionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCCustionButton.m; sourceTree = "<group>"; };
 		77DD80A4208355A000A1D080 /* DCLIRLButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCLIRLButton.h; sourceTree = "<group>"; };
+		77E3893C214D54C0007B0784 /* scan_photo_album.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = scan_photo_album.png; sourceTree = "<group>"; };
 		77F839992070E375004E9717 /* CXGMSupermarket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CXGMSupermarket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77F8399C2070E375004E9717 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		77F8399F2070E375004E9717 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -1787,6 +1789,7 @@
 		77DD80262082409F00A1D080 /* CDDCDDScanning */ = {
 			isa = PBXGroup;
 			children = (
+				77E3893C214D54C0007B0784 /* scan_photo_album.png */,
 				77DD80272082409F00A1D080 /* DCScanningViewController.m */,
 				77DD80282082409F00A1D080 /* DCScanTool.h */,
 				77DD80292082409F00A1D080 /* flsah_normal@2x.png */,
@@ -2964,6 +2967,7 @@
 				779BA054212BF143009854BE /* business_info.jpg in Resources */,
 				BEC90F99207F809700B5E609 /* cart_addBtn_nomal@2x.png in Resources */,
 				BE677BE1208763320085CBA9 /* PingFang Regular.ttf in Resources */,
+				77E3893D214D54C0007B0784 /* scan_photo_album.png in Resources */,
 				77559BE520DCD71B00798AD0 /* UMCommonLog.bundle in Resources */,
 				77F839A62070E375004E9717 /* Assets.xcassets in Resources */,
 				77DD80342082409F00A1D080 /* flsah_normal@2x.png in Resources */,
