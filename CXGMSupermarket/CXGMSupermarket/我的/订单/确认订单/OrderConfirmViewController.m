@@ -507,6 +507,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     NSInteger hour = [currentComps hour];
     
+    NSLog(@"HOUR HOUR %d",hour);
+    
     if (0 <= hour && hour < 9 ) {//今天
         
         self.isToday = YES;
@@ -516,7 +518,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         
         for (NSInteger i = 1; i < duration; i ++) {
             
-            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",8+i,8+i+1];
+            NSString *string = [NSString stringWithFormat:@"%d:00-%d:00",8+i,8+i+1];
             [self.timeArray addObject:string];
         }
     }
@@ -529,7 +531,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         
         for (NSInteger i = 1; i < duration; i ++) {
             
-            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",hour+i,hour+i+1];
+            NSString *string = [NSString stringWithFormat:@"%d:00-%d:00",hour+i,hour+i+1];
             [self.timeArray addObject:string];
         }
     }

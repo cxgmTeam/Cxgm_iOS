@@ -166,7 +166,8 @@
             _goodsView.showAdvertiseDetailVC = ^(AdvertisementModel* ad){
                 if ([ad.type isEqualToString:@"1"] && [ad.notifyUrl length] > 0) {
                     WebViewController* vc = [WebViewController new];
-                    vc.urlString = ad.notifyUrl;
+                    NSString* url = [NSString stringWithFormat:@"%@?token=%@",ad.notifyUrl,[UserInfoManager sharedInstance].userInfo.token];
+                    vc.urlString = url;
                     [wself.navigationController pushViewController:vc animated:YES];
                 }
                 if ([ad.type isEqualToString:@"2"]) {

@@ -77,6 +77,7 @@
 		7770377420EB2BB70000254D /* RefundAmountViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7770377320EB2BB70000254D /* RefundAmountViewCell.m */; };
 		7770377720EB45C40000254D /* NoteInfoViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7770377620EB45C40000254D /* NoteInfoViewCell.m */; };
 		7776D5F520C12C84008DE606 /* NoAddressTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7776D5F420C12C84008DE606 /* NoAddressTableCell.m */; };
+		7779E11A2150F20E0066F301 /* OCJSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7779E1192150F20E0066F301 /* OCJSHelper.m */; };
 		777A302A20DB7D5E003F14C1 /* UMPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777A302720DB7D5E003F14C1 /* UMPush.framework */; };
 		777B48CA20B59C0E0048CE78 /* PaymentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 777B48C920B59C0E0048CE78 /* PaymentButton.m */; };
 		7783F2002095CEFA00338459 /* RemainTimeHintHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F1FF2095CEFA00338459 /* RemainTimeHintHead.m */; };
@@ -485,6 +486,8 @@
 		7770377620EB45C40000254D /* NoteInfoViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NoteInfoViewCell.m; sourceTree = "<group>"; };
 		7776D5F320C12C84008DE606 /* NoAddressTableCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NoAddressTableCell.h; sourceTree = "<group>"; };
 		7776D5F420C12C84008DE606 /* NoAddressTableCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NoAddressTableCell.m; sourceTree = "<group>"; };
+		7779E1182150F20E0066F301 /* OCJSHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OCJSHelper.h; sourceTree = "<group>"; };
+		7779E1192150F20E0066F301 /* OCJSHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OCJSHelper.m; sourceTree = "<group>"; };
 		777A302720DB7D5E003F14C1 /* UMPush.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = UMPush.framework; sourceTree = "<group>"; };
 		777A302B20DB8336003F14C1 /* CXGMSupermarket.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CXGMSupermarket.entitlements; sourceTree = "<group>"; };
 		777B48C820B59C0E0048CE78 /* PaymentButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaymentButton.h; sourceTree = "<group>"; };
@@ -1425,6 +1428,8 @@
 				775D358420B3B5780047F9EE /* cell */,
 				775D357E20B3B3D40047F9EE /* MessageViewController.h */,
 				775D357F20B3B3D40047F9EE /* MessageViewController.m */,
+				7779E1182150F20E0066F301 /* OCJSHelper.h */,
+				7779E1192150F20E0066F301 /* OCJSHelper.m */,
 				7754862620F333E300CFBE52 /* WebViewController.h */,
 				7754862720F333E300CFBE52 /* WebViewController.m */,
 			);
@@ -3116,6 +3121,7 @@
 				77F83AB32070E8CE004E9717 /* UIImage+GIF.m in Sources */,
 				77F83A6D2070E8CE004E9717 /* AFNetworkReachabilityManager.m in Sources */,
 				BE9769D82072505C00783217 /* MJRefreshBackFooter.m in Sources */,
+				7779E11A2150F20E0066F301 /* OCJSHelper.m in Sources */,
 				BE40AFAD208F5EC600D4B690 /* OrderViewController.m in Sources */,
 				BECB90182084B03C00170BC6 /* Foundation+Log.m in Sources */,
 				77F83AAA2070E8CE004E9717 /* SDWebImageFrame.m in Sources */,

@@ -14,6 +14,11 @@
 
 @implementation RefundAmountViewCell
 
+- (void)setOrder:(OrderModel *)order
+{
+    self.moneyLabel.text = [NSString stringWithFormat:@"¥%.2f",[order.orderAmount floatValue]];
+}
+
 - (id)initWithFrame:(CGRect)frame{
     if (self = [super initWithFrame:frame]) {
         

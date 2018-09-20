@@ -293,7 +293,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
     {
         if ([self.orderDetail.status intValue] == STATUS_WAIT_REFUND || [self.orderDetail.status intValue] == STATUS_REFUNDED){
             RefundAmountViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:RefundAmountViewCellID forIndexPath:indexPath];
-
+            cell.order = self.orderDetail;
             gridcell = cell;
         }else{
             OrderCustomerViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderCustomerViewCellID forIndexPath:indexPath];

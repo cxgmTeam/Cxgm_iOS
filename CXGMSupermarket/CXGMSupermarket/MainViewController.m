@@ -199,14 +199,15 @@
             }else{
                 self.cartItem.badgeValue = [NSString stringWithFormat:@"%@",model.listModel.total];
             }
-
+        }
+        
+        if ([model.listModel.list isKindOfClass:[NSArray class]]) {
+            [DeviceHelper sharedInstance].shopCartList = [GoodsModel arrayOfModelsFromDictionaries:(NSArray *)model.listModel.list error:nil];
         }
     } failure:^(id JSON, NSError *error){
 
     }];
 }
-
-
 
 #pragma mark- 定位
 

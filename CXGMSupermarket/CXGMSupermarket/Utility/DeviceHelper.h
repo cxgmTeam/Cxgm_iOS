@@ -29,6 +29,8 @@
 
 @property (nonatomic, assign) BOOL showWineCategory ;//去掉列表中的"中外名酒"分类  NO是不显示 YES是显示
 
+@property (nonatomic, strong) NSArray *  shopCartList;//缓存购物车
+
 + (instancetype)sharedInstance;
 
 @end

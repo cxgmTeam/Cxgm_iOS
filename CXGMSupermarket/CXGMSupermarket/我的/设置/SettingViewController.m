@@ -41,7 +41,7 @@
         UIButton* button = [UIButton new];
         button.layer.cornerRadius = 4;
         button.backgroundColor = [UIColor colorWithRed:0/255.0 green:168/255.0 blue:98/255.0 alpha:1/1.0];
-        [button setTitle:@"注销账号" forState:UIControlStateNormal];
+        [button setTitle:@"退出登录" forState:UIControlStateNormal];
         [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         button.titleLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:16];
         [view addSubview:button];
@@ -71,7 +71,7 @@
 
 - (void)onTapButton:(id)sender
 {
-    UIAlertController *alter = [UIAlertController alertControllerWithTitle:nil message:@"确认注销账号" preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alter = [UIAlertController alertControllerWithTitle:nil message:@"确认退出登录" preferredStyle:UIAlertControllerStyleAlert];
     
     WEAKSELF;
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){
