@@ -11,4 +11,5 @@
 @interface GoodsCashViewCell : UICollectionViewCell
 @property(nonatomic,strong)UILabel* totalAmountLabel;
 @property(nonatomic,strong)UILabel* preferentialLabel;
+@property(nonatomic,strong)UILabel* couponsLabel;
 @end

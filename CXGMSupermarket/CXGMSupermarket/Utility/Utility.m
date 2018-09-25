@@ -254,7 +254,7 @@ BOOL pnpoly (int nvert, float *vertx, float *verty, float testx, float testy) {
         if (data)
         {
             NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-            NSLog(@"\n\nCXGMPostRequest %@\n dic = %@",requestUrl,dic);
+//            NSLog(@"\n\nCXGMPostRequest %@\n dic = %@",requestUrl,dic);
             if ([[dic objectForKey:@"code"] integerValue] == 200) {
                 if (success) {
                     success(dic,nil);

@@ -13,6 +13,7 @@
 #import "OrderBillViewCell.h"
 #import "OrderCustomerViewCell.h"
 #import "NoteInfoViewCell.h"
+#import "ShippingModeCell.h"
 //head
 #import "RemainTimeHintHead.h"
 #import "OrderGoodsInfoHead.h"
@@ -57,13 +58,17 @@
 @property (strong,  nonatomic)NSMutableArray * timeArray;
 @property (strong , nonatomic)NSString* dateString;
 @property (assign , nonatomic)BOOL isToday;
+
+@property(strong , nonatomic)PostageItem * postage;
+@property(strong , nonatomic)NSString * shippingMode;//配送方式
+@property(assign , nonatomic)NSString * shippingCharge;//运费
 @end
 
 /* cell */
 static NSString *const GoodsCashViewCellID = @"GoodsCashViewCell";
 static NSString *const OrderCouponViewCellID = @"OrderCouponViewCell";
 static NSString *const OrderBillViewCellID = @"OrderBillViewCell";
-
+static NSString *const ShippingModeCellID = @"ShippingModeCell";
 static NSString *const OrderCustomerViewCellID = @"OrderCustomerViewCell";
 static NSString *const NoteInfoViewCellID = @"NoteInfoViewCell";
 /* head */
@@ -91,6 +96,8 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         make.bottom.equalTo(self.bottomView.top);
     }];
     
+    self.shippingMode = @"配送";
+    self.shippingCharge = @"0.00";
     
     [self calculateDeliveryTime];
     
@@ -127,13 +134,21 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     }
     //    orderAmount 实付金额   totalAmount 订单总金额  priceExpression 订单优惠
     //    orderAmount = totalAmount - priceExpression + 运费
-    
-    //这个地方还要减去优惠券的
-    
-    NSString* orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+Freight_Charges];
-    
+    NSString*  orderAmount = self.moneyDic[@"orderAmount"];
     if (self.coupons) {
-        orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+Freight_Charges-[self.coupons.priceExpression floatValue]];
+        orderAmount = [NSString stringWithFormat:@"%.2f",[orderAmount floatValue]-[self.coupons.priceExpression floatValue]];
+    }
+    if (self.postage) {
+        if ([orderAmount floatValue] >= [self.postage.satisfyMoney floatValue]) {
+            self.shippingCharge = @"0.00";
+        }else{
+            if ([self.shippingMode isEqualToString:@"配送"]) {
+                self.shippingCharge = self.postage.reduceMoney;
+                orderAmount = [NSString stringWithFormat:@"%.2f",[orderAmount floatValue]+[self.shippingCharge floatValue]];
+            }else{
+                self.shippingCharge = @"0.00";
+            }
+        }
     }
     
     [self.orderParam setObject:self.moneyDic[@"totalAmount"] forKey:@"totalAmount"];
@@ -171,7 +186,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     }
     
     [self.orderParam setObject:[DeviceHelper sharedInstance].shop.id forKey:@"storeId"];
-    
+    //配送方式  自取，配送
+    [self.orderParam setObject:self.shippingMode forKey:@"extractionType"];
+    //配送费
+    [self.orderParam setObject:self.shippingCharge forKey:@"postage"];
 
     typeof(self) __weak wself = self;
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIAddOrder] token:[UserInfoManager sharedInstance].userInfo.token parameter:self.orderParam success:^(id JSON, NSError *error){
@@ -289,6 +307,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     [self.orderParam setObject:array2 forKey:@"productList"];
     
     
+    typeof(self) __weak wself = self;
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APICheckCoupon] token:[UserInfoManager sharedInstance].userInfo.token parameter:param success:^(id JSON, NSError *error){
         
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
@@ -303,20 +322,69 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             }else{
                 self.coupons = nil;
             }
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 
                 if (self.coupons) {
-                    NSString*  orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+Freight_Charges-[self.coupons.priceExpression floatValue]];
-                    self.moneyLabel.text = [NSString stringWithFormat:@"¥%@",orderAmount];
+                    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:3]]];
                 }
-                
-                [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]]];
+
+                [wself getPostage];
+            
             });
         }
         
     } failure:^(id JSON, NSError *error){
 
     }];
+}
+
+- (void)getPostage
+{
+    NSDictionary* dic = @{
+                @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
+                };
+    
+    
+    UserInfo* userInfo = [UserInfoManager sharedInstance].userInfo;
+    
+    typeof(self) __weak wself = self;
+    [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIOrderPostage] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        
+        DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
+        if ([model.data isKindOfClass:[NSDictionary class]]) {
+            self.postage = [[PostageItem alloc] initWithDictionary:(NSDictionary *)model.data error:nil];
+        }
+        
+        [wself calculateOrderAmount];
+        
+    } failure:^(id JSON, NSError *error){
+        
+    }];
+}
+
+- (void)calculateOrderAmount
+{
+    NSString*  orderAmount = self.moneyDic[@"orderAmount"];
+    if (self.coupons) {
+        orderAmount = [NSString stringWithFormat:@"%.2f",[orderAmount floatValue]-[self.coupons.priceExpression floatValue]];
+    }
+    if (self.postage) {
+        if ([orderAmount floatValue] >= [self.postage.satisfyMoney floatValue]) {
+            self.shippingCharge = @"0.00";
+        }else{
+            if ([self.shippingMode isEqualToString:@"配送"]) {
+                self.shippingCharge = self.postage.reduceMoney;
+                orderAmount = [NSString stringWithFormat:@"%.2f",[orderAmount floatValue]+[self.shippingCharge floatValue]];
+            }else{
+                self.shippingCharge = @"0.00";
+            }
+        }
+    }
+    self.moneyLabel.text = [NSString stringWithFormat:@"¥%@",orderAmount];
+    
+    [self.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]]];
 }
 
 - (void)onTapButton:(id)sender
@@ -327,7 +395,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 
 #pragma mark-
 - (NSInteger) numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
-    return 4;
+    return 5;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
@@ -342,12 +410,21 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         gridcell = cell;
         
     }else if (indexPath.section == 1) {
+        ShippingModeCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ShippingModeCellID forIndexPath:indexPath];
+        typeof(self) __weak wself = self;
+        cell.selectShippingMode = ^(NSString * mode){
+            self.shippingMode = mode;
+            [wself calculateOrderAmount];
+        };
+        gridcell = cell;
+    }else if (indexPath.section == 2) {
         GoodsCashViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:GoodsCashViewCellID forIndexPath:indexPath];
         cell.totalAmountLabel.text = [NSString stringWithFormat:@"¥%@",self.moneyDic[@"totalAmount"]];
         cell.preferentialLabel.text = [NSString stringWithFormat:@"¥%@",self.moneyDic[@"preferential"]];
+        cell.couponsLabel.text = [NSString stringWithFormat:@"¥%.2f",[self.shippingCharge floatValue]];
         gridcell = cell;
     }
-    else if (indexPath.section == 2) {
+    else if (indexPath.section == 3) {
         OrderCouponViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderCouponViewCellID forIndexPath:indexPath];
         cell.coupons = self.coupons;
         gridcell = cell;
@@ -356,7 +433,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 //        OrderBillViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:OrderBillViewCellID forIndexPath:indexPath];
 //        gridcell = cell;
 //    }
-    else if (indexPath.section == 3) {
+    else if (indexPath.section == 4) {
         NoteInfoViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NoteInfoViewCellID forIndexPath:indexPath];
         cell.textField.delegate = self;
         self.textField = cell.textField;
@@ -379,17 +456,16 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         [self.navigationController pushViewController:vc animated:YES];
     }
     
-    if (indexPath.section == 2 && indexPath.item == 0 && self.couponArray.count > 0) {
+    if (indexPath.section == 3 && indexPath.item == 0 && self.couponArray.count > 0) {
         GoodsCouponController* vc = [GoodsCouponController new];
         vc.listArray = self.couponArray;
         typeof(self) __weak wself = self;
         vc.selectCoupon = ^(CouponsModel * model){
             self.coupons = model;
 
-            NSString*  orderAmount = [NSString stringWithFormat:@"%.2f",[self.moneyDic[@"orderAmount"] floatValue]+Freight_Charges-[self.coupons.priceExpression floatValue]];
-            wself.moneyLabel.text = [NSString stringWithFormat:@"¥%@",orderAmount];
+            [wself calculateOrderAmount];
             
-            [wself.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:2]]];
+            [wself.collectionView reloadItemsAtIndexPaths:@[[NSIndexPath indexPathForRow:0 inSection:3]]];
         };
         [self.navigationController pushViewController:vc animated:YES];
     }
@@ -417,7 +493,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     if (kind == UICollectionElementKindSectionHeader){
 
-        if (indexPath.section == 1){
+        if (indexPath.section == 2){
             OrderGoodsInfoHead *headerView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderGoodsInfoHeadID forIndexPath:indexPath];
             headerView.goodsArray = self.goodsArray;
             typeof(self) __weak wself = self;
@@ -453,13 +529,13 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (indexPath.section == 0) {
         return CGSizeMake(ScreenW , 93);
     }
-    if (indexPath.section == 1 ) {
+    if (indexPath.section == 2 ) {
         return CGSizeMake(ScreenW, 128);
     }
 //    if (indexPath.section == 2 || indexPath.section == 3 || indexPath.section == 4) {
 //        return CGSizeMake(ScreenW, 45);
 //    }
-    if (indexPath.section == 2 || indexPath.section == 3) {
+    if (indexPath.section == 1 || indexPath.section == 3 || indexPath.section == 4) {
         return CGSizeMake(ScreenW, 45);
     }
 
@@ -469,7 +545,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 #pragma mark - head宽高
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForHeaderInSection:(NSInteger)section {
 
-    if (section == 1 ) {
+    if (section == 2 ) {
         return CGSizeMake(ScreenW, 111);
     }
     return CGSizeZero;
@@ -480,11 +556,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (section == 0) {
         return CGSizeMake(ScreenW, 55);
     }
-//    else if (section == 1 || section == 2 || section == 3 || section == 4 )
-//    {
-//        return CGSizeMake(ScreenW, 10);
-//    }
-    else if (section == 1 || section == 2 || section == 3)
+    else if (section == 1 || section == 2 || section == 3 || section == 4 )
     {
         return CGSizeMake(ScreenW, 10);
     }
@@ -507,8 +579,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     
     NSInteger hour = [currentComps hour];
     
-    NSLog(@"HOUR HOUR %d",hour);
-    
     if (0 <= hour && hour < 9 ) {//今天
         
         self.isToday = YES;
@@ -518,7 +588,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         
         for (NSInteger i = 1; i < duration; i ++) {
             
-            NSString *string = [NSString stringWithFormat:@"%d:00-%d:00",8+i,8+i+1];
+            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",8+i,8+i+1];
             [self.timeArray addObject:string];
         }
     }
@@ -531,7 +601,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         
         for (NSInteger i = 1; i < duration; i ++) {
             
-            NSString *string = [NSString stringWithFormat:@"%d:00-%d:00",hour+i,hour+i+1];
+            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",hour+i,hour+i+1];
             [self.timeArray addObject:string];
         }
     }
@@ -559,6 +629,10 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
             NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",8+i,8+i+1];
             [self.timeArray addObject:string];
         }
+    }
+    
+    if (self.timeArray.count > 0) {
+        self.timeFootview.timeLabel.text = [self.timeArray firstObject];
     }
 }
 
@@ -599,6 +673,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         [_collectionView registerClass:[OrderBillViewCell class] forCellWithReuseIdentifier:OrderBillViewCellID];
         [_collectionView registerClass:[OrderCustomerViewCell class] forCellWithReuseIdentifier:OrderCustomerViewCellID];
         [_collectionView registerClass:[NoteInfoViewCell class] forCellWithReuseIdentifier:NoteInfoViewCellID];
+        [_collectionView registerClass:[ShippingModeCell class] forCellWithReuseIdentifier:ShippingModeCellID];
 
         [_collectionView registerClass:[OrderGoodsInfoHead class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:OrderGoodsInfoHeadID];
         

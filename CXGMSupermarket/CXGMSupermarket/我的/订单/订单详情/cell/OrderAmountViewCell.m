@@ -31,6 +31,7 @@
     _amountLabel.text = [NSString stringWithFormat:@"¥%.2f",[order.totalAmount floatValue]];
     _couponLabel.text = [NSString stringWithFormat:@"¥%.2f",[order.preferential floatValue]];
     _paymentLabel.text = [NSString stringWithFormat:@"¥%.2f",[order.orderAmount floatValue]];
+    _freightLabel.text = [NSString stringWithFormat:@"¥%.2f",[order.postage floatValue]];
 }
 
 - (void)setupUI

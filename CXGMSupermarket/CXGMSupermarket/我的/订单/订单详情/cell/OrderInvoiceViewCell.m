@@ -37,6 +37,8 @@
     }else if ([order.payType isEqualToString:@"zfb"]){
         _paywayLabel.text = @"支付宝支付";
     }
+    
+    _invoiceLabel.text = order.extractionType;
 
 //    if (!order.receipt) {
 //        _invoiceLabel.text = @"不开发票";
@@ -78,24 +80,24 @@
         make.top.equalTo(label2.bottom).offset(8);
     }];
 
-//    UIView* line = [UIView new];
-//    line.backgroundColor = ColorE8E8E8E;
-//    [self addSubview:line];
-//    [line mas_makeConstraints:^(MASConstraintMaker *make){
-//        make.left.right.equalTo(self);
-//        make.height.equalTo(1);
-//        make.top.equalTo(label3.bottom).offset(15);
-//    }];
+    UIView* line = [UIView new];
+    line.backgroundColor = ColorE8E8E8E;
+    [self addSubview:line];
+    [line mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.right.equalTo(self);
+        make.height.equalTo(1);
+        make.top.equalTo(label3.bottom).offset(15);
+    }];
     
-//    UILabel *label4 = [[UILabel alloc] init];
-//    label4.text = @"发票类型：";
-//    label4.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-//    label4.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
-//    [self addSubview:label4];
-//    [label4 mas_makeConstraints:^(MASConstraintMaker *make){
-//        make.left.equalTo(label1);
-//        make.top.equalTo(line.bottom).offset(12);
-//    }];
+    UILabel *label4 = [[UILabel alloc] init];
+    label4.text = @"配送方式：";
+    label4.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+    label4.textColor = [UIColor colorWithRed:102/255.0 green:102/255.0 blue:102/255.0 alpha:1/1.0];
+    [self addSubview:label4];
+    [label4 mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(label1);
+        make.top.equalTo(line.bottom).offset(12);
+    }];
     
     _numberLabel = [[UILabel alloc] init];
     _numberLabel.text = @"660008978786";
@@ -127,15 +129,15 @@
         make.top.equalTo(label3);
     }];
     
-//    _invoiceLabel = [[UILabel alloc] init];
-//    _invoiceLabel.text = @"不开发票";
-//    _invoiceLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
-//    _invoiceLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
-//    [self addSubview:_invoiceLabel];
-//    [_invoiceLabel mas_makeConstraints:^(MASConstraintMaker *make){
-//        make.left.equalTo(self.numberLabel);
-//        make.top.equalTo(label4);
-//    }];
+    _invoiceLabel = [[UILabel alloc] init];
+    _invoiceLabel.text = @"不开发票";
+    _invoiceLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+    _invoiceLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+    [self addSubview:_invoiceLabel];
+    [_invoiceLabel mas_makeConstraints:^(MASConstraintMaker *make){
+        make.left.equalTo(self.numberLabel);
+        make.top.equalTo(label4);
+    }];
 
 }
 @end

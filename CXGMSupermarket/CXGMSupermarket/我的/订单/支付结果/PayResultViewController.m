@@ -10,7 +10,7 @@
 #import "OrderDetailViewController.h"
 
 @interface PayResultViewController ()
-@property(nonatomic,assign)NSInteger requestCount;
+
 @end
 
 @implementation PayResultViewController
@@ -54,16 +54,12 @@
     [AFNetAPIClient POST:[OrderBaseURL stringByAppendingString:APIUpdateStatus] token:[UserInfoManager sharedInstance].userInfo.token parameters:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithString:JSON error:nil];
         
-        if ((![model.msg isEqualToString:@"ok"] || ![model.msg isEqualToString:@"OK"])
-            && wself.requestCount < 3) {
-            wself.requestCount++;
+        if (![model.msg isEqualToString:@"ok"] || ![model.msg isEqualToString:@"OK"]) {
             [wself updateOrderStatus];
+            
         }
     } failure:^(id JSON, NSError *error){
-        if (wself.requestCount < 3) {
-            wself.requestCount++;
-            [wself updateOrderStatus];
-        }
+        [wself updateOrderStatus];
     }];
 }
 

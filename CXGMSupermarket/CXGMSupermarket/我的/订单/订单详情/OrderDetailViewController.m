@@ -378,7 +378,7 @@ static NSString *const BlankCollectionFootViewID = @"BlankCollectionFootView";
         return CGSizeMake(ScreenW, 109);
     }
     if (indexPath.section == 2 ) {
-        return CGSizeMake(ScreenW, 154-45);
+        return CGSizeMake(ScreenW, 154);
     }
     if (indexPath.section == 3 ) {
         return CGSizeMake(ScreenW, 45);

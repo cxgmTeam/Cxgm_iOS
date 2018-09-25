@@ -94,7 +94,7 @@ static NSString *const SearchHeadViewID = @"SearchHeadView";
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     _topView.hidden = NO;
-    
+    [_textField becomeFirstResponder];
 
     if (self.showSearchResult && [_textField.text length] > 0) {
         [self searchGoods:_textField.text];

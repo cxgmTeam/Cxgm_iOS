@@ -98,6 +98,8 @@
 #define APIAliPay  @"/payments/aliPay"
 //修改订单状态
 #define APIUpdateStatus  @"/payments/updateStatus"
+//邮费
+#define APIOrderPostage  @"/order/orderPostage"
 
 /*购物车相关*/
 //我的购物车列表

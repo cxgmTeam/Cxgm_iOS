@@ -222,6 +222,8 @@
 @property(nonatomic,strong)AddressModel<Optional> * addressObj;
 
 @property(nonatomic,strong)NSString<Optional> * psPhone;//配送员电话
+@property(nonatomic,strong)NSString<Optional> * extractionType;//配送方式
+@property(nonatomic,strong)NSString<Optional> * postage;//运费
 
 +(OrderModel *)OrderModelWithJson:(NSDictionary *)json;
 @end
@@ -258,3 +260,7 @@
 @end
 
 
+@interface PostageItem : JSONModel
+@property(nonatomic,strong)NSString<Optional> * reduceMoney;
+@property(nonatomic,strong)NSString<Optional> * satisfyMoney;
+@end

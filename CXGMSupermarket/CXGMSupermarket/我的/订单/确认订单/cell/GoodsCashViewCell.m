@@ -10,7 +10,7 @@
 
 @interface GoodsCashViewCell ()
 
-@property(nonatomic,strong)UILabel* valueLabel3;
+
 @end
 
 @implementation GoodsCashViewCell
@@ -78,12 +78,12 @@
         make.right.equalTo(-15);
     }];
     
-    _valueLabel3 = [[UILabel alloc] init];
-    _valueLabel3.text = [NSString stringWithFormat:@"¥%.2f",Freight_Charges];
-    _valueLabel3.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
-    _valueLabel3.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
-    [self addSubview:_valueLabel3];
-    [_valueLabel3 mas_makeConstraints:^(MASConstraintMaker *make){
+    _couponsLabel = [[UILabel alloc] init];
+    _couponsLabel.text = [NSString stringWithFormat:@"¥%.2f",Freight_Charges];
+    _couponsLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];
+    _couponsLabel.textColor = [UIColor colorWithRed:51/255.0 green:51/255.0 blue:51/255.0 alpha:1/1.0];
+    [self addSubview:_couponsLabel];
+    [_couponsLabel mas_makeConstraints:^(MASConstraintMaker *make){
         make.top.equalTo(label3);
         make.right.equalTo(-15);
     }];

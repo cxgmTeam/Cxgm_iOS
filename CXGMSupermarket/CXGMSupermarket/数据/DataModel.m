@@ -83,3 +83,7 @@
 
 @end
 
+
+@implementation PostageItem
+
+@end

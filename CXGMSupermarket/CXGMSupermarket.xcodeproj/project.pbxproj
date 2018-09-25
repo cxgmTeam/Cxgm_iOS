@@ -80,6 +80,7 @@
 		7779E11A2150F20E0066F301 /* OCJSHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7779E1192150F20E0066F301 /* OCJSHelper.m */; };
 		777A302A20DB7D5E003F14C1 /* UMPush.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 777A302720DB7D5E003F14C1 /* UMPush.framework */; };
 		777B48CA20B59C0E0048CE78 /* PaymentButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 777B48C920B59C0E0048CE78 /* PaymentButton.m */; };
+		77824A6C215A21E500FB67A7 /* ShippingModeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 77824A6B215A21E500FB67A7 /* ShippingModeCell.m */; };
 		7783F2002095CEFA00338459 /* RemainTimeHintHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F1FF2095CEFA00338459 /* RemainTimeHintHead.m */; };
 		7783F2032095D2C100338459 /* OrderGoodsInfoHead.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F2022095D2C100338459 /* OrderGoodsInfoHead.m */; };
 		7783F2062097064700338459 /* GoodsCashViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7783F2052097064700338459 /* GoodsCashViewCell.m */; };
@@ -492,6 +493,8 @@
 		777A302B20DB8336003F14C1 /* CXGMSupermarket.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = CXGMSupermarket.entitlements; sourceTree = "<group>"; };
 		777B48C820B59C0E0048CE78 /* PaymentButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PaymentButton.h; sourceTree = "<group>"; };
 		777B48C920B59C0E0048CE78 /* PaymentButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PaymentButton.m; sourceTree = "<group>"; };
+		77824A6A215A21E500FB67A7 /* ShippingModeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShippingModeCell.h; sourceTree = "<group>"; };
+		77824A6B215A21E500FB67A7 /* ShippingModeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ShippingModeCell.m; sourceTree = "<group>"; };
 		7783F1FE2095CEFA00338459 /* RemainTimeHintHead.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemainTimeHintHead.h; sourceTree = "<group>"; };
 		7783F1FF2095CEFA00338459 /* RemainTimeHintHead.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RemainTimeHintHead.m; sourceTree = "<group>"; };
 		7783F2012095D2C100338459 /* OrderGoodsInfoHead.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OrderGoodsInfoHead.h; sourceTree = "<group>"; };
@@ -1512,6 +1515,8 @@
 				7783F20B209707F900338459 /* OrderBillViewCell.m */,
 				7770377520EB45C40000254D /* NoteInfoViewCell.h */,
 				7770377620EB45C40000254D /* NoteInfoViewCell.m */,
+				77824A6A215A21E500FB67A7 /* ShippingModeCell.h */,
+				77824A6B215A21E500FB67A7 /* ShippingModeCell.m */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -3195,6 +3200,7 @@
 				77DD806F20824F7C00A1D080 /* SDCycleScrollView.m in Sources */,
 				BE8E87862093576D005EB719 /* OrderAmountViewCell.m in Sources */,
 				77F83AA12070E8CE004E9717 /* SDAnimatedImageRep.m in Sources */,
+				77824A6C215A21E500FB67A7 /* ShippingModeCell.m in Sources */,
 				770355B12099E077002B3A8D /* LoginViewController.m in Sources */,
 				BECB90242084B4E200170BC6 /* DetailShowTypeCell.m in Sources */,
 				BE23B596208DFE8D00367E0E /* BlankCollectionFootView.m in Sources */,
