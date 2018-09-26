@@ -422,6 +422,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         cell.totalAmountLabel.text = [NSString stringWithFormat:@"¥%@",self.moneyDic[@"totalAmount"]];
         cell.preferentialLabel.text = [NSString stringWithFormat:@"¥%@",self.moneyDic[@"preferential"]];
         cell.couponsLabel.text = [NSString stringWithFormat:@"¥%.2f",[self.shippingCharge floatValue]];
+        cell.postageLabel.text = [NSString stringWithFormat:@"（满%.0f元包邮）",[self.postage.satisfyMoney floatValue]];
         gridcell = cell;
     }
     else if (indexPath.section == 3) {
@@ -588,7 +589,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         
         for (NSInteger i = 1; i < duration; i ++) {
             
-            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",8+i,8+i+1];
+            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",(long)(8+i),(long)(8+i+1)];
             [self.timeArray addObject:string];
         }
     }
@@ -601,7 +602,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         
         for (NSInteger i = 1; i < duration; i ++) {
             
-            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",hour+i,hour+i+1];
+            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",(long)(hour+i),(long)(hour+i+1)];
             [self.timeArray addObject:string];
         }
     }
@@ -626,7 +627,7 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
         
         for (NSInteger i = 1; i < duration; i ++) {
             
-            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",8+i,8+i+1];
+            NSString *string = [NSString stringWithFormat:@"%ld:00-%ld:00",(long)(8+i),(long)(8+i+1)];
             [self.timeArray addObject:string];
         }
     }

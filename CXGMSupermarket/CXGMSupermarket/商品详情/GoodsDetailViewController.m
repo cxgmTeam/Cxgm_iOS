@@ -81,7 +81,7 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     [self.view addSubview:self.addGoodsBtn];
     [self.addGoodsBtn mas_makeConstraints:^(MASConstraintMaker *make){
         make.bottom.left.right.equalTo(self.view);
-        make.height.equalTo(TAB_BAR_HEIGHT);
+        make.height.equalTo(49+HOME_INDICATOR_HEIGHT);
     }];
     
     

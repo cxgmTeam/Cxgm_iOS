@@ -58,6 +58,16 @@
         make.left.equalTo(15);
     }];
     
+    _postageLabel = [[UILabel alloc] init];
+    _postageLabel.text = @"（满100.00元包邮）";
+    _postageLabel.font = [UIFont fontWithName:@"PingFangSC-Regular" size:14];
+    _postageLabel.textColor = [UIColor colorWithRed:255/255.0 green:79/255.0 blue:79/255.0 alpha:1/1.0];
+    [self addSubview:_postageLabel];
+    [_postageLabel mas_makeConstraints:^(MASConstraintMaker *make){
+        make.top.equalTo(label3);
+        make.left.equalTo(label3.right);
+    }];
+    
     _totalAmountLabel = [[UILabel alloc] init];
     _totalAmountLabel.text = @"¥460.00";
     _totalAmountLabel.font = [UIFont fontWithName:@"PingFangSC-Medium" size:14];

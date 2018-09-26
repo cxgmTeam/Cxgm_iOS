@@ -98,11 +98,8 @@
                           @"shopId":[DeviceHelper sharedInstance].shop.id.length>0?[DeviceHelper sharedInstance].shop.id:@""
                           };
     
-    [MBProgressHUD showHUDAddedTo:self animated:YES];
-    
     typeof(self) __weak wself = self;
     [AFNetAPIClient GET:[OrderBaseURL stringByAppendingString:APIShopCartList] token:userInfo.token parameters:dic success:^(id JSON, NSError *error){
-        [MBProgressHUD hideHUDForView:self animated:YES];
         
         [self.dataArray removeAllObjects];
         
@@ -116,7 +113,7 @@
             [wself retsetSelectedStatus];
         }
     } failure:^(id JSON, NSError *error){
-        [MBProgressHUD hideHUDForView:self animated:YES];
+
     }];
 }
 

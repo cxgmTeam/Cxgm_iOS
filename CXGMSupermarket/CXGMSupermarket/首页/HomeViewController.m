@@ -82,30 +82,17 @@
     self.needNewAddress = YES;
     
     if ([DeviceHelper sharedInstance].defaultAddress) {
-//        AddressModel* defAddress = [DeviceHelper sharedInstance].defaultAddress;
-//        locationString = [@"送货至：" stringByAppendingString:defAddress.area] ;
-        
         self.needNewAddress = NO;
-        
     }
     else if ([DeviceHelper sharedInstance].place && [DeviceHelper sharedInstance].locationInScope)
     {
-//        NSDictionary* dic = [DeviceHelper sharedInstance].place.addressDictionary;
-//        if (dic[@"SubLocality"]) {
-//             locationString = [@"送货至：" stringByAppendingString:dic[@"SubLocality"]];
-//        }
-//         if (dic[@"Street"]) {
-//              locationString = [locationString stringByAppendingString:dic[@"Street"]] ;
-//         }
-        
         self.needNewAddress = NO;
-    
     }
     
     CGFloat width = [self sizeLabelWidth:locationString];
     
     CGRect frame = CGRectMake(10, NAVIGATION_BAR_HEIGHT-25, width, 30);
-    if (iPhoneX) {
+    if (iPhoneX || iPhoneXR || iPhoneXS || iPhoneXRMAX) {
         frame = CGRectMake(10, NAVIGATION_BAR_HEIGHT-50, width, 30);
     }
     
