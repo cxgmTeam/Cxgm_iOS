@@ -23,6 +23,7 @@
 #import "GoodsDetailViewController.h"
 #import "WebViewController.h"
 
+#define APPID @"1394406457"
 
 @interface HomeViewController ()
 @property(nonatomic,strong)HomeGoodsView* goodsView;
@@ -56,6 +57,7 @@
     
     [self setNoticeLocation];
     
+    //检查版本
     [self checkAppUpdate];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showRemoteNotification:) name:Show_RemoteNotification object:nil];
@@ -504,83 +506,49 @@
     return titleWidth;
 }
 
+
 #pragma mark- 检查更新
+
 -(void)checkAppUpdate
 {
-    NSString* appid = @"1394406457";
-    NSDictionary* infoDict=[[NSBundle mainBundle] infoDictionary];
-    NSString* nowVersion=[infoDict objectForKey:@"CFBundleShortVersionString"];
+    //1先获取当前工程项目版本号
+    NSDictionary *infoDic=[[NSBundle mainBundle] infoDictionary];
+    NSString *currentVersion=infoDic[@"CFBundleShortVersionString"];
     
-    NSURL* url=[NSURL URLWithString:[NSString stringWithFormat:@"http://itunes.apple.com/lookup?id=%@",appid]];
-    NSString* file=[NSString stringWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
-    if (!file) {
+    //2从网络获取appStore版本号
+    NSError *error;
+    NSData *response = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"http://itunes.apple.com/cn/lookup?id=%@",APPID]]] returningResponse:nil error:nil];
+    if (response == nil) {
+        NSLog(@"你没有连接网络哦");
         return;
     }
-    
-    NSError *err = nil;
-    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:[file dataUsingEncoding:NSUTF8StringEncoding]
-                                                         options:NSJSONReadingMutableContainers
-                                                           error:&err];
-    if ([dict[@"resultCount"] integerValue] == 0) {
+    NSDictionary *appInfoDic = [NSJSONSerialization JSONObjectWithData:response options:NSJSONReadingMutableLeaves error:&error];
+    if (error) {
+        NSLog(@"hsUpdateAppError:%@",error);
         return;
     }
-    NSRange substr=[file rangeOfString:@"\"version\":\""];//判断是不是找到字符
-    NSRange range1=NSMakeRange(substr.location+substr.length,10);
-    NSRange substr2=[file rangeOfString:@"\""options:NSCaseInsensitiveSearch range:range1];
-    NSRange range2=NSMakeRange(substr.location+substr.length,substr2.location-substr.location-substr.length);
-    NSString*newVersion=[file substringWithRange:range2];
-    
-    NSLog(@"nowVersion %@   newVersion %@",nowVersion,newVersion);
-    if (newVersion)
+    NSArray *array = appInfoDic[@"results"];
+    NSDictionary *dic = array[0];
+    NSString *appStoreVersion = dic[@"version"];
+    //打印版本号
+    NSLog(@"当前版本号:%@\n商店版本号:%@",currentVersion,appStoreVersion);
+    //3当前版本号小于商店版本号,就更新
+    if([currentVersion floatValue] < [appStoreVersion floatValue])
     {
-        BOOL flag = [self compareEditionNumber:newVersion localNumber:nowVersion];
-        if (flag) {
-            [[[UIAlertView alloc] initWithTitle:@"发现新版本"
-                                        message:@"是否前往App Store更新?"
-                                       delegate:self
-                              cancelButtonTitle:@"取消"
-                              otherButtonTitles:@"更新", nil] show];
-        }
+        UIAlertController * vc = [UIAlertController alertControllerWithTitle:@"版本有更新" message:[NSString stringWithFormat:@"检测到新版本(%@),是否更新?",appStoreVersion] preferredStyle:UIAlertControllerStyleAlert];
+        
+        [vc addAction:[UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleDefault handler:nil]];
+        [vc addAction:[UIAlertAction actionWithTitle:@"更新" style:UIAlertActionStyleDefault handler:^(UIAlertAction * action){
+            
+            NSString *str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=%@",APPID ];
+            [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
+        }]];
+        [self presentViewController:vc animated:YES completion:nil];
+    }else{
+        NSLog(@"版本号好像比商店大噢!检测到不需要更新");
     }
     
 }
-
-//输出YES（服务器大与本地） 输出NO（服务器小于本地）
-- (BOOL)compareEditionNumber:(NSString *)serverNumberStr localNumber:(NSString*)localNumberStr {
-    //剔除版本号字符串中的点
-    serverNumberStr = [serverNumberStr stringByReplacingOccurrencesOfString:@"." withString:@""];
-    localNumberStr = [localNumberStr stringByReplacingOccurrencesOfString:@"." withString:@""];
-    //计算版本号位数差
-    int placeMistake = (int)(serverNumberStr.length-localNumberStr.length);
-    //根据placeMistake的绝对值判断两个版本号是否位数相等
-    if (abs(placeMistake) == 0) {
-        //位数相等
-        return [serverNumberStr integerValue] > [localNumberStr integerValue];
-    }else {
-        //位数不等
-        //multipleMistake差的倍数
-        NSInteger multipleMistake = pow(10, abs(placeMistake));
-        NSInteger server = [serverNumberStr integerValue];
-        NSInteger local = [localNumberStr integerValue];
-        if (server > local) {
-            return server > local * multipleMistake;
-        }else {
-            return server * multipleMistake > local;
-        }
-    }
-}
-
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (1 == buttonIndex)
-    {
-        NSString* appid = @"1394406457";
-        NSString *str = [NSString stringWithFormat:@"itms-apps://itunes.apple.com/WebObjects/MZStore.woa/wa/viewSoftware?id=%@",appid ];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:str]];
-    }
-}
-
 #pragma mark-
 - (void)dealloc{
     [[NSNotificationCenter defaultCenter] removeObserver:self];

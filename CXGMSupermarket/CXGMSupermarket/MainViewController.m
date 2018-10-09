@@ -28,6 +28,8 @@
 @property(nonatomic,assign)NSInteger  requestCount;
 @end
 
+
+
 @implementation MainViewController
 
 - (void)viewDidLoad {
@@ -100,6 +102,8 @@
     
     //添加通知
     [self addNotification];
+    
+
 }
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item{
@@ -447,6 +451,8 @@
 {
     [self.homeVC setupMainUI:NO];
 }
+
+
 
 #pragma mark-
 - (void)dealloc{

@@ -27,7 +27,11 @@
 - (void)setOrder:(OrderModel *)order
 {
     _shopNameLabel.text = order.shopName;
-    _shopAddressLabel.text = order.shopAddress;
+    if ([order.shopAddress length] > 0) {
+        _shopAddressLabel.text = order.shopAddress;
+    }else{
+        _shopAddressLabel.text = @"";
+    }
 }
 
 - (void)setupUI{

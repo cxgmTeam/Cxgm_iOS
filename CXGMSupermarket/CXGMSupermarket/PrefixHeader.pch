@@ -154,7 +154,7 @@ typedef NS_ENUM(NSInteger, OrderStatus) {
 #define Freight_Charges  0.00
 
 
-#define VersionNum  @"1.2"
+#define VersionNum  @"1.4"
 
 #define PAGECOUNT  @"10"
 

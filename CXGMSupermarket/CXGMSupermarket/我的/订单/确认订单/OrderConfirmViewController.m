@@ -122,18 +122,21 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
 - (void)addOrder
 {
     if (!self.address) {
+        self.submitBtn.enabled = YES;
         [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请添加收货地址"]; return;
     }else{
         if (self.pointsArr.count > 0) {
             CLLocationCoordinate2D coords = CLLocationCoordinate2DMake([self.address.dimension doubleValue],[self.address.longitude doubleValue]);
             BOOL flag = [Utility mutableBoundConrtolAction:self.pointsArr myCoordinate:coords];
             if (!flag) {
+                self.submitBtn.enabled = YES;
                 [MBProgressHUD MBProgressHUDWithView:self.view Str:@"送货地址不在当前店铺配送范围内"]; return;
             }
         }
     }
-    //    orderAmount 实付金额   totalAmount 订单总金额  priceExpression 订单优惠
-    //    orderAmount = totalAmount - priceExpression + 运费
+    
+//    orderAmount 实付金额   totalAmount 订单总金额  priceExpression 订单优惠
+//    orderAmount = totalAmount - priceExpression + 运费
     NSString*  orderAmount = self.moneyDic[@"orderAmount"];
     if (self.coupons) {
         orderAmount = [NSString stringWithFormat:@"%.2f",[orderAmount floatValue]-[self.coupons.priceExpression floatValue]];
@@ -155,10 +158,18 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     [self.orderParam setObject:self.moneyDic[@"preferential"]forKey:@"preferential"];
     [self.orderParam setObject:orderAmount forKey:@"orderAmount"];
     
-    
-    [self.orderParam setObject:self.address.id forKey:@"addressId"];
-    
+    if (self.address) {
+        [self.orderParam setObject:self.address.id forKey:@"addressId"];
+    }else{
+        [self.orderParam setObject:@"" forKey:@"addressId"];
+    }
+   
     NSString* deliveryTime = [NSString stringWithFormat:@"%@ %@",self.dateString,self.timeFootview.timeLabel.text];
+
+    if ([self.dateString length] == 0 || [self.timeFootview.timeLabel.text length] == 0) {
+        self.submitBtn.enabled = YES;
+        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"请选择配送时间"]; return;
+    }
     [self.orderParam setObject:deliveryTime forKey:@"receiveTime"];
     
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -169,7 +180,6 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     if (self.receiptDic) {
         [self.orderParam setObject:self.receiptDic forKey:@"receipt"];
     }
-    
     
     [self.orderParam setObject:[NSString stringWithFormat:@"%ld",(long)self.orderNum] forKey:@"orderNum"];
     
@@ -191,25 +201,34 @@ static NSString *const GoodsArrivedTimeFootID = @"GoodsArrivedTimeFoot";
     //配送费
     [self.orderParam setObject:self.shippingCharge forKey:@"postage"];
 
+
     typeof(self) __weak wself = self;
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIAddOrder] token:[UserInfoManager sharedInstance].userInfo.token parameter:self.orderParam success:^(id JSON, NSError *error){
-        DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
-        if ([model.code isEqualToString:@"200"]) {
-            dispatch_async(dispatch_get_main_queue(), ^{
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+
+            DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
+            if ([model.code isEqualToString:@"200"]) {
                 [[NSNotificationCenter defaultCenter] postNotificationName:AddOrder_Success object:nil];
                 
                 PaymentViewController* vc = [PaymentViewController new];
                 vc.orderAmount = orderAmount;
                 vc.orderId = [NSString stringWithFormat:@"%ld",[(NSNumber *)model.data longValue]];
                 [wself.navigationController pushViewController:vc animated:YES];
-            });
-        }else{
+            }else{
+                self.submitBtn.enabled = YES;
+                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"提交订单失败"];
+            }
+            
+        });
+        
+    } failure:^(id JSON, NSError *error){
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
             self.submitBtn.enabled = YES;
             [MBProgressHUD MBProgressHUDWithView:self.view Str:@"提交订单失败"];
-        }
-    } failure:^(id JSON, NSError *error){
-        self.submitBtn.enabled = YES;
-        [MBProgressHUD MBProgressHUDWithView:self.view Str:@"提交订单失败"];
+            
+        });
     }];
 }
 
