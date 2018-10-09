@@ -253,24 +253,24 @@ BOOL pnpoly (int nvert, float *vertx, float *verty, float testx, float testy) {
         
         if (data)
         {
-            NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
-            NSLog(@"\n\nCXGMPostRequest %@\n dic = %@",requestUrl,dic);
-            if ([[dic objectForKey:@"code"] integerValue] == 200) {
-                if (success) {
-                    success(dic,nil);
-                }
-            }else if ([[dic objectForKey:@"code"] integerValue] == 403){
-                dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                NSDictionary * dic = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:nil];
+                NSLog(@"\n\nCXGMPostRequest %@\n dic = %@",requestUrl,dic);
+                if ([[dic objectForKey:@"code"] integerValue] == 200) {
+                    if (success) {
+                        success(dic,nil);
+                    }
+                }else if ([[dic objectForKey:@"code"] integerValue] == 403){
                     [[UserInfoManager sharedInstance] deleteUserInfo];
                     UIWindow* window = [UIApplication sharedApplication].keyWindow;
                     [MBProgressHUD MBProgressHUDWithView:window Str:@"登录失效，请重新登录"];
-                });
-                
-            }else{
-                if (failure) {
-                    failure(dic,error);
+                    
+                }else{
+                    if (failure) {
+                        failure(dic,error);
+                    }
                 }
-            }
+            });
         }
     }];
     [dataTask resume];

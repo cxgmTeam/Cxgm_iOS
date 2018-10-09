@@ -213,16 +213,14 @@
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-
-                self.goods.id = [NSString stringWithFormat:@"%d",[(NSNumber *)model.data intValue]];
-                self.goods.goodNum = @"1";
-                [self.shopCartList addObject:self.goods];
-                
-                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:nil];
-            });
+            
+            self.goods.id = [NSString stringWithFormat:@"%d",[(NSNumber *)model.data intValue]];
+            self.goods.goodNum = @"1";
+            [self.shopCartList addObject:self.goods];
+            
+            [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:nil];
         }
         
     } failure:^(id JSON, NSError *error){
@@ -248,19 +246,17 @@
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-
-                for (GoodsModel * model in self.shopCartList) {
-                    if ([model.goodCode isEqualToString:self.goods.goodCode]) {
-                        model.goodNum = [NSString stringWithFormat:@"%d",[model.goodNum intValue]+1];
-                        break;
-                    }
+            
+            for (GoodsModel * model in self.shopCartList) {
+                if ([model.goodCode isEqualToString:self.goods.goodCode]) {
+                    model.goodNum = [NSString stringWithFormat:@"%d",[model.goodNum intValue]+1];
+                    break;
                 }
-                
-                [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
-
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:nil];
-            });
+            }
+            
+            [MBProgressHUD MBProgressHUDWithView:self.view Str:@"添加成功！"];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:nil];
         }
         
     } failure:^(id JSON, NSError *error){

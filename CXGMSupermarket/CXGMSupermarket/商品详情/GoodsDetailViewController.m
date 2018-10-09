@@ -271,14 +271,11 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];
-                self.goodsDetail.shopCartId = [NSString stringWithFormat:@"%@",model.data];
-                
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsDetail.sn,@"shopCartNum": self.goodsDetail.shopCartNum,@"shopCartId": self.goodsDetail.shopCartId}];
-            });
+            self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];
+            self.goodsDetail.shopCartId = [NSString stringWithFormat:@"%@",model.data];
+            
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsDetail.sn,@"shopCartNum": self.goodsDetail.shopCartNum,@"shopCartId": self.goodsDetail.shopCartId}];
         }
         
     } failure:^(id JSON, NSError *error){
@@ -304,12 +301,9 @@ static NSString *const DetailTopFootViewID = @"DetailTopFootView";
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsDetail.sn,@"shopCartNum": self.goodsDetail.shopCartNum,@"shopCartId": self.goodsDetail.shopCartId}];
-            });
+            self.goodsDetail.shopCartNum = [NSString stringWithFormat:@"%ld",number];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsDetail.sn,@"shopCartNum": self.goodsDetail.shopCartNum,@"shopCartId": self.goodsDetail.shopCartId}];
         }
         
     } failure:^(id JSON, NSError *error){

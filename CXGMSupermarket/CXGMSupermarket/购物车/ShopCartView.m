@@ -259,9 +259,7 @@
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
 
-            });
         }
         
     } failure:^(id JSON, NSError *error){

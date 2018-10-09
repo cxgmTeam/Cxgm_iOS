@@ -135,16 +135,12 @@
             NSLog(@"[UserInfoManager sharedInstance].userInfo %@",[UserInfoManager sharedInstance].userInfo);
             [[UserInfoManager sharedInstance] saveUserInfo:(NSDictionary *)model.data];
             
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[NSNotificationCenter defaultCenter] postNotificationName:LoginAccount_Success object:nil];
-                [weakSelf dismissViewControllerAnimated:YES completion:nil];
-            });
+            [[NSNotificationCenter defaultCenter] postNotificationName:LoginAccount_Success object:nil];
+            [weakSelf dismissViewControllerAnimated:YES completion:nil];
         }
     } failure:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [MBProgressHUD MBProgressHUDWithView:self.view Str:model.msg];
-        });
+        [MBProgressHUD MBProgressHUDWithView:self.view Str:model.msg];
     }];
 }
 

@@ -128,17 +128,15 @@
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
-                [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
-                
-                self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
-                self.goodsModel.shopCartId = [NSString stringWithFormat:@"%@",model.data];
-                
-
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId":self.goodsModel.shopCartId}];
-            });
+            
+            UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+            [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
+            
+            self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
+            self.goodsModel.shopCartId = [NSString stringWithFormat:@"%@",model.data];
+            
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId":self.goodsModel.shopCartId}];
         }
         
     } failure:^(id JSON, NSError *error){
@@ -164,15 +162,13 @@
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
-                [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
-                
-                self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
-                
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId":goods.shopCartId}];
-            });
+            
+            UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+            [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
+            
+            self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId":goods.shopCartId}];
         }
         
     } failure:^(id JSON, NSError *error){

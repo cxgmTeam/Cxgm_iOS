@@ -104,27 +104,25 @@
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIShopAddCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
-                [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
-                
-                self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
-                self.goodsModel.shopCartId = [NSString stringWithFormat:@"%@",model.data];
-                
-                self.numberLabel.text = self.goodsModel.shopCartNum;
-                
-                if ([self.goodsModel.shopCartNum intValue] > 0) {
-                    self.numberLabel.hidden = NO;
-                    self.cutBtn.hidden = NO;
-                }else{
-                    self.numberLabel.hidden = YES;
-                    self.cutBtn.hidden = YES;
-                }
-                
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId": self.goodsModel.shopCartId}];
-            });
+            
+            UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+            [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"添加成功！"];
+            
+            self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%d",[self.goodsModel.shopCartNum intValue]+1];
+            self.goodsModel.shopCartId = [NSString stringWithFormat:@"%@",model.data];
+            
+            self.numberLabel.text = self.goodsModel.shopCartNum;
+            
+            if ([self.goodsModel.shopCartNum intValue] > 0) {
+                self.numberLabel.hidden = NO;
+                self.cutBtn.hidden = NO;
+            }else{
+                self.numberLabel.hidden = YES;
+                self.cutBtn.hidden = YES;
+            }
+            
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId": self.goodsModel.shopCartId}];
         }
         
     } failure:^(id JSON, NSError *error){
@@ -148,24 +146,23 @@
     [Utility CXGMPostRequest:[OrderBaseURL stringByAppendingString:APIUpdateCart] token:[UserInfoManager sharedInstance].userInfo.token parameter:dic success:^(id JSON, NSError *error){
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
-                [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"更新成功！"];
-                
-                self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%ld",(long)number];
-                
-                self.numberLabel.text = self.goodsModel.shopCartNum;
-                
-                if ([self.goodsModel.shopCartNum intValue] > 0) {
-                    self.numberLabel.hidden = NO;
-                    self.cutBtn.hidden = NO;
-                }else{
-                    self.numberLabel.hidden = YES;
-                    self.cutBtn.hidden = YES;
-                }
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId": self.goodsModel.shopCartId}];
-            });
+            
+            UIViewController* controller = [UIApplication sharedApplication].keyWindow.rootViewController;
+            [MBProgressHUD MBProgressHUDWithView:controller.view Str:@"更新成功！"];
+            
+            self.goodsModel.shopCartNum = [NSString stringWithFormat:@"%ld",(long)number];
+            
+            self.numberLabel.text = self.goodsModel.shopCartNum;
+            
+            if ([self.goodsModel.shopCartNum intValue] > 0) {
+                self.numberLabel.hidden = NO;
+                self.cutBtn.hidden = NO;
+            }else{
+                self.numberLabel.hidden = YES;
+                self.cutBtn.hidden = YES;
+            }
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:AddGoodsSuccess_Notify object:nil userInfo:@{@"sn":self.goodsModel.sn,@"shopCartNum": self.goodsModel.shopCartNum,@"shopCartId": self.goodsModel.shopCartId}];
         }
         
     } failure:^(id JSON, NSError *error){

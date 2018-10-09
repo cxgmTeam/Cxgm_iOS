@@ -131,17 +131,14 @@ static NSString *const AddAddressFootViewID = @"AddAddressFootView";
 
         DataModel* model = [[DataModel alloc] initWithDictionary:JSON error:nil];
         if ([model.code intValue] == 200) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                if (self.selectedLoacation) {
-                    NSArray* vcs = weakSelf.navigationController.childViewControllers;
-                    if (vcs.count > 1) {
-                        [weakSelf.navigationController popToViewController:vcs[1] animated:YES];
-                    }
-                }else{
-                   [weakSelf.navigationController popViewControllerAnimated:YES];
+            if (self.selectedLoacation) {
+                NSArray* vcs = weakSelf.navigationController.childViewControllers;
+                if (vcs.count > 1) {
+                    [weakSelf.navigationController popToViewController:vcs[1] animated:YES];
                 }
-            });
+            }else{
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            }
         }
     } failure:^(id JSON, NSError *error){
         
