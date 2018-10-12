@@ -115,12 +115,19 @@
 
 - (void)onTapImageView:(UITapGestureRecognizer *)gesture
 {
-    NSLog(@"gesture gesture gesture  %d",gesture.view.tag);
     NSInteger tag = gesture.view.tag;
     
-    if (tag < self.motionArray.count) {
+    if (tag < self.motionArray.count)
+    {
         AdvertisementModel* model = self.motionArray[tag];
-        !_showAdvertiseDetail?:_showAdvertiseDetail(model);
+        
+        if (![DeviceHelper sharedInstance].showWineCategory) {
+            if (![model.notifyUrl isEqualToString:@"http://www.superstartv.top/freshfruitbeauty/niceProduct.html"]) {
+                !_showAdvertiseDetail?:_showAdvertiseDetail(model);
+            }
+        }else{
+            !_showAdvertiseDetail?:_showAdvertiseDetail(model);
+        }
     }
 }
 
@@ -136,21 +143,12 @@
         AdvertisementModel* model = motionArray[i];
         
         if (i == 0) {
-//            _leftItem.advertisement = model;
-//            _leftLabel.text = model.type;
-            
             [_leftImgView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
         }
         else if (i == 1){
-//            _rightTopItem.advertisement = model;
-//            _rightTopLabel.text = model.type;
-            
             [_rightTopImgView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
         }
         else if (i == 2){
-//            _rightDownItem.advertisement = model;
-//            _rightDownLabel.text = model.type;
-            
             [_rightDownImgView sd_setImageWithURL:[NSURL URLWithString:model.imageUrl] placeholderImage:[UIImage imageNamed:@"placeholderImage"]];
         }
     }

@@ -287,7 +287,14 @@ static NSString *const TopLineFootViewID = @"TopLineFootView";
             NSMutableArray* array2 = [NSMutableArray array];
             for (AdvertisementModel* model in array) {
                 if ([model.position isEqualToString:@"1"]) {
-                    [array1 addObject:model];
+                    if (![DeviceHelper sharedInstance].showWineCategory) {
+                        if (![model.notifyUrl isEqualToString:@"http://www.superstartv.top/freshfruitbeauty/niceProduct.html"]) {
+                            [array1 addObject:model];
+                        }
+                    }else{
+                        [array1 addObject:model];
+                    }
+                    
                 }
                 if ([model.position isEqualToString:@"2"]) {
                     [array2 addObject:model];

@@ -207,7 +207,6 @@
 {
     NSArray* vcs = self.navigationController.childViewControllers;
     
-    NSLog(@"vcs  %@",vcs);
     for (UIViewController* vc in vcs) {
         if ([vc isKindOfClass:NSClassFromString(@"ShoppingCartController")] || [vc isKindOfClass:NSClassFromString(@"AnotherCartViewController")] || [vc isKindOfClass:NSClassFromString(@"OrderViewController")]) {
             [self.navigationController popToViewController:vc animated:YES];

@@ -488,7 +488,10 @@ API_AVAILABLE(ios(10.0)){
         if ([model.data isKindOfClass:[NSDictionary class]]) {
             NSDictionary* dic = (NSDictionary *)model.data;
             
-            if ([dic[@"iOSVersionNum"] isEqualToString:VersionNum]) {
+            NSDictionary *infoDic=[[NSBundle mainBundle] infoDictionary];
+            NSString *currentVersion=infoDic[@"CFBundleShortVersionString"];
+            
+            if ([dic[@"iOSVersionNum"] isEqualToString:currentVersion]) {
                 [DeviceHelper sharedInstance].showWineCategory = [dic[@"sign"] boolValue];
             }
         }
